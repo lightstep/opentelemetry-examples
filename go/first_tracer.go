@@ -8,7 +8,7 @@ import (
 	"go.opentelemetry.io/otel/api/core"
 	"go.opentelemetry.io/otel/api/global"
 	apitrace "go.opentelemetry.io/otel/api/trace"
-	"go.opentelemetry.io/otel/exporter/trace/stdout"
+	"go.opentelemetry.io/otel/exporters/trace/stdout"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
@@ -38,7 +38,7 @@ func main() {
 		core.KeyValue{Key: "version", Value: core.String("1.2.3")},
 	}
 
-	ctx, child := tracer.Start(ctx, "baz", apitrace.ChildOf(span.SpanContext()), apitrace.WithAttributes(attributes...))
+	ctx, child := tracer.Start(ctx, "baz", apitrace.WithAttributes(attributes...))
 
 	child.End()
 	span.End()

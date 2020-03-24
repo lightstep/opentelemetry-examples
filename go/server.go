@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"go.opentelemetry.io/otel/api/distributedcontext"
+	"go.opentelemetry.io/otel/api/correlation"
 	"go.opentelemetry.io/otel/api/global"
 	"go.opentelemetry.io/otel/api/trace"
-	"go.opentelemetry.io/otel/exporter/trace/stdout"
+	"go.opentelemetry.io/otel/exporters/trace/stdout"
 	"go.opentelemetry.io/otel/plugin/httptrace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
@@ -38,10 +38,14 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 	// distributed context tags, and a span context for
 	// tracing this request.
 	attrs, entries, spanCtx := httptrace.Extract(req.Context(), req)
+	ctx := req.Context()
+	if spanCtx.IsValid() {
+		ctx = trace.ContextWithRemoteSpanContext(ctx, spanCtx)
+	}
 
-	// Apply the distributed context tags to the request
+	// Apply the correlation context tags to the request
 	// context.
-	req = req.WithContext(distributedcontext.WithMap(req.Context(), distributedcontext.NewMap(distributedcontext.MapUpdate{
+	req = req.WithContext(correlation.ContextWithMap(ctx, correlation.NewMap(correlation.MapUpdate{
 		MultiKV: entries,
 	})))
 
@@ -51,7 +55,6 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 		req.Context(),
 		"hello",
 		trace.WithAttributes(attrs...),
-		trace.ChildOf(spanCtx),
 	)
 	defer span.End()
 

@@ -10,11 +10,11 @@ import (
 
 	"google.golang.org/grpc/codes"
 
-	"go.opentelemetry.io/otel/api/distributedcontext"
+	"go.opentelemetry.io/otel/api/correlation"
 	"go.opentelemetry.io/otel/api/global"
 	"go.opentelemetry.io/otel/api/key"
 	"go.opentelemetry.io/otel/api/trace"
-	"go.opentelemetry.io/otel/exporter/trace/stdout"
+	"go.opentelemetry.io/otel/exporters/trace/stdout"
 	"go.opentelemetry.io/otel/plugin/httptrace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
@@ -37,7 +37,7 @@ func main() {
 	initTracer()
 
 	client := http.DefaultClient
-	ctx := distributedcontext.NewContext(context.Background(),
+	ctx := correlation.NewContext(context.Background(),
 		key.String("username", "donuts"),
 	)
 
@@ -56,7 +56,7 @@ func main() {
 			}
 			body, err = ioutil.ReadAll(res.Body)
 			_ = res.Body.Close()
-			trace.SpanFromContext(ctx).SetStatus(codes.OK)
+			trace.SpanFromContext(ctx).SetStatus(codes.OK, "OK")
 			return err
 		})
 
