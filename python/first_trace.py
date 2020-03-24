@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # first_trace.py
 from opentelemetry import trace
-from opentelemetry.sdk.trace import Tracer
+from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter
 from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
 
-trace.set_preferred_tracer_implementation(lambda T: Tracer())
-tracer = trace.tracer()
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
 span_processor = BatchExportSpanProcessor(ConsoleSpanExporter())
-tracer.add_span_processor(span_processor)
+trace.get_tracer_provider().add_span_processor(span_processor)
 
 span = tracer.start_span('foo')
 span.set_attribute("platform", "osx")
