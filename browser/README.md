@@ -294,13 +294,13 @@ We assume that you have completed the "Collect Trace Data", In this example we w
     window.addEventListener('load', () => {
       const btnAdd = document.getElementById('btn');
       btnAdd.addEventListener('click', () => {
-      tracer.getCurrentSpan().addEvent('starting ...');
-      getData('https://httpbin.org/get?a=1').then(() => {
-        tracer.getCurrentSpan().addEvent('first file downloaded');
+        tracer.getCurrentSpan().addEvent('starting ...');
         getData('https://httpbin.org/get?a=1').then(() => {
-          tracer.getCurrentSpan().addEvent('second file downloaded');
+          tracer.getCurrentSpan().addEvent('first file downloaded');
+          getData('https://httpbin.org/get?a=1').then(() => {
+            tracer.getCurrentSpan().addEvent('second file downloaded');
+          });
         });
-      });
       });
     });
 ```
