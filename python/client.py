@@ -16,4 +16,3 @@ trace.get_tracer_provider().add_span_processor(span_processor)
 
 http_requests.enable(trace.get_tracer_provider())
 response = requests.get(url="http://127.0.0.1:5000/")
-span_processor.shutdown()
