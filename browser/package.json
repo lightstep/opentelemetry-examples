@@ -1,0 +1,29 @@
+{
+  "name": "lightstep-web-example",
+  "version": "1.0.0",
+  "description": "Example to demonstrate opentelemetry web with lighstep exporter",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server -d --progress --colors --port 8091 --config webpack.config.js --hot --inline --host 0.0.0.0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/api": "^0.5.2",
+    "@opentelemetry/context-zone": "^0.5.2",
+    "@opentelemetry/plugin-document-load": "^0.5.2",
+    "@opentelemetry/plugin-user-interaction": "^0.5.2",
+    "@opentelemetry/plugin-xml-http-request": "^0.5.2",
+    "@opentelemetry/tracing": "^0.5.2",
+    "@opentelemetry/web": "^0.5.2",
+    "lightstep-opentelemetry-exporter": "^0.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

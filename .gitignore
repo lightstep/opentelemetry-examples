@@ -1,2 +1,9 @@
-node_modules
+node_modules/
+build/
+.npm
+.eslintcache
 package-lock.json
+.DS_Store
+.vscode/
+.idea/
+*.iml
