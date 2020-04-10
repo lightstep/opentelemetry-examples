@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-getting-started",
+  "version": "1.0.0",
+  "description": "NodeJS Getting Started",
+  "main": "first-trace.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node first-trace.js",
+    "start:server": "node server.js",
+    "start:client": "node client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opentelemetry/api": "^0.5.2",
+    "@opentelemetry/node": "^0.5.2",
+    "@opentelemetry/plugin-express": "^0.5.2",
+    "@opentelemetry/plugin-http": "^0.5.2",
+    "@opentelemetry/tracing": "^0.5.2",
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "lightstep-opentelemetry-exporter": "^0.1.0"
+  }
+}
