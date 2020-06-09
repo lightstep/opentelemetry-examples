@@ -23,8 +23,7 @@ tracerProvider.addSpanProcessor(
 tracerProvider.addSpanProcessor(
   new SimpleSpanProcessor(
     new LightstepExporter({
-      // if testing on staging
-      collectorUrl: 'https://collector-staging.lightstep.com/api/v2/reports',
+      collectorUrl: 'YOUR_SATELLITE_URL',
       token: 'YOUR_TOKEN',
     }),
   ),
