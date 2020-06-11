@@ -2,7 +2,10 @@
 
 import opentelemetry from '@opentelemetry/api';
 import { WebTracerProvider } from '@opentelemetry/web';
-import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/tracing';
+import {
+  ConsoleSpanExporter,
+  SimpleSpanProcessor,
+} from '@opentelemetry/tracing';
 import { LightstepExporter } from 'lightstep-opentelemetry-exporter';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { UserInteractionPlugin } from '@opentelemetry/plugin-user-interaction';
@@ -21,10 +24,17 @@ const tracerProvider = new WebTracerProvider({
 });
 
 // Configure a span processor and exporter for the tracer
-tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
-tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new LightstepExporter({
-  token: 'WA1hHti46U7aknMCn42ar/mt4ExmJirNBdrhvKt7JOU1to1Ot6FrolCpD5AzHD4+5sODLtg2lT1p5/+2BPzaNbPNKg6AXVa6vUo+Y2eP',
-})));
+tracerProvider.addSpanProcessor(
+  new SimpleSpanProcessor(new ConsoleSpanExporter())
+);
+tracerProvider.addSpanProcessor(
+  new SimpleSpanProcessor(
+    new LightstepExporter({
+      collectorUrl: 'YOUR_SATELLITE_URL',
+      token: 'YOUR_TOKEN',
+    })
+  )
+);
 
 // Register the tracer
 tracerProvider.register({
@@ -38,12 +48,11 @@ function getData(url, resolve) {
     req.setRequestHeader('Content-Type', 'application/json');
     req.setRequestHeader('Accept', 'application/json');
     req.send();
-    req.onload = function () {
+    req.onload = function() {
       resolve();
     };
   });
 }
-
 const tracer = opentelemetry.trace.getTracer('lightstep-web-example');
 
 window.addEventListener('load', () => {

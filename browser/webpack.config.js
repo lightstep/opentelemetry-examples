@@ -1,8 +1,8 @@
 module.exports = {
   mode: 'development',
   entry: {
-    'tracer': 'tracer.js',
     'document-load': 'document-load.js',
+    tracer: 'tracer.js',
     'user-interaction': 'user-interaction.js',
   },
   output: {
@@ -10,7 +10,15 @@ module.exports = {
     sourceMapFilename: '[file].map',
   },
   target: 'web',
-  module: { rules: [{ test: /\.js$/, exclude: /(node_modules)/, use: { loader: 'babel-loader' } }] },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: { loader: 'babel-loader' },
+      },
+    ],
+  },
   resolve: { modules: [__dirname, 'node_modules'], extensions: ['.js'] },
   devtool: 'eval-source-map',
 };

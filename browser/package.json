@@ -1,7 +1,7 @@
 {
   "name": "lightstep-web-example",
   "version": "1.0.0",
-  "description": "Example to demonstrate opentelemetry web with lighstep exporter",
+  "description": "Example to demonstrate OpenTelemetry Web with Lightstep Exporter",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server -d --progress --colors --port 8091 --config webpack.config.js --hot --inline --host 0.0.0.0",
