@@ -17,7 +17,7 @@
     "@opentelemetry/plugin-xml-http-request": "^0.5.2",
     "@opentelemetry/tracing": "^0.5.2",
     "@opentelemetry/web": "^0.5.2",
-    "lightstep-opentelemetry-exporter": "^0.1.0"
+    "lightstep-opentelemetry-exporter": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
