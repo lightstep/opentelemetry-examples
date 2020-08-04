@@ -1,0 +1,375 @@
+version: "3.7"
+services:
+    ###########################
+    ####### Go examples #######
+    ###########################
+    go-opentracing-server:
+        container_name: go-opentracing-server
+        build: ./go/opentracing/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=go-opentracing-server
+            - LIGHTSTEP_SERVICE_VERSION=5
+        stop_grace_period: 1s
+    go-opentracing-client:
+        container_name: go-opentracing-client
+        build: ./go/opentracing/client
+        networks:
+            - demo
+        depends_on:
+            - go-opentracing-server
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=go-opentracing-client
+            - LIGHTSTEP_SERVICE_VERSION=1.2.7
+            - TARGET_URL=http://go-opentracing-server:8081
+        stop_grace_period: 1s
+    go-otlp-server:
+        container_name: go-otlp-server
+        build: ./go/otlp/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        depends_on:
+            - otel-collector
+        environment:
+            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_INSECURE=1
+            - LS_SERVICE_NAME=go-otlp-server
+            - LS_SERVICE_VERSION=9.9.1
+        stop_grace_period: 1s
+    go-otlp-client:
+        container_name: go-otlp-client
+        build: ./go/otlp/client
+        networks:
+            - demo
+        depends_on:
+            - go-otlp-server
+            - otel-collector
+        env_file:
+            - .env
+        environment:
+            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_INSECURE=1
+            - LS_SERVICE_NAME=go-otlp-client
+            - LS_SERVICE_VERSION=9.9.2
+            - TARGET_URL=http://go-otlp-server:8081
+        stop_grace_period: 1s
+    go-launcher-server:
+        container_name: go-launcher-server
+        build: ./go/launcher/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=go-launcher-server
+            - LS_SERVICE_VERSION=9.9.9
+        stop_grace_period: 1s
+    go-launcher-client:
+        container_name: go-launcher-client
+        build: ./go/launcher/client
+        networks:
+            - demo
+        depends_on:
+            - go-launcher-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=go-launcher-client
+            - LS_SERVICE_VERSION=9.9.8
+            - DESTINATION_URL=http://go-launcher-server:8081
+        stop_grace_period: 1s
+    ###############################
+    ####### Python examples #######
+    ###############################
+    py-lstrace-client:
+        container_name: py-lstrace-client
+        build:
+            context: ./python
+            dockerfile: ./lstrace/Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-lstrace-server
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=py-lstrace-client
+            - LIGHTSTEP_SERVICE_VERSION=1.2.1
+            - TARGET_URL=http://py-lstrace-server:5000
+        stop_grace_period: 1s
+    py-lstrace-server:
+        container_name: py-lstrace-server
+        build:
+            context: ./python
+            dockerfile: ./lstrace/Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=py-lstrace-server
+            - LIGHTSTEP_SERVICE_VERSION=0.2.2
+        stop_grace_period: 1s
+    py-collector-client:
+        container_name: py-collector-client
+        build:
+            context: ./python
+            dockerfile: ./otlp/Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-collector-server
+            - otel-collector
+        env_file:
+            - .env
+        environment:
+            - OPENTELEMETRY_INSTRUMENTATION=1
+            - OPENTELEMETRY_EXPORTER=collector
+            - INSECURE=1
+            - COLLECTOR_ENDPOINT=otel-collector:55680
+            - LIGHTSTEP_SERVICE_NAME=py-collector-client
+            - LIGHTSTEP_SERVICE_VERSION=1.2.9
+            - TARGET_URL=http://py-collector-server:5000
+        stop_grace_period: 1s
+    py-collector-server:
+        container_name: py-collector-server
+        build:
+            context: ./python
+            dockerfile: ./otlp/Dockerfile.server
+        networks:
+            - demo
+        depends_on:
+            - otel-collector
+        env_file:
+            - .env
+        environment:
+            - OPENTELEMETRY_INSTRUMENTATION=1
+            - OPENTELEMETRY_EXPORTER=collector
+            - INSECURE=1
+            - COLLECTOR_ENDPOINT=otel-collector:55680
+            - LIGHTSTEP_SERVICE_NAME=py-collector-server
+            - LIGHTSTEP_SERVICE_VERSION=0.2.8
+        stop_grace_period: 1s
+    py-otlp-client:
+        container_name: py-otlp-client
+        build:
+            context: ./python
+            dockerfile: ./otlp/Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-otlp-server
+        env_file:
+            - .env
+        environment:
+            - OPENTELEMETRY_INSTRUMENTATION=1
+            - OPENTELEMETRY_EXPORTER=collector
+            - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
+            - LIGHTSTEP_SERVICE_NAME=py-otlp-client
+            - LIGHTSTEP_SERVICE_VERSION=10.10.10
+            - TARGET_URL=http://py-otlp-server:5000
+        stop_grace_period: 1s
+    py-otlp-server:
+        container_name: py-otlp-server
+        build:
+            context: ./python
+            dockerfile: ./otlp/Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OPENTELEMETRY_INSTRUMENTATION=1
+            - OPENTELEMETRY_EXPORTER=collector
+            - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
+            - LIGHTSTEP_SERVICE_NAME=py-otlp-server
+            - LIGHTSTEP_SERVICE_VERSION=10.10.9
+        stop_grace_period: 1s
+    py-launcher-client:
+        container_name: py-launcher-client
+        build:
+            context: ./python/launcher
+            dockerfile: Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-launcher-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-launcher-client
+            - LS_SERVICE_VERSION=10.10.10
+            - DESTINATION_URL=http://py-launcher-server:5000
+        stop_grace_period: 1s
+    py-launcher-server:
+        container_name: py-launcher-server
+        build:
+            context: ./python/launcher
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-launcher-server
+            - LS_SERVICE_VERSION=10.10.9
+        stop_grace_period: 1s
+    ###################################
+    ####### Javascript examples #######
+    ###################################
+    js-lstrace-server:
+        container_name: js-lstrace-server
+        build: ./nodejs/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=js-lstrace-server
+        stop_grace_period: 1s
+    js-lstrace-client:
+        container_name: js-lstrace-client
+        build: ./nodejs/client
+        networks:
+            - demo
+        depends_on:
+            - js-lstrace-server
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=js-lstrace-client
+            - TARGET_URL=http://js-lstrace-server:8080/ping
+        stop_grace_period: 1s
+    ##############################
+    ####### Java examples ########
+    ##############################
+    java-specialagent-server:
+        container_name: java-specialagent-server
+        build: ./java/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=java-specialagent-server
+            - LIGHTSTEP_SERVICE_VERSION=4.3.2
+        stop_grace_period: 1s
+    java-specialagent-client:
+        container_name: java-specialagent-client
+        build: ./java/client
+        networks:
+            - demo
+        depends_on:
+            - java-specialagent-server
+        env_file:
+            - .env
+        environment:
+            - LIGHTSTEP_COMPONENT_NAME=java-specialagent-client
+            - LIGHTSTEP_SERVICE_VERSION=3.2.1
+            - TARGET_URL=http://java-specialagent-server:8083
+        stop_grace_period: 1s
+    java-otlp-client:
+        container_name: java-otlp-client
+        build:
+            context: ./java/otlp
+            dockerfile: Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - java-otlp-server
+        env_file:
+            - .env
+        environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-client,service.version=11.11.10
+            - LS_SATELLITE_URL=ingest.lightstep.com:443
+            - TARGET_URL=http://java-otlp-server:8083
+        stop_grace_period: 1s
+    java-otlp-server:
+        container_name: java-otlp-server
+        build:
+            context: ./java/otlp
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
+            - LS_SATELLITE_URL=ingest.lightstep.com:443
+        stop_grace_period: 1s
+    ##############################
+    ####### Extra services #######
+    ##############################
+    mongo:
+        container_name: mongo
+        image: mongo:latest
+        networks:
+            - demo
+        stop_grace_period: 1s
+        ports:
+            - 0.0.0.0:27017:27017
+    mysql:
+        container_name: mysql
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_USER: testuser
+            MYSQL_PASSWORD: testpassword
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: opentelemetry-tests
+        networks:
+            - demo
+        stop_grace_period: 1s
+    postgres:
+        container_name: postgres
+        image: postgres:10.5-alpine
+        environment:
+            POSTGRES_USER: testuser
+            POSTGRES_PASSWORD: testpassword
+            POSTGRES_DB: opentelemetry-tests
+        networks:
+            - demo
+        ports:
+            - 0.0.0.0:5432:5432
+        stop_grace_period: 1s
+    redis:
+        container_name: redis
+        image: redis:4.0-alpine
+        networks:
+            - demo
+        ports:
+            - 0.0.0.0:6379:6379
+        stop_grace_period: 1s
+    otel-collector:
+        container_name: otel-collector
+        image: otel/opentelemetry-collector:0.6.1
+        command: ["--config=/conf/collector-config.yaml", "--log-level=DEBUG"]
+        networks:
+            - demo
+        # depends_on:
+        #     - satellite
+        volumes:
+            - ./collector/collector-config.yaml:/conf/collector-config.yaml
+        ports:
+            - "0.0.0.0:8889:8889"   # Prometheus exporter metrics
+            - "0.0.0.0:55680:55680" # OTLP receiver
+    # optionally configure a satellite here
+    # satellite:
+    #     container_name: satellite
+    #     image: satlocal:latest
+    #     env_file:
+    #         - .env
+    #     networks:
+    #         - demo
+    #     ports:
+    #         - "0.0.0.0:8360:8360"   # Satellite ingest port
+    #     stop_grace_period: 1s
+networks:
+    demo:

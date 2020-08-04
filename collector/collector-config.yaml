@@ -1,0 +1,35 @@
+receivers:
+    otlp:
+      protocols:
+          grpc:
+  
+exporters:
+    prometheus:
+        endpoint: "0.0.0.0:8889"
+
+    logging:
+        loglevel: debug
+
+    # configure collector to send data to a local satellite
+    # otlp:
+    #   endpoint: satellite:8360
+    #   insecure: true
+
+    # configuring otlp to public satellites
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: {"lightstep-access-token":"ACCESS TOKEN"}
+
+processors:
+    batch:
+    queued_retry:
+  
+service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        exporters: [logging, otlp]
+        processors: [batch]
+      metrics:
+        receivers: [otlp]
+        exporters: [logging]
