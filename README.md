@@ -1,6 +1,11 @@
-# Lightstep Examples
+# Lightstep OpenTelemetry Examples
 
-This repo contains example client/server applications using different mechanism for sending data to Lightstep. The following examples are configured in the docker-compose file:
+This repo contains example code and resources for working with OpenTelemetry.
+
+
+## With docker-compose
+
+The following client/server applications using different mechanism for sending data to Lightstep. The following examples are configured in the `docker-compose.yml` file:
 
 | name           | description |
 | -------------- | ----------- |
@@ -15,7 +20,7 @@ This repo contains example client/server applications using different mechanism 
 | java           | client/server example instrumented via special agent |
 | java-otlp      | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 
-## Getting started
+### running examples
 
 ```bash
 git clone https://github.com/lightstep/opentelemetry-examples && cd opentelemetrys-examples
