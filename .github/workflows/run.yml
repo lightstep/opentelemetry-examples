@@ -15,6 +15,13 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Update configuration
+      run: |
+        cp example.env .env
+        sed -i '' 's/<ACCESS TOKEN>/${TOKEN}/' .env
+        cp example-collector-config.yaml ./collector/collector-config.yaml
+        sed -i '' 's/<ACCESS TOKEN>/${TOKEN}/' ./collector/collector-config.yaml
+
     - name: Run docker-compose
       run: docker-compose up -d
 
