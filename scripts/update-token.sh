@@ -1,7 +1,5 @@
 #!/bin/bash
 
-TOKEN=${{ secrets.ACCESS_TOKEN }}
-
 cp example.env .env
 sed -i '' "s/<ACCESS TOKEN>/${TOKEN}/" .env
 cp example-collector-config.yaml ./collector/collector-config.yaml
