@@ -24,7 +24,13 @@ The following client/server applications using different mechanism for sending d
 
 ```bash
 git clone https://github.com/lightstep/opentelemetry-examples && cd opentelemetrys-examples
+
+# copy the example environment variable file
+# and update the access token
 cp example.env .env
-# edit .env file with your access token
+sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' .env
+cp example-collector-config.yaml ./collector/collector-config.yaml
+sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' ./collector/collector-config.yaml
+
 docker-compose up
 ```
