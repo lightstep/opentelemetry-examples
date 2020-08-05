@@ -3,7 +3,7 @@ name: Run docker-compose
 # Runs examples every hour for 30 seconds
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   run:
@@ -16,11 +16,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Update configuration
-      run: |
-        cp example.env .env
-        sed -i '' 's/<ACCESS TOKEN>/${TOKEN}/' .env
-        cp example-collector-config.yaml ./collector/collector-config.yaml
-        sed -i '' 's/<ACCESS TOKEN>/${TOKEN}/' ./collector/collector-config.yaml
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+      run: ./scripts/update-token.sh
 
     - name: Run docker-compose
       run: docker-compose up -d
