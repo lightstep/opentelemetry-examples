@@ -3,8 +3,8 @@
 //
 // usage:
 //   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LIGHTSTEP_COMPONENT_NAME=demo-server-go \
-//   LIGHTSTEP_SERVICE_VERSION=0.1.8 \
+//   LS_SERVICE_NAME=demo-server-go \
+//   LS_SERVICE_VERSION=0.1.8 \
 //   go run server.go
 
 package main
@@ -31,8 +31,8 @@ import (
 var (
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	lsMetricsURL   = os.Getenv("LS_METRICS_URL")
-	componentName  = os.Getenv("LIGHTSTEP_COMPONENT_NAME")
-	serviceVersion = os.Getenv("LIGHTSTEP_SERVICE_VERSION")
+	componentName  = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -3,8 +3,8 @@
 //
 // usage:
 //   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LIGHTSTEP_COMPONENT_NAME=demo-server-go \
-//   LIGHTSTEP_SERVICE_VERSION=0.1.8 \
+//   LS_SERVICE_NAME=demo-server-go \
+//   LS_SERVICE_VERSION=0.1.8 \
 //   go run server.go
 
 package main

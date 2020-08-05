@@ -11,8 +11,8 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=go-opentracing-server
-            - LIGHTSTEP_SERVICE_VERSION=5
+            - LS_SERVICE_NAME=go-opentracing-server
+            - LS_SERVICE_VERSION=5
         stop_grace_period: 1s
     go-opentracing-client:
         container_name: go-opentracing-client
@@ -24,8 +24,8 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=go-opentracing-client
-            - LIGHTSTEP_SERVICE_VERSION=1.2.7
+            - LS_SERVICE_NAME=go-opentracing-client
+            - LS_SERVICE_VERSION=1.2.7
             - TARGET_URL=http://go-opentracing-server:8081
         stop_grace_period: 1s
     go-otlp-server:
@@ -91,8 +91,8 @@ services:
     py-lstrace-client:
         container_name: py-lstrace-client
         build:
-            context: ./python
-            dockerfile: ./lstrace/Dockerfile.client
+            context: ./python/lstrace
+            dockerfile: Dockerfile.client
         networks:
             - demo
         depends_on:
@@ -100,28 +100,28 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=py-lstrace-client
-            - LIGHTSTEP_SERVICE_VERSION=1.2.1
+            - LS_SERVICE_NAME=py-lstrace-client
+            - LS_SERVICE_VERSION=1.2.1
             - TARGET_URL=http://py-lstrace-server:5000
         stop_grace_period: 1s
     py-lstrace-server:
         container_name: py-lstrace-server
         build:
-            context: ./python
-            dockerfile: ./lstrace/Dockerfile.server
+            context: ./python/lstrace
+            dockerfile: Dockerfile.server
         networks:
             - demo
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=py-lstrace-server
-            - LIGHTSTEP_SERVICE_VERSION=0.2.2
+            - LS_SERVICE_NAME=py-lstrace-server
+            - LS_SERVICE_VERSION=0.2.2
         stop_grace_period: 1s
     py-collector-client:
         container_name: py-collector-client
         build:
-            context: ./python
-            dockerfile: ./otlp/Dockerfile.client
+            context: ./python/otlp
+            dockerfile: Dockerfile.client
         networks:
             - demo
         depends_on:
@@ -130,19 +130,17 @@ services:
         env_file:
             - .env
         environment:
-            - OPENTELEMETRY_INSTRUMENTATION=1
-            - OPENTELEMETRY_EXPORTER=collector
             - INSECURE=1
             - COLLECTOR_ENDPOINT=otel-collector:55680
-            - LIGHTSTEP_SERVICE_NAME=py-collector-client
-            - LIGHTSTEP_SERVICE_VERSION=1.2.9
+            - LS_SERVICE_NAME=py-collector-client
+            - LS_SERVICE_VERSION=1.2.9
             - TARGET_URL=http://py-collector-server:5000
         stop_grace_period: 1s
     py-collector-server:
         container_name: py-collector-server
         build:
-            context: ./python
-            dockerfile: ./otlp/Dockerfile.server
+            context: ./python/otlp
+            dockerfile: Dockerfile.server
         networks:
             - demo
         depends_on:
@@ -150,18 +148,16 @@ services:
         env_file:
             - .env
         environment:
-            - OPENTELEMETRY_INSTRUMENTATION=1
-            - OPENTELEMETRY_EXPORTER=collector
             - INSECURE=1
             - COLLECTOR_ENDPOINT=otel-collector:55680
-            - LIGHTSTEP_SERVICE_NAME=py-collector-server
-            - LIGHTSTEP_SERVICE_VERSION=0.2.8
+            - LS_SERVICE_NAME=py-collector-server
+            - LS_SERVICE_VERSION=0.2.8
         stop_grace_period: 1s
     py-otlp-client:
         container_name: py-otlp-client
         build:
-            context: ./python
-            dockerfile: ./otlp/Dockerfile.client
+            context: ./python/otlp
+            dockerfile: Dockerfile.client
         networks:
             - demo
         depends_on:
@@ -169,28 +165,24 @@ services:
         env_file:
             - .env
         environment:
-            - OPENTELEMETRY_INSTRUMENTATION=1
-            - OPENTELEMETRY_EXPORTER=collector
             - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
-            - LIGHTSTEP_SERVICE_NAME=py-otlp-client
-            - LIGHTSTEP_SERVICE_VERSION=10.10.10
+            - LS_SERVICE_NAME=py-otlp-client
+            - LS_SERVICE_VERSION=10.10.10
             - TARGET_URL=http://py-otlp-server:5000
         stop_grace_period: 1s
     py-otlp-server:
         container_name: py-otlp-server
         build:
-            context: ./python
-            dockerfile: ./otlp/Dockerfile.server
+            context: ./python/otlp
+            dockerfile: Dockerfile.server
         networks:
             - demo
         env_file:
             - .env
         environment:
-            - OPENTELEMETRY_INSTRUMENTATION=1
-            - OPENTELEMETRY_EXPORTER=collector
             - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
-            - LIGHTSTEP_SERVICE_NAME=py-otlp-server
-            - LIGHTSTEP_SERVICE_VERSION=10.10.9
+            - LS_SERVICE_NAME=py-otlp-server
+            - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
     py-launcher-client:
         container_name: py-launcher-client
@@ -232,7 +224,7 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=js-lstrace-server
+            - LS_SERVICE_NAME=js-lstrace-server
         stop_grace_period: 1s
     js-lstrace-client:
         container_name: js-lstrace-client
@@ -244,7 +236,7 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=js-lstrace-client
+            - LS_SERVICE_NAME=js-lstrace-client
             - TARGET_URL=http://js-lstrace-server:8080/ping
         stop_grace_period: 1s
     ##############################
@@ -258,8 +250,8 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=java-specialagent-server
-            - LIGHTSTEP_SERVICE_VERSION=4.3.2
+            - LS_SERVICE_NAME=java-specialagent-server
+            - LS_SERVICE_VERSION=4.3.2
         stop_grace_period: 1s
     java-specialagent-client:
         container_name: java-specialagent-client
@@ -271,8 +263,8 @@ services:
         env_file:
             - .env
         environment:
-            - LIGHTSTEP_COMPONENT_NAME=java-specialagent-client
-            - LIGHTSTEP_SERVICE_VERSION=3.2.1
+            - LS_SERVICE_NAME=java-specialagent-client
+            - LS_SERVICE_VERSION=3.2.1
             - TARGET_URL=http://java-specialagent-server:8083
         stop_grace_period: 1s
     java-otlp-client:

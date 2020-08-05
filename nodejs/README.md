@@ -26,6 +26,6 @@ docker-compose up
 | Name                     | Required | Default                              |
 | ------------------------ | -------- | ------------------------------------ |
 | LS_ACCESS_TOKEN          | yes      |
-| LIGHTSTEP_COMPONENT_NAME | yes      |                                      |
+| LS_SERVICE_NAME | yes      |                                      |
 | DD_TRACE_AGENT_URL       | yes      |
 | LS_METRICS_URL           | No       | https://ingest.lightstep.com/metrics |

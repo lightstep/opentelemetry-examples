@@ -12,13 +12,11 @@ import os
 import random
 import time
 
-from opentelemetry import trace
-from opentelemetry.launcher import configure_opentelemetry
+from common import get_tracer
+
+tracer = get_tracer()
 
 import requests
-
-configure_opentelemetry()
-tracer = trace.get_tracer(__name__)
 
 
 def send_requests(target):
@@ -35,7 +33,7 @@ def send_requests(target):
 
 
 if __name__ == "__main__":
-    target = os.getenv("DESTINATION_URL", "http://localhost:8081")
+    target = os.getenv("TARGET_URL", "http://localhost:8081")
     while True:
         send_requests(target)
         time.sleep(5)

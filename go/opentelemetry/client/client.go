@@ -3,8 +3,8 @@
 //
 // usage:
 //   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LIGHTSTEP_COMPONENT_NAME=demo-client-go \
-//   LIGHTSTEP_SERVICE_VERSION=0.1.8 \
+//   LS_SERVICE_NAME=demo-client-go \
+//   LS_SERVICE_VERSION=0.1.8 \
 //   go run client.go
 
 package main
@@ -29,8 +29,8 @@ var (
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	lsMetricsURL   = os.Getenv("LS_METRICS_URL")
 	targetURL      = os.Getenv("TARGET_URL")
-	componentName  = os.Getenv("LIGHTSTEP_COMPONENT_NAME")
-	serviceVersion = os.Getenv("LIGHTSTEP_SERVICE_VERSION")
+	componentName  = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 )
 
 func initLightstepTracer() {

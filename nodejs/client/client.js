@@ -2,8 +2,8 @@
 
 const ACCESS_TOKEN = process.env.LS_ACCESS_TOKEN;
 const COMPONENT_NAME =
-  process.env.LIGHTSTEP_COMPONENT_NAME || 'js-lstrace-client';
-const SERVICE_VERSION = process.env.LIGHTSTEP_SERVICE_VERSION || '0.0.1';
+  process.env.LS_SERVICE_NAME || 'js-lstrace-client';
+const SERVICE_VERSION = process.env.LS_SERVICE_VERSION || '0.0.1';
 const TARGET_URL = process.env.TARGET_URL || 'http://localhost:8080/ping';
 
 const tracer = require('ls-trace').init({

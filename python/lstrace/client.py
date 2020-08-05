@@ -12,18 +12,17 @@ import os
 import random
 import time
 
-from opentelemetry import trace
-from opentelemetry.launcher import configure_opentelemetry
-
+from ddtrace import tracer
 import requests
 
-configure_opentelemetry()
-tracer = trace.get_tracer(__name__)
+from common import get_tracer
+
+get_tracer()
 
 
 def send_requests(target):
     integrations = ["pymongo", "redis", "sqlalchemy"]
-    with tracer.start_as_current_span("client operation"):
+    with tracer.trace("client operation"):
         for i in integrations:
             url = f"{target}/{i}/{random.randint(1,1024)}"
             try:
@@ -35,7 +34,7 @@ def send_requests(target):
 
 
 if __name__ == "__main__":
-    target = os.getenv("DESTINATION_URL", "http://localhost:8081")
+    target = os.getenv("TARGET_URL", "http://localhost:8081")
     while True:
         send_requests(target)
         time.sleep(5)
