@@ -3,7 +3,7 @@ name: Run docker-compose
 # Runs examples every hour for 30 seconds
 on:
   schedule:
-    - cron: "0 */1 * * *"
+    - cron: "5 * * * *"
 
 jobs:
   run:
@@ -23,9 +23,9 @@ jobs:
     - name: Run docker-compose
       run: docker-compose up -d
 
-    - name: Sleep 30s
+    - name: Sleep 5 minutes
       run:
-        sleep 30
+        sleep 300
 
     - name: Run docker-compose
       run: docker-compose down
