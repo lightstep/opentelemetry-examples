@@ -1,6 +1,6 @@
 name: Run docker-compose
 
-# Runs examples every hour for 30 seconds
+# Runs examples every hour for 5 minutes
 on:
   schedule:
     - cron: "5 * * * *"
