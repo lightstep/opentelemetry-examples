@@ -213,6 +213,12 @@ services:
             - LS_SERVICE_NAME=py-launcher-server
             - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
+
+
+
+
+
+<<<<<<< HEAD
     demo-client-otlp:
         container_name: demo-client-otlp
         build:
@@ -227,6 +233,8 @@ services:
             - LS_SERVICE_NAME=demo-client-otlp
             - LS_SERVICE_VERSION=0.1.1
         stop_grace_period: 1s
+
+
     demo-client-lstrace:
         container_name: demo-client-lstrace
         build:
@@ -240,6 +248,35 @@ services:
             - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server
             - LS_SERVICE_NAME=demo-client-lstrace
             - LS_SERVICE_VERSION=0.2.2
+        stop_grace_period: 1s
+    py-opentracing-client:
+        container_name: py-opentracing-client
+        build:
+            context: ./python/opentracing
+            dockerfile: Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-opentracing-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-client
+            - LS_SERVICE_VERSION=10.10.10
+            - DESTINATION_URL=http://py-opentracing-server:5000
+        stop_grace_period: 1s
+    py-opentracing-server:
+        container_name: py-opentracing-server
+        build:
+            context: ./python/opentracing
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-server
+            - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
     ###################################
     ####### Javascript examples #######

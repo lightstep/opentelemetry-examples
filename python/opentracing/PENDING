@@ -1,1 +1,0 @@
-Make an example that uses opentracingshim to send opentelemetry traces to the lightstep app via the opentracing shim
