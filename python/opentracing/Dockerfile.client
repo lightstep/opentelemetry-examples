@@ -1,7 +1,7 @@
 FROM python:3.7
 RUN pip install flask pymongo redis requests sqlalchemy
-RUN pip install opentelemetry-launcher
-RUN opentelemetry-bootstrap -a install
+RUN pip install lightstep
+RUN pip install opentelemetry-opentracing-shim
 
 ADD client.py /app/client.py
-CMD ["opentelemetry-instrument", "/app/client.py"]
+CMD ["python", "/app/client.py"]

@@ -13,7 +13,7 @@ from lightstep import Tracer
 
 def send_requests(target):
     integrations = ["pymongo", "redis", "sqlalchemy"]
-    with global_tracer.start_active_span("client operation"):
+    with global_tracer().start_active_span("client operation"):
         for i in integrations:
             url = f"{target}/{i}/{randint(1,1024)}"
             try:
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     set_global_tracer(
         Tracer(
-            component_name="testing01",
+            component_name="py-opentracing-client",
             access_token=getenv("LS_ACCESS_TOKEN")
         )
     )
