@@ -4,7 +4,9 @@ RUN pip install lightstep
 RUN pip install opentelemetry-launcher
 RUN pip install git+https://github.com/ocelotl/opentelemetry-python.git@issue_305#subdirectory=opentelemetry-api
 RUN pip install git+https://github.com/ocelotl/opentelemetry-python.git@issue_305#subdirectory=opentelemetry-sdk
+RUN pip install git+https://github.com/ocelotl/opentelemetry-python.git@issue_305#subdirectory=opentelemetry-instrumentation
 RUN pip install git+https://github.com/ocelotl/opentelemetry-python.git@issue_305#subdirectory=instrumentation/opentelemetry-instrumentation-opentracing-shim
+RUN pip install git+https://github.com/ocelotl/opentelemetry-python.git@issue_305#subdirectory=instrumentation/opentelemetry-instrumentation-requests
 
 ADD client.py /app/client.py
-CMD ["python", "/app/client.py"]
+CMD ["opentelemetry-instrument", "python", "/app/client.py"]
