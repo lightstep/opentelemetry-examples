@@ -239,6 +239,31 @@ services:
             - LS_SERVICE_NAME=js-lstrace-client
             - TARGET_URL=http://js-lstrace-server:8080/ping
         stop_grace_period: 1s
+    js-launcher-server:
+        container_name: js-launcher-server
+        build: ./nodejs/launcher/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+            - LS_SERVICE_NAME=js-launcher-server
+        stop_grace_period: 1s
+    js-launcher-client:
+        container_name: js-launcher-client
+        build: ./nodejs/launcher/client
+        networks:
+            - demo
+        depends_on:
+            - js-launcher-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=js-launcher-client
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+            - TARGET_URL=http://js-launcher-server:8080/ping
+        stop_grace_period: 1s
     ##############################
     ####### Java examples ########
     ##############################
