@@ -247,6 +247,7 @@ services:
         env_file:
             - .env
         environment:
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
             - LS_SERVICE_NAME=js-launcher-server
         stop_grace_period: 1s
     js-launcher-client:
@@ -260,6 +261,7 @@ services:
             - .env
         environment:
             - LS_SERVICE_NAME=js-launcher-client
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
             - TARGET_URL=http://js-launcher-server:8080/ping
         stop_grace_period: 1s
     ##############################
