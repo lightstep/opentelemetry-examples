@@ -8,7 +8,6 @@ from time import sleep
 from requests import get
 
 from opentracing import set_global_tracer, global_tracer
-# from lightstep import Tracer
 
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
@@ -37,12 +36,6 @@ def send_requests(target):
 if __name__ == "__main__":
     target = getenv("DESTINATION_URL", "http://localhost:8081")
 
-    # set_global_tracer(
-    #     Tracer(
-    #         component_name="py-opentracing-client",
-    #         access_token=getenv("LS_ACCESS_TOKEN")
-    #     )
-    # )
     set_global_tracer(shim)
 
     while True:
