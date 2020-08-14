@@ -7,11 +7,9 @@ from time import sleep
 
 from requests import get
 
-# from opentracing import set_global_tracer, global_tracer
-from opentracing import set_global_tracer
-from lightstep import Tracer
+from opentracing import set_global_tracer, global_tracer
+# from lightstep import Tracer
 
-# Added opentelemetry lines
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.instrumentation.opentracing_shim import create_tracer
@@ -25,8 +23,7 @@ shim = create_tracer(trace.get_tracer_provider())
 
 def send_requests(target):
     integrations = ["pymongo", "redis", "sqlalchemy"]
-    # with global_tracer().start_active_span("client operation"):
-    with shim.start_active_span("client operation"):
+    with global_tracer().start_active_span("client operation"):
         for i in integrations:
             url = f"{target}/{i}/{randint(1,1024)}"
             try:
@@ -40,12 +37,13 @@ def send_requests(target):
 if __name__ == "__main__":
     target = getenv("DESTINATION_URL", "http://localhost:8081")
 
-    set_global_tracer(
-        Tracer(
-            component_name="py-opentracing-client",
-            access_token=getenv("LS_ACCESS_TOKEN")
-        )
-    )
+    # set_global_tracer(
+    #     Tracer(
+    #         component_name="py-opentracing-client",
+    #         access_token=getenv("LS_ACCESS_TOKEN")
+    #     )
+    # )
+    set_global_tracer(shim)
 
     while True:
         send_requests(target)
