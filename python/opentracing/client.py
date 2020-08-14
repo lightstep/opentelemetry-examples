@@ -9,15 +9,14 @@ from requests import get
 
 from opentracing import set_global_tracer, global_tracer
 
-from opentelemetry import trace
+from opentelemetry.trace import get_tracer_provider, set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.instrumentation.opentracing_shim import create_tracer
 from opentelemetry.launcher import configure_opentelemetry
 
-trace.set_tracer_provider(TracerProvider())
+set_tracer_provider(TracerProvider())
 configure_opentelemetry()
-otel_tracer = trace.get_tracer(__name__)
-shim = create_tracer(trace.get_tracer_provider())
+shim = create_tracer(get_tracer_provider())
 
 
 def send_requests(target):
