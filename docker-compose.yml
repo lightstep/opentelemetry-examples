@@ -223,6 +223,7 @@ services:
         env_file:
             - .env
         environment:
+            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123
             - LS_SERVICE_NAME=demo-client
             - LS_SERVICE_VERSION=0.1.1
         stop_grace_period: 1s
@@ -384,12 +385,22 @@ services:
         networks:
             - demo
         # depends_on:
+        #     - jaeger
         #     - satellite
         volumes:
             - ./collector/collector-config.yaml:/conf/collector-config.yaml
         ports:
             - "0.0.0.0:8889:8889"   # Prometheus exporter metrics
             - "0.0.0.0:55680:55680" # OTLP receiver
+    # jaeger:
+    #     container_name: jaeger
+    #     image: jaegertracing/all-in-one:latest
+    #     ports:
+    #         - "0.0.0.0:16686:16686"
+    #     networks:
+    #         - demo
+    #         # docker run -p 16686:16686 -p 14268:14268 -p 6831:6831/udp -p 14250:14250 
+    #     stop_grace_period: 1s
     # optionally configure a satellite here
     # satellite:
     #     container_name: satellite

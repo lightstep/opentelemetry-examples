@@ -19,6 +19,10 @@ exporters:
     otlp:
       endpoint: ingest.lightstep.com:443
       headers: {"lightstep-access-token":"<ACCESS TOKEN>"}
+    
+      # configure collector to send data to jaeger
+    # jaeger:
+    #   endpoint: jaeger:6831
 
 processors:
     batch:
