@@ -90,6 +90,9 @@ func initLightstepTracer() {
 		SystemMetrics: lightstep.SystemMetricsOptions{
 			Endpoint: endpoint,
 		},
+		Propagators: map[opentracing.BuiltinFormat]lightstep.Propagator{
+			opentracing.HTTPHeaders: lightstep.B3Propagator,
+		},
 	}))
 }
 
