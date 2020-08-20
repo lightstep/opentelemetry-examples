@@ -16,7 +16,9 @@ import io.grpc.Metadata.Key;
 import io.grpc.MethodDescriptor;
 import io.grpc.Status;
 import io.opentelemetry.OpenTelemetry;
+import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.extensions.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.trace.Span;
@@ -78,6 +80,11 @@ public class ExampleServer {
                 .build()
         ).build();
 
+    OpenTelemetry.setPropagators(
+      DefaultContextPropagators
+        .builder()
+        .addHttpTextFormat(B3Propagator.getMultipleHeaderPropagator())
+        .build());
     OpenTelemetrySdk.getTracerProvider()
         .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
 

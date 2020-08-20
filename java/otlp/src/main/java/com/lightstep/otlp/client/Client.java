@@ -9,6 +9,7 @@ import io.grpc.CallOptions;
 import io.grpc.Channel;
 import io.grpc.ClientCall;
 import io.grpc.ClientInterceptor;
+import io.grpc.Context;
 import io.grpc.ForwardingClientCall.SimpleForwardingClientCall;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -16,12 +17,16 @@ import io.grpc.Metadata.Key;
 import io.grpc.MethodDescriptor;
 import io.grpc.Status;
 import io.opentelemetry.OpenTelemetry;
+import io.opentelemetry.context.propagation.DefaultContextPropagators;
+import io.opentelemetry.context.propagation.HttpTextFormat;
 import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.extensions.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.trace.Span;
 import io.opentelemetry.trace.Span.Kind;
 import io.opentelemetry.trace.Tracer;
+import io.opentelemetry.trace.TracingContextUtils;
 
 public class Client {
   private static final Key<String> ACCESS_TOKEN_HEADER = Key
@@ -82,6 +87,12 @@ public class Client {
                 .build()
         ).build();
 
+    OpenTelemetry.setPropagators(
+      DefaultContextPropagators
+        .builder()
+        .addHttpTextFormat(B3Propagator.getMultipleHeaderPropagator())
+        .build());
+
     OpenTelemetrySdk.getTracerProvider()
         .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
 
@@ -103,7 +114,13 @@ public class Client {
     span.addEvent("Event 0");
 
     OkHttpClient client = new OkHttpClient();
-    Request req = new Request.Builder()
+    Request.Builder reqBuilder = new Request.Builder();
+
+    // Inject the current Span into the Request.
+    Context withSpanContext = TracingContextUtils.withSpan(span, Context.current());
+    OpenTelemetry.getPropagators().getHttpTextFormat().inject(withSpanContext, reqBuilder, Request.Builder::addHeader);
+
+    Request req = reqBuilder
     .url(targetURL + "/content")
     .build();
 
