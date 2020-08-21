@@ -350,6 +350,22 @@ services:
             - LS_SATELLITE_URL=ingest.lightstep.com:443
         stop_grace_period: 1s
     ##############################
+    ####### .NET examples ########
+    ##############################
+    dotnet-otlp-server:
+        container_name: dotnet-otlp-server
+        build:
+            context: ./dotnet/server
+            dockerfile: Dockerfile
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=dotnet-otlp-server
+            - LS_SERVICE_VERSION=15.15.15
+        stop_grace_period: 1s
+    ##############################
     ####### Extra services #######
     ##############################
     mongo:
