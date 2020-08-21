@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import os
 import random
 import string
+import flask
 
 import redis
 from pymongo import MongoClient
@@ -10,14 +10,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from opentelemetry import trace
-from opentelemetry.launcher import configure_opentelemetry
+# from opentelemetry.launcher import configure_opentelemetry
 
 
-configure_opentelemetry()
+# configure_opentelemetry()
 tracer = trace.get_tracer(__name__)
-from flask import Flask
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 Base = declarative_base()
 
