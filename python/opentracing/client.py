@@ -9,13 +9,9 @@ from requests import get
 
 from opentracing import set_global_tracer, global_tracer
 
-from opentelemetry.trace import get_tracer_provider, set_tracer_provider
-from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.trace import get_tracer_provider
 from opentelemetry.instrumentation.opentracing_shim import create_tracer
-from opentelemetry.launcher import configure_opentelemetry
 
-set_tracer_provider(TracerProvider())
-configure_opentelemetry()
 shim = create_tracer(get_tracer_provider())
 
 

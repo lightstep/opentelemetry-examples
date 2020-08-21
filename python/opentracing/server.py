@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import os
 import random
 import string
+import flask
 
 import redis
 from pymongo import MongoClient
@@ -9,15 +9,14 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from opentelemetry import trace
-from opentelemetry.launcher import configure_opentelemetry
+from opentracing import set_global_tracer, global_tracer
 
+from opentelemetry.trace import get_tracer_provider
+from opentelemetry.instrumentation.opentracing_shim import create_tracer
 
-configure_opentelemetry()
-tracer = trace.get_tracer(__name__)
-from flask import Flask
+shim = create_tracer(get_tracer_provider())
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 Base = declarative_base()
 
@@ -50,7 +49,7 @@ def _random_string(length):
 
 @app.route("/redis/<length>")
 def redis_integration(length):
-    with tracer.start_as_current_span("server redis operation"):
+    with global_tracer().start_active_span("server redis operation"):
         r = redis.Redis(host="redis", port=6379)
         r.mset({"length": _random_string(length)})
         return str(r.get("length"))
@@ -58,7 +57,7 @@ def redis_integration(length):
 
 @app.route("/pymongo/<length>")
 def pymongo_integration(length):
-    with tracer.start_as_current_span("server pymongo operation"):
+    with global_tracer().start_active_span("server pymongo operation"):
         client = MongoClient("mongo", 27017, serverSelectionTimeoutMS=2000)
         db = client["opentelemetry-tests"]
         collection = db["tests"]
@@ -68,7 +67,7 @@ def pymongo_integration(length):
 
 @app.route("/sqlalchemy/<length>")
 def sqlalchemy_integration(length):
-    with tracer.start_as_current_span("server sqlalchemy operation"):
+    with global_tracer().start_active_span("server sqlalchemy operation"):
         # Create an engine that stores data in the local directory's
         # sqlalchemy_example.db file.
         engine = create_engine("sqlite:///sqlalchemy_example.db")
@@ -80,4 +79,5 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
+    set_global_tracer(shim)
     app.run(host="0.0.0.0")
