@@ -1,14 +1,8 @@
 FROM python:3.7
+RUN pip install protobuf==3.12.2
 RUN pip install flask pymongo redis requests sqlalchemy
-RUN pip install opentelemetry-api \
-    opentelemetry-instrumentation \
-    opentelemetry-sdk \
-    opentelemetry-exporter-otlp
-
+RUN pip install opentelemetry-launcher
 RUN opentelemetry-bootstrap -a install
 
-# install instrumentation that has not been released yet
-#RUN pip install \
-#    "git+https://github.com/open-telemetry/opentelemetry-python.git@master#subdirectory=ext/opentelemetry-ext-redis"
 ADD *.py /app/
-CMD ["opentelemetry-instrument", "/app/server.py"]
+CMD ["opentelemetry-instrument", "python", "/app/server.py"]

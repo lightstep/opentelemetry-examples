@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import random
 import string
+import flask
 
 import redis
 from pymongo import MongoClient
@@ -12,9 +13,8 @@ from common import get_tracer
 
 
 tracer = get_tracer()
-from flask import Flask
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 Base = declarative_base()
 

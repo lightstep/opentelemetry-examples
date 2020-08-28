@@ -241,6 +241,35 @@ services:
             - LS_SERVICE_NAME=demo-client-lstrace
             - LS_SERVICE_VERSION=0.2.2
         stop_grace_period: 1s
+    py-opentracing-client:
+        container_name: py-opentracing-client
+        build:
+            context: ./python/opentracing
+            dockerfile: Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - py-opentracing-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-client
+            - LS_SERVICE_VERSION=10.10.10
+            - DESTINATION_URL=http://py-opentracing-server:5000
+        stop_grace_period: 1s
+    py-opentracing-server:
+        container_name: py-opentracing-server
+        build:
+            context: ./python/opentracing
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-server
+            - LS_SERVICE_VERSION=10.10.9
+        stop_grace_period: 1s
     ###################################
     ####### Javascript examples #######
     ###################################

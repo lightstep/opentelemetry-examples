@@ -13,11 +13,9 @@ import random
 import time
 
 from opentelemetry import trace
-from opentelemetry.launcher import configure_opentelemetry
 
 import requests
 
-configure_opentelemetry()
 tracer = trace.get_tracer(__name__)
 
 

@@ -1,8 +1,6 @@
 import os
 
 from ddtrace import tracer
-from ddtrace.constants import FILTERS_KEY
-from ddtrace.filters import FilterRequestsOnUrl
 from ddtrace.propagation.b3 import B3HTTPPropagator
 
 
