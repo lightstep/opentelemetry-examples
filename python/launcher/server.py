@@ -10,10 +10,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from opentelemetry import trace
-# from opentelemetry.launcher import configure_opentelemetry
 
 
-# configure_opentelemetry()
 tracer = trace.get_tracer(__name__)
 
 app = flask.Flask(__name__)
