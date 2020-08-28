@@ -1,7 +1,6 @@
 FROM python:3.7
 RUN pip install protobuf==3.12.2
 RUN pip install flask pymongo redis requests sqlalchemy
-RUN pip install opentelemetry-opentracing-shim
 RUN pip install opentelemetry-launcher
 RUN opentelemetry-bootstrap -a install
 
