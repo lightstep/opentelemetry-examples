@@ -439,7 +439,7 @@ services:
         stop_grace_period: 1s
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector:0.6.1
+        image: otel/opentelemetry-collector:0.9.0
         command: ["--config=/conf/collector-config.yaml", "--log-level=DEBUG"]
         networks:
             - demo
