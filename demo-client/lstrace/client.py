@@ -15,7 +15,10 @@ def send_requests(destinations):
     with tracer.trace("send_requests"):
         for url in destinations:
             try:
-                res = requests.get(url)
+                if "/order" in url:
+                    res = requests.post(url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}')
+                else:
+                    res = requests.get(url)
                 print(f"Request to {url}, got {len(res.content)} bytes")
             except Exception as e:
                 print(f"Request to {url} failed {e}")
@@ -35,3 +38,6 @@ if __name__ == "__main__":
     while True:
         send_requests(destinations)
         time.sleep(2)
+
+
+curl -X POST -d '{"donuts":[{"flavor":"cinnamon","quantity":1}]}' 

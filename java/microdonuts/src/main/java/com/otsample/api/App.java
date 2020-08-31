@@ -17,8 +17,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 public class App {
   public static void main(String[] args)
       throws Exception {
-    Properties config = loadConfig(args);
-    if (!configureGlobalTracer(config, "MicroDonuts")) {
+    if (!configureGlobalTracer("MicroDonuts")) {
       throw new Exception("Could not configure the global tracer");
     }
 
@@ -32,8 +31,8 @@ public class App {
     ContextHandlerCollection handlers = new ContextHandlerCollection();
     handlers.setHandlers(new Handler[]{
         fileCtxHandler,
-        new ApiContextHandler(config),
-        new KitchenContextHandler(config),
+        new ApiContextHandler(),
+        new KitchenContextHandler(),
     });
     Server server = new Server(10001);
     server.setHandler(handlers);
@@ -43,26 +42,8 @@ public class App {
     server.join();
   }
 
-  static Properties loadConfig(String[] args)
-      throws IOException {
-    String file = "tracer_config.properties";
-    if (args.length > 0) {
-      file = args[0];
-    }
-
-    FileInputStream fs = new FileInputStream(file);
-    Properties config = new Properties();
-    config.load(fs);
-    return config;
-  }
-
-  static boolean configureGlobalTracer(Properties config, String componentName)
+  static boolean configureGlobalTracer(String componentName)
       throws MalformedURLException {
-    System.setProperty("ls.service.name", componentName);
-    System.setProperty("ls.access.token", config.getProperty("ls.access.token"));
-    System.setProperty("ls.service.version", config.getProperty("ls.service.version"));
-    System.setProperty("otel.exporter.otlp.span.endpoint",
-        config.getProperty("ls.collector_host"));
     OpenTelemetryConfiguration.newBuilder().install();
     Tracer tracer = TraceShim.createTracerShim();
 

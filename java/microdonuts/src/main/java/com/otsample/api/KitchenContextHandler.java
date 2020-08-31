@@ -24,7 +24,7 @@ public class KitchenContextHandler extends ServletContextHandler
 {
     KitchenService service;
 
-    public KitchenContextHandler(Properties config)
+    public KitchenContextHandler()
     {
         // The decorator here is boilerplate aside from the setOperationName() call.
         ServletFilterSpanDecorator renameSpanDecorator =
