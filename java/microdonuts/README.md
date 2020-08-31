@@ -31,9 +31,3 @@ In your web browser, navigate to http://127.0.0.1:10001 and order yourself some
 #### Lightstep Configuration
 
 If you have access to [LightStep](https://app.lightstep.com]), you will need your access token. 
-Add the following to `tracer_config.properties`:
-
-```properties
-ls.collector_host=ingest.lightstep.com
-ls.access.token=XXXXXXXXXXXXXXX  // TODO: replace with your token
-```
