@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  js-server:
+    container_name: js-server
+    build: ./server
+    networks:
+      - demo
+    env_file:
+      - .env
+    environment:
+      - LS_SERVICE_NAME=js-lstrace-server
+  js-client:
+    container_name: js-client
+    build: ./client
+    networks:
+      - demo
+    depends_on:
+      - js-server
+    env_file:
+      - .env
+    environment:
+      - LS_SERVICE_NAME=js-lstrace-client
+      - TARGET_URL=http://js-server:8080/ping
+networks:
+  demo:

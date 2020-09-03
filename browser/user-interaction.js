@@ -41,12 +41,11 @@ function getData(url, resolve) {
     req.setRequestHeader('Content-Type', 'application/json');
     req.setRequestHeader('Accept', 'application/json');
     req.send();
-    req.onload = function () {
+    req.onload = function() {
       resolve();
     };
   });
 }
-
 const tracer = opentelemetry.trace.getTracer('lightstep-web-example');
 
 window.addEventListener('load', () => {

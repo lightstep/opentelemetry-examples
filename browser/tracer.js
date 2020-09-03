@@ -1,7 +1,10 @@
 'use strict';
 
+// this will be needed to get a tracer
 import opentelemetry from '@opentelemetry/api';
+// tracer provider for web
 import { WebTracerProvider } from '@opentelemetry/web';
+// and an exporter with span processor
 import {
   ConsoleSpanExporter,
   SimpleSpanProcessor,
@@ -22,9 +25,18 @@ tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExport
   }
 })));
 
+tracerProvider.addSpanProcessor(
+  new SimpleSpanProcessor(
+    new LightstepExporter({
+      collectorUrl: 'YOUR_SATELLITE_URL',
+      serviceName: 'browser-demo',
+      token: 'YOUR_TOKEN',
+    })
+  )
+);
+
 // Register the tracer
 tracerProvider.register();
-
 const tracer = opentelemetry.trace.getTracer('lightstep-web-example');
 
 const span = tracer.startSpan('foo');
@@ -34,6 +46,6 @@ span.addEvent('event in foo');
 const childSpan = tracer.startSpan('bar', {
   parent: span,
 });
-
 childSpan.end();
+
 span.end();

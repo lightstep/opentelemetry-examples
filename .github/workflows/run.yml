@@ -1,0 +1,31 @@
+name: Run docker-compose
+
+# Runs examples every hour for 5 minutes
+on:
+  schedule:
+    - cron: "5 * * * *"
+
+jobs:
+  run:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Update configuration
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+      run: ./scripts/update-token.sh
+
+    - name: Run docker-compose
+      run: docker-compose up -d
+
+    - name: Sleep 5 minutes
+      run:
+        sleep 300
+
+    - name: Run docker-compose
+      run: docker-compose down
