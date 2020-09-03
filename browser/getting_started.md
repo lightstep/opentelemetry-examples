@@ -188,11 +188,11 @@ module.exports = {
 
 Congratulations you have successfully created your first trace!
 
-## Configure the Opentelemetry Collector Exporter
+## Configure the OpenTelemetry Collector Exporter
 
-This section assumes you have completed the "Collect Trace Data" section. In this example we will replace the Console Exporter with the Lightstep Exporter.
+This section assumes you have completed the "Collect Trace Data" section. In this example we will replace the Console Exporter with the OpenTelemetry Collector Exporter.
 
-1.  Install the Lightstep Exporter
+1.  Install the OpenTelemetry Collector Exporter
 
 ```shell script
     npm install @opentelemetry/exporter-collector --save
@@ -236,34 +236,30 @@ tracerProvider.addSpanProcessor(
 'use strict';
 
 import { WebTracerProvider } from '@opentelemetry/web';
-import {
-  ConsoleSpanExporter,
-  SimpleSpanProcessor,
-} from '@opentelemetry/tracing';
-import { LightstepExporter } from 'lightstep-opentelemetry-exporter';
+import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/tracing';
+import { CollectorTraceExporter } from '@opentelemetry/exporter-collector';
 import { DocumentLoad } from '@opentelemetry/plugin-document-load';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 
 // Create a provider for activating and tracking spans
 const tracerProvider = new WebTracerProvider({
-  plugins: [new DocumentLoad()],
+  plugins: [
+    new DocumentLoad(),
+  ],
 });
 
 // Configure a span processor and exporter for the tracer
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(new ConsoleSpanExporter())
-);
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new LightstepExporter({
-      token: 'YOUR_TOKEN',
-    })
-  )
-);
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
+  url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
+  headers: {
+    'Lightstep-Access-Token': 'YOUR_TOKEN'
+  }
+})));
 
 // Register the tracer
 tracerProvider.register({
-  contextManager: new ZoneContextManager().enable(),
+  contextManager: new ZoneContextManager(),
 });
 ```
 
@@ -426,4 +422,3 @@ window.addEventListener('load', () => {
 
 ![Screenshot of the running example](images/user-interaction-1-1.png)
 ![Screenshot of the running example](images/user-interaction-1-2.png)
-![Screenshot of the running example](images/user-interaction-1-3.png)
