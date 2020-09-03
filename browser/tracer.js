@@ -25,16 +25,6 @@ tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExport
   }
 })));
 
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new LightstepExporter({
-      collectorUrl: 'YOUR_SATELLITE_URL',
-      serviceName: 'browser-demo',
-      token: 'YOUR_TOKEN',
-    })
-  )
-);
-
 // Register the tracer
 tracerProvider.register();
 const tracer = opentelemetry.trace.getTracer('lightstep-web-example');
