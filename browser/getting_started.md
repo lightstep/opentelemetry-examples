@@ -160,64 +160,59 @@ module.exports = {
 10. Open the browser and go to 'http://localhost:8091/'. You should see similar output in the console
 
 ```json
+
 {
-  "traceId": "985b66d592a1299f7d12ebca56ca1fe3",
-  "parentId": "8d62a70aa335a227",
+  "traceId": "6bd973d5e8d84b685853e825cadfc99f",
+  "parentId": "20a1df36a0d578b8",
   "name": "bar",
-  "id": "17ada85c3d55376a",
+  "id": "703466258e17778f",
   "kind": 0,
-  "timestamp": 1685674607399000,
-  "duration": 299,
+  "timestamp": 1599138889685791,
+  "duration": 55,
   "attributes": {},
   "status": { "code": 0 },
-  "events": []
-}
+  "events": [],
+},
 {
-  "traceId": "985b66d592a1299f7d12ebca56ca1fe3",
+  "traceId": "6bd973d5e8d84b685853e825cadfc99f",
   "name": "foo",
-  "id": "8d62a70aa335a227",
+  "id": "20a1df36a0d578b8",
   "kind": 0,
-  "timestamp": 1585130342183948,
-  "duration": 315,
-  "attributes": {
-    "name": "value"
-  },
+  "timestamp": 1599138889685381,
+  "duration": 133012495,
+  "attributes": { "name": "value" },
   "status": { "code": 0 },
-  "events": [
-    {
-      "name": "event in foo",
-      "time": [1585130342, 184213041]
-    }
-  ]
+  "events": [{ "name": "event in foo", "time": [1599138889, 685635852] }],
 }
 ```
 
 Congratulations you have successfully created your first trace!
 
-## Configure the Lightstep Exporter
+## Configure the Opentelemetry Collector Exporter
 
 This section assumes you have completed the "Collect Trace Data" section. In this example we will replace the Console Exporter with the Lightstep Exporter.
 
 1.  Install the Lightstep Exporter
 
 ```shell script
-    npm install lightstep-opentelemetry-exporter --save
+    npm install @opentelemetry/exporter-collector --save
 ```
 
 2. Edit `tracer.js` and add code below
 
 ```javascript
 // ...
-
-import { LightstepExporter } from 'lightstep-opentelemetry-exporter';
+import { CollectorTraceExporter } from '@opentelemetry/exporter-collector';
 
 // ...
 
 tracerProvider.addSpanProcessor(
   new SimpleSpanProcessor(
-    new LightstepExporter({
-      serviceName: 'browser-demo',
-      token: 'YOUR_TOKEN',
+    new CollectorTraceExporter({
+      url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
+      headers: {
+        'Lightstep-Access-Token': 'YOUR_TOKEN'
+      }
     })
   )
 );
@@ -331,7 +326,7 @@ import {
   ConsoleSpanExporter,
   SimpleSpanProcessor,
 } from '@opentelemetry/tracing';
-import { LightstepExporter } from 'lightstep-opentelemetry-exporter';
+import { CollectorTraceExporter } from '@opentelemetry/exporter-collector';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { UserInteractionPlugin } from '@opentelemetry/plugin-user-interaction';
 import { XMLHttpRequestPlugin } from '@opentelemetry/plugin-xml-http-request';
@@ -349,20 +344,17 @@ const tracerProvider = new WebTracerProvider({
 });
 
 // Configure a span processor and exporter for the tracer
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(new ConsoleSpanExporter())
-);
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new LightstepExporter({
-      token: 'YOUR_TOKEN',
-    })
-  )
-);
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
+  url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
+  headers: {
+    'Lightstep-Access-Token': 'YOUR_TOKEN',
+  },
+})));
 
 // Register the tracer
 tracerProvider.register({
-  contextManager: new ZoneContextManager().enable(),
+  contextManager: new ZoneContextManager(),
 });
 
 function getData(url, resolve) {
