@@ -22,16 +22,7 @@ public class Client {
       targetURL = "http://127.0.0.1:8084";
     }
 
-    final String spanEndpoint = System.getenv("OTEL_EXPORTER_OTLP_SPAN_ENDPOINT");
-    final String lsToken = System.getenv("LS_ACCESS_TOKEN");
-    final String serviceName = System.getenv("LS_SERVICE_NAME");
-    final String serviceVersion = System.getenv("LS_SERVICE_VERSION");
-
     OtlpGrpcSpanExporter exporter = OpenTelemetryConfiguration.newBuilder()
-        .setServiceName(serviceName)
-        .setServiceVersion(serviceVersion)
-        .setAccessToken(lsToken)
-        .setSpanEndpoint(spanEndpoint)
         .buildExporter();
 
     OpenTelemetrySdk.getTracerProvider()
@@ -59,7 +50,7 @@ public class Client {
 
     // Inject the current Span into the Request.
     Context withSpanContext = TracingContextUtils.withSpan(span, Context.current());
-    OpenTelemetry.getPropagators().getHttpTextFormat()
+    OpenTelemetry.getPropagators().getTextMapPropagator()
         .inject(withSpanContext, reqBuilder, Request.Builder::addHeader);
 
     Request req = reqBuilder
