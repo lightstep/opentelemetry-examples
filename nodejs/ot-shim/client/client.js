@@ -27,7 +27,6 @@ sdk.start().then(() => {
 
   setInterval(() => {
     const span = tracer.startSpan('client.ping');
-    // const span = otelTracer.startSpan('client.ping');
     const headers = {};
     tracer.inject(span, opentracing.FORMAT_HTTP_HEADERS, headers);
 

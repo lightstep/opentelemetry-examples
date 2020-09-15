@@ -19,6 +19,7 @@ The following client/server applications using different mechanism for sending d
 | js-lstrace     | client/server example instrumented via ls-trace-js |
 | java           | client/server example instrumented via special agent |
 | java-otlp      | client/server example instrumented via OpenTelemetry and the OTLP exporter |
+| js-ot-shim     | client/server example instrumented via OpenTelemetry and JS Launcher with OpenTracing |
 
 ### running examples
 
