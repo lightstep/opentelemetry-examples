@@ -9,8 +9,7 @@ import {
   ConsoleSpanExporter,
   SimpleSpanProcessor,
 } from '@opentelemetry/tracing';
-
-import { LightstepExporter } from 'lightstep-opentelemetry-exporter';
+import { CollectorTraceExporter } from '@opentelemetry/exporter-collector';
 
 // Create a provider for activating and tracking spans
 const tracerProvider = new WebTracerProvider();
@@ -19,16 +18,12 @@ const tracerProvider = new WebTracerProvider();
 tracerProvider.addSpanProcessor(
   new SimpleSpanProcessor(new ConsoleSpanExporter())
 );
-
-tracerProvider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new LightstepExporter({
-      collectorUrl: 'YOUR_SATELLITE_URL',
-      serviceName: 'browser-demo',
-      token: 'YOUR_TOKEN',
-    })
-  )
-);
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
+  url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
+  headers: {
+    'Lightstep-Access-Token': 'YOUR_TOKEN'
+  }
+})));
 
 // Register the tracer
 tracerProvider.register();

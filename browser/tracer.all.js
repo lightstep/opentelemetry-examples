@@ -2,7 +2,7 @@
 
 import opentelemetry from '@opentelemetry/api';
 // import { UserInteractionPlugin } from '@opentelemetry/plugin-user-interaction';
-import { XMLHttpRequestPlugin } from '@opentelemetry/plugin-xml-http-request';
+// import { XMLHttpRequestPlugin } from '@opentelemetry/plugin-xml-http-request';
 import { WebTracerProvider } from '@opentelemetry/web';
 import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/tracing';
 

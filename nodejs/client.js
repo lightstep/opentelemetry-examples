@@ -1,5 +1,6 @@
 const opentelemetry = require('@opentelemetry/api');
 const { NodeTracerProvider } = require('@opentelemetry/node');
+const { CollectorTraceExporter } = require('@opentelemetry/exporter-collector');
 const {
   SimpleSpanProcessor,
   ConsoleSpanExporter,
@@ -16,9 +17,14 @@ const tracerProvider = new NodeTracerProvider({
   },
 });
 
-const exporter = new ConsoleSpanExporter({ serviceName: 'demo-client' });
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter({ serviceName: 'demo-client' })));
+tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
+  url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
+  headers: {
+    'Lightstep-Access-Token': 'YOUR_TOKEN',
+  },
+})));
 
-tracerProvider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 tracerProvider.register();
 
 // --- Make a request to the example service
