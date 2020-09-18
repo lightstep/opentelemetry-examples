@@ -16,7 +16,9 @@ def send_requests(destinations):
         for url in destinations:
             try:
                 if "/order" in url:
-                    res = requests.post(url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}')
+                    res = requests.post(
+                        url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}'
+                    )
                 else:
                     res = requests.get(url)
                 print(f"Request to {url}, got {len(res.content)} bytes")
@@ -38,6 +40,3 @@ if __name__ == "__main__":
     while True:
         send_requests(destinations)
         time.sleep(2)
-
-
-curl -X POST -d '{"donuts":[{"flavor":"cinnamon","quantity":1}]}' 

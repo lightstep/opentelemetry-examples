@@ -74,7 +74,17 @@ func makeRequest() {
 
 	contentLength := mathrand.Intn(2048)
 	url := fmt.Sprintf("%s/content/%d", targetURL, contentLength)
-	res, err := http.Get(url)
+	httpClient := &http.Client{}
+	httpReq, _ := http.NewRequest("GET", url, nil)
+
+	// Transmit the span's TraceContext as HTTP headers on our
+	// outbound request.
+	opentracing.GlobalTracer().Inject(
+		trivialSpan.Context(),
+		opentracing.HTTPHeaders,
+		opentracing.HTTPHeadersCarrier(httpReq.Header))
+
+	res, err := httpClient.Do(httpReq)
 	if err != nil {
 		fmt.Println(err)
 		return
