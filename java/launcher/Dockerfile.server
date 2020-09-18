@@ -13,8 +13,8 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 FROM openjdk:8
 
 COPY --from=build /usr/src/app/opentelemetry-javaagent-all.jar /app/
-COPY --from=build /usr/src/app/target/lightstep-otlp-server.jar /app/
+COPY --from=build /usr/src/app/target/lightstep-launcher-server.jar /app/
 
 ENTRYPOINT java \
-        -jar /app/lightstep-otlp-server.jar\
-        com.lightstep.otlp.server.ExampleServer
+        -jar /app/lightstep-launcher-server.jar\
+        com.lightstep.launcher.server.ExampleServer
