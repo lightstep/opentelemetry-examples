@@ -2,12 +2,10 @@ package com.lightstep.launcher.server;
 
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
 import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.trace.Span;
 import io.opentelemetry.trace.Span.Kind;
 import io.opentelemetry.trace.Tracer;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
@@ -15,14 +13,9 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 public class ExampleServer {
 
   public static void main(String[] args) throws Exception {
-    OtlpGrpcSpanExporter exporter = OpenTelemetryConfiguration.newBuilder()
-        .buildExporter();
+    OpenTelemetryConfiguration.newBuilder().install();
 
-    OpenTelemetrySdk.getTracerProvider()
-        .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
-
-    Tracer tracer =
-        OpenTelemetry.getTracerProvider().get("LightstepExample");
+    Tracer tracer = OpenTelemetry.getTracerProvider().get("LightstepExample");
 
     Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
@@ -46,7 +39,7 @@ public class ExampleServer {
 
   private static void doWork() {
     try {
-      Thread.sleep(1000);
+      TimeUnit.SECONDS.sleep(1);
     } catch (InterruptedException ignore) {
     }
   }
