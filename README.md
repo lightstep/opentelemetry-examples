@@ -20,6 +20,7 @@ The following client/server applications using different mechanism for sending d
 | java           | client/server example instrumented via special agent |
 | java-otlp      | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 | java-launcher  | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
+| js-ot-shim     | client/server example instrumented via OpenTelemetry and JS Launcher with OpenTracing |
 
 ### running examples
 
