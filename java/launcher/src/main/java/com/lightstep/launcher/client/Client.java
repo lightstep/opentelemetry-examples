@@ -17,7 +17,7 @@ import okhttp3.Response;
 
 public class Client {
   public static void main(String[] args) {
-    String targetURL = System.getenv("TARGET_URL");
+    String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
       targetURL = "http://127.0.0.1:8084";
     }

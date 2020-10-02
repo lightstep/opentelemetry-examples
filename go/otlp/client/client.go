@@ -32,7 +32,7 @@ var (
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	collectorURL   = os.Getenv("LS_SATELLITE_URL")
-	targetURL      = os.Getenv("TARGET_URL")
+	targetURL      = os.Getenv("DESTINATION_URL")
 	insecure       = os.Getenv("LS_INSECURE")
 )
 

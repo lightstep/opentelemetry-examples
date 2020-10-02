@@ -25,7 +25,7 @@ services:
         environment:
             - LS_SERVICE_NAME=js-ot-shim-client
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-            - TARGET_URL=http://js-ot-shim-server:8080/ping
+            - DESTINATION_URL=http://js-ot-shim-server:8080/ping
         stop_grace_period: 1s
 networks:
     demo:

@@ -25,7 +25,7 @@ import (
 
 var lsToken = os.Getenv("LS_ACCESS_TOKEN")
 var lsMetricsURL = os.Getenv("LS_METRICS_URL")
-var targetURL = os.Getenv("TARGET_URL")
+var targetURL = os.Getenv("DESTINATION_URL")
 
 func initLightstepTracer() {
 	u, err := url.Parse(lsMetricsURL)

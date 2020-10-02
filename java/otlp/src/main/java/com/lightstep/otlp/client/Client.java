@@ -36,7 +36,7 @@ public class Client {
 
     final String satelliteURL = System.getenv("LS_SATELLITE_URL");
     final String lsToken = System.getenv("LS_ACCESS_TOKEN");
-    String targetURL = System.getenv("TARGET_URL");
+    String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0)
         targetURL = "http://127.0.0.1:8083";
 

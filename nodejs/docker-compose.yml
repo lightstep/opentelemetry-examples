@@ -20,6 +20,6 @@ services:
       - .env
     environment:
       - LS_SERVICE_NAME=js-lstrace-client
-      - TARGET_URL=http://js-server:8080/ping
+      - DESTINATION_URL=http://js-server:8080/ping
 networks:
   demo:

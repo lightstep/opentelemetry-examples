@@ -4,7 +4,7 @@ const ACCESS_TOKEN = process.env.LS_ACCESS_TOKEN;
 const COMPONENT_NAME =
   process.env.LS_SERVICE_NAME || 'js-lstrace-client';
 const SERVICE_VERSION = process.env.LS_SERVICE_VERSION || '0.0.1';
-const TARGET_URL = process.env.TARGET_URL || 'http://localhost:8080/ping';
+const DESTINATION_URL = process.env.DESTINATION_URL || 'http://localhost:8080/ping';
 
 const tracer = require('ls-trace').init({
   experimental: {
@@ -20,7 +20,7 @@ setInterval(() => {
   const span = tracer.startSpan('client.ping');
   console.log('send: ping');
   scope.activate(span, () => {
-    http.get(TARGET_URL, resp => {
+    http.get(DESTINATION_URL, resp => {
       let data = '';
       resp.on('data', chunk => (data += chunk));
       resp.on('end', () => console.log(`recv: ${data}`));

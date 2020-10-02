@@ -34,7 +34,7 @@ def send_requests(target):
 
 
 if __name__ == "__main__":
-    target = os.getenv("TARGET_URL", "http://localhost:8081")
+    target = os.getenv("DESTINATION_URL", "http://localhost:8081")
     while True:
         send_requests(target)
         time.sleep(5)

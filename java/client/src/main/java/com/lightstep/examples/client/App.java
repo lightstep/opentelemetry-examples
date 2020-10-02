@@ -10,7 +10,7 @@ public class App
   public static void main( String[] args )
       throws Exception
     {
-      String targetUrl = System.getenv("TARGET_URL");
+      String targetUrl = System.getenv("DESTINATION_URL");
       if (targetUrl == null || targetUrl.length() == 0)
         targetUrl = "http://127.0.0.1:8083";
 
