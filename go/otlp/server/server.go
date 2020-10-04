@@ -23,10 +23,12 @@ import (
 	"google.golang.org/grpc/credentials"
 
 	// re-enable once the new version of otel-go and otel-go-contrib is released
-	muxtrace "go.opentelemetry.io/contrib/instrumentation/gorilla/mux"
+	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/kv"
+	"go.opentelemetry.io/otel/api/propagation"
 	"go.opentelemetry.io/otel/exporters/otlp"
+	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 )
@@ -89,6 +91,13 @@ func initExporter(url string, token string) *otlp.Exporter {
 }
 
 func initTracer() {
+	b3 := b3.B3{}
+	// Register the B3 propagator globally.
+	global.SetPropagators(propagation.New(
+		propagation.WithExtractors(b3),
+		propagation.WithInjectors(b3),
+	))
+
 	if len(collectorURL) == 0 {
 		collectorURL = "localhost:55680"
 	}
@@ -104,20 +113,17 @@ func initTracer() {
 	exporter := initExporter(collectorURL, lsToken)
 
 	resources := resource.New(
-		kv.String("service.name", componentName),
-		kv.String("service.version", serviceVersion),
-		kv.String("library.language", "go"),
-		kv.String("library.version", "1.2.3"),
+		label.String("service.name", componentName),
+		label.String("service.version", serviceVersion),
+		label.String("library.language", "go"),
+		label.String("library.version", "1.2.3"),
 	)
-	tp, err := trace.NewProvider(
+	tp := trace.NewTracerProvider(
 		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
 		trace.WithSyncer(exporter),
 		trace.WithResource(resources),
 	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	global.SetTraceProvider(tp)
+	global.SetTracerProvider(tp)
 }
 
 func main() {
