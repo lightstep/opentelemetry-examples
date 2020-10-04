@@ -14,9 +14,9 @@ clients:
 - java-otlp-client
 - java-launcher-client
 endpoints:
-- http://go-opentracing-server:8081
-- http://go-otlp-server:8081/content/10
-- http://go-launcher-server:8081/content/20
+- http://go-opentracing-server:8081/ping
+- http://go-otlp-server:8081/ping
+- http://go-launcher-server:8081/ping
 - http://py-lstrace-server:5000
 - http://py-collector-server:5000
 - http://py-otlp-server:5000

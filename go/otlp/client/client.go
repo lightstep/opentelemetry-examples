@@ -13,7 +13,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	mathrand "math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -101,9 +100,7 @@ func makeRequest() {
 	ctx, span := tracer.Start(context.Background(), "makeRequest")
 	defer span.End()
 
-	contentLength := mathrand.Intn(2048)
-	url := fmt.Sprintf("%s/content/%d", targetURL, contentLength)
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest("GET", targetURL, nil)
 	ctx, req = otelhttptrace.W3C(ctx, req)
 	otelhttptrace.Inject(ctx, req)
 	res, err := client.Do(req)
@@ -112,7 +109,7 @@ func makeRequest() {
 		return nil
 	}
 	defer res.Body.Close()
-	fmt.Printf("Request to %s, got %d bytes\n", url, res.ContentLength)
+	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
 }
 
 func main() {

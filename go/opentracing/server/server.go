@@ -99,12 +99,8 @@ func initLightstepTracer() {
 func main() {
 	initLightstepTracer()
 	fmt.Printf("Starting server on http://localhost:8081")
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		length, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/content/"))
-		if err != nil {
-			length = 10
-		}
-
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		length := rand.Intn(1024)
 		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
 		fmt.Fprintf(w, randString(length))
 	})

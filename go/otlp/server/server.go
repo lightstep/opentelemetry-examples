@@ -15,7 +15,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -132,13 +131,8 @@ func main() {
 	r := mux.NewRouter()
 	// re-enable once the new version of otel-go and otel-go-contrib is released
 	r.Use(muxtrace.Middleware(componentName))
-	r.HandleFunc("/content/{length:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		length, err := strconv.Atoi(vars["length"])
-		if err != nil {
-			length = 10
-		}
-
+	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		length := rand.Intn(1024)
 		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
 		fmt.Fprintf(w, randString(length))
 	})

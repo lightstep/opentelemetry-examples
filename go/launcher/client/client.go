@@ -12,7 +12,6 @@ package main
 import (
 	"context"
 	"fmt"
-	mathrand "math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -30,9 +29,7 @@ func makeRequest() {
 	client := http.DefaultClient
 	tracer := global.Tracer("otel-example/client")
 	tracer.WithSpan(context.Background(), "makeRequest", func(ctx context.Context) error {
-		contentLength := mathrand.Intn(2048)
-		url := fmt.Sprintf("%s/content/%d", destinationURL, contentLength)
-		req, _ := http.NewRequest("GET", url, nil)
+		req, _ := http.NewRequest("GET", destinationURL, nil)
 		httptrace.Inject(ctx, req)
 		res, err := client.Do(req)
 		if err != nil {
@@ -40,7 +37,7 @@ func makeRequest() {
 			return nil
 		}
 		defer res.Body.Close()
-		fmt.Printf("Request to %s, got %d bytes\n", url, res.ContentLength)
+		fmt.Printf("Request to %s, got %d bytes\n", destinationURL, res.ContentLength)
 		return nil
 	})
 }

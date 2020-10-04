@@ -12,7 +12,6 @@ package main
 import (
 	"context"
 	"fmt"
-	mathrand "math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -72,10 +71,8 @@ func makeRequest() {
 	trivialSpan, _ := opentracing.StartSpanFromContext(context.Background(), "makeRequest")
 	defer trivialSpan.Finish()
 
-	contentLength := mathrand.Intn(2048)
-	url := fmt.Sprintf("%s/content/%d", targetURL, contentLength)
 	httpClient := &http.Client{}
-	httpReq, _ := http.NewRequest("GET", url, nil)
+	httpReq, _ := http.NewRequest("GET", targetURL, nil)
 
 	// Transmit the span's TraceContext as HTTP headers on our
 	// outbound request.
@@ -90,7 +87,7 @@ func makeRequest() {
 		return
 	}
 	defer res.Body.Close()
-	fmt.Printf("Request to %s, got %d bytes\n", url, res.ContentLength)
+	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
 }
 
 func main() {

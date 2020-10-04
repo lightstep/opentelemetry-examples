@@ -26,7 +26,7 @@ services:
         environment:
             - LS_SERVICE_NAME=go-opentracing-client
             - LS_SERVICE_VERSION=1.2.7
-            - DESTINATION_URL=http://go-opentracing-server:8081
+            - DESTINATION_URL=http://go-opentracing-server:8081/ping
         stop_grace_period: 1s
     go-otlp-server:
         container_name: go-otlp-server
@@ -58,7 +58,7 @@ services:
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-otlp-client
             - LS_SERVICE_VERSION=9.9.2
-            - DESTINATION_URL=http://go-otlp-server:8081
+            - DESTINATION_URL=http://go-otlp-server:8081/ping
         stop_grace_period: 1s
     go-launcher-server:
         container_name: go-launcher-server
@@ -83,7 +83,7 @@ services:
         environment:
             - LS_SERVICE_NAME=go-launcher-client
             - LS_SERVICE_VERSION=9.9.8
-            - DESTINATION_URL=http://go-launcher-server:8081
+            - DESTINATION_URL=http://go-launcher-server:8081/ping
         stop_grace_period: 1s
     ###############################
     ####### Python examples #######
@@ -224,7 +224,7 @@ services:
             - .env
         environment:
             - INTEGRATION_CONFIG_FILE=/app/integration.yml
-            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
+            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/ping,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/ping,http://go-otlp-server:8081/ping,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
             - LS_SERVICE_NAME=demo-client-otlp
             - LS_SERVICE_VERSION=0.1.1
         volumes:
@@ -241,7 +241,7 @@ services:
             - .env
         environment:
             - INTEGRATION_CONFIG_FILE=/app/integration.yml
-            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
+            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/ping,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/ping,http://go-otlp-server:8081/ping,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
             - LS_SERVICE_NAME=demo-client-lstrace
             - LS_SERVICE_VERSION=0.2.2
         volumes:
