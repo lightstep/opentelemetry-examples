@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+import json
+import os
+import time
+
+import requests
+import yaml
+from opentelemetry import trace
+
+tracer = trace.get_tracer(__name__)
+
+
+API_URL = "https://api.lightstep.com/public/v0.2"
+TEST_ORG = os.environ.get("ORG_NAME")  # maybe this should be a different one
+PROJECT = os.environ.get("PROJECT_NAME")
+TOKEN = os.environ.get("API_KEY")
+
+
+def _get_headers():
+    return {
+        "Authorization": "{}".format(TOKEN),
+        "Content-Type": "application/json",
+    }
+
+
+def test_auth():
+    url = "{}/{}/test".format(API_URL, TEST_ORG)
+    response = requests.get(url, headers=_get_headers())
+    assert response.status_code == 200
+
+
+def _get_destinations():
+    config_file = os.environ.get("INTEGRATION_CONFIG_FILE")
+    if not config_file:
+        raise Exception("Config file not specified!!")
+
+    config_data = {}
+    with open(config_file) as f:
+        config_data = yaml.load(f, Loader=yaml.FullLoader)
+
+    return config_data.get("endpoints")
+
+
+def _get_services():
+    config_file = os.environ.get("INTEGRATION_CONFIG_FILE")
+    if not config_file:
+        raise Exception("Config file not specified!!")
+
+    config_data = {}
+    with open(config_file) as f:
+        config_data = yaml.load(f, Loader=yaml.FullLoader)
+
+    return config_data.get("services")
+
+
+def create_trace():
+    span_id = None
+    with tracer.start_as_current_span("integration_test_requests") as span:
+        for url in _get_destinations():
+            try:
+                if "/order" in url:
+                    res = requests.post(
+                        url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}'
+                    )
+                else:
+                    res = requests.get(url)
+                print(f"Request to {url}, got {len(res.content)} bytes")
+            except Exception as e:
+                print(f"Request to {url} failed {e}")
+        span_id = span.get_context().span_id
+    return span_id
+
+
+def test_traces():
+    # give time for services to spin up
+    # note this should probably be using requests retries instead
+    time.sleep(60)
+    # send a trace
+    span_id = create_trace()
+    assert span_id is not None
+
+    # give time for services to report traces
+    time.sleep(60)
+    url = "{}/{}/projects/{}/snapshots".format(API_URL, TEST_ORG, PROJECT)
+    querystring = 'service IN ("{}")'.format(os.environ.get("LS_SERVICE_NAME"))
+    payload = {"data": {"attributes": {"query": querystring}}}
+
+    # create a snapshot
+    response = requests.post(url, headers=_get_headers(), json=payload)
+    assert response.status_code == 200
+
+    url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
+    querystring = {"span-id": format(span_id, "x")}
+
+    # search the snapshot for our trace
+    response = requests.get(url, headers=_get_headers(), params=querystring)
+    retries = 5
+    while retries > 0:
+        retries -= 1
+        if response.status_code == 200:
+            break
+        time.sleep(8)
+        response = requests.get(url, headers=_get_headers(), params=querystring)
+
+    assert response.status_code == 200
+    results = response.json()
+    reporters = (
+        results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
+    )
+    services = _get_services()
+    # the integration test will report as well
+    services.append(os.environ.get("LS_SERVICE_NAME"))
+    # assert number of reporters are the the same as expected
+    assert len(reporters) == len(services)
+    # assert each service matches a reporter
+    for reporter in reporters:
+        service_name = reporter.get("attributes", {}).get("lightstep.component_name")
+        if service_name in services:
+            services.remove(service_name)
+
+    assert services == []
+

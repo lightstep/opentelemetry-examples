@@ -1,0 +1,53 @@
+clients:
+- go-opentracing-client
+- go-otlp-client
+- go-launcher-client
+- py-lstrace-client
+- py-collector-client
+- py-otlp-client
+- py-launcher-client
+- py-opentracing-client
+- js-lstrace-client
+- js-launcher-client
+- js-ot-shim-client
+- java-specialagent-client
+- java-otlp-client
+- java-launcher-client
+endpoints:
+- http://go-opentracing-server:8081
+- http://go-otlp-server:8081/content/10
+- http://go-launcher-server:8081/content/20
+- http://py-lstrace-server:5000
+- http://py-collector-server:5000
+- http://py-otlp-server:5000
+- http://py-launcher-server:5000
+- http://py-opentracing-server:5000
+- http://js-lstrace-server:8080/ping
+- http://js-launcher-server:8080/ping
+- http://js-ot-shim-server:8080/ping
+- http://java-specialagent-server:8083
+- http://java-otlp-server:8083/content
+- http://java-launcher-server:8084/content
+# TODO: re-enable once b3 propagation is fixed
+# - http://dotnet-otlp-server
+# TODO: re-enable once b3 propagation is fixed
+# - http://java-opentracing-server:10001/order
+services:
+- go-opentracing-server
+- go-otlp-server
+- go-launcher-server
+- py-lstrace-server
+- py-collector-server
+- py-otlp-server
+- py-launcher-server
+- py-opentracing-server
+- js-lstrace-server
+- js-launcher-server
+- js-ot-shim-server
+- java-specialagent-server
+- java-otlp-server
+- java-launcher-server
+# TODO: re-enable once b3 propagation is fixed
+# - java-opentracing-server
+# TODO: re-enable once b3 propagation is fixed
+# - dotnet-otlp-server
