@@ -38,7 +38,7 @@ public class Client {
     final String lsToken = System.getenv("LS_ACCESS_TOKEN");
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0)
-        targetURL = "http://127.0.0.1:8083";
+        targetURL = "http://127.0.0.1:8083/ping";
 
     final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.newBuilder()
         .setDeadlineMs(60_000)
@@ -121,7 +121,7 @@ public class Client {
     OpenTelemetry.getPropagators().getHttpTextFormat().inject(withSpanContext, reqBuilder, Request.Builder::addHeader);
 
     Request req = reqBuilder
-    .url(targetURL + "/content")
+    .url(targetURL)
     .build();
 
     try (Response res = client.newCall(req).execute()) {
