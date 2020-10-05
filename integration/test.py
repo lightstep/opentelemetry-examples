@@ -110,13 +110,16 @@ def test_traces():
     services = _get_services()
     # the integration test will report as well
     services.append(os.environ.get("LS_SERVICE_NAME"))
-    # assert number of reporters are the the same as expected
-    assert len(reporters) == len(services)
+    expected_services_count = len(services)
     # assert each service matches a reporter
     for reporter in reporters:
         service_name = reporter.get("attributes", {}).get("lightstep.component_name")
         if service_name in services:
             services.remove(service_name)
 
+    # assert number of reporters are the the same as expected
+    assert len(reporters) == expected_services_count, "Services not found: {}".format(
+        services
+    )
     assert services == []
 
