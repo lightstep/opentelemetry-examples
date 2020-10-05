@@ -17,6 +17,9 @@ jobs:
     - name: Update configuration
       env:
         TOKEN: ${{ secrets.TOKEN }}
+        ORG_NAME: ${{ secrets.ORG_NAME }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        API_KEY: ${{ secrets.API_KEY }}
       run: ./scripts/update-token.sh
 
     - name: Build containers
@@ -26,9 +29,4 @@ jobs:
       run: docker-compose up config-generator
 
     - name: Run integration test
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        ORG_NAME: ${{ secrets.ORG_NAME }}
-        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-        API_KEY: ${{ secrets.API_KEY }}
       run: docker-compose up integration-test
