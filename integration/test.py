@@ -74,7 +74,7 @@ def create_trace():
 def test_traces():
     # give time for services to spin up
     # note this should probably be using requests retries instead
-    time.sleep(60)
+    time.sleep(300)
     # send a trace
     span_id = create_trace()
     assert span_id is not None

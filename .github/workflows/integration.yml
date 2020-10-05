@@ -31,4 +31,4 @@ jobs:
       run: docker-compose up config-generator
 
     - name: Run integration test
-      run: docker-compose up integration-test
+      run: docker-compose up --exit-code-from integration-test integration-test
