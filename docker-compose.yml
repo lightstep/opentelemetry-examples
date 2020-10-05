@@ -502,6 +502,23 @@ services:
         volumes:
             - ./integration:/config/:ro
         stop_grace_period: 1s
+    ################################
+    ####### Config generator #######
+    ################################
+    config-generator:
+        container_name: config-generator
+        build:
+            context: ./integration
+        env_file:
+            - .env
+        environment:
+            - DOCKER_COMPOSE_PATH=/docker-compose.yml
+            - OUTPUT_PATH=/config/integration.yml
+        volumes:
+            - ./docker-compose.yml:/docker-compose.yml/:ro
+            - ./integration:/config/:rw
+        command: python /app/generate_config.py
+        stop_grace_period: 1s
     ##############################
     ####### Extra services #######
     ##############################

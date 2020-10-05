@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+import os
 import yaml
 
 
-config_path = "../docker-compose.yml"
-output_path = "integration.yml"
+config_path = os.environ.get("DOCKER_COMPOSE_PATH", "/docker-compose.yml")
+output_path = os.environ.get("OUTPUT_PATH", "/config/integration.yml")
 
 config = None
 servers = []

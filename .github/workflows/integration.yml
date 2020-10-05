@@ -1,0 +1,31 @@
+name: Run integration test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Update configuration
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+      run: ./scripts/update-token.sh
+
+    - name: Build containers
+      run: docker-compose build
+
+    - name: Run integration test
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+        ORG_NAME: ${{ secrets.ORG_NAME }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        API_KEY: ${{ secrets.API_KEY }}
+      run: docker-compose up integration-test
