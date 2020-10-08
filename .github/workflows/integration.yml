@@ -16,6 +16,9 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Validate config is up-to-date
+      run: ./scripts/precommit.sh
+
     - name: Update configuration
       env:
         TOKEN: ${{ secrets.TOKEN }}
@@ -26,9 +29,6 @@ jobs:
 
     - name: Build containers
       run: docker-compose build
-
-    - name: Run config generator
-      run: docker-compose up config-generator
 
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test

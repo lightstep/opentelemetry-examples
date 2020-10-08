@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-import json
+#
+# This integration test does the following:
+#   - creates a new span called "integration_test_requests"
+#   - sends a request to each configured server
+#   - use the Lightstep API to query for the trace describing that span
+#   - ensures it contains information from all of the servers
+#
+# If the trace is incomplete, then the context did not correctly propagate
+# across all the servers.
+
 import os
 import time
 
@@ -10,6 +19,9 @@ from opentelemetry import trace
 tracer = trace.get_tracer(__name__)
 
 
+# the integration test is instrumented to propagate
+# context across to all servers via the opentelemetry-launcher
+INTEGRATION_TEST_APP = os.environ.get("LS_SERVICE_NAME")
 API_URL = "https://api.lightstep.com/public/v0.2"
 TEST_ORG = os.environ.get("ORG_NAME")  # maybe this should be a different one
 PROJECT = os.environ.get("PROJECT_NAME")
@@ -75,17 +87,19 @@ def test_traces():
     # give time for services to spin up
     # note this should probably be using requests retries instead
     time.sleep(300)
+
     # send a trace
     span_id = create_trace()
     assert span_id is not None
 
     # give time for services to report traces
     time.sleep(60)
+
     url = "{}/{}/projects/{}/snapshots".format(API_URL, TEST_ORG, PROJECT)
-    querystring = 'service IN ("{}")'.format(os.environ.get("LS_SERVICE_NAME"))
+    querystring = 'service IN ("{}")'.format(INTEGRATION_TEST_APP)
     payload = {"data": {"attributes": {"query": querystring}}}
 
-    # create a snapshot
+    # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
     assert response.status_code == 200
 
@@ -95,10 +109,8 @@ def test_traces():
     # search the snapshot for our trace
     response = requests.get(url, headers=_get_headers(), params=querystring)
     retries = 5
-    while retries > 0:
+    while retries > 0 and response.status_code != 200:
         retries -= 1
-        if response.status_code == 200:
-            break
         time.sleep(8)
         response = requests.get(url, headers=_get_headers(), params=querystring)
 
@@ -108,10 +120,15 @@ def test_traces():
         results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
     )
     services = _get_services()
+
     # the integration test will report as well
-    services.append(os.environ.get("LS_SERVICE_NAME"))
+    services.append(INTEGRATION_TEST_APP)
     expected_services_count = len(services)
-    # assert each service matches a reporter
+
+    # each server will be listed as a reporter in the trace being retrieved
+    # we're inspecting the list of reporters rather than individual span
+    # to prevent having to update this test every time an example application
+    # updates spans being generated
     for reporter in reporters:
         service_name = reporter.get("attributes", {}).get("lightstep.component_name")
         if service_name in services:
