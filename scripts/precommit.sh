@@ -2,8 +2,10 @@
 
 docker-compose up config-generator
 
-if [ -z $(git diff --quiet --exit-code ./integration) ]; then 
-    echo "config has changed"
-    git status
-    exit 1
+if ! git diff --quiet; then
+    echo;
+    echo 'Working tree is not clean, did you forget to run "./scripts/precommit"?';
+    echo;
+    git status;
+    exit 1;
 fi
