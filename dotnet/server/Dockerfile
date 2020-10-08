@@ -10,8 +10,6 @@ RUN dotnet restore -r linux-x64
 # copy everything else and build app
 COPY aspnetapp/. ./aspnetapp/
 WORKDIR /source/aspnetapp
-RUN dotnet add package OpenTelemetry.Exporter.Console -v 0.4.0-beta.2
-RUN dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol -v 0.4.0-beta.2
 RUN dotnet restore -r linux-x64
 RUN dotnet publish -c release -o /app -r linux-x64 --self-contained false --no-restore
 
