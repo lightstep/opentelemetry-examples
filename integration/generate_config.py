@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+#
+# This script generates a yaml config file by reading in the docker-compose
+# file, then outputting client, services and endpoints which are then
+# used by the integration-test, demo-client-lstrace and demo-client-otlp
+# containers
+
 import os
 import yaml
 
