@@ -26,20 +26,6 @@ namespace aspnetapp.Pages
 
         public void OnGet()
         {
-
-            using var otel = Sdk.CreateTracerProvider(b => b
-                .AddActivitySource("MyCompany.MyProduct.MyLibrary")
-                .UseOtlpExporter(opt =>
-                {
-                    opt.Endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_SPAN_ENDPOINT");
-                    opt.Headers = new Metadata
-                    {
-                        { "lightstep-access-token", Environment.GetEnvironmentVariable("LS_ACCESS_TOKEN")}
-                    };
-                    opt.Credentials = new SslCredentials();
-                })
-                .SetResource(Resources.CreateServiceResource(Environment.GetEnvironmentVariable("LS_SERVICE_NAME"), serviceVersion: Environment.GetEnvironmentVariable("LS_SERVICE_VERSION"))));
-
             using (var activity = activitySource.StartActivity("SayHello"))
             {
                 activity?.AddTag("bar", "Hello, World!");
