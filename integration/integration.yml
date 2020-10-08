@@ -28,10 +28,8 @@ endpoints:
 - http://java-specialagent-server:8083/ping
 - http://java-otlp-server:8083/ping
 - http://java-launcher-server:8084/ping
-# TODO: re-enable once b3 propagation is fixed
-# - http://dotnet-otlp-server
-# TODO: re-enable once b3 propagation is fixed
-# - http://java-opentracing-server:10001/order
+- http://java-opentracing-server:10001/order
+- http://dotnet-otlp-server
 services:
 - go-opentracing-server
 - go-otlp-server
@@ -47,7 +45,5 @@ services:
 - java-specialagent-server
 - java-otlp-server
 - java-launcher-server
-# TODO: re-enable once b3 propagation is fixed
-# - java-opentracing-server
-# TODO: re-enable once b3 propagation is fixed
-# - dotnet-otlp-server
+- java-opentracing-server
+- dotnet-otlp-server

@@ -451,6 +451,7 @@ services:
             - LS_SERVICE_NAME=java-opentracing-server
             - OTEL_RESOURCE_ATTRIBUTES=service.version=19.19.19
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+            - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
     ##############################
     ####### .NET examples ########
@@ -467,6 +468,7 @@ services:
         environment:
             - LS_SERVICE_NAME=dotnet-otlp-server
             - LS_SERVICE_VERSION=15.15.15
+            - DESTINATION_URL=http://dotnet-otlp-server
         stop_grace_period: 1s
     ################################
     ####### Integration test #######
