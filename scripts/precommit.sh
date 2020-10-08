@@ -2,8 +2,8 @@
 
 docker-compose up config-generator
 
-if ! git diff-index --quiet HEAD --; then
+if [ -z $(git diff --quiet --exit-code) ]; then 
     echo "config has changed"
-    git diff
+    git status
     exit 1
 fi
