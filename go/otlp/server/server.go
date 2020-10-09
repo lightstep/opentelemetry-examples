@@ -19,9 +19,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"google.golang.org/grpc/credentials"
-
-	// re-enable once the new version of otel-go and otel-go-contrib is released
 	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel/api/global"
@@ -30,6 +27,7 @@ import (
 	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
