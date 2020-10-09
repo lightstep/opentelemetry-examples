@@ -3,7 +3,7 @@ import os
 import grpc
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.trace_exporter import OTLPSpanExporter
-from opentelemetry.propagators import set_global_httptextformat
+from opentelemetry.propagators import set_global_textmap
 from opentelemetry.propagators.composite import CompositeHTTPPropagator
 from opentelemetry.sdk.trace import Resource
 from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
@@ -25,7 +25,7 @@ def get_otlp_exporter():
 
 def get_otel_tracer():
 
-    set_global_httptextformat(CompositeHTTPPropagator([B3Format()]))
+    set_global_textmap(CompositeHTTPPropagator([B3Format()]))
     span_exporter = get_otlp_exporter()
 
     trace.get_tracer_provider().add_span_processor(

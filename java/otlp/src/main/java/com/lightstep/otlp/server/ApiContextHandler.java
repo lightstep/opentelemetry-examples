@@ -21,7 +21,7 @@ public class ApiContextHandler extends ServletContextHandler
 {
   public ApiContextHandler()
   {
-    addServlet(new ServletHolder(new ApiServlet()), "/content");
+    addServlet(new ServletHolder(new ApiServlet()), "/ping");
   }
 
   static final class ApiServlet extends HttpServlet

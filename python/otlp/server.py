@@ -45,6 +45,15 @@ def _random_string(length):
     return "".join(random.choice(letters) for i in range(int(length)))
 
 
+@app.route("/ping")
+def ping():
+    length = random.randint(1, 1024)
+    redis_integration(length)
+    pymongo_integration(length)
+    sqlalchemy_integration(length)
+    return _random_string(length)
+
+
 @app.route("/redis/<length>")
 def redis_integration(length):
     with tracer.start_as_current_span("server redis operation"):

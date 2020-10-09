@@ -28,7 +28,7 @@ import (
 var (
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	lsMetricsURL   = os.Getenv("LS_METRICS_URL")
-	targetURL      = os.Getenv("TARGET_URL")
+	targetURL      = os.Getenv("DESTINATION_URL")
 	componentName  = os.Getenv("LS_SERVICE_NAME")
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 )

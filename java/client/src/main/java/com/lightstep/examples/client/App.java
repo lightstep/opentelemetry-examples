@@ -10,13 +10,13 @@ public class App
   public static void main( String[] args )
       throws Exception
     {
-      String targetUrl = System.getenv("TARGET_URL");
+      String targetUrl = System.getenv("DESTINATION_URL");
       if (targetUrl == null || targetUrl.length() == 0)
-        targetUrl = "http://127.0.0.1:8083";
+        targetUrl = "http://127.0.0.1:8083/ping";
 
       OkHttpClient client = new OkHttpClient();
       Request req = new Request.Builder()
-        .url(targetUrl + "/content")
+        .url(targetUrl)
         .build();
 
       while (true) {
