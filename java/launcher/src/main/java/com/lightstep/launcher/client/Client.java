@@ -1,16 +1,13 @@
 package com.lightstep.launcher.client;
 
-import com.lightstep.opentelemetry.common.VariablesConverter;
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
 import io.grpc.Context;
 import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.trace.Span;
 import io.opentelemetry.trace.Span.Kind;
 import io.opentelemetry.trace.Tracer;
 import io.opentelemetry.trace.TracingContextUtils;
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,20 +19,16 @@ public class Client {
       targetURL = "http://127.0.0.1:8084/ping";
     }
 
-    OtlpGrpcSpanExporter exporter = OpenTelemetryConfiguration.newBuilder()
-        .buildExporter();
+    OpenTelemetryConfiguration.newBuilder().install();
 
-    OpenTelemetrySdk.getTracerProvider()
-        .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
-
-    Tracer tracer =
-        OpenTelemetry.getTracerProvider().get("LightstepExample");
+    Tracer tracer = OpenTelemetry.getTracerProvider().get("LightstepExample");
 
     while (true) {
       doWork(tracer, targetURL);
       try {
-        Thread.sleep(1000);
+        TimeUnit.SECONDS.sleep(1);
       } catch (InterruptedException ignore) {
+        break;
       }
     }
   }
