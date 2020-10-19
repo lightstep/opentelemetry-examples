@@ -223,7 +223,7 @@ services:
         env_file:
             - .env
         environment:
-            - INTEGRATION_CONFIG_FILE=/app/integration.yml
+            - INTEGRATION_CONFIG_FILE=/config/integration.yml
             - LS_SERVICE_NAME=demo-client-otlp
             - LS_SERVICE_VERSION=0.1.1
         volumes:
@@ -239,7 +239,7 @@ services:
         env_file:
             - .env
         environment:
-            - INTEGRATION_CONFIG_FILE=/app/integration.yml
+            - INTEGRATION_CONFIG_FILE=/config/integration.yml
             - LS_SERVICE_NAME=demo-client-lstrace
             - LS_SERVICE_VERSION=0.2.2
         volumes:
