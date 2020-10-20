@@ -15,7 +15,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -57,13 +56,8 @@ func main() {
 	fmt.Printf("Starting server on http://localhost:8081\n")
 	r := mux.NewRouter()
 	r.Use(muxtrace.Middleware(os.Getenv("LS_SERVICE_NAME")))
-	r.HandleFunc("/content/{length:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		length, err := strconv.Atoi(vars["length"])
-		if err != nil {
-			length = 10
-		}
-
+	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		length := rand.Intn(1024)
 		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
 		fmt.Fprintf(w, randString(length))
 	})

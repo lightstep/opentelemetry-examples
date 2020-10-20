@@ -5,7 +5,7 @@ const {
   opentelemetry,
 } = require('lightstep-opentelemetry-launcher-node');
 
-const TARGET_URL = process.env.TARGET_URL || 'http://localhost:8080/ping';
+const DESTINATION_URL = process.env.DESTINATION_URL || 'http://localhost:8080/ping';
 const sdk = lightstep.configureOpenTelemetry();
 
 sdk.start().then(() => {
@@ -15,7 +15,7 @@ sdk.start().then(() => {
     const span = tracer.startSpan('client.ping');
     console.log('send: ping');
     tracer.withSpan(span, () => {
-      http.get(TARGET_URL, resp => {
+      http.get(DESTINATION_URL, resp => {
         let data = '';
         resp.on('data', chunk => (data += chunk));
         resp.on('end', () => console.log(`recv: ${data}`));

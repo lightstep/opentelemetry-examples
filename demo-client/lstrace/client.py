@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import os
 import time
 
 import requests
-from environs import Env
+import yaml
 
 from ddtrace import tracer
 from ddtrace.propagation.b3 import B3HTTPPropagator
@@ -27,9 +28,15 @@ def send_requests(destinations):
 
 
 if __name__ == "__main__":
-    env = Env()
-    env.read_env()
-    destinations = env.list("DESTINATIONS")
+    config_file = os.environ.get("INTEGRATION_CONFIG_FILE")
+    if not config_file:
+        raise Exception("Config file not specified!!")
+
+    config_data = {}
+    with open(config_file) as f:
+        config_data = yaml.load(f, Loader=yaml.FullLoader)
+
+    destinations = config_data.get("endpoints")
     tracer.set_tags(
         {
             "lightstep.service_name": env.str("LS_SERVICE_NAME"),

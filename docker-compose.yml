@@ -26,7 +26,7 @@ services:
         environment:
             - LS_SERVICE_NAME=go-opentracing-client
             - LS_SERVICE_VERSION=1.2.7
-            - TARGET_URL=http://go-opentracing-server:8081
+            - DESTINATION_URL=http://go-opentracing-server:8081/ping
         stop_grace_period: 1s
     go-otlp-server:
         container_name: go-otlp-server
@@ -58,7 +58,7 @@ services:
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-otlp-client
             - LS_SERVICE_VERSION=9.9.2
-            - TARGET_URL=http://go-otlp-server:8081
+            - DESTINATION_URL=http://go-otlp-server:8081/ping
         stop_grace_period: 1s
     go-launcher-server:
         container_name: go-launcher-server
@@ -83,7 +83,7 @@ services:
         environment:
             - LS_SERVICE_NAME=go-launcher-client
             - LS_SERVICE_VERSION=9.9.8
-            - DESTINATION_URL=http://go-launcher-server:8081
+            - DESTINATION_URL=http://go-launcher-server:8081/ping
         stop_grace_period: 1s
     ###############################
     ####### Python examples #######
@@ -102,7 +102,7 @@ services:
         environment:
             - LS_SERVICE_NAME=py-lstrace-client
             - LS_SERVICE_VERSION=1.2.1
-            - TARGET_URL=http://py-lstrace-server:5000
+            - DESTINATION_URL=http://py-lstrace-server:5000/ping
         stop_grace_period: 1s
     py-lstrace-server:
         container_name: py-lstrace-server
@@ -134,7 +134,7 @@ services:
             - COLLECTOR_ENDPOINT=otel-collector:55680
             - LS_SERVICE_NAME=py-collector-client
             - LS_SERVICE_VERSION=1.2.9
-            - TARGET_URL=http://py-collector-server:5000
+            - DESTINATION_URL=http://py-collector-server:5000/ping
         stop_grace_period: 1s
     py-collector-server:
         container_name: py-collector-server
@@ -168,7 +168,7 @@ services:
             - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
             - LS_SERVICE_NAME=py-otlp-client
             - LS_SERVICE_VERSION=10.10.10
-            - TARGET_URL=http://py-otlp-server:5000
+            - DESTINATION_URL=http://py-otlp-server:5000/ping
         stop_grace_period: 1s
     py-otlp-server:
         container_name: py-otlp-server
@@ -198,7 +198,7 @@ services:
         environment:
             - LS_SERVICE_NAME=py-launcher-client
             - LS_SERVICE_VERSION=10.10.10
-            - DESTINATION_URL=http://py-launcher-server:5000
+            - DESTINATION_URL=http://py-launcher-server:5000/ping
         stop_grace_period: 1s
     py-launcher-server:
         container_name: py-launcher-server
@@ -223,9 +223,11 @@ services:
         env_file:
             - .env
         environment:
-            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
+            - INTEGRATION_CONFIG_FILE=/config/integration.yml
             - LS_SERVICE_NAME=demo-client-otlp
             - LS_SERVICE_VERSION=0.1.1
+        volumes:
+            - ./integration:/config/:ro
         stop_grace_period: 1s
     demo-client-lstrace:
         container_name: demo-client-lstrace
@@ -237,9 +239,11 @@ services:
         env_file:
             - .env
         environment:
-            - DESTINATIONS=http://py-lstrace-server:5000/redis/999,http://go-launcher-server:8081/content/234,http://py-launcher-server:5000/redis/123,http://js-launcher-server:8080/ping,http://go-opentracing-server:8081/content/456,http://go-otlp-server:8081/content/345,http://java-otlp-server:8083/content,http://java-launcher-server:8084/content,http://java-specialagent-server:8083/content,http://js-lstrace-server:8080/ping,http://py-otlp-server:5000/pymongo/123,http://py-collector-server:5000/sqlalchemy/123,http://dotnet-otlp-server,http://py-opentracing-server:5000/pymongo/890,http://java-opentracing-server:10001/order,http://js-ot-shim-server:8080/ping
+            - INTEGRATION_CONFIG_FILE=/config/integration.yml
             - LS_SERVICE_NAME=demo-client-lstrace
             - LS_SERVICE_VERSION=0.2.2
+        volumes:
+            - ./integration:/config/:ro
         stop_grace_period: 1s
     py-opentracing-client:
         container_name: py-opentracing-client
@@ -255,7 +259,7 @@ services:
         environment:
             - LS_SERVICE_NAME=py-opentracing-client
             - LS_SERVICE_VERSION=10.10.10
-            - DESTINATION_URL=http://py-opentracing-server:5000
+            - DESTINATION_URL=http://py-opentracing-server:5000/ping
         stop_grace_period: 1s
     py-opentracing-server:
         container_name: py-opentracing-server
@@ -294,7 +298,7 @@ services:
             - .env
         environment:
             - LS_SERVICE_NAME=js-lstrace-client
-            - TARGET_URL=http://js-lstrace-server:8080/ping
+            - DESTINATION_URL=http://js-lstrace-server:8080/ping
         stop_grace_period: 1s
     js-launcher-server:
         container_name: js-launcher-server
@@ -319,7 +323,7 @@ services:
         environment:
             - LS_SERVICE_NAME=js-launcher-client
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-            - TARGET_URL=http://js-launcher-server:8080/ping
+            - DESTINATION_URL=http://js-launcher-server:8080/ping
         stop_grace_period: 1s
     js-ot-shim-server:
         container_name: js-ot-shim-server
@@ -344,7 +348,7 @@ services:
         environment:
             - LS_SERVICE_NAME=js-ot-shim-client
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-            - TARGET_URL=http://js-ot-shim-server:8080/ping
+            - DESTINATION_URL=http://js-ot-shim-server:8080/ping
         stop_grace_period: 1s
     ##############################
     ####### Java examples ########
@@ -372,7 +376,7 @@ services:
         environment:
             - LS_SERVICE_NAME=java-specialagent-client
             - LS_SERVICE_VERSION=3.2.1
-            - TARGET_URL=http://java-specialagent-server:8083
+            - DESTINATION_URL=http://java-specialagent-server:8083/ping
         stop_grace_period: 1s
     java-otlp-client:
         container_name: java-otlp-client
@@ -388,7 +392,7 @@ services:
         environment:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-client,service.version=11.11.10
             - LS_SATELLITE_URL=ingest.lightstep.com:443
-            - TARGET_URL=http://java-otlp-server:8083
+            - DESTINATION_URL=http://java-otlp-server:8083/ping
         stop_grace_period: 1s
     java-otlp-server:
         container_name: java-otlp-server
@@ -418,7 +422,7 @@ services:
             - LS_SERVICE_NAME=java-launcher-client
             - LS_SERVICE_VERSION=11.11.10
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-            - TARGET_URL=http://java-launcher-server:8084
+            - DESTINATION_URL=http://java-launcher-server:8084/ping
         stop_grace_period: 1s
     java-launcher-server:
         container_name: java-launcher-server
@@ -430,7 +434,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SERVICE_NAME=java-launcher-client
+            - LS_SERVICE_NAME=java-launcher-server
             - LS_SERVICE_VERSION=11.11.11
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
         stop_grace_period: 1s    
@@ -447,6 +451,7 @@ services:
             - LS_SERVICE_NAME=java-opentracing-server
             - OTEL_RESOURCE_ATTRIBUTES=service.version=19.19.19
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+            - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
     ##############################
     ####### .NET examples ########
@@ -463,6 +468,58 @@ services:
         environment:
             - LS_SERVICE_NAME=dotnet-otlp-server
             - LS_SERVICE_VERSION=15.15.15
+            - DESTINATION_URL=http://dotnet-otlp-server
+        stop_grace_period: 1s
+    ################################
+    ####### Integration test #######
+    ################################
+    integration-test:
+        container_name: integration-test
+        build:
+            context: ./integration
+        networks:
+            - demo
+        depends_on:
+            - go-opentracing-server
+            - go-otlp-server
+            - go-launcher-server
+            - py-lstrace-server
+            - py-collector-server
+            - py-otlp-server
+            - py-launcher-server
+            - py-opentracing-server
+            - js-lstrace-server
+            - js-launcher-server
+            - js-ot-shim-server
+            - java-specialagent-server
+            - java-otlp-server
+            - java-launcher-server
+            - java-opentracing-server
+            - dotnet-otlp-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=integration-test
+            - OTEL_RESOURCE_ATTRIBUTES=service.version=2020.10.02
+        volumes:
+            - ./integration:/config/:ro
+        stop_grace_period: 1s
+    ################################
+    ####### Config generator #######
+    ################################
+    config-generator:
+        container_name: config-generator
+        build:
+            context: ./integration
+        env_file:
+            - .env
+        environment:
+            - DOCKER_COMPOSE_PATH=/docker-compose.yml
+            - OUTPUT_PATH=/config/integration.yml
+        volumes:
+            - ./docker-compose.yml:/docker-compose.yml/:ro
+            - ./integration:/config/:rw
+        command: python /app/generate_config.py
         stop_grace_period: 1s
     ##############################
     ####### Extra services #######

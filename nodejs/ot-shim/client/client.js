@@ -7,7 +7,7 @@ const {
 const opentracing = require('opentracing');
 const { TracerShim } = require('@opentelemetry/shim-opentracing');
 
-const TARGET_URL = process.env.TARGET_URL || 'http://localhost:8080/ping';
+const DESTINATION_URL = process.env.DESTINATION_URL || 'http://localhost:8080/ping';
 const sdk = lightstep.configureOpenTelemetry();
 
 // development purposes
@@ -32,7 +32,7 @@ sdk.start().then(() => {
 
     console.log('send: ping', span);
 
-    axios.get(TARGET_URL, { timeout: 100, headers: headers }).then(resp => {
+    axios.get(DESTINATION_URL, { timeout: 100, headers: headers }).then(resp => {
       span.setTag('response', resp.data);
       span.finish();
       // make optimistic flush without waiting for batch processor
