@@ -29,7 +29,7 @@ sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' ./config/collector-config.yaml
 docker-compose up
 ```
 
-The following client/server applications using different mechanism for sending data to Lightstep. The following examples are configured in the `docker-compose.yml` file:
+The following client/server applications use different mechanism for sending data to Lightstep. The following examples are configured in the `docker-compose.yml` file:
 
 | name             | description                                                  |
 | ---------------- | ------------------------------------------------------------ |
