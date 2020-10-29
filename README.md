@@ -31,6 +31,7 @@ git clone https://github.com/lightstep/opentelemetry-examples && cd opentelemetr
 # and update the access token
 cp example.env .env
 sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' .env
+# if using the AWS OpenTelemetry Distro, use `example-aws-collector-config.yaml`
 cp example-collector-config.yaml ./collector/collector-config.yaml
 sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' ./collector/collector-config.yaml
 
