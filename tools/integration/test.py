@@ -79,7 +79,7 @@ def create_trace():
                 print(f"Request to {url}, got {len(res.content)} bytes")
             except Exception as e:
                 print(f"Request to {url} failed {e}")
-        span_id = span.get_context().span_id
+        span_id = span.get_span_context().span_id
     return span_id
 
 
