@@ -578,6 +578,17 @@ services:
         ports:
             - "0.0.0.0:8889:8889"   # Prometheus exporter metrics
             - "0.0.0.0:55680:55680" # OTLP receiver
+    # aws-otel-collector:
+    #     image: amazon/aws-otel-collector:latest
+    #     networks:
+    #         - demo
+    #     command: ["--config=/etc/otel-agent-config.yaml", "--log-level=DEBUG"]
+    #     ports:
+    #         - "0.0.0.0:55680:55680" # OTLP receiver
+    #     volumes:
+    #         - ./collector/collector-config.yaml:/etc/otel-agent-config.yaml
+    #     env_file:
+    #         - .env
     # jaeger:
     #     container_name: jaeger
     #     image: jaegertracing/all-in-one:latest

@@ -1,0 +1,37 @@
+# Example config for the AWS OpenTelemetry Distro
+# This sends data to Lightstep, AWS EMF, and X-Ray
+# https://github.com/aws-observability/aws-otel-collector
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:55680
+
+processors:
+  batch/traces:
+    timeout: 1s
+    send_batch_size: 50
+  batch/metrics:
+    timeout: 60s
+
+exporters:
+  awsxray:
+  awsemf:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "<ACCESS TOKEN>"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch/traces]
+      exporters: [awsxray, otlp, logging]
+    metrics:
+      receivers: [otlp]
+      processors: [batch/metrics]
+      exporters: [awsemf, otlp]
