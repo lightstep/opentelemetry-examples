@@ -11,10 +11,12 @@
 
 import os
 import time
+from opentelemetry.trace.status import Status, StatusCode
 
 import requests
 import yaml
 from opentelemetry import trace
+from retry import retry
 
 tracer = trace.get_tracer(__name__)
 
@@ -65,29 +67,32 @@ def _get_services():
     return config_data.get("services")
 
 
+@retry((requests.exceptions.ConnectionError), delay=1, backoff=2, tries=8)
+def send_request(url):
+    if "/order" in url:
+        res = requests.post(url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}')
+    else:
+        res = requests.get(url)
+    return res
+
+
 def create_trace():
     span_id = None
     with tracer.start_as_current_span("integration_test_requests") as span:
         for url in _get_destinations():
-            try:
-                if "/order" in url:
-                    res = requests.post(
-                        url, data='{"donuts":[{"flavor":"cinnamon","quantity":1}]}'
-                    )
-                else:
-                    res = requests.get(url)
-                print(f"Request to {url}, got {len(res.content)} bytes")
-            except Exception as e:
-                print(f"Request to {url} failed {e}")
-        span_id = span.get_context().span_id
+            with tracer.start_as_current_span("send_request_to {}".format(url)) as s:
+                try:
+                    res = send_request(url)
+                    print(f"Request to {url}, got {len(res.content)} bytes")
+                except Exception as e:
+                    print(f"Request to {url} failed {e}")
+                    s.record_exception(e)
+                    s.set_status(Status(StatusCode.ERROR))
+        span_id = span.get_span_context().span_id
     return span_id
 
 
 def test_traces():
-    # give time for services to spin up
-    # note this should probably be using requests retries instead
-    time.sleep(300)
-
     # send a trace
     span_id = create_trace()
     assert span_id is not None
@@ -139,4 +144,3 @@ def test_traces():
         services
     )
     assert services == []
-
