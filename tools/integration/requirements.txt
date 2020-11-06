@@ -2,3 +2,4 @@ opentelemetry-launcher
 pyyaml
 pytest
 requests
+retry

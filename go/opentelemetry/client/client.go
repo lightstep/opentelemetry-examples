@@ -13,39 +13,61 @@ import (
 	"context"
 	"fmt"
 	"log"
-	mathrand "math/rand"
 	"net/http"
-	"net/url"
 	"os"
-	"strconv"
 	"time"
 
-	ls "github.com/lightstep/opentelemetry-exporter-go/lightstep"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace"
+	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel/api/global"
+	"go.opentelemetry.io/otel/api/propagation"
+	"go.opentelemetry.io/otel/exporters/otlp"
+	"go.opentelemetry.io/otel/label"
+	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
-	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
-	lsMetricsURL   = os.Getenv("LS_METRICS_URL")
-	targetURL      = os.Getenv("DESTINATION_URL")
 	componentName  = os.Getenv("LS_SERVICE_NAME")
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
+	collectorURL   = os.Getenv("LS_SATELLITE_URL")
+	targetURL      = os.Getenv("DESTINATION_URL")
+	insecure       = os.Getenv("LS_INSECURE")
 )
 
-func initLightstepTracer() {
-	u, err := url.Parse(lsMetricsURL)
+func initExporter(url string, token string) *otlp.Exporter {
+	headers := map[string]string{
+		"lightstep-access-token": token,
+	}
 
-	host := "ingest.lightstep.com"
-	port := 443
-	plaintext := false
+	secureOption := otlp.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	if len(insecure) > 0 {
+		secureOption = otlp.WithInsecure()
+	}
 
-	if err == nil {
-		host = u.Hostname()
-		port, _ = strconv.Atoi(u.Port())
-		if u.Scheme == "http" {
-			plaintext = true
-		}
+	exporter, err := otlp.NewExporter(
+		secureOption,
+		otlp.WithAddress(url),
+		otlp.WithHeaders(headers),
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	return exporter
+}
+
+func initTracer() {
+	b3 := b3.B3{}
+	// Register the B3 propagator globally.
+	global.SetPropagators(propagation.New(
+		propagation.WithExtractors(b3),
+		propagation.WithInjectors(b3),
+	))
+	if len(collectorURL) == 0 {
+		collectorURL = "localhost:55680"
 	}
 
 	if len(componentName) == 0 {
@@ -55,43 +77,42 @@ func initLightstepTracer() {
 		serviceVersion = "0.0.0"
 	}
 
-	exporter, err := ls.NewExporter(
-		ls.WithAccessToken(lsToken),
-		ls.WithHost(host),
-		ls.WithPort(port),
-		ls.WithPlainText(plaintext),
-		ls.WithServiceName(componentName),
-		ls.WithServiceVersion(serviceVersion),
+	exporter := initExporter(collectorURL, lsToken)
+
+	resources := resource.New(
+		label.String("service.name", componentName),
+		label.String("service.version", serviceVersion),
+		label.String("library.language", "go"),
+		label.String("library.version", "1.2.3"),
 	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tp, err := trace.NewProvider(trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
-		trace.WithSyncer(exporter))
-	if err != nil {
-		log.Fatal(err)
-	}
-	global.SetTraceProvider(tp)
+	tp := trace.NewTracerProvider(
+		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
+		trace.WithSyncer(exporter),
+		trace.WithResource(resources),
+	)
+	global.SetTracerProvider(tp)
 }
 
 func makeRequest() {
+	client := http.DefaultClient
 	tracer := global.Tracer("otel-example/client")
-	tracer.WithSpan(context.Background(), "makeRequest", func(ctx context.Context) error {
-		contentLength := mathrand.Intn(2048)
-		url := fmt.Sprintf("%s/content/%d", targetURL, contentLength)
-		res, err := http.Get(url)
-		if err != nil {
-			fmt.Println(err)
-			return nil
-		}
-		defer res.Body.Close()
-		fmt.Printf("Request to %s, got %d bytes\n", url, res.ContentLength)
+	ctx, span := tracer.Start(context.Background(), "makeRequest")
+	defer span.End()
+
+	req, _ := http.NewRequest("GET", targetURL, nil)
+	ctx, req = otelhttptrace.W3C(ctx, req)
+	otelhttptrace.Inject(ctx, req)
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
 		return nil
-	})
+	}
+	defer res.Body.Close()
+	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
 }
 
 func main() {
-	initLightstepTracer()
+	initTracer()
 	if len(targetURL) == 0 {
 		targetURL = "http://localhost:8081"
 	}

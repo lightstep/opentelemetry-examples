@@ -18,7 +18,7 @@ jobs:
     - name: Update configuration
       env:
         TOKEN: ${{ secrets.TOKEN }}
-      run: ./scripts/update-token.sh
+      run: ./tools/update-token.sh
 
     - name: Run docker-compose
       run: docker-compose up -d
