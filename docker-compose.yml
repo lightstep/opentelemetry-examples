@@ -130,8 +130,8 @@ services:
         env_file:
             - .env
         environment:
-            - INSECURE=1
-            - COLLECTOR_ENDPOINT=otel-collector:55680
+            - OTEL_EXPORTER_OTLP_INSECURE=true
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
             - LS_SERVICE_NAME=py-collector-client
             - LS_SERVICE_VERSION=1.2.9
             - DESTINATION_URL=http://py-collector-server:5000/ping
@@ -148,8 +148,8 @@ services:
         env_file:
             - .env
         environment:
-            - INSECURE=1
-            - COLLECTOR_ENDPOINT=otel-collector:55680
+            - OTEL_EXPORTER_OTLP_INSECURE=true
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
             - LS_SERVICE_NAME=py-collector-server
             - LS_SERVICE_VERSION=0.2.8
         stop_grace_period: 1s
@@ -165,7 +165,7 @@ services:
         env_file:
             - .env
         environment:
-            - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com:443
             - LS_SERVICE_NAME=py-opentelemetry-client
             - LS_SERVICE_VERSION=10.10.10
             - DESTINATION_URL=http://py-opentelemetry-server:5000/ping
@@ -180,7 +180,7 @@ services:
         env_file:
             - .env
         environment:
-            - COLLECTOR_ENDPOINT=ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com:443
             - LS_SERVICE_NAME=py-opentelemetry-server
             - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
@@ -487,6 +487,7 @@ services:
             - py-opentelemetry-server
             - py-launcher-server
             - py-opentracing-server
+            - py-lstrace-server
             - js-lstrace-server
             - js-launcher-server
             - js-ot-shim-server
@@ -569,11 +570,8 @@ services:
         command: ["--config=/conf/collector-config.yaml", "--log-level=DEBUG"]
         networks:
             - demo
-        # depends_on:
-        #     - jaeger
-        #     - satellite
         volumes:
-            - ./config/collector-config.yaml:/conf/collector-config.yaml
+            - ./config:/conf/:rw
         ports:
             - "0.0.0.0:8889:8889"   # Prometheus exporter metrics
             - "0.0.0.0:55680:55680" # OTLP receiver
