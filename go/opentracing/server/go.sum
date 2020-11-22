@@ -66,6 +66,8 @@ github.com/lightstep/lightstep-tracer-go v0.19.1-0.20200323205214-429886e32f2b h
 github.com/lightstep/lightstep-tracer-go v0.19.1-0.20200323205214-429886e32f2b/go.mod h1:9SchLidOpK6E/FixVOYTAp9xRkfEYXqO4AnAnadkOYM=
 github.com/lightstep/lightstep-tracer-go v0.20.0 h1:Kwc+Vt7N2mxTyEdLuARDfx1nUAwHILcg1s8jBAxqSIg=
 github.com/lightstep/lightstep-tracer-go v0.20.0/go.mod h1:RnONwHKg89zYPmF+Uig5PpHMUcYCFgml8+r4SS53y7A=
+github.com/lightstep/lightstep-tracer-go v0.22.0 h1:Yy1G8UDT1Ayx010fji4IaTIsmijil5xijvwJ1OoypDk=
+github.com/lightstep/lightstep-tracer-go v0.22.0/go.mod h1:RnONwHKg89zYPmF+Uig5PpHMUcYCFgml8+r4SS53y7A=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=

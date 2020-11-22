@@ -10,6 +10,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -21,8 +22,7 @@ import (
 	"github.com/gorilla/mux"
 	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 	"go.opentelemetry.io/contrib/propagators/b3"
-	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/propagation"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -90,10 +90,7 @@ func initExporter(url string, token string) *otlp.Exporter {
 func initTracer() {
 	b3 := b3.B3{}
 	// Register the B3 propagator globally.
-	global.SetPropagators(propagation.New(
-		propagation.WithExtractors(b3),
-		propagation.WithInjectors(b3),
-	))
+	otel.SetTextMapPropagator(b3)
 
 	if len(collectorURL) == 0 {
 		collectorURL = "localhost:55680"
@@ -109,18 +106,24 @@ func initTracer() {
 
 	exporter := initExporter(collectorURL, lsToken)
 
-	resources := resource.New(
-		label.String("service.name", componentName),
-		label.String("service.version", serviceVersion),
-		label.String("library.language", "go"),
-		label.String("library.version", "1.2.3"),
+	resources, err := resource.New(
+		context.Background(),
+		resource.WithAttributes(
+			label.String("service.name", componentName),
+			label.String("service.version", serviceVersion),
+			label.String("library.language", "go"),
+			label.String("library.version", "1.2.3"),
+		),
 	)
+	if err != nil {
+		log.Printf("Could not set resources: ", err)
+	}
 	tp := trace.NewTracerProvider(
 		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
 		trace.WithSyncer(exporter),
 		trace.WithResource(resources),
 	)
-	global.SetTracerProvider(tp)
+	otel.SetTracerProvider(tp)
 }
 
 func main() {

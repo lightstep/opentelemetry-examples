@@ -25,6 +25,8 @@ github.com/lightstep/lightstep-tracer-common/golang/gogo v0.0.0-20200305213919-a
 github.com/lightstep/lightstep-tracer-common/golang/gogo v0.0.0-20200305213919-a88bf8de3718/go.mod h1:qklhhLq1aX+mtWk9cPHPzaBjWImj5ULL6C7HFJtXQMM=
 github.com/lightstep/lightstep-tracer-go v0.20.0 h1:Kwc+Vt7N2mxTyEdLuARDfx1nUAwHILcg1s8jBAxqSIg=
 github.com/lightstep/lightstep-tracer-go v0.20.0/go.mod h1:RnONwHKg89zYPmF+Uig5PpHMUcYCFgml8+r4SS53y7A=
+github.com/lightstep/lightstep-tracer-go v0.22.0 h1:Yy1G8UDT1Ayx010fji4IaTIsmijil5xijvwJ1OoypDk=
+github.com/lightstep/lightstep-tracer-go v0.22.0/go.mod h1:RnONwHKg89zYPmF+Uig5PpHMUcYCFgml8+r4SS53y7A=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
