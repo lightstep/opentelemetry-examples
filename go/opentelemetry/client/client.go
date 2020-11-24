@@ -17,10 +17,9 @@ import (
 	"os"
 	"time"
 
-	"go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/contrib/propagators/b3"
-	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/propagation"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -62,10 +61,7 @@ func initExporter(url string, token string) *otlp.Exporter {
 func initTracer() {
 	b3 := b3.B3{}
 	// Register the B3 propagator globally.
-	global.SetPropagators(propagation.New(
-		propagation.WithExtractors(b3),
-		propagation.WithInjectors(b3),
-	))
+	otel.SetTextMapPropagator(b3)
 	if len(collectorURL) == 0 {
 		collectorURL = "localhost:55680"
 	}
@@ -79,33 +75,39 @@ func initTracer() {
 
 	exporter := initExporter(collectorURL, lsToken)
 
-	resources := resource.New(
-		label.String("service.name", componentName),
-		label.String("service.version", serviceVersion),
-		label.String("library.language", "go"),
-		label.String("library.version", "1.2.3"),
+	resources, err := resource.New(
+		context.Background(),
+		resource.WithAttributes(
+			label.String("service.name", componentName),
+			label.String("service.version", serviceVersion),
+			label.String("library.language", "go"),
+			label.String("library.version", "1.2.3"),
+		),
 	)
+	if err != nil {
+		log.Printf("Could not set resources: ", err)
+	}
 	tp := trace.NewTracerProvider(
 		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
 		trace.WithSyncer(exporter),
 		trace.WithResource(resources),
 	)
-	global.SetTracerProvider(tp)
+	otel.SetTracerProvider(tp)
 }
 
 func makeRequest() {
-	client := http.DefaultClient
-	tracer := global.Tracer("otel-example/client")
-	ctx, span := tracer.Start(context.Background(), "makeRequest")
+	httpClient := &http.Client{
+		Transport: otelhttp.NewTransport(http.DefaultTransport),
+	}
+	tracer := otel.Tracer("otel-example/client")
+	_, span := tracer.Start(context.Background(), "makeRequest")
 	defer span.End()
 
 	req, _ := http.NewRequest("GET", targetURL, nil)
-	ctx, req = otelhttptrace.W3C(ctx, req)
-	otelhttptrace.Inject(ctx, req)
-	res, err := client.Do(req)
+	res, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return
 	}
 	defer res.Body.Close()
 	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
