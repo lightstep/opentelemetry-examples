@@ -3,8 +3,6 @@ module github.com/lightstep/ls-examples/go/opentelemetry/client
 go 1.13
 
 require (
-	github.com/kr/pretty v0.2.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.14.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.14.0
 	go.opentelemetry.io/contrib/propagators v0.14.0
 	go.opentelemetry.io/otel v0.14.0

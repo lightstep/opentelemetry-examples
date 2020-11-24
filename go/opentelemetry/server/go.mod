@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/gorilla/mux v1.8.0
-	github.com/kr/pretty v0.2.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux v0.14.0
 	go.opentelemetry.io/contrib/propagators v0.14.0
 	go.opentelemetry.io/otel v0.14.0
