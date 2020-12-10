@@ -119,11 +119,4 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>lightstep</id>
-      <url>https://dl.bintray.com/lightstep/maven</url>
-    </repository>
-  </repositories>
-
 </project>
