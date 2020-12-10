@@ -55,13 +55,13 @@
   <dependency>
     <groupId>io.opentelemetry</groupId>
     <artifactId>opentelemetry-opentracing-shim</artifactId>
-    <version>0.9.1</version>
+    <version>0.12.0</version>
   </dependency>
 
   <dependency>
     <groupId>com.lightstep.opentelemetry</groupId>
     <artifactId>opentelemetry-launcher</artifactId>
-    <version>0.9.0</version>
+    <version>0.12.0</version>
   </dependency>
 
 </dependencies>
@@ -118,5 +118,12 @@
       </plugin>
     </plugins>
   </build>
+
+  <repositories>
+    <repository>
+      <id>lightstep</id>
+      <url>https://dl.bintray.com/lightstep/maven</url>
+    </repository>
+  </repositories>
 
 </project>
