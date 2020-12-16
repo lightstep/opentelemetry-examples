@@ -8,4 +8,4 @@ RUN pip install protobuf~=3.12.2
 
 ADD test.py /app/test.py
 ADD generate_config.py /app/generate_config.py
-CMD ["opentelemetry-instrument", "pytest", "/app/test.py"]
+CMD ["opentelemetry-instrument", "-e", "none", "pytest", "/app/test.py"]
