@@ -111,6 +111,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
@@ -177,6 +182,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
@@ -207,6 +217,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
@@ -268,6 +283,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
