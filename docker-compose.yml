@@ -137,8 +137,7 @@ services:
         environment:
             - OTEL_EXPORTER_OTLP_INSECURE=true
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
-            - LS_SERVICE_NAME=py-collector-client
-            - LS_SERVICE_VERSION=1.2.9
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-client,service.version=1.2.9
             - DESTINATION_URL=http://py-collector-server:5000/ping
         stop_grace_period: 1s
     py-collector-server:
@@ -155,8 +154,7 @@ services:
         environment:
             - OTEL_EXPORTER_OTLP_INSECURE=true
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
-            - LS_SERVICE_NAME=py-collector-server
-            - LS_SERVICE_VERSION=0.2.8
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-server,service.version=0.2.8
         stop_grace_period: 1s
     py-opentelemetry-client:
         container_name: py-opentelemetry-client
@@ -170,9 +168,8 @@ services:
         env_file:
             - .env
         environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-client,service.version=10.10.10
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com:443
-            - LS_SERVICE_NAME=py-opentelemetry-client
-            - LS_SERVICE_VERSION=10.10.10
             - DESTINATION_URL=http://py-opentelemetry-server:5000/ping
         stop_grace_period: 1s
     py-opentelemetry-server:
@@ -190,9 +187,8 @@ services:
         env_file:
             - .env
         environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-server,service.version=10.10.9
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com:443
-            - LS_SERVICE_NAME=py-opentelemetry-server
-            - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
     py-launcher-client:
         container_name: py-launcher-client
@@ -206,8 +202,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SERVICE_NAME=py-launcher-client
-            - LS_SERVICE_VERSION=10.10.10
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-launcher-client,service.version=10.10.10
             - DESTINATION_URL=http://py-launcher-server:5000/ping
         stop_grace_period: 1s
     py-launcher-server:
@@ -225,8 +220,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SERVICE_NAME=py-launcher-server
-            - LS_SERVICE_VERSION=10.10.9
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-launcher-server,service.version=10.10.9
         stop_grace_period: 1s
     demo-client-otlp:
         container_name: demo-client-otlp
@@ -272,8 +266,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SERVICE_NAME=py-opentracing-client
-            - LS_SERVICE_VERSION=10.10.10
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentracing-client,service.version=10.10.10
             - DESTINATION_URL=http://py-opentracing-server:5000/ping
         stop_grace_period: 1s
     py-opentracing-server:
@@ -291,8 +284,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SERVICE_NAME=py-opentracing-server
-            - LS_SERVICE_VERSION=10.10.9
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentracing-server,service.version=10.10.9
         stop_grace_period: 1s
     ###################################
     ####### Javascript examples #######

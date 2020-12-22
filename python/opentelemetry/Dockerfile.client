@@ -1,9 +1,15 @@
 FROM python:3.7
-RUN pip install protobuf==3.12.2
-RUN pip install requests
-RUN pip install opentelemetry-instrumentation-requests
-RUN pip install opentelemetry-exporter-otlp
-RUN pip install opentelemetry-instrumentation
 
-ADD *.py /app/
+RUN mkdir /app
+WORKDIR /app
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+
+# version pinning is here as a workaround for
+# a bug in auto instrumentation w/ certificates
+# present in 0.16b1
+# TODO: remove when 0.17b0 is released
+#RUN opentelemetry-bootstrap -a install
+
+ADD *.py ./
 CMD ["opentelemetry-instrument", "/app/client.py"]
