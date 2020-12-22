@@ -129,6 +129,7 @@ def test_traces():
     # the integration test will report as well
     services.append(INTEGRATION_TEST_APP)
     expected_services_count = len(services)
+    reported_services = {}
 
     # each server will be listed as a reporter in the trace being retrieved
     # we're inspecting the list of reporters rather than individual span
@@ -136,11 +137,12 @@ def test_traces():
     # updates spans being generated
     for reporter in reporters:
         service_name = reporter.get("attributes", {}).get("lightstep.component_name")
+        reported_services[service_name] = 1
         if service_name in services:
             services.remove(service_name)
 
     # assert number of reporters are the the same as expected
-    assert len(reporters) == expected_services_count, "Services not found: {}".format(
-        services
-    )
+    assert (
+        len(reported_services) == expected_services_count
+    ), "Services not found: {}".format(services)
     assert services == []
