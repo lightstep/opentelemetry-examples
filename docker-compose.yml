@@ -202,7 +202,8 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-launcher-client,service.version=10.10.10
+            - LS_SERVICE_NAME=py-launcher-client
+            - LS_SERVICE_VERSION=10.10.10
             - DESTINATION_URL=http://py-launcher-server:5000/ping
         stop_grace_period: 1s
     py-launcher-server:
@@ -220,7 +221,8 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-launcher-server,service.version=10.10.9
+            - LS_SERVICE_NAME=py-launcher-server
+            - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
     demo-client-otlp:
         container_name: demo-client-otlp
@@ -266,7 +268,8 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentracing-client,service.version=10.10.10
+            - LS_SERVICE_NAME=py-opentracing-client
+            - LS_SERVICE_VERSION=10.10.10
             - DESTINATION_URL=http://py-opentracing-server:5000/ping
         stop_grace_period: 1s
     py-opentracing-server:
@@ -284,7 +287,8 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentracing-server,service.version=10.10.9
+            - LS_SERVICE_NAME=py-opentracing-server
+            - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
     ###################################
     ####### Javascript examples #######
