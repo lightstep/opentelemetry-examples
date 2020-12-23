@@ -84,6 +84,8 @@ def create_trace():
                 try:
                     res = send_request(url)
                     print(f"Request to {url}, got {len(res.content)} bytes")
+                    if res.status_code == 500:
+                        print(f"{res.text}")
                 except Exception as e:
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
