@@ -19,7 +19,7 @@
   <dependency>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-server</artifactId>
-    <version>9.4.35.v20201120</version>
+    <version>9.4.17.v20190418</version>
   </dependency>
   <dependency>
     <groupId>org.eclipse.jetty</groupId>
@@ -55,13 +55,13 @@
   <dependency>
     <groupId>io.opentelemetry</groupId>
     <artifactId>opentelemetry-opentracing-shim</artifactId>
-    <version>0.7.0</version>
+    <version>0.12.0</version>
   </dependency>
 
   <dependency>
     <groupId>com.lightstep.opentelemetry</groupId>
     <artifactId>opentelemetry-launcher</artifactId>
-    <version>0.7.2</version>
+    <version>0.12.0</version>
   </dependency>
 
 </dependencies>
@@ -112,8 +112,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
