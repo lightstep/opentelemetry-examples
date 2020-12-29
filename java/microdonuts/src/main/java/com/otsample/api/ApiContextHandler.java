@@ -1,16 +1,20 @@
 package com.otsample.api;
 
 import io.opentracing.Span;
+import io.opentracing.contrib.web.servlet.filter.TracingFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.EnumSet;
 import java.util.Properties;
 import java.util.UUID;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -31,7 +35,10 @@ public class ApiContextHandler extends ServletContextHandler
 
     public ApiContextHandler()
     {
-        registerServlets();
+      TracingFilter tracingFilter = new TracingFilter(GlobalTracer.get());
+      addFilter(new FilterHolder(tracingFilter), "/*", EnumSet.allOf(DispatcherType.class));
+
+      registerServlets();
     }
 
     void registerServlets()
