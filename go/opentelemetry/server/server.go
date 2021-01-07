@@ -76,6 +76,7 @@ func initExporter(url string, token string) *otlp.Exporter {
 	}
 
 	exporter, err := otlp.NewExporter(
+		context.Background(),
 		secureOption,
 		otlp.WithAddress(url),
 		otlp.WithHeaders(headers),
