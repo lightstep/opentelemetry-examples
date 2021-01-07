@@ -39,4 +39,4 @@ service:
         processors: [batch]
       metrics:
         receivers: [otlp]
-        exporters: [logging]
+        exporters: [logging, otlp]
