@@ -1,0 +1,8 @@
+.idea/
+*.iml
+package-lock.json
+node_modules
+.tox/
+__pycache__
+.pyc
+actual.json
