@@ -1,0 +1,82 @@
+//
+// example code to test lightstep/otel-launcher-go/launcher
+//
+// usage:
+//   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+//   LS_SERVICE_NAME=demo-server-go \
+//   LS_SERVICE_VERSION=0.1.8 \
+//   go run server.go
+
+package main
+
+import (
+	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
+	// "os"
+	"strings"
+	"time"
+
+	// "github.com/gorilla/mux"
+	"go.opentelemetry.io/otel"
+	"github.com/lightstep/otel-launcher-go/launcher"
+	otShim "go.opentelemetry.io/otel/bridge/opentracing"
+	ot "github.com/opentracing/opentracing-go"
+	"github.com/opentracing-contrib/go-stdlib/nethttp"
+	// muxtrace "github.com/opentracing-contrib/go-gorilla/gorilla"
+)
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const (
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+)
+
+var src = rand.NewSource(time.Now().UnixNano())
+
+func randString(n int) string {
+	sb := strings.Builder{}
+	sb.Grow(n)
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			sb.WriteByte(letterBytes[idx])
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return sb.String()
+}
+
+
+func main() {
+	lsOtel := launcher.ConfigureOpentelemetry()
+	defer lsOtel.Shutdown()
+
+	// create OTEL tracer which we  then bind to the OT shim
+	otelTracer := otel.Tracer("otel-ot-bridge-example/client")
+	bridge, wrapper := otShim.NewTracerPair(otelTracer)
+
+	// register BridgeTracer with opentracing and WrapperTracerProvider with opentelemetry.
+	otel.SetTracerProvider(wrapper)
+	ot.SetGlobalTracer(bridge)
+
+	fmt.Printf("Starting server on http://localhost:8081\n")
+	
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		length := rand.Intn(1024)
+		log.Printf("%s %s %s %s", r.Method, r.URL.Path, r.Proto)
+		fmt.Fprintf(w, randString(length))
+	})
+
+	log.Fatal(http.ListenAndServe(
+		":8081",
+		nethttp.Middleware(ot.GlobalTracer(), http.DefaultServeMux)),
+	)
+}
