@@ -14,13 +14,17 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
+	// "os"
 	"strings"
 	"time"
 
-	"github.com/gorilla/mux"
+	// "github.com/gorilla/mux"
+	"go.opentelemetry.io/otel"
 	"github.com/lightstep/otel-launcher-go/launcher"
-	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	otShim "go.opentelemetry.io/otel/bridge/opentracing"
+	ot "github.com/opentracing/opentracing-go"
+	"github.com/opentracing-contrib/go-stdlib/nethttp"
+	// muxtrace "github.com/opentracing-contrib/go-gorilla/gorilla"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -50,18 +54,29 @@ func randString(n int) string {
 	return sb.String()
 }
 
+
 func main() {
-	otel := launcher.ConfigureOpentelemetry()
-	defer otel.Shutdown()
+	lsOtel := launcher.ConfigureOpentelemetry()
+	defer lsOtel.Shutdown()
+
+	// create OTEL tracer which we  then bind to the OT shim
+	otelTracer := otel.Tracer("otel-ot-bridge-example/client")
+	bridge, wrapper := otShim.NewTracerPair(otelTracer)
+
+	// register BridgeTracer with opentracing and WrapperTracerProvider with opentelemetry.
+	otel.SetTracerProvider(wrapper)
+	ot.SetGlobalTracer(bridge)
+
 	fmt.Printf("Starting server on http://localhost:8081\n")
-	r := mux.NewRouter()
-	r.Use(muxtrace.Middleware(os.Getenv("LS_SERVICE_NAME")))
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		length := rand.Intn(1024)
-		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
+		log.Printf("%s %s %s %s", r.Method, r.URL.Path, r.Proto)
 		fmt.Fprintf(w, randString(length))
 	})
-	http.Handle("/", r)
 
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Fatal(http.ListenAndServe(
+		":8081",
+		nethttp.Middleware(ot.GlobalTracer(), http.DefaultServeMux)),
+	)
 }
