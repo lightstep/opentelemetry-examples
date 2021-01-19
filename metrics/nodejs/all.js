@@ -13,7 +13,7 @@ const meter = new MeterProvider({
 }).getMeter('name', "version");
 
 
-const testValues = require('./test_values');
+const testValues = require('./test_cases');
 
 const labels = { 'A': 'B' };
 
