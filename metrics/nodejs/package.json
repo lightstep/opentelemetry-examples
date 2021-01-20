@@ -1,0 +1,25 @@
+{
+  "name": "example-metrics",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Example of using metrics",
+  "main": "index.js",
+  "scripts": {
+    "counter": "node counter.js",
+    "updown_counter": "node updown_counter.js",
+    "value_observer": "node value_observer.js",
+    "sum_observer": "node sum_observer.js",
+    "updown_sum_observer": "node updown_sum_observer.js",
+    "value_recorder": "node value_recorder.js",
+    "produce": "npm run counter && npm run updown_counter && npm run value_observer && npm run sum_observer && npm run updown_sum_observer && npm run value_recorder",
+    "all": "node all.js"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "author": "Lightstep Authors",
+  "dependencies": {
+    "@opentelemetry/exporter-collector-grpc": "^0.13.0",
+    "@opentelemetry/metrics": "^0.13.0"
+  }
+}

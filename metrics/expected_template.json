@@ -1,0 +1,160 @@
+{
+  "resource_metrics": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "Value": {
+                "string_value": "LANGUAGE"
+              }
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "Value": {
+                "string_value": "opentelemetry"
+              }
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "Value": {
+                "string_value": "VERSION"
+              }
+            }
+          }
+        ]
+      },
+      "instrumentation_library_metrics": [
+        {
+          "instrumentation_library": {
+            "name": "name",
+            "version": "version"
+          },
+          "metrics": [
+            {
+              "name": "counter",
+              "description": "description",
+              "unit": "1",
+              "Data": {
+                "int_sum": {
+                  "data_points": [
+                    {
+                      "labels": [
+                        {
+                          "key": "A",
+                          "value": "B"
+                        }
+                      ],
+                      "start_time_unix_nano": "TIMESTAMP",
+                      "time_unix_nano": "TIMESTAMP",
+                      "value": 13
+                    }
+                  ],
+                  "aggregation_temporality": 2,
+                  "is_monotonic": true
+                }
+              }
+            },
+            {
+              "name": "updowncounter",
+              "description": "description",
+              "unit": "1",
+              "Data": {
+                "int_sum": {
+                  "data_points": [
+                    {
+                      "labels": [
+                        {
+                          "key": "A",
+                          "value": "B"
+                        }
+                      ],
+                      "start_time_unix_nano": "TIMESTAMP",
+                      "time_unix_nano": "TIMESTAMP",
+                      "value": 7
+                    }
+                  ],
+                  "aggregation_temporality": 2
+                }
+              }
+            },
+            {
+              "name": "sumobserver",
+              "description": "description",
+              "unit": "1",
+              "Data": {
+                "int_sum": {
+                  "data_points": [
+                    {
+                      "labels": [
+                        {
+                          "key": "A",
+                          "value": "B"
+                        }
+                      ],
+                      "start_time_unix_nano": "TIMESTAMP",
+                      "time_unix_nano": "TIMESTAMP",
+                      "value": 6
+                    }
+                  ],
+                  "aggregation_temporality": 2,
+                  "is_monotonic": true
+                }
+              }
+            },
+            {
+              "name": "updownsumobserver",
+              "description": "description",
+              "unit": "1",
+              "Data": {
+                "int_sum": {
+                  "data_points": [
+                    {
+                      "labels": [
+                        {
+                          "key": "A",
+                          "value": "B"
+                        }
+                      ],
+                      "start_time_unix_nano": "TIMESTAMP",
+                      "time_unix_nano": "TIMESTAMP",
+                      "value": -5
+                    }
+                  ],
+                  "aggregation_temporality": 2
+                }
+              }
+            },
+            {
+              "name": "valueobserver",
+              "description": "description",
+              "unit": "1",
+              "Data": {
+                "int_gauge": {
+                  "data_points": [
+                    {
+                      "labels": [
+                        {
+                          "key": "A",
+                          "value": "B"
+                        }
+                      ],
+                      "start_time_unix_nano": "TIMESTAMP",
+                      "time_unix_nano": "TIMESTAMP",
+                      "value": -5
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
