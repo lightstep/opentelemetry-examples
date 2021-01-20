@@ -1,0 +1,18 @@
+name: Run Implementation Concordance Test
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Start collector
+      run: docker-compose up metric-collector
+
+    - name: Run integration test
+      run: docker-compose up --exit-code-from implementation-concordance-test implementation-concordance-test
