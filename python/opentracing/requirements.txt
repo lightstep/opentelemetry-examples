@@ -5,3 +5,4 @@ redis
 requests
 sqlalchemy
 opentelemetry-launcher==0.17b0
+opentelemetry-opentracing-shim

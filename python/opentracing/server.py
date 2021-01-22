@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship
 from opentracing import set_global_tracer, global_tracer
 
 from opentelemetry.trace import get_tracer_provider
-from opentelemetry.instrumentation.opentracing_shim import create_tracer
+from opentelemetry.shim.opentracing_shim import create_tracer
 
 shim = create_tracer(get_tracer_provider())
 
