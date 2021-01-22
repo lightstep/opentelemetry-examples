@@ -1,5 +1,5 @@
 {
-  "name": "otel-server",
+  "name": "ls-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lightstep-opentelemetry-launcher-node": "^0.13.0",
-    "@opentelemetry/propagator-opentracing": "file:../../../../opentelemetry-js-contrib/propagators/opentelemetry-propagator-opentracing/"
+    "express": "^4.17.1",
+    "express-opentracing": "^0.1.1",
+    "lightstep-tracer": "^0.30.2",
+    "opentracing": "^0.14.5"
   }
 }

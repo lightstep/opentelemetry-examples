@@ -7,7 +7,7 @@ const {
 
 const {
   OpenTracingPropagator,
-} = require('@opentelemetry/propagator-opentelemetry');
+} = require('@opentelemetry/propagator-opentracing');
 
 const PORT = process.env.PORT || 8080;
 
