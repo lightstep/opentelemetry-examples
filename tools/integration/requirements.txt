@@ -1,5 +1,5 @@
 opentelemetry-launcher
-protobuf==3.12.4
+protobuf==3.13.0
 pyyaml
 pytest
 requests
