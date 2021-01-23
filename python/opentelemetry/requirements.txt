@@ -1,17 +1,9 @@
-protobuf==3.12.2
+protobuf==3.13.0
 flask
 pymongo
 redis
 requests
 sqlalchemy
-# version pinning is here as a workaround for
-# a bug in auto instrumentation w/ certificates
-# present in 0.16b1
-# TODO: remove when 0.17b0 is released
-opentelemetry-instrumentation==0.15b0
-opentelemetry-instrumentation-flask==0.15b0
-opentelemetry-instrumentation-pymongo==0.15b0
-opentelemetry-instrumentation-redis==0.15b0
-opentelemetry-instrumentation-requests==0.15b0
-opentelemetry-instrumentation-sqlalchemy==0.15b0
-opentelemetry-exporter-otlp==0.15b0
+opentelemetry-instrumentation==0.17b0
+opentelemetry-exporter-otlp==0.17b0
+opentelemetry-propagator-b3==0.17b0

@@ -6,7 +6,7 @@ from opentelemetry.exporter.otlp.trace_exporter import OTLPSpanExporter
 from opentelemetry.propagators import set_global_textmap
 from opentelemetry.propagators.composite import CompositeHTTPPropagator
 from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
-from opentelemetry.sdk.trace.propagation.b3_format import B3Format
+from opentelemetry.propagators.b3 import B3Format
 
 
 def get_otlp_exporter():
