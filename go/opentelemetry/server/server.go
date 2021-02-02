@@ -24,6 +24,7 @@ import (
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
 	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -70,16 +71,18 @@ func initExporter(url string, token string) *otlp.Exporter {
 		"lightstep-access-token": token,
 	}
 
-	secureOption := otlp.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	secureOption := otlpgrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
 	if len(insecure) > 0 {
-		secureOption = otlp.WithInsecure()
+		secureOption = otlpgrpc.WithInsecure()
 	}
 
 	exporter, err := otlp.NewExporter(
 		context.Background(),
-		secureOption,
-		otlp.WithAddress(url),
-		otlp.WithHeaders(headers),
+		otlpgrpc.NewDriver(
+                    secureOption,
+		    otlpgrpc.WithEndpoint(url),
+		    otlpgrpc.WithHeaders(headers),
+                ),
 	)
 
 	if err != nil {
