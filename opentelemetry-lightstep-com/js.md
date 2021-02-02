@@ -15,7 +15,7 @@ The full list of configuration options can be found in the [README](https://gith
 ### Requirements
 
 * Node.js version 12 or newer
-* An app to add OpenTelemetry to. You can use [this example application](https://github.com/lightstep/opentelemetry-examples/tree/main/go) or bring your own.
+* An app to add OpenTelemetry to. You can use [this example application](https://github.com/lightstep/opentelemetry-examples/tree/main/nodejs) or bring your own.
 * A [free Lightstep account](https://app.lightstep.com/signup/developer?signup_source=otelnode) account, or another OpenTelemetry backend. 
 
 > LS Note: When connecting to Lightstep, a project [Access Token](https://docs.lightstep.com/paths/gs-lightstep-path/step-three#create-an-access-token) is required.
@@ -139,7 +139,7 @@ import opentelemetry from '@opentelemetry/api';
 // tracer provider for web
 import { WebTracerProvider } from '@opentelemetry/web';
 // and an exporter with span processor
-import {
+import {  
   SimpleSpanProcessor,
 } from '@opentelemetry/tracing';
 import { CollectorTraceExporter } from '@opentelemetry/exporter-collector';
@@ -157,6 +157,7 @@ tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExport
 
 // Register the tracer
 tracerProvider.register();
+
 ```
 
 2. Load the tracer into your HTML document.
@@ -262,11 +263,11 @@ Ideally, when tracing application code, spans are created and managed in the app
 
 If your application framework is supported, a trace will automatically be created for each request, and your application code will already be wrapped in a span, which can be used for adding application specific attributes and events.
 
-To access the currently active span, call `getCurrentSpan`:
+To access the currently active span, call `getSpan(context.active())`:
 
 ```js
-const tracer = opentelemetry.trace.getTracer('launcher-node-example');
-const span = tracer.getCurrentSpan();
+import { context, getSpan } from '@opentelemetry/api';
+const span = getSpan(context.active());
 ```
 
 ### Setting a new current span
@@ -275,25 +276,28 @@ The naive way to do this would be to just start a span, call your method, then e
 
 ```js
 // make a child span to measure how long it takes to bake a cake.
-Const parentSpan = tracer.getCurrentSpan()
+import { context, getSpan } from '@opentelemetry/api';
+const cakeSpan = tracer.startSpan('bake-cake');
 
-Const cakeSpan = tracer.startSpan('bake-cake', {parent: parent_span});
 chef.bakeCake()
 cakeSpan.end()
 ```
 
-The above example will work just fine, but with one big problem: the `bakeCake` method itself has no access to this new `bake-cake` span. That means there would be no way to add attributes and events to this span from within the bakeCake method. Even worse, `get_current_span` would return the parent of “bake-cake,” since that span is still set as current. 
+The above example will work just fine, but with one big problem: the `bakeCake` method itself has no access to this new `bake-cake` span. 
+That means there would be no way to add attributes and events to this span from within the bakeCake method. 
+Even worse, `get_current_span` would return the parent of "bake-cake", since that span is still set as current. 
 
-What should we do instead? Replace the current span with `bake-cake.` To do this, call `withSpan` to make a closure around the `bakeCake` method. Within this closure, the `getCurrentSpan` method will now return `bake-cake`.
+What should we do instead? Replace the current span with `bake-cake.` To do this first set the desired span to be an active span in current context `setSpan(context.active(), cakeSpan)` and then call `context.with` to make a closure around the `bakeCake` method. Within this closure, the `getSpan` method will now return `bake-cake`.
 
 ```js
+import { context, setSpan } from '@opentelemetry/api';
 // Replace the current active span with a new child span
-Const cakeSpan =  tracer.startSpan("bake-cake"):
-tracer.withSpan()
-  # now returns the bake-cake span
-  tracer.getCurrentSpan()
-  # bake your cake!
+const cakeSpan = tracer.startSpan("bake-cake");
+context.with(setSpan(context.active(), cakeSpan), () => {
+  // now returns the bake-cake span
+  console.log(getSpan(context.active()));
   chef.bake_cake()
+});
 ```
 
 This pattern of wrapping method calls is important, because we always want application code to be able to assume that the current span is correct.
@@ -306,13 +310,16 @@ When performing root cause analysis, span attributes are an important tool for p
 
 > Note that it is only possible to set attributes, not to get them.
 
-Much like how resources are used to describe your services, attributes are used to describe your spans. Here is an example of setting attributes to correctly define an HTTP client request:
+Much like how resources are used to describe your services, attributes are used to describe your spans. 
+Here is an example of setting attributes to correctly define an HTTP client request:
 
 ```js
 import * as api from '@opentelemetry/api';
 
+const parentSpan = tracer.startSpan('parent');
+api.setSpan(api.context.active(), parentSpan);
+
 const span = tracer.startSpan('handleRequest', {
-    parent: tracer.getCurrentSpan(),
     kind: api.SpanKind.CLIENT, // server
     attributes: {
       "http.method": "GET",
@@ -322,8 +329,8 @@ const span = tracer.startSpan('handleRequest', {
       "http.status_code": 200,
       "http.status_text": "OK"},
   });
-
-# In addition to the standard attributes, custom attributes can be added as well.
+  
+// In addition to the standard attributes, custom attributes can be added as well.
 span.setAttribute("list.page_number", 2);
 
 // To avoid collisions, always namespace your attribute keys using dot notation.
@@ -352,7 +359,9 @@ The following semantic conventions are defined for tracing:
 
 The finest-grained tracing tool is the event system. 
 
-Span events are a form of structured logging. Each event has a name, a timestamp, and a set of attributes. When events are added to a span, they inherit the span's context. This additional context allows events to be searched, filtered, and grouped by trace ID and other span attributes. 
+Span events are a form of structured logging. Each event has a name, a timestamp, and a set of attributes. 
+When events are added to a span, they inherit the span's context. 
+This additional context allows events to be searched, filtered, and grouped by trace ID and other span attributes. 
 
 > Span context is one of the key differences between distributed tracing and traditional logging.
 
@@ -363,16 +372,16 @@ For example, enqueuing an item might be recorded as an event.
 
 ```js
 // Get the current span
-const span = tracer.getCurrentSpan();
+const span = api.getSpan(api.context.active());
 
 // Perform the action
 queue.enqueue(myItem);
 
 // Record the action
-span.addEvent( “enqueued item“, {
-  "item.id", myItem.ID(),
-	"queue.id": queue.ID(),
-	"queue.length": queue.length(),
+span.addEvent( "enqueued item", {
+    "item.id": myItem.ID(),
+    "queue.id": queue.ID(),
+    "queue.length": queue.length(),
 })
 ```
 
@@ -380,19 +389,20 @@ span.addEvent( “enqueued item“, {
 
 ### Recording exceptions
 
-Many of the tracing conventions can apply to event attributes as well as span attributes. The most important event-specific convention is [recording exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/exceptions.md).
+Many of the tracing conventions can apply to event attributes as well as span attributes. 
+The most important event-specific convention is [recording exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/exceptions.md).
 
 ```js
-const span = trace.getCurrentSpan();
+const span = api.getSpan(api.context.active());
 
 // recordException converts the error into a span event. 
-span.span.recordException(err);
+span.recordException(err);
 
 // If the exception means the operation results in an 
 // error state, you can also use it to update the span status.
-span.span.setStatus({ code: CanonicalCode.INTERNAL });
+span.setStatus({ code: CanonicalCode.INTERNAL });
 ```
 
-> Marking the span as an error is independent from recordings exceptions. To mark the entire span as an error, and have it count against error rates, set the SpanStatus to any value other than OK.
+> Marking the span as an error is independent of recordings exceptions. To mark the entire span as an error, and have it count against error rates, set the SpanStatus to any value other than OK.
 
 StatusCode definitions can be found in the [OpenTelemetry specification](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#statuscanonicalcode). If no status code directly maps to the type of error you are recording, set the status code to `UNKNOWN` for common errors, and `INTERNAL` for serious errors.
