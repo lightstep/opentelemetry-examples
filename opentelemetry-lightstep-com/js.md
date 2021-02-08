@@ -121,7 +121,7 @@ The full code for the example in this guide can be found [here](https://github.c
 
 > Need an account? [Create a free Lightstep account here](https://app.lightstep.com/signup/developer?signup_source=otelnode).
 
-To use OpenTelemetry, you need to install the API, SDK, span processor and exporter packages. The version of the SDK and API used in this guide is **0.5.1**, the most current version as of writing.
+To use OpenTelemetry, you need to install the API, SDK, span processor and exporter packages. The version of the SDK and API used in this guide is **0.16.0**, the most current version as of writing.
 
 ```bash
 npm install @opentelemetry/api @opentelemetry/web @opentelemetry/tracing --save
@@ -196,22 +196,24 @@ The full list of supported plugins can be found in the [README](https://github.c
 
 Telemetry data is indexed by service. In OpenTelemetry, services are described by **resources**, which are set when the OpenTelemetry SDK is initialized during program startup.
 
-We want our data to be normalized, so we can compare apples to apples. OpenTelemetry defines a schema for the keys and values which describe common service resources such as hostname, region, version, etc. These standards are called Semantic Conventions, and are defined in the [OpenTelemetry Specification](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#resource-semantic-conventions).
+We want our data to be normalized, so we can compare apples to apples. OpenTelemetry defines a schema for the keys and values which describe common service resources such as hostname, region, version, etc. 
+These standards are called Semantic Conventions, and are defined in the [OpenTelemetry Specification](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#resource-semantic-conventions).
 
 We recommend that, at minimum, the following resources be applied to every service:
 
 | Attribute  | Description  | Example  | Required? |
 |---|---|---|---|
 | service.name | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. | `shoppingcart` | Yes |
+| service.namespace | A namespace for `service.name`. A string value having a meaning that helps to distinguish a group of services. | `Shop` | No |
+| service.instance.id | The string ID of the service instance. | `627cc493-f310-47de-96bd-71410b7dec09` | No |
 | service.version | The version string of the service API or implementation as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
-| host.hostname | Contains what the hostname command would return on the host machine. | `server1.mydomain.com,` | No |
 
 ## Node.js configuration
 
-At this time, resources for NodeJS can only be set from the command line via the `OTEL_RESOURCE_LABELS` environment variable.
+At this time, resources for NodeJS can only be set from the command line via the `OTEL_RESOURCE_ATTRIBUTES` environment variable.
 
 ```bash
-OTEL_RESOURCE_LABELS=service.name:myservice,service.version:1.2.3,host.hostname:myhost
+OTEL_RESOURCE_ATTRIBUTES=service.name:myservice,service.version:1.2.3
 ```
 
 The format is a comma-separated list of attributes, e.g. `key1:val1,key2:val2`.
@@ -400,7 +402,7 @@ span.recordException(err);
 
 // If the exception means the operation results in an 
 // error state, you can also use it to update the span status.
-span.setStatus({ code: CanonicalCode.INTERNAL });
+span.setStatus({ code: api.SpanStatusCode.ERROR });
 ```
 
 > Marking the span as an error is independent of recordings exceptions. To mark the entire span as an error, and have it count against error rates, set the SpanStatus to any value other than OK.
