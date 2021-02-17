@@ -5,13 +5,11 @@ const {
   opentelemetry,
 } = require('lightstep-opentelemetry-launcher-node');
 
-const {
-  OpenTracingPropagator,
-} = require('@opentelemetry/propagator-opentracing');
+const { OTTracePropagator } = require('@opentelemetry/propagator-ot-trace');
 
 const sdk = lightstep.configureOpenTelemetry({
   serviceName: 'otel-js-client (ot-ctx)',
-  textMapPropagator: new OpenTracingPropagator(),
+  textMapPropagator: new OTTracePropagator(),
 });
 
 const DESTINATION_URL =
