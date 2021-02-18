@@ -1,7 +1,7 @@
 FROM node:12
 
 # Create app directory
-WORKDIR /app/otel-server
+WORKDIR /app/ls-server
 
 # Install app dependencies
 COPY package*.json ./

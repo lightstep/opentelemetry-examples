@@ -366,6 +366,52 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
             - DESTINATION_URL=http://js-ot-shim-server:8080/ping
         stop_grace_period: 1s
+    js-ot-context-ls-client:
+        container_name: js-ot-context-ls-client
+        build: ./nodejs/ot-context/ls-client
+        networks:
+            - demo
+        depends_on:
+            - js-ot-context-otel-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=js-ot-context-ls-client
+            - DESTINATION_URL=http://js-ot-context-otel-server:8080/ping
+        stop_grace_period: 1s
+    js-ot-context-otel-server:
+        container_name: js-ot-context-otel-server
+        build: ./nodejs/ot-context/otel-server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=js-ot-context-otel-server
+        stop_grace_period: 1s
+    js-ot-context-otel-client:
+        container_name: js-ot-context-otel-client
+        build: ./nodejs/ot-context/otel-client
+        networks:
+            - demo
+        depends_on:
+            - js-ot-context-ls-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=js-ot-context-otel-client
+            - DESTINATION_URL=http://js-ot-context-ls-server:8080/ping
+        stop_grace_period: 1s
+    js-ot-context-ls-server:
+        container_name: js-ot-context-ls-server
+        build: ./nodejs/ot-context/ls-server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=js-ot-context-ls-server
+        stop_grace_period: 1s
     ##############################
     ####### Java examples ########
     ##############################

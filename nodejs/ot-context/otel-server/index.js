@@ -10,9 +10,7 @@ const { OTTracePropagator } = require('@opentelemetry/propagator-ot-trace');
 const PORT = process.env.PORT || 8080;
 
 const sdk = lightstep.configureOpenTelemetry({
-  serviceName: 'otel-js-server (ot-ctx)',
   textMapPropagator: new OTTracePropagator(),
-  spanEndpoint: 'https://ingest.lightstep.com/traces/otlp/v0.6',
 });
 
 sdk.start().then(() => {
