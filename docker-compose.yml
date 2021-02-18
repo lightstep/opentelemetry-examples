@@ -368,7 +368,7 @@ services:
         stop_grace_period: 1s
     js-ot-context-ls-client:
         container_name: js-ot-context-ls-client
-        build: ./nodejs/ot-context/ls-client
+        build: ./nodejs/opentracing/client
         networks:
             - demo
         depends_on:
@@ -404,7 +404,7 @@ services:
         stop_grace_period: 1s
     js-ot-context-ls-server:
         container_name: js-ot-context-ls-server
-        build: ./nodejs/ot-context/ls-server
+        build: ./nodejs/opentracing/server
         networks:
             - demo
         env_file:
