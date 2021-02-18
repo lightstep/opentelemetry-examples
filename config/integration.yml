@@ -10,6 +10,8 @@ clients:
 - js-lstrace-client
 - js-launcher-client
 - js-ot-shim-client
+- js-ot-context-ls-client
+- js-ot-context-otel-client
 - java-specialagent-client
 - java-otlp-client
 - java-launcher-client
@@ -25,6 +27,8 @@ endpoints:
 - http://js-lstrace-server:8080/ping
 - http://js-launcher-server:8080/ping
 - http://js-ot-shim-server:8080/ping
+- http://js-ot-context-otel-server:8080/ping
+- http://js-ot-context-ls-server:8080/ping
 - http://java-specialagent-server:8083/ping
 - http://java-otlp-server:8083/ping
 - http://java-launcher-server:8084/ping
@@ -42,6 +46,8 @@ services:
 - js-lstrace-server
 - js-launcher-server
 - js-ot-shim-server
+- js-ot-context-otel-server
+- js-ot-context-ls-server
 - java-specialagent-server
 - java-otlp-server
 - java-launcher-server
