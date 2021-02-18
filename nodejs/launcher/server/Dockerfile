@@ -1,7 +1,7 @@
 FROM node:12
 
 # Create app directory
-WORKDIR /usr/src/server
+WORKDIR /app/otel-server
 
 # Install app dependencies
 COPY package*.json ./
@@ -10,5 +10,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+CMD [ "node", "index.js" ]

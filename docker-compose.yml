@@ -324,7 +324,6 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
             - LS_SERVICE_NAME=js-launcher-server
         stop_grace_period: 1s
     js-launcher-client:
@@ -338,7 +337,6 @@ services:
             - .env
         environment:
             - LS_SERVICE_NAME=js-launcher-client
-            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
             - DESTINATION_URL=http://js-launcher-server:8080/ping
         stop_grace_period: 1s
     js-ot-shim-server:
@@ -381,7 +379,7 @@ services:
         stop_grace_period: 1s
     js-ot-context-otel-server:
         container_name: js-ot-context-otel-server
-        build: ./nodejs/ot-context/otel-server
+        build: ./nodejs/launcher/server
         networks:
             - demo
         env_file:
@@ -392,7 +390,7 @@ services:
         stop_grace_period: 1s
     js-ot-context-otel-client:
         container_name: js-ot-context-otel-client
-        build: ./nodejs/ot-context/otel-client
+        build: ./nodejs/launcher/client
         networks:
             - demo
         depends_on:
