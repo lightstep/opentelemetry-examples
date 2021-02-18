@@ -388,6 +388,7 @@ services:
             - .env
         environment:
             - LS_SERVICE_NAME=js-ot-context-otel-server
+            - OTEL_PROPAGATORS=ottrace
         stop_grace_period: 1s
     js-ot-context-otel-client:
         container_name: js-ot-context-otel-client
@@ -400,6 +401,7 @@ services:
             - .env
         environment:
             - LS_SERVICE_NAME=js-ot-context-otel-client
+            - OTEL_PROPAGATORS=ottrace
             - DESTINATION_URL=http://js-ot-context-ls-server:8080/ping
         stop_grace_period: 1s
     js-ot-context-ls-server:

@@ -7,9 +7,15 @@ const {
 
 const { OTTracePropagator } = require('@opentelemetry/propagator-ot-trace');
 
-const sdk = lightstep.configureOpenTelemetry({
-  textMapPropagator: new OTTracePropagator(),
-});
+const config = {};
+
+// This "if" can be deleted when OTel JS has native support for OTEL_PROPAGATORS
+if (process.env.OTEL_PROPAGATORS === 'ottrace') {
+  config.textMapPropagator = new OTTracePropagator();
+  delete process.env.OTEL_PROPAGATORS;
+}
+
+const sdk = lightstep.configureOpenTelemetry(config);
 
 const DESTINATION_URL =
   process.env.DESTINATION_URL || 'http://localhost:8080/ping';
