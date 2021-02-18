@@ -295,7 +295,7 @@ services:
     ###################################
     js-lstrace-server:
         container_name: js-lstrace-server
-        build: ./nodejs/server
+        build: ./nodejs/lstrace/server
         networks:
             - demo
         env_file:
@@ -305,7 +305,7 @@ services:
         stop_grace_period: 1s
     js-lstrace-client:
         container_name: js-lstrace-client
-        build: ./nodejs/client
+        build: ./nodejs/lstrace/client
         networks:
             - demo
         depends_on:
