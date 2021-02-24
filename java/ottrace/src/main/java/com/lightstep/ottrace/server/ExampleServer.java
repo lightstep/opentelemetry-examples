@@ -15,7 +15,7 @@ public class ExampleServer {
 
   public static void main(String[] args) throws Exception {
     OpenTelemetryConfiguration.newBuilder()
-        //.setPropagator(Propagator.OT_TRACE) // TODO
+        .setPropagator(Propagator.OT_TRACE)
         .install();
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
