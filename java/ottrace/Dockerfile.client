@@ -1,0 +1,17 @@
+FROM maven:3.5.2-jdk-8 AS build
+
+RUN apt-get update
+RUN apt-get install -y curl
+RUN update-ca-certificates -f
+
+WORKDIR /usr/src/app
+COPY src ./src
+COPY pom-client.xml pom.xml
+RUN mvn -f /usr/src/app/pom.xml clean package
+
+FROM openjdk:8
+
+COPY --from=build /usr/src/app/target/lightstep-ottrace-client.jar /app/
+
+ENTRYPOINT java -jar /app/lightstep-ottrace-client.jar \
+        com.lightstep.ottrace.client.Client

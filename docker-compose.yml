@@ -453,7 +453,38 @@ services:
             - LS_SERVICE_NAME=java-launcher-server
             - LS_SERVICE_VERSION=11.11.11
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-        stop_grace_period: 1s    
+        stop_grace_period: 1s
+    java-ottrace-client:
+        container_name: java-ottrace-client
+        build:
+            context: ./java/ottrace
+            dockerfile: Dockerfile.client
+        networks:
+            - demo
+        depends_on:
+            - java-ottrace-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=java-ottrace-client
+            - LS_SERVICE_VERSION=11.11.10
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+            - DESTINATION_URL=http://java-ottrace-server:8085/ping
+        stop_grace_period: 1s
+    java-ottrace-server:
+        container_name: java-ottrace-server
+        build:
+            context: ./java/ottrace
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=java-ottrace-server
+            - LS_SERVICE_VERSION=11.11.11
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+        stop_grace_period: 1s
     java-opentracing-server:
         container_name: java-opentracing-server
         build:
@@ -510,6 +541,7 @@ services:
             - java-specialagent-server
             - java-otlp-server
             - java-launcher-server
+            - java-ottrace-server
             - java-opentracing-server
             - dotnet-otlp-server
         env_file:
