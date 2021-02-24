@@ -16,7 +16,7 @@ public class Client {
   public static void main(String[] args) {
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
-      targetURL = "http://127.0.0.1:8084/ping";
+      targetURL = "http://127.0.0.1:8085/ping";
     }
 
     OpenTelemetryConfiguration.newBuilder()

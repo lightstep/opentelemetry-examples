@@ -469,7 +469,7 @@ services:
             - LS_SERVICE_NAME=java-ottrace-client
             - LS_SERVICE_VERSION=11.11.10
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-            - DESTINATION_URL=http://java-ottrace-server:8084/ping
+            - DESTINATION_URL=http://java-ottrace-server:8085/ping
         stop_grace_period: 1s
     java-ottrace-server:
         container_name: java-ottrace-server

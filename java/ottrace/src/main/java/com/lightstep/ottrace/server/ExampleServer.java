@@ -32,7 +32,7 @@ public class ExampleServer {
     handlers.setHandlers(new Handler[]{
         new ApiContextHandler(),
     });
-    Server server = new Server(8084);
+    Server server = new Server(8085);
     server.setHandler(handlers);
 
     server.start();
