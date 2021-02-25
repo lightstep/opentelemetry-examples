@@ -1,115 +1,63 @@
 package com.lightstep.otlp.client;
 
-import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.extension.trace.propagation.B3Propagator;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
-import io.grpc.ClientInterceptor;
-import io.grpc.Context;
-import io.grpc.ForwardingClientCall.SimpleForwardingClientCall;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Metadata;
-import io.grpc.Metadata.Key;
-import io.grpc.MethodDescriptor;
-import io.grpc.Status;
-import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.context.propagation.DefaultContextPropagators;
-import io.opentelemetry.context.propagation.HttpTextFormat;
-import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
-import io.opentelemetry.extensions.trace.propagation.B3Propagator;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.trace.Span;
-import io.opentelemetry.trace.Span.Kind;
-import io.opentelemetry.trace.Tracer;
-import io.opentelemetry.trace.TracingContextUtils;
-
 public class Client {
-  private static final Key<String> ACCESS_TOKEN_HEADER = Key
-      .of("lightstep-access-token", ASCII_STRING_MARSHALLER);
+  private static final String ACCESS_TOKEN_HEADER = "lightstep-access-token";
 
   public static void main(String[] args) {
 
-    final String satelliteURL = System.getenv("LS_SATELLITE_URL");
+    final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
     final String lsToken = System.getenv("LS_ACCESS_TOKEN");
     String targetURL = System.getenv("DESTINATION_URL");
-    if (targetURL == null || targetURL.length() == 0)
-        targetURL = "http://127.0.0.1:8083/ping";
+    if (targetURL == null || targetURL.length() == 0) {
+      targetURL = "http://127.0.0.1:8083/ping";
+    }
 
-    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.newBuilder()
-        .setDeadlineMs(60_000)
-        .readSystemProperties()
-        .readEnvironmentVariables()
-        .setChannel(
-            ManagedChannelBuilder
-                .forTarget(satelliteURL)
-                .useTransportSecurity()
-                .intercept(new ClientInterceptor() {
-                  @Override
-                  public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-                      MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-                    return new SimpleForwardingClientCall<ReqT, RespT>(
-                        next.newCall(method, callOptions)
-                    ) {
-                      @Override
-                      public void start(final Listener<RespT> responseListener, Metadata headers) {
-                        headers.put(ACCESS_TOKEN_HEADER, lsToken);
-                        super.start(new Listener<RespT>() {
-                          @Override
-                          public void onHeaders(Metadata headers) {
-                            responseListener.onHeaders(headers);
-                          }
+    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
+        .setTimeout(60_000, TimeUnit.MILLISECONDS)
+        .addHeader(ACCESS_TOKEN_HEADER, lsToken)
+        .setEndpoint(satelliteURL).build();
 
-                          @Override
-                          public void onMessage(RespT message) {
-                            responseListener.onMessage(message);
-                          }
+    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+        .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
+        .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
+        .build();
 
-                          @Override
-                          public void onClose(Status status, Metadata trailers) {
-                            System.out.println(status);
-                            responseListener.onClose(status, trailers);
-                          }
+    OpenTelemetrySdk.builder()
+        .setTracerProvider(sdkTracerProvider)
+        .setPropagators(
+            ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
+        .buildAndRegisterGlobal();
 
-                          @Override
-                          public void onReady() {
-                            responseListener.onReady();
-                          }
-                        }, headers);
-                      }
-                    };
-                  }
-                })
-                .build()
-        ).build();
-
-    OpenTelemetry.setPropagators(
-      DefaultContextPropagators
-        .builder()
-        .addHttpTextFormat(B3Propagator.getMultipleHeaderPropagator())
-        .build());
-
-    OpenTelemetrySdk.getTracerProvider()
-        .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
-
-    Tracer tracer =
-        OpenTelemetry.getTracerProvider().get("LightstepExample");
+    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
     while (true) {
-        doWork(tracer, targetURL);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignore) {
-        }
+      doWork(tracer, targetURL);
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException ignore) {
+      }
     }
   }
 
   private static void doWork(Tracer tracer, String targetURL) {
-    Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
+    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
 
@@ -117,20 +65,23 @@ public class Client {
     Request.Builder reqBuilder = new Request.Builder();
 
     // Inject the current Span into the Request.
-    Context withSpanContext = TracingContextUtils.withSpan(span, Context.current());
-    OpenTelemetry.getPropagators().getHttpTextFormat().inject(withSpanContext, reqBuilder, Request.Builder::addHeader);
+    try (Scope scope = span.makeCurrent()) {
+      GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
+          .inject(io.opentelemetry.context.Context.current(), reqBuilder,
+              Request.Builder::addHeader);
+    }
 
     Request req = reqBuilder
-    .url(targetURL)
-    .build();
+        .url(targetURL)
+        .build();
 
     try (Response res = client.newCall(req).execute()) {
-        String retval = res.body().string();
-        System.out.println(String.format("Request to %s, got %s bytes",
-            targetURL, retval.length()));
+      String retval = res.body().string();
+      System.out.println(String.format("Request to %s, got %s bytes",
+          targetURL, retval.length()));
     } catch (Exception e) {
-        System.out.println(String.format("Request to %s failed: %s",
-            targetURL, e));
+      System.out.println(String.format("Request to %s failed: %s",
+          targetURL, e));
     }
     span.addEvent("Event 1");
     span.end();
