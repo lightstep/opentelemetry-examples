@@ -1,4 +1,4 @@
-package com.lightstep.launcher.server;
+package com.lightstep.ottrace.server;
 
 
 import io.opentelemetry.api.GlobalOpenTelemetry;
