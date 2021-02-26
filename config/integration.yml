@@ -13,6 +13,7 @@ clients:
 - java-specialagent-client
 - java-otlp-client
 - java-launcher-client
+- java-ottrace-client
 endpoints:
 - http://go-opentracing-server:8081/ping
 - http://go-opentelemetry-server:8081/ping
@@ -28,6 +29,7 @@ endpoints:
 - http://java-specialagent-server:8083/ping
 - http://java-otlp-server:8083/ping
 - http://java-launcher-server:8084/ping
+#- http://java-ottrace-server:8085/ping
 - http://java-opentracing-server:10001/order
 - http://dotnet-otlp-server
 services:
@@ -45,5 +47,6 @@ services:
 - java-specialagent-server
 - java-otlp-server
 - java-launcher-server
+- java-ottrace-server
 - java-opentracing-server
 - dotnet-otlp-server
