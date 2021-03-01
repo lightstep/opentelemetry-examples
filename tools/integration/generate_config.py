@@ -39,4 +39,3 @@ with open(output_path, "w") as output_file:
     yaml.dump(
         {"services": servers, "clients": clients, "endpoints": endpoints}, output_file
     )
-

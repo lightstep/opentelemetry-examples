@@ -1,4 +1,5 @@
-opentelemetry-launcher
+# opentelemetry-launcher
+git+git://github.com/lightstep/otel-launcher-python@issue_71#egg=opentelemetry-launcher
 protobuf==3.13.0
 pyyaml
 pytest
