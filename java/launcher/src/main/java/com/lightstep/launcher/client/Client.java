@@ -1,12 +1,11 @@
 package com.lightstep.launcher.client;
 
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
-import io.grpc.Context;
-import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.trace.Span;
-import io.opentelemetry.trace.Span.Kind;
-import io.opentelemetry.trace.Tracer;
-import io.opentelemetry.trace.TracingContextUtils;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,7 +20,7 @@ public class Client {
 
     OpenTelemetryConfiguration.newBuilder().install();
 
-    Tracer tracer = OpenTelemetry.getTracerProvider().get("LightstepExample");
+    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
     while (true) {
       doWork(tracer, targetURL);
@@ -34,7 +33,7 @@ public class Client {
   }
 
   private static void doWork(Tracer tracer, String targetURL) {
-    Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
+    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
 
@@ -42,9 +41,11 @@ public class Client {
     Request.Builder reqBuilder = new Request.Builder();
 
     // Inject the current Span into the Request.
-    Context withSpanContext = TracingContextUtils.withSpan(span, Context.current());
-    OpenTelemetry.getPropagators().getTextMapPropagator()
-        .inject(withSpanContext, reqBuilder, Request.Builder::addHeader);
+    try (Scope scope = span.makeCurrent()) {
+      GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
+          .inject(io.opentelemetry.context.Context.current(), reqBuilder,
+              Request.Builder::addHeader);
+    }
 
     Request req = reqBuilder
         .url(targetURL)

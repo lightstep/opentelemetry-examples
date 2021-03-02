@@ -1,97 +1,46 @@
 package com.lightstep.otlp.server;
 
-import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
-import org.eclipse.jetty.server.Server;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.extension.trace.propagation.B3Propagator;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
-import io.grpc.ClientInterceptor;
-import io.grpc.ForwardingClientCall.SimpleForwardingClientCall;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Metadata;
-import io.grpc.Metadata.Key;
-import io.grpc.MethodDescriptor;
-import io.grpc.Status;
-import io.opentelemetry.OpenTelemetry;
-import io.opentelemetry.context.propagation.DefaultContextPropagators;
-import io.opentelemetry.exporters.otlp.OtlpGrpcSpanExporter;
-import io.opentelemetry.extensions.trace.propagation.B3Propagator;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.trace.Span;
-import io.opentelemetry.trace.Span.Kind;
-import io.opentelemetry.trace.Tracer;
-
 public class ExampleServer {
-  private static final Key<String> ACCESS_TOKEN_HEADER = Key
-      .of("lightstep-access-token", ASCII_STRING_MARSHALLER);
+  private static final String ACCESS_TOKEN_HEADER = "lightstep-access-token";
 
-  public static void main(String[] args) throws Exception{
-    final String satelliteURL = System.getenv("LS_SATELLITE_URL");
+  public static void main(String[] args) throws Exception {
+    final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
     final String lsToken = System.getenv("LS_ACCESS_TOKEN");
 
-    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.newBuilder()
-        .setDeadlineMs(60_000)
-        .readSystemProperties()
-        .readEnvironmentVariables()
-        .setChannel(
-            ManagedChannelBuilder
-                .forTarget(satelliteURL)
-                .useTransportSecurity()
-                .intercept(new ClientInterceptor() {
-                  @Override
-                  public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-                      MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-                    return new SimpleForwardingClientCall<ReqT, RespT>(
-                        next.newCall(method, callOptions)
-                    ) {
-                      @Override
-                      public void start(final Listener<RespT> responseListener, Metadata headers) {
-                        headers.put(ACCESS_TOKEN_HEADER, lsToken);
-                        super.start(new Listener<RespT>() {
-                          @Override
-                          public void onHeaders(Metadata headers) {
-                            responseListener.onHeaders(headers);
-                          }
+    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
+        .setTimeout(60_000, TimeUnit.MILLISECONDS)
+        .addHeader(ACCESS_TOKEN_HEADER, lsToken)
+        .setEndpoint(satelliteURL).build();
 
-                          @Override
-                          public void onMessage(RespT message) {
-                            responseListener.onMessage(message);
-                          }
+    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+        .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
+        .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
+        .build();
 
-                          @Override
-                          public void onClose(Status status, Metadata trailers) {
-                            System.out.println(status);
-                            responseListener.onClose(status, trailers);
-                          }
+    OpenTelemetrySdk.builder()
+        .setTracerProvider(sdkTracerProvider)
+        .setPropagators(ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
+        .buildAndRegisterGlobal();
 
-                          @Override
-                          public void onReady() {
-                            responseListener.onReady();
-                          }
-                        }, headers);
-                      }
-                    };
-                  }
-                })
-                .build()
-        ).build();
+    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
-    OpenTelemetry.setPropagators(
-      DefaultContextPropagators
-        .builder()
-        .addHttpTextFormat(B3Propagator.getMultipleHeaderPropagator())
-        .build());
-    OpenTelemetrySdk.getTracerProvider()
-        .addSpanProcessor(SimpleSpanProcessor.newBuilder(exporter).build());
-
-    Tracer tracer =
-        OpenTelemetry.getTracerProvider().get("LightstepExample");
-
-    Span span = tracer.spanBuilder("start example").setSpanKind(Kind.CLIENT).startSpan();
+    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
     // execute my use case - here we simulate a wait
@@ -100,8 +49,8 @@ public class ExampleServer {
     span.end();
 
     ContextHandlerCollection handlers = new ContextHandlerCollection();
-    handlers.setHandlers(new Handler[] {
-    new ApiContextHandler(),
+    handlers.setHandlers(new Handler[]{
+        new ApiContextHandler(),
     });
     Server server = new Server(8083);
     server.setHandler(handlers);
