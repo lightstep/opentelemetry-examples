@@ -60,6 +60,38 @@ services:
             - LS_SERVICE_VERSION=9.9.2
             - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
         stop_grace_period: 1s
+    go-ot-context-server:
+        container_name: go-ot-context-server
+        build: ./go/ot-context/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        depends_on:
+            - otel-collector
+        environment:
+            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_INSECURE=1
+            - LS_SERVICE_NAME=go-ot-context-server
+            - LS_SERVICE_VERSION=9.9.8
+        stop_grace_period: 1s
+    go-ot-context-client:
+        container_name: go-ot-context-client
+        build: ./go/ot-context/client
+        networks:
+            - demo
+        depends_on:
+            - go-ot-context-server
+            - otel-collector
+        env_file:
+            - .env
+        environment:
+            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_INSECURE=1
+            - LS_SERVICE_NAME=go-ot-context-client
+            - LS_SERVICE_VERSION=9.9.9
+            - DESTINATION_URL=http://go-ot-context-server:8081/ping
+        stop_grace_period: 1s
     go-launcher-server:
         container_name: go-launcher-server
         build: ./go/launcher/server

@@ -1,6 +1,7 @@
 clients:
 - go-opentracing-client
 - go-opentelemetry-client
+- go-ot-context-client
 - go-launcher-client
 - py-lstrace-client
 - py-collector-client
@@ -16,6 +17,7 @@ clients:
 endpoints:
 - http://go-opentracing-server:8081/ping
 - http://go-opentelemetry-server:8081/ping
+- http://go-ot-context-server:8081/ping
 - http://go-launcher-server:8081/ping
 - http://py-lstrace-server:5000/ping
 - http://py-collector-server:5000/ping
@@ -33,6 +35,7 @@ endpoints:
 services:
 - go-opentracing-server
 - go-opentelemetry-server
+- go-ot-context-server
 - go-launcher-server
 - py-lstrace-server
 - py-collector-server
