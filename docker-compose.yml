@@ -558,8 +558,8 @@ services:
             - java-launcher-server
             - java-opentracing-server
             - dotnet-otlp-server
-            - js-ot-context-otel-server
-            - js-ot-context-ls-server
+              # - js-ot-context-otel-server
+              # - js-ot-context-ls-server
         env_file:
             - .env
         environment:
