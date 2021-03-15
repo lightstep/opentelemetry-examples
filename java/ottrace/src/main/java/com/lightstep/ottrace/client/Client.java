@@ -1,57 +1,36 @@
-package com.lightstep.otlp.client;
+package com.lightstep.ottrace.client;
 
+import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
+import com.lightstep.opentelemetry.launcher.Propagator;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
-import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-import io.opentelemetry.extension.trace.propagation.B3Propagator;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class Client {
-  private static final String ACCESS_TOKEN_HEADER = "lightstep-access-token";
-
   public static void main(String[] args) {
-
-    final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
-    final String lsToken = System.getenv("LS_ACCESS_TOKEN");
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
-      targetURL = "http://127.0.0.1:8083/ping";
+      targetURL = "http://127.0.0.1:8085/ping";
     }
 
-    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
-        .setTimeout(60_000, TimeUnit.MILLISECONDS)
-        .addHeader(ACCESS_TOKEN_HEADER, lsToken)
-        .setEndpoint(satelliteURL).build();
-
-    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
-        .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
-        .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
-        .build();
-
-    OpenTelemetrySdk.builder()
-        .setTracerProvider(sdkTracerProvider)
-        .setPropagators(
-            ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
-        .buildAndRegisterGlobal();
+    OpenTelemetryConfiguration.newBuilder()
+        .setPropagator(Propagator.OT_TRACE)
+        .install();
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
     while (true) {
       doWork(tracer, targetURL);
       try {
-        Thread.sleep(1000);
+        TimeUnit.SECONDS.sleep(1);
       } catch (InterruptedException ignore) {
+        break;
       }
     }
   }

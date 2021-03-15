@@ -1,6 +1,7 @@
-package com.lightstep.launcher.server;
+package com.lightstep.ottrace.server;
 
 import com.lightstep.opentelemetry.launcher.OpenTelemetryConfiguration;
+import com.lightstep.opentelemetry.launcher.Propagator;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanKind;
@@ -13,7 +14,9 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 public class ExampleServer {
 
   public static void main(String[] args) throws Exception {
-    OpenTelemetryConfiguration.newBuilder().install();
+    OpenTelemetryConfiguration.newBuilder()
+        .setPropagator(Propagator.OT_TRACE)
+        .install();
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
@@ -29,7 +32,7 @@ public class ExampleServer {
     handlers.setHandlers(new Handler[]{
         new ApiContextHandler(),
     });
-    Server server = new Server(8084);
+    Server server = new Server(8085);
     server.setHandler(handlers);
 
     server.start();

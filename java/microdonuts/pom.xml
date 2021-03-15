@@ -59,13 +59,13 @@
   <dependency>
     <groupId>io.opentelemetry</groupId>
     <artifactId>opentelemetry-opentracing-shim</artifactId>
-    <version>0.12.0</version>
+    <version>0.17.1-alpha</version>
   </dependency>
 
   <dependency>
     <groupId>com.lightstep.opentelemetry</groupId>
     <artifactId>opentelemetry-launcher</artifactId>
-    <version>0.12.0</version>
+    <version>0.17.1</version>
   </dependency>
 
 </dependencies>
