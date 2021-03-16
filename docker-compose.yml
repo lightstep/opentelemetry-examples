@@ -544,6 +544,7 @@ services:
             - java-launcher-server
             - java-opentracing-server
             - dotnet-otlp-server
+            - go-ot-context-server
         env_file:
             - .env
         environment:
