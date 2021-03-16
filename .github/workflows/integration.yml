@@ -30,6 +30,9 @@ jobs:
       run: ./tools/precommit.sh
 
     - name: Build containers
+      env:
+        COMPOSE_DOCKER_CLI_BUILD: 1
+        DOCKER_BUILDKIT: 1
       run: docker-compose build
 
     - name: Run integration test
