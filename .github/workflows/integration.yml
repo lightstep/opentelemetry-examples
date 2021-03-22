@@ -33,7 +33,9 @@ jobs:
       env:
         COMPOSE_DOCKER_CLI_BUILD: 1
         DOCKER_BUILDKIT: 1
-      run: docker-compose build
+      run: |
+      docker-compose --version
+      docker-compose build
 
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
