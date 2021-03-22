@@ -7,16 +7,27 @@ on:
   pull_request:
 
 jobs:
-  buildx:
+  run:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - uses: docker/setup-buildx-action@v1
-      id: buildx
+    
+    - name: Cache local Go repository
+      uses: actions/cache@v2
       with:
-        install: true
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
     - name: Update configuration
       env:
@@ -30,9 +41,6 @@ jobs:
       run: ./tools/precommit.sh
 
     - name: Build containers
-      env:
-        COMPOSE_DOCKER_CLI_BUILD: 1
-        DOCKER_BUILDKIT: 1
       run: docker-compose build
 
     - name: Run integration test

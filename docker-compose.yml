@@ -392,6 +392,8 @@ services:
             - LS_SERVICE_NAME=java-specialagent-server
             - LS_SERVICE_VERSION=4.3.2
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-specialagent-client:
         container_name: java-specialagent-client
         build: ./java/client
@@ -406,6 +408,8 @@ services:
             - LS_SERVICE_VERSION=3.2.1
             - DESTINATION_URL=http://java-specialagent-server:8083/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-client:
         container_name: java-otlp-client
         build:
@@ -422,6 +426,8 @@ services:
             - LS_SATELLITE_URL=ingest.lightstep.com:443
             - DESTINATION_URL=http://java-otlp-server:8083/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-server:
         container_name: java-otlp-server
         build:
@@ -435,6 +441,8 @@ services:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
             - LS_SATELLITE_URL=ingest.lightstep.com:443
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-client:
         container_name: java-launcher-client
         build:
@@ -452,6 +460,8 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-launcher-server:8084/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-server:
         container_name: java-launcher-server
         build:
@@ -466,6 +476,8 @@ services:
             - LS_SERVICE_VERSION=11.11.11
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
         stop_grace_period: 1s    
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-opentracing-server:
         container_name: java-opentracing-server
         build:
@@ -481,6 +493,8 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     ##############################
     ####### .NET examples ########
     ##############################
