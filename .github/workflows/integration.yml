@@ -12,8 +12,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
     
-    - name: Cache local Go repository
+    - name: Go Cache
       uses: actions/cache@v2
       with:
         path: ~/go/pkg/mod

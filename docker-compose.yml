@@ -15,7 +15,7 @@ services:
             - LS_SERVICE_VERSION=5
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentracing-client:
         container_name: go-opentracing-client
         build: ./go/opentracing/client
@@ -31,7 +31,7 @@ services:
             - DESTINATION_URL=http://go-opentracing-server:8081/ping
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-server:
         container_name: go-opentelemetry-server
         build: ./go/opentelemetry/server
@@ -48,7 +48,7 @@ services:
             - LS_SERVICE_VERSION=9.9.1
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-client:
         container_name: go-opentelemetry-client
         build: ./go/opentelemetry/client
@@ -67,7 +67,7 @@ services:
             - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-server:
         container_name: go-launcher-server
         build: ./go/launcher/server
@@ -80,7 +80,7 @@ services:
             - LS_SERVICE_VERSION=9.9.9
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-client:
         container_name: go-launcher-client
         build: ./go/launcher/client
@@ -96,7 +96,7 @@ services:
             - DESTINATION_URL=http://go-launcher-server:8081/ping
         stop_grace_period: 1s
         volumes:
-        - go-modules:/go/pkg
+        - $HOME/go/pkg/mod:/go/pkg/mod
     ###############################
     ####### Python examples #######
     ###############################
@@ -650,5 +650,3 @@ services:
     #     stop_grace_period: 1s
 networks:
     demo:
-volumes:
-  go-modules:
