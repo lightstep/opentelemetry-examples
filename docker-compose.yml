@@ -14,6 +14,8 @@ services:
             - LS_SERVICE_NAME=go-opentracing-server
             - LS_SERVICE_VERSION=5
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentracing-client:
         container_name: go-opentracing-client
         build: ./go/opentracing/client
@@ -28,6 +30,8 @@ services:
             - LS_SERVICE_VERSION=1.2.7
             - DESTINATION_URL=http://go-opentracing-server:8081/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-server:
         container_name: go-opentelemetry-server
         build: ./go/opentelemetry/server
@@ -43,6 +47,8 @@ services:
             - LS_SERVICE_NAME=go-opentelemetry-server
             - LS_SERVICE_VERSION=9.9.1
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-client:
         container_name: go-opentelemetry-client
         build: ./go/opentelemetry/client
@@ -60,6 +66,8 @@ services:
             - LS_SERVICE_VERSION=9.9.2
             - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-ot-context-server:
         container_name: go-ot-context-server
         build: ./go/ot-context/server
@@ -75,6 +83,8 @@ services:
             - LS_SERVICE_NAME=go-ot-context-server
             - LS_SERVICE_VERSION=9.9.8
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-ot-context-client:
         container_name: go-ot-context-client
         build: ./go/ot-context/client
@@ -92,6 +102,8 @@ services:
             - LS_SERVICE_VERSION=9.9.9
             - DESTINATION_URL=http://go-ot-context-server:8081/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-server:
         container_name: go-launcher-server
         build: ./go/launcher/server
@@ -103,6 +115,8 @@ services:
             - LS_SERVICE_NAME=go-launcher-server
             - LS_SERVICE_VERSION=9.9.9
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-client:
         container_name: go-launcher-client
         build: ./go/launcher/client
@@ -117,6 +131,8 @@ services:
             - LS_SERVICE_VERSION=9.9.8
             - DESTINATION_URL=http://go-launcher-server:8081/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/go/pkg/mod:/go/pkg/mod
     ###############################
     ####### Python examples #######
     ###############################
@@ -412,6 +428,8 @@ services:
             - LS_SERVICE_NAME=java-specialagent-server
             - LS_SERVICE_VERSION=4.3.2
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-specialagent-client:
         container_name: java-specialagent-client
         build: ./java/client
@@ -426,6 +444,8 @@ services:
             - LS_SERVICE_VERSION=3.2.1
             - DESTINATION_URL=http://java-specialagent-server:8083/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-client:
         container_name: java-otlp-client
         build:
@@ -442,6 +462,8 @@ services:
             - LS_SATELLITE_URL=ingest.lightstep.com:443
             - DESTINATION_URL=http://java-otlp-server:8083/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-server:
         container_name: java-otlp-server
         build:
@@ -455,6 +477,8 @@ services:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
             - LS_SATELLITE_URL=ingest.lightstep.com:443
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-client:
         container_name: java-launcher-client
         build:
@@ -472,6 +496,8 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-launcher-server:8084/ping
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-server:
         container_name: java-launcher-server
         build:
@@ -486,6 +512,8 @@ services:
             - LS_SERVICE_VERSION=11.11.11
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
         stop_grace_period: 1s    
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     java-opentracing-server:
         container_name: java-opentracing-server
         build:
@@ -501,6 +529,8 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
+        volumes:
+        - $HOME/.m2/repository:/root/.m2/repository
     ##############################
     ####### .NET examples ########
     ##############################
