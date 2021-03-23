@@ -23,9 +23,9 @@ import (
 	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
-	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"google.golang.org/grpc/credentials"
@@ -79,10 +79,10 @@ func initExporter(url string, token string) *otlp.Exporter {
 	exporter, err := otlp.NewExporter(
 		context.Background(),
 		otlpgrpc.NewDriver(
-                    secureOption,
-		    otlpgrpc.WithEndpoint(url),
-		    otlpgrpc.WithHeaders(headers),
-                ),
+			secureOption,
+			otlpgrpc.WithEndpoint(url),
+			otlpgrpc.WithHeaders(headers),
+		),
 	)
 
 	if err != nil {
@@ -113,10 +113,10 @@ func initTracer() {
 	resources, err := resource.New(
 		context.Background(),
 		resource.WithAttributes(
-			label.String("service.name", componentName),
-			label.String("service.version", serviceVersion),
-			label.String("library.language", "go"),
-			label.String("library.version", "1.2.3"),
+			attribute.String("service.name", componentName),
+			attribute.String("service.version", serviceVersion),
+			attribute.String("library.language", "go"),
+			attribute.String("library.version", "1.2.3"),
 		),
 	)
 	if err != nil {
