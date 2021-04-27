@@ -36,6 +36,16 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    
+
+    - id: cache-docker
+      uses: actions/cache@v1
+      with:
+        path: /tmp/docker-registry
+        key: docker-registry-no-buildkit-${{ hashFiles('docker-compose.yml') }}
+
+    - name: Run local docker registry
+      run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
 
     - name: Update configuration
       env:
@@ -50,6 +60,9 @@ jobs:
 
     - name: Build containers
       run: docker-compose build --parallel
+
+    - name: Push containers to local registry
+      run: docker-compose push go-launcher-client go-launcher-server go-opentracing-server go-opentracing-client go-opentelemetry-server go-opentelemetry-client
 
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test

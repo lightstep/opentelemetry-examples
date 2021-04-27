@@ -6,6 +6,7 @@ services:
     go-opentracing-server:
         container_name: go-opentracing-server
         build: ./go/opentracing/server
+        image: localhost:5000/otel-examples/go-opentracing-server
         networks:
             - demo
         env_file:
@@ -19,6 +20,7 @@ services:
     go-opentracing-client:
         container_name: go-opentracing-client
         build: ./go/opentracing/client
+        image: localhost:5000/otel-examples/go-opentracing-client
         networks:
             - demo
         depends_on:
@@ -35,6 +37,7 @@ services:
     go-opentelemetry-server:
         container_name: go-opentelemetry-server
         build: ./go/opentelemetry/server
+        image: localhost:5000/otel-examples/go-opentelemetry-server
         networks:
             - demo
         env_file:
@@ -52,6 +55,7 @@ services:
     go-opentelemetry-client:
         container_name: go-opentelemetry-client
         build: ./go/opentelemetry/client
+        image: localhost:5000/otel-examples/go-opentelemetry-client
         networks:
             - demo
         depends_on:
@@ -71,6 +75,7 @@ services:
     go-launcher-server:
         container_name: go-launcher-server
         build: ./go/launcher/server
+        image: localhost:5000/otel-examples/go-launcher-server
         networks:
             - demo
         env_file:
@@ -84,6 +89,7 @@ services:
     go-launcher-client:
         container_name: go-launcher-client
         build: ./go/launcher/client
+        image: localhost:5000/otel-examples/go-launcher-client
         networks:
             - demo
         depends_on:
