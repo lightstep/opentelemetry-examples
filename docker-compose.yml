@@ -5,8 +5,8 @@ services:
     ###########################
     go-opentracing-server:
         container_name: go-opentracing-server
-        build: ./go/opentracing/server
         image: localhost:5000/otel-examples/go-opentracing-server
+        build: ./go/opentracing/server
         networks:
             - demo
         env_file:
@@ -19,8 +19,8 @@ services:
         - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentracing-client:
         container_name: go-opentracing-client
-        build: ./go/opentracing/client
         image: localhost:5000/otel-examples/go-opentracing-client
+        build: ./go/opentracing/client
         networks:
             - demo
         depends_on:
@@ -36,8 +36,8 @@ services:
         - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-server:
         container_name: go-opentelemetry-server
-        build: ./go/opentelemetry/server
         image: localhost:5000/otel-examples/go-opentelemetry-server
+        build: ./go/opentelemetry/server
         networks:
             - demo
         env_file:
@@ -54,8 +54,8 @@ services:
         - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-client:
         container_name: go-opentelemetry-client
-        build: ./go/opentelemetry/client
         image: localhost:5000/otel-examples/go-opentelemetry-client
+        build: ./go/opentelemetry/client
         networks:
             - demo
         depends_on:
@@ -74,8 +74,8 @@ services:
         - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-server:
         container_name: go-launcher-server
-        build: ./go/launcher/server
         image: localhost:5000/otel-examples/go-launcher-server
+        build: ./go/launcher/server
         networks:
             - demo
         env_file:
@@ -88,8 +88,8 @@ services:
         - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-client:
         container_name: go-launcher-client
-        build: ./go/launcher/client
         image: localhost:5000/otel-examples/go-launcher-client
+        build: ./go/launcher/client
         networks:
             - demo
         depends_on:
@@ -108,6 +108,7 @@ services:
     ###############################
     py-lstrace-client:
         container_name: py-lstrace-client
+        image: localhost:5000/otel-examples/py-lstrace-client
         build:
             context: ./python/lstrace
             dockerfile: Dockerfile.client
@@ -124,6 +125,7 @@ services:
         stop_grace_period: 1s
     py-lstrace-server:
         container_name: py-lstrace-server
+        image: localhost:5000/otel-examples/py-lstrace-server
         build:
             context: ./python/lstrace
             dockerfile: Dockerfile.server
@@ -142,6 +144,7 @@ services:
         stop_grace_period: 1s
     py-collector-client:
         container_name: py-collector-client
+        image: localhost:5000/otel-examples/py-collector-client
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.client
@@ -160,6 +163,7 @@ services:
         stop_grace_period: 1s
     py-collector-server:
         container_name: py-collector-server
+        image: localhost:5000/otel-examples/py-collector-server
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.server
@@ -176,6 +180,7 @@ services:
         stop_grace_period: 1s
     py-opentelemetry-client:
         container_name: py-opentelemetry-client
+        image: localhost:5000/otel-examples/py-opentelemetry-client
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.client
@@ -192,6 +197,7 @@ services:
         stop_grace_period: 1s
     py-opentelemetry-server:
         container_name: py-opentelemetry-server
+        image: localhost:5000/otel-examples/py-opentelemetry-server
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.server
@@ -210,6 +216,7 @@ services:
         stop_grace_period: 1s
     py-launcher-client:
         container_name: py-launcher-client
+        image: localhost:5000/otel-examples/py-launcher-client
         build:
             context: ./python/launcher
             dockerfile: Dockerfile.client
@@ -226,6 +233,7 @@ services:
         stop_grace_period: 1s
     py-launcher-server:
         container_name: py-launcher-server
+        image: localhost:5000/otel-examples/py-launcher-server
         build:
             context: ./python/launcher
             dockerfile: Dockerfile.server
@@ -276,6 +284,7 @@ services:
         stop_grace_period: 1s
     py-opentracing-client:
         container_name: py-opentracing-client
+        image: localhost:5000/otel-examples/py-opentracing-client
         build:
             context: ./python/opentracing
             dockerfile: Dockerfile.client
@@ -292,6 +301,7 @@ services:
         stop_grace_period: 1s
     py-opentracing-server:
         container_name: py-opentracing-server
+        image: localhost:5000/otel-examples/py-opentracing-server
         build:
             context: ./python/opentracing
             dockerfile: Dockerfile.server
@@ -313,6 +323,7 @@ services:
     ###################################
     js-lstrace-server:
         container_name: js-lstrace-server
+        image: localhost:5000/otel-examples/js-lstrace-server
         build: ./nodejs/server
         networks:
             - demo
@@ -323,6 +334,7 @@ services:
         stop_grace_period: 1s
     js-lstrace-client:
         container_name: js-lstrace-client
+        image: localhost:5000/otel-examples/js-lstrace-client
         build: ./nodejs/client
         networks:
             - demo
@@ -336,6 +348,7 @@ services:
         stop_grace_period: 1s
     js-launcher-server:
         container_name: js-launcher-server
+        image: localhost:5000/otel-examples/js-launcher-server
         build: ./nodejs/launcher/server
         networks:
             - demo
@@ -347,6 +360,7 @@ services:
         stop_grace_period: 1s
     js-launcher-client:
         container_name: js-launcher-client
+        image: localhost:5000/otel-examples/js-launcher-client
         build: ./nodejs/launcher/client
         networks:
             - demo
@@ -361,6 +375,7 @@ services:
         stop_grace_period: 1s
     js-ot-shim-server:
         container_name: js-ot-shim-server
+        image: localhost:5000/otel-examples/js-ot-shim-server
         build: ./nodejs/ot-shim/server
         networks:
             - demo
@@ -372,6 +387,7 @@ services:
         stop_grace_period: 1s
     js-ot-shim-client:
         container_name: js-ot-shim-client
+        image: localhost:5000/otel-examples/js-ot-shim-client
         build: ./nodejs/ot-shim/client
         networks:
             - demo
@@ -389,6 +405,7 @@ services:
     ##############################
     java-specialagent-server:
         container_name: java-specialagent-server
+        image: localhost:5000/otel-examples/java-specialagent-server
         build: ./java/server
         networks:
             - demo
@@ -402,6 +419,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-specialagent-client:
         container_name: java-specialagent-client
+        image: localhost:5000/otel-examples/java-specialagent-client
         build: ./java/client
         networks:
             - demo
@@ -418,6 +436,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-client:
         container_name: java-otlp-client
+        image: localhost:5000/otel-examples/java-otlp-client
         build:
             context: ./java/otlp
             dockerfile: Dockerfile.client
@@ -436,6 +455,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-server:
         container_name: java-otlp-server
+        image: localhost:5000/otel-examples/java-otlp-server
         build:
             context: ./java/otlp
             dockerfile: Dockerfile.server
@@ -451,6 +471,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-client:
         container_name: java-launcher-client
+        image: localhost:5000/otel-examples/java-launcher-client
         build:
             context: ./java/launcher
             dockerfile: Dockerfile.client
@@ -470,6 +491,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-server:
         container_name: java-launcher-server
+        image: localhost:5000/otel-examples/java-launcher-server
         build:
             context: ./java/launcher
             dockerfile: Dockerfile.server
@@ -486,6 +508,7 @@ services:
         - $HOME/.m2/repository:/root/.m2/repository
     java-opentracing-server:
         container_name: java-opentracing-server
+        image: localhost:5000/otel-examples/java-opentracing-server
         build:
             context: ./java/microdonuts
             dockerfile: Dockerfile

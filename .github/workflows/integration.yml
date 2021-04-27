@@ -62,7 +62,7 @@ jobs:
       run: docker-compose build --parallel
 
     - name: Push containers to local registry
-      run: docker-compose push go-launcher-client go-launcher-server go-opentracing-server go-opentracing-client go-opentelemetry-server go-opentelemetry-client
+      run: docker-compose push go-opentracing-server go-opentracing-client go-opentelemetry-server go-opentelemetry-client go-launcher-server go-launcher-client py-lstrace-client py-lstrace-server py-collector-client py-collector-server py-opentelemetry-client py-opentelemetry-server py-launcher-client py-launcher-server demo-client-otlp demo-client-lstrace py-opentracing-client py-opentracing-server js-lstrace-server js-lstrace-client js-launcher-server js-launcher-client js-ot-shim-server js-ot-shim-client java-specialagent-server java-specialagent-client java-otlp-client java-otlp-server java-launcher-client java-launcher-server java-opentracing-server
 
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
