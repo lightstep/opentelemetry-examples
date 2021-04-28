@@ -14,8 +14,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Cache Docker layers
       uses: actions/cache@v2
@@ -54,6 +53,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Update configuration
       env:
         TOKEN: ${{ secrets.TOKEN }}
@@ -89,6 +89,8 @@ jobs:
           'java-opentracing-server'
         ]
     steps:
+    - uses: actions/checkout@v2
+
     - name: Build containers
       run: docker-compose build ${{ matrix.component }}
 
@@ -99,5 +101,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
