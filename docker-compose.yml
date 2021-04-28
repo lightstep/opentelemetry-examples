@@ -581,8 +581,6 @@ services:
         container_name: config-generator
         build:
             context: ./tools/integration
-        env_file:
-            - .env
         environment:
             - DOCKER_COMPOSE_PATH=/docker-compose.yml
             - OUTPUT_PATH=/config/integration.yml
