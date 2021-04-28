@@ -98,5 +98,6 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    steps:
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
