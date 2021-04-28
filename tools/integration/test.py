@@ -100,7 +100,7 @@ def test_traces():
     assert span_id is not None
 
     # give time for services to report traces
-    time.sleep(60)
+    time.sleep(30)
 
     url = "{}/{}/projects/{}/snapshots".format(API_URL, TEST_ORG, PROJECT)
     querystring = 'service IN ("{}")'.format(INTEGRATION_TEST_APP)
@@ -109,6 +109,8 @@ def test_traces():
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
     assert response.status_code == 200
+
+    time.sleep(55)
 
     url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
     querystring = {"span-id": format(span_id, "x")}
