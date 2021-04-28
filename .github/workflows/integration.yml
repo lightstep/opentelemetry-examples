@@ -88,7 +88,7 @@ jobs:
           'java-launcher-client', 'java-launcher-server',
           'java-opentracing-server'
         ]
-
+    steps:
     - name: Build containers
       run: docker-compose build ${{ matrix.component }}
 
