@@ -11,13 +11,7 @@ from opentelemetry.propagators.b3 import B3Format
 
 def get_otlp_exporter():
 
-    if os.getenv("OTEL_EXPORTER_OTLP_INSECURE", False):
-        credentials = None
-    else:
-        credentials = grpc.ssl_channel_credentials()
-
     return OTLPSpanExporter(
-        credentials=credentials,
         headers=(("lightstep-access-token", os.environ.get("LS_ACCESS_TOKEN")),),
     )
 
