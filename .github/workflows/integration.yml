@@ -58,6 +58,9 @@ jobs:
     - name: Validate config is up-to-date
       run: ./tools/precommit.sh
 
+    - name: Pull containers from local registry
+      run: docker-compose pull go-opentracing-server go-opentracing-client go-opentelemetry-server go-opentelemetry-client go-launcher-server go-launcher-client py-lstrace-client py-lstrace-server py-collector-client py-collector-server py-opentelemetry-client py-opentelemetry-server py-launcher-client py-launcher-server demo-client-otlp demo-client-lstrace py-opentracing-client py-opentracing-server js-lstrace-server js-lstrace-client js-launcher-server js-launcher-client js-ot-shim-server js-ot-shim-client java-specialagent-server java-specialagent-client java-otlp-client java-otlp-server java-launcher-client java-launcher-server java-opentracing-server || true
+
     - name: Build containers
       run: docker-compose build --parallel
 
