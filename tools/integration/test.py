@@ -110,7 +110,7 @@ def test_traces():
     response = requests.post(url, headers=_get_headers(), json=payload)
     assert response.status_code == 200
 
-    time.sleep(55)
+    time.sleep(60)
 
     url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
     querystring = {"span-id": format(span_id, "x")}
