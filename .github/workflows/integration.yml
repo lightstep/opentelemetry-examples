@@ -62,7 +62,7 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN }}
         ORG_NAME: ${{ secrets.ORG_NAME }}
-        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        PROJECT_NAME: examples
         API_KEY: ${{ secrets.API_KEY }}
       run: ./tools/update-token.sh
 
@@ -89,7 +89,7 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN }}
         ORG_NAME: ${{ secrets.ORG_NAME }}
-        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        PROJECT_NAME: examples
         API_KEY: ${{ secrets.API_KEY }}
       run: ./tools/update-token.sh
 
