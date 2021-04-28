@@ -23,24 +23,7 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
-    
-    - name: Go Cache
-      uses: actions/cache@v2
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-    
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
 
-  
   validate:
     needs: setup
     runs-on: ubuntu-latest
@@ -71,10 +54,18 @@ jobs:
           'java-specialagent-server', 'java-specialagent-client',
           'java-otlp-client', 'java-otlp-server',
           'java-launcher-client', 'java-launcher-server',
-          'java-opentracing-server'
+          'java-opentracing-server', 'integration-test'
         ]
     steps:
     - uses: actions/checkout@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
 
     - id: cache-docker
       uses: actions/cache@v1
@@ -85,8 +76,13 @@ jobs:
     - name: Run local docker registry
       run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
 
-    - name: Set .env file
-      run: touch .env
+    - name: Update configuration
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+        ORG_NAME: ${{ secrets.ORG_NAME }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        API_KEY: ${{ secrets.API_KEY }}
+      run: ./tools/update-token.sh
 
     - name: Build containers
       run: docker-compose build ${{ matrix.component }}
@@ -99,6 +95,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
 
     - id: cache-docker
       uses: actions/cache@v1
@@ -121,4 +125,4 @@ jobs:
       run: docker-compose pull
 
     - name: Run integration test
-      run: docker-compose up --no-build --exit-code-from integration-test integration-test
+      run: docker-compose up --exit-code-from integration-test integration-test
