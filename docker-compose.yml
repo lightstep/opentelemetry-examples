@@ -41,7 +41,7 @@ services:
         depends_on:
             - otel-collector
         environment:
-            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-opentelemetry-server
             - LS_SERVICE_VERSION=9.9.1
@@ -58,7 +58,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-opentelemetry-client
             - LS_SERVICE_VERSION=9.9.2
@@ -144,7 +144,7 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:55680
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-client,service.version=1.2.9
             - DESTINATION_URL=http://py-collector-server:5000/ping
         stop_grace_period: 1s
@@ -161,7 +161,7 @@ services:
         env_file:
             - .env
         environment:
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:55680
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-server,service.version=0.2.8
         stop_grace_period: 1s
     py-opentelemetry-client:
