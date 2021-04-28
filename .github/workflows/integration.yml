@@ -39,6 +39,7 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
   
   validate:
     needs: setup
@@ -74,6 +75,16 @@ jobs:
         ]
     steps:
     - uses: actions/checkout@v2
+
+    - id: cache-docker
+      uses: actions/cache@v1
+      with:
+        path: /tmp/docker-registry
+        key: docker-registry-no-buildkit-${{ hashFiles('docker-compose.yml') }}
+
+    - name: Run local docker registry
+      run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
+
     - name: Set .env file
       run: touch .env
 
@@ -85,6 +96,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - id: cache-docker
+      uses: actions/cache@v1
+      with:
+        path: /tmp/docker-registry
+        key: docker-registry-no-buildkit-${{ hashFiles('docker-compose.yml') }}
+
+    - name: Run local docker registry
+      run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
+
     - name: Update configuration
       env:
         TOKEN: ${{ secrets.TOKEN }}
