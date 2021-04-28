@@ -16,14 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Cache Docker layers
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: /tmp/.buildx-cache
-    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-buildx-
-
   validate:
     needs: setup
     runs-on: ubuntu-latest
@@ -59,22 +51,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Cache Docker layers
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: /tmp/.buildx-cache
-    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-buildx-
-
-    - id: cache-docker
-      uses: actions/cache@v1
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
       with:
-        path: /tmp/docker-registry/docker/registry/v2/repositories/otel-examples/${{ matrix.component }}
-        key: docker-registry-${{ hashFiles('docker-compose.yml') }}-${{ matrix.component }}
-
-    - name: Run local docker registry
-      run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update configuration
       env:
@@ -96,28 +78,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Cache Docker layers
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: /tmp/.buildx-cache
-    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-buildx-
-
-    - id: cache-docker-go-opentracing-client
-      uses: actions/cache@v1
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
       with:
-        path: /tmp/docker-registry/docker/registry/v2/repositories/otel-examples/go-opentracing-client
-        key: docker-registry-${{ hashFiles('docker-compose.yml') }}-go-opentracing-client
-
-    - id: cache-docker-go-opentracing-server
-      uses: actions/cache@v1
-      with:
-        path: /tmp/docker-registry/docker/registry/v2/repositories/otel-examples/go-opentracing-server
-        key: docker-registry-${{ hashFiles('docker-compose.yml') }}-go-opentracing-server
-
-    - name: Run local docker registry
-      run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update configuration
       env:
