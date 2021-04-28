@@ -121,4 +121,4 @@ jobs:
       run: docker-compose pull
 
     - name: Run integration test
-      run: docker-compose up --exit-code-from integration-test integration-test
+      run: docker-compose up --no-build --exit-code-from integration-test integration-test
