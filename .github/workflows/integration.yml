@@ -6,9 +6,9 @@ on:
       - main
   pull_request:  
 
-env:
-  DOCKER_BUILDKIT: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
+# env:
+#   DOCKER_BUILDKIT: 1
+#   COMPOSE_DOCKER_CLI_BUILD: 1
 
 jobs:
   setup:
@@ -16,13 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # - name: Cache Docker layers
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: /tmp/.buildx-cache
+    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-buildx-
 
   validate:
     needs: setup
@@ -59,19 +59,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # - name: Cache Docker layers
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: /tmp/.buildx-cache
+    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-buildx-
 
     - id: cache-docker
       uses: actions/cache@v1
       with:
         path: /tmp/docker-registry
-        key: docker-registry-no-buildkit-${{ hashFiles('docker-compose.yml') }}
+        key: docker-registry-${{ hashFiles('docker-compose.yml') }}
 
     - name: Run local docker registry
       run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
@@ -96,19 +96,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # - name: Cache Docker layers
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: /tmp/.buildx-cache
+    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-buildx-
 
     - id: cache-docker
       uses: actions/cache@v1
       with:
         path: /tmp/docker-registry
-        key: docker-registry-no-buildkit-${{ hashFiles('docker-compose.yml') }}
+        key: docker-registry-${{ hashFiles('docker-compose.yml') }}
 
     - name: Run local docker registry
       run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
@@ -121,5 +121,8 @@ jobs:
         API_KEY: ${{ secrets.API_KEY }}
       run: ./tools/update-token.sh
 
-    - name: Run integration tests
-      run: docker-compose pull && docker-compose up --no-build --exit-code-from integration-test integration-test
+    - name: Pull images
+      run: docker-compose pull
+
+    - name: Run integration test
+      run: docker-compose up --exit-code-from integration-test integration-test
