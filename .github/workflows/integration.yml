@@ -54,13 +54,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Update configuration
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        ORG_NAME: ${{ secrets.ORG_NAME }}
-        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-        API_KEY: ${{ secrets.API_KEY }}
-      run: ./tools/update-token.sh
 
     - name: Validate config is up-to-date
       run: ./tools/precommit.sh
@@ -90,6 +83,8 @@ jobs:
         ]
     steps:
     - uses: actions/checkout@v2
+    - name: Set .env file
+      run: touch .env
 
     - name: Build containers
       run: docker-compose build ${{ matrix.component }}
@@ -102,5 +97,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Update configuration
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+        ORG_NAME: ${{ secrets.ORG_NAME }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        API_KEY: ${{ secrets.API_KEY }}
+      run: ./tools/update-token.sh
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
