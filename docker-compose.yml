@@ -42,7 +42,7 @@ services:
         depends_on:
             - otel-collector
         environment:
-            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-opentelemetry-server
             - LS_SERVICE_VERSION=9.9.1
@@ -60,7 +60,7 @@ services:
         env_file:
             - .env
         environment:
-            - LS_SATELLITE_URL=otel-collector:55680
+            - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-opentelemetry-client
             - LS_SERVICE_VERSION=9.9.2
@@ -148,7 +148,7 @@ services:
             - .env
         environment:
             - OTEL_EXPORTER_OTLP_INSECURE=true
-            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-client,service.version=1.2.9
             - DESTINATION_URL=http://py-collector-server:5000/ping
         stop_grace_period: 1s
@@ -165,7 +165,7 @@ services:
             - .env
         environment:
             - OTEL_EXPORTER_OTLP_INSECURE=true
-            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:55680
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-collector-server,service.version=0.2.8
         stop_grace_period: 1s
     py-opentelemetry-client:
@@ -608,7 +608,7 @@ services:
         stop_grace_period: 1s
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector:0.17.0
+        image: otel/opentelemetry-collector:0.22.0
         command: ["--config=/conf/collector-config.yaml", "--log-level=DEBUG"]
         networks:
             - demo
@@ -616,7 +616,7 @@ services:
             - ./config:/conf/:rw
         ports:
             - "0.0.0.0:8889:8889"   # Prometheus exporter metrics
-            - "0.0.0.0:55680:55680" # OTLP receiver
+            - "0.0.0.0:4317:4317" # OTLP receiver
     # aws-otel-collector:
     #     image: amazon/aws-otel-collector:latest
     #     networks:
