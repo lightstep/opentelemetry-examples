@@ -5,6 +5,7 @@ services:
     ###########################
     go-opentracing-server:
         container_name: go-opentracing-server
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentracing-server
         build: ./go/opentracing/server
         networks:
             - demo
@@ -14,10 +15,9 @@ services:
             - LS_SERVICE_NAME=go-opentracing-server
             - LS_SERVICE_VERSION=5
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentracing-client:
         container_name: go-opentracing-client
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentracing-client
         build: ./go/opentracing/client
         networks:
             - demo
@@ -30,10 +30,9 @@ services:
             - LS_SERVICE_VERSION=1.2.7
             - DESTINATION_URL=http://go-opentracing-server:8081/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-server:
         container_name: go-opentelemetry-server
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server
         build: ./go/opentelemetry/server
         networks:
             - demo
@@ -47,10 +46,9 @@ services:
             - LS_SERVICE_NAME=go-opentelemetry-server
             - LS_SERVICE_VERSION=9.9.1
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     go-opentelemetry-client:
         container_name: go-opentelemetry-client
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client
         build: ./go/opentelemetry/client
         networks:
             - demo
@@ -66,10 +64,9 @@ services:
             - LS_SERVICE_VERSION=9.9.2
             - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-server:
         container_name: go-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:go-launcher-server
         build: ./go/launcher/server
         networks:
             - demo
@@ -79,10 +76,9 @@ services:
             - LS_SERVICE_NAME=go-launcher-server
             - LS_SERVICE_VERSION=9.9.9
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     go-launcher-client:
         container_name: go-launcher-client
+        image: ghcr.io/lightstep/opentelemetry-examples:go-launcher-client
         build: ./go/launcher/client
         networks:
             - demo
@@ -95,13 +91,12 @@ services:
             - LS_SERVICE_VERSION=9.9.8
             - DESTINATION_URL=http://go-launcher-server:8081/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/go/pkg/mod:/go/pkg/mod
     ###############################
     ####### Python examples #######
     ###############################
     py-lstrace-client:
         container_name: py-lstrace-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-lstrace-client
         build:
             context: ./python/lstrace
             dockerfile: Dockerfile.client
@@ -118,6 +113,7 @@ services:
         stop_grace_period: 1s
     py-lstrace-server:
         container_name: py-lstrace-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-lstrace-server
         build:
             context: ./python/lstrace
             dockerfile: Dockerfile.server
@@ -136,6 +132,7 @@ services:
         stop_grace_period: 1s
     py-collector-client:
         container_name: py-collector-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-collector-client
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.client
@@ -154,6 +151,7 @@ services:
         stop_grace_period: 1s
     py-collector-server:
         container_name: py-collector-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-collector-server
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.server
@@ -170,6 +168,7 @@ services:
         stop_grace_period: 1s
     py-opentelemetry-client:
         container_name: py-opentelemetry-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-client
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.client
@@ -186,6 +185,7 @@ services:
         stop_grace_period: 1s
     py-opentelemetry-server:
         container_name: py-opentelemetry-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-server
         build:
             context: ./python/opentelemetry
             dockerfile: Dockerfile.server
@@ -204,6 +204,7 @@ services:
         stop_grace_period: 1s
     py-launcher-client:
         container_name: py-launcher-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-launcher-client
         build:
             context: ./python/launcher
             dockerfile: Dockerfile.client
@@ -220,6 +221,7 @@ services:
         stop_grace_period: 1s
     py-launcher-server:
         container_name: py-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-launcher-server
         build:
             context: ./python/launcher
             dockerfile: Dockerfile.server
@@ -270,6 +272,7 @@ services:
         stop_grace_period: 1s
     py-opentracing-client:
         container_name: py-opentracing-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentracing-client
         build:
             context: ./python/opentracing
             dockerfile: Dockerfile.client
@@ -286,6 +289,7 @@ services:
         stop_grace_period: 1s
     py-opentracing-server:
         container_name: py-opentracing-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentracing-server
         build:
             context: ./python/opentracing
             dockerfile: Dockerfile.server
@@ -307,6 +311,7 @@ services:
     ###################################
     js-lstrace-server:
         container_name: js-lstrace-server
+        image: ghcr.io/lightstep/opentelemetry-examples:js-lstrace-server
         build: ./nodejs/server
         networks:
             - demo
@@ -317,6 +322,7 @@ services:
         stop_grace_period: 1s
     js-lstrace-client:
         container_name: js-lstrace-client
+        image: ghcr.io/lightstep/opentelemetry-examples:js-lstrace-client
         build: ./nodejs/client
         networks:
             - demo
@@ -330,6 +336,7 @@ services:
         stop_grace_period: 1s
     js-launcher-server:
         container_name: js-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-server
         build: ./nodejs/launcher/server
         networks:
             - demo
@@ -341,6 +348,7 @@ services:
         stop_grace_period: 1s
     js-launcher-client:
         container_name: js-launcher-client
+        image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-client
         build: ./nodejs/launcher/client
         networks:
             - demo
@@ -355,6 +363,7 @@ services:
         stop_grace_period: 1s
     js-ot-shim-server:
         container_name: js-ot-shim-server
+        image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-server
         build: ./nodejs/ot-shim/server
         networks:
             - demo
@@ -366,6 +375,7 @@ services:
         stop_grace_period: 1s
     js-ot-shim-client:
         container_name: js-ot-shim-client
+        image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-client
         build: ./nodejs/ot-shim/client
         networks:
             - demo
@@ -383,6 +393,7 @@ services:
     ##############################
     java-specialagent-server:
         container_name: java-specialagent-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-server
         build: ./java/server
         networks:
             - demo
@@ -392,10 +403,9 @@ services:
             - LS_SERVICE_NAME=java-specialagent-server
             - LS_SERVICE_VERSION=4.3.2
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     java-specialagent-client:
         container_name: java-specialagent-client
+        image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-client
         build: ./java/client
         networks:
             - demo
@@ -408,10 +418,9 @@ services:
             - LS_SERVICE_VERSION=3.2.1
             - DESTINATION_URL=http://java-specialagent-server:8083/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-client:
         container_name: java-otlp-client
+        image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-client
         build:
             context: ./java/otlp
             dockerfile: Dockerfile.client
@@ -426,10 +435,9 @@ services:
             - LS_SATELLITE_URL=ingest.lightstep.com:443
             - DESTINATION_URL=http://java-otlp-server:8083/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     java-otlp-server:
         container_name: java-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-server
         build:
             context: ./java/otlp
             dockerfile: Dockerfile.server
@@ -441,10 +449,9 @@ services:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
             - LS_SATELLITE_URL=ingest.lightstep.com:443
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-client:
         container_name: java-launcher-client
+        image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-client
         build:
             context: ./java/launcher
             dockerfile: Dockerfile.client
@@ -460,10 +467,9 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-launcher-server:8084/ping
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     java-launcher-server:
         container_name: java-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-server
         build:
             context: ./java/launcher
             dockerfile: Dockerfile.server
@@ -475,11 +481,10 @@ services:
             - LS_SERVICE_NAME=java-launcher-server
             - LS_SERVICE_VERSION=11.11.11
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-        stop_grace_period: 1s    
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
+        stop_grace_period: 1s
     java-opentracing-server:
         container_name: java-opentracing-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-opentracing-server
         build:
             context: ./java/microdonuts
             dockerfile: Dockerfile
@@ -493,13 +498,12 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
-        volumes:
-        - $HOME/.m2/repository:/root/.m2/repository
     ##############################
     ####### .NET examples ########
     ##############################
     dotnet-otlp-server:
         container_name: dotnet-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:dotnet-otlp-server
         build:
             context: ./dotnet/server
             dockerfile: Dockerfile
@@ -517,6 +521,7 @@ services:
     ################################
     integration-test:
         container_name: integration-test
+        image: ghcr.io/lightstep/opentelemetry-examples:integration-test
         build:
             context: ./tools/integration
         networks:
@@ -541,6 +546,7 @@ services:
         env_file:
             - .env
         environment:
+            - OTEL_LOG_LEVEL=error
             - LS_SERVICE_NAME=integration-test
             - OTEL_RESOURCE_ATTRIBUTES=service.version=2020.10.02
         volumes:
@@ -551,10 +557,9 @@ services:
     ################################
     config-generator:
         container_name: config-generator
+        image: ghcr.io/lightstep/opentelemetry-examples:config-generator
         build:
             context: ./tools/integration
-        env_file:
-            - .env
         environment:
             - DOCKER_COMPOSE_PATH=/docker-compose.yml
             - OUTPUT_PATH=/config/integration.yml

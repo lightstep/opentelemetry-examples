@@ -1,7 +1,7 @@
-opentelemetry-launcher
+opentelemetry-launcher==1.0.0rc1
 protobuf==3.13.0
 pyyaml
 pytest
 requests
 retry
-opentelemetry-instrumentation-requests==0.17b0
+opentelemetry-instrumentation-requests==0.18b0
