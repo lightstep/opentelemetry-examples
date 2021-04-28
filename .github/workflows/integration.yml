@@ -1,16 +1,9 @@
 name: Run integration test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:  
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
 
   validate:
     needs: setup
@@ -20,53 +13,6 @@ jobs:
 
     - name: Validate config is up-to-date
       run: ./tools/precommit.sh
-
-  # build:
-  #   needs: validate
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       component: [
-  #         'go-opentracing-server', 'go-opentracing-client',
-  #         'go-opentelemetry-server', 'go-opentelemetry-client',
-  #         'go-launcher-server', 'go-launcher-client',
-  #         'py-lstrace-client', 'py-lstrace-server',
-  #         'py-collector-client', 'py-collector-server',
-  #         'py-opentelemetry-client', 'py-opentelemetry-server',
-  #         'py-launcher-client', 'py-launcher-server',
-  #         'demo-client-otlp', 'demo-client-lstrace',
-  #         'py-opentracing-client', 'py-opentracing-server',
-  #         'js-lstrace-server', 'js-lstrace-client',
-  #         'js-launcher-server', 'js-launcher-client',
-  #         'js-ot-shim-server', 'js-ot-shim-client',
-  #         'java-specialagent-server', 'java-specialagent-client',
-  #         'java-otlp-client', 'java-otlp-server',
-  #         'java-launcher-client', 'java-launcher-server',
-  #         'java-opentracing-server', 'integration-test'
-  #       ]
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Login to GitHub Container Registry
-  #     uses: docker/login-action@v1
-  #     with:
-  #       registry: ghcr.io
-  #       username: ${{ github.repository_owner }}
-  #       password: ${{ secrets.GITHUB_TOKEN }}
-
-  #   - name: Update configuration
-  #     env:
-  #       TOKEN: ${{ secrets.TOKEN }}
-  #       ORG_NAME: ${{ secrets.ORG_NAME }}
-  #       PROJECT_NAME: examples
-  #       API_KEY: ${{ secrets.API_KEY }}
-  #     run: ./tools/update-token.sh
-
-  #   - name: Build containers
-  #     run: docker-compose build ${{ matrix.component }}
-
-  #   - name: Push containers
-  #     run: docker-compose push ${{ matrix.component }}
 
   test:
     needs: validate

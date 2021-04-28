@@ -501,6 +501,7 @@ services:
     ##############################
     dotnet-otlp-server:
         container_name: dotnet-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:dotnet-otlp-server
         build:
             context: ./dotnet/server
             dockerfile: Dockerfile
@@ -518,6 +519,7 @@ services:
     ################################
     integration-test:
         container_name: integration-test
+        image: ghcr.io/lightstep/opentelemetry-examples:integration-test
         build:
             context: ./tools/integration
         networks:
@@ -553,6 +555,7 @@ services:
     ################################
     config-generator:
         container_name: config-generator
+        image: ghcr.io/lightstep/opentelemetry-examples:config-generator
         build:
             context: ./tools/integration
         environment:
@@ -608,7 +611,7 @@ services:
         stop_grace_period: 1s
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector:0.17.0
+        image: otel/opentelemetry-collector:0.22.0
         command: ["--config=/conf/collector-config.yaml", "--log-level=DEBUG"]
         networks:
             - demo
