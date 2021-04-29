@@ -29,7 +29,6 @@ exporters:
 
 processors:
     batch:
-    queued_retry:
   
 service:
     pipelines:
