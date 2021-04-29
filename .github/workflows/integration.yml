@@ -3,6 +3,10 @@ name: Run integration test
 on:
   pull_request:  
 
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -35,6 +39,9 @@ jobs:
 
     - name: Pull images
       run: docker-compose pull
+
+    - name: Build images
+      run: docker-compose build --parallel
 
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
