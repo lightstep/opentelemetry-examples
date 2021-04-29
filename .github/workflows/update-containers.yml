@@ -37,6 +37,9 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set dummy .env file
+      run: touch .env
 
     - name: Build containers
       run: docker-compose build ${{ matrix.component }}
