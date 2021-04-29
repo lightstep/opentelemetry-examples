@@ -38,7 +38,7 @@ jobs:
       run: ./tools/update-token.sh
 
     - name: Pull images
-      run: docker-compose pull
+      run: docker-compose pull || true
 
     - name: Build images
       run: docker-compose build --parallel
