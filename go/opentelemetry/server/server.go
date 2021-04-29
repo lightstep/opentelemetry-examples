@@ -97,7 +97,7 @@ func initTracer() {
 	otel.SetTextMapPropagator(b3)
 
 	if len(collectorURL) == 0 {
-		collectorURL = "localhost:55680"
+		collectorURL = "localhost:4317"
 	}
 
 	if len(componentName) == 0 {
