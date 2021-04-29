@@ -36,5 +36,8 @@ jobs:
     - name: Pull images
       run: docker-compose pull
 
+    - name: Build images
+      run: docker-compose build
+
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
