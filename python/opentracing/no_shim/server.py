@@ -37,7 +37,8 @@ def ping():
 
     with opentracing.tracer.start_active_span(name, child_of=context):
         sleep(random_int / 10000)
-        return name
+    opentracing.tracer.flush()
+    return name
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
