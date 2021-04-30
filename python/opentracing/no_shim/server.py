@@ -16,6 +16,8 @@ import lightstep
 from opentracing.propagation import Format
 
 opentracing.tracer = lightstep.Tracer(
+    collector_host="https://ingest.staging.lightstep.com",
+    collector_port=443,
     component_name=environ["LS_SERVICE_NAME"],
     access_token=environ["LS_ACCESS_TOKEN"],
 )
@@ -35,7 +37,8 @@ def ping():
     random_int = int(context.baggage["random-int"])
     name = "server {}".format(random_int)
 
-    with opentracing.tracer.start_active_span(name, child_of=context):
+    # with opentracing.tracer.start_active_span(name, child_of=context):
+    with opentracing.tracer.start_active_span(name):
         sleep(random_int / 10000)
     opentracing.tracer.flush()
     return name
