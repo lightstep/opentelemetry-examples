@@ -4,6 +4,7 @@
 # LS_SERVICE_NAME
 #
 # Spans will be exported to https://ingest.staging.lightstep.com:443
+# NoShim
 
 from os import environ
 from time import sleep
