@@ -11,48 +11,31 @@ from time import sleep
 
 import flask
 
-from opentelemetry.propagate import extract, set_global_textmap
-from opentelemetry.trace import (
-    get_tracer, set_tracer_provider, get_tracer_provider
-)
-from opentelemetry.propagators.ot_trace import OTTracePropagator
-from opentelemetry.sdk.trace import TracerProvider, Resource
-from opentelemetry.launcher.tracer import LightstepOTLPSpanExporter
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from grpc import ssl_channel_credentials
+import opentracing
+import lightstep
+from opentracing.propagation import Format
 
-set_tracer_provider(TracerProvider())
-
-set_global_textmap(OTTracePropagator())
-
-get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(
-        LightstepOTLPSpanExporter(
-            endpoint="https://ingest.staging.lightstep.com:443",
-            credentials=ssl_channel_credentials(),
-            headers=(("lightstep-access-token", environ["LS_ACCESS_TOKEN"]),)
-        )
-    )
-)
-get_tracer_provider()._resource = Resource(
-    {"service.name": environ["LS_SERVICE_NAME"], "service.version": "1.2.3"}
+opentracing.tracer = lightstep.Tracer(
+    component_name=environ["LS_SERVICE_NAME"],
+    access_token=environ["LS_ACCESS_TOKEN"],
 )
 
 
-tracer = get_tracer(__name__)
 app = flask.Flask(__name__)
-tracer = get_tracer(__name__)
 
 
 @app.route("/ping")
 def ping():
 
-    context = extract(flask.request.headers)
+    context = opentracing.tracer.extract(
+        Format.HTTP_HEADERS,
+        {key: value for key, value in flask.request.headers.items()}
+    )
 
-    random_int = int(context["baggage"]["Random-Int"])
+    random_int = int(context.baggage["random-int"])
     name = "server {}".format(random_int)
 
-    with tracer.start_as_current_span(name, context=context):
+    with opentracing.tracer.start_active_span(name, child_of=context):
         sleep(random_int / 10000)
         return name
 
