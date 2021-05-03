@@ -94,6 +94,33 @@ services:
     ###############################
     ####### Python examples #######
     ###############################
+    py-opentracing-server:
+        container_name: py-opentracing-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentracing-server
+        build: ./py/opentracing/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-server
+            - LS_SERVICE_VERSION=5
+        stop_grace_period: 1s
+    py-opentracing-client:
+        container_name: py-opentracing-client
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentracing-client
+        build: ./py/opentracing/client
+        networks:
+            - demo
+        depends_on:
+            - py-opentracing-server
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=py-opentracing-client
+            - LS_SERVICE_VERSION=1.2.7
+            - DESTINATION_URL=http://py-opentracing-server:8081/ping
+        stop_grace_period: 1s
     py-lstrace-client:
         container_name: py-lstrace-client
         image: ghcr.io/lightstep/opentelemetry-examples:py-lstrace-client
