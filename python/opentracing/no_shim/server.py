@@ -16,7 +16,7 @@ import lightstep
 from opentracing.propagation import Format
 
 opentracing.tracer = lightstep.Tracer(
-    collector_host="https://ingest.staging.lightstep.com",
+    collector_host="https://collector.staging.lightstep.com",
     collector_port=443,
     component_name=environ["LS_SERVICE_NAME"],
     access_token=environ["LS_ACCESS_TOKEN"],
