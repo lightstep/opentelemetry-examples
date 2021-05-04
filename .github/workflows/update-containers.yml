@@ -14,7 +14,6 @@ jobs:
           'go-opentracing-server', 'go-opentracing-client',
           'go-opentelemetry-server', 'go-opentelemetry-client',
           'go-launcher-server', 'go-launcher-client',
-          'py-lstrace-client', 'py-lstrace-server',
           'py-collector-client', 'py-collector-server',
           'py-opentelemetry-client', 'py-opentelemetry-server',
           'py-launcher-client', 'py-launcher-server',
