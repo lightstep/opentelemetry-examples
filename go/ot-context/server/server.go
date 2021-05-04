@@ -23,9 +23,9 @@ import (
 	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 	"go.opentelemetry.io/contrib/propagators/ot"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
-	"go.opentelemetry.io/otel/label"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"google.golang.org/grpc/credentials"
@@ -35,8 +35,7 @@ var (
 	componentName  = os.Getenv("LS_SERVICE_NAME")
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
-	collectorURL   = os.Getenv("LS_SATELLITE_URL")
-	insecure       = os.Getenv("LS_INSECURE")
+	collectorURL   = os.Getenv("OTEL_EXPORTER_OTLP_SPAN_ENDPOINT")
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -72,9 +71,6 @@ func initExporter(url string, token string) *otlp.Exporter {
 	}
 
 	secureOption := otlpgrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
-	if len(insecure) > 0 {
-		secureOption = otlpgrpc.WithInsecure()
-	}
 
 	exporter, err := otlp.NewExporter(
 		context.Background(),
@@ -113,18 +109,19 @@ func initTracer() {
 	resources, err := resource.New(
 		context.Background(),
 		resource.WithAttributes(
-			label.String("service.name", componentName),
-			label.String("service.version", serviceVersion),
-			label.String("library.language", "go"),
-			label.String("library.version", "1.2.3"),
+			attribute.String("service.name", componentName),
+			attribute.String("service.version", serviceVersion),
+			attribute.String("library.language", "go"),
+			attribute.String("library.version", "1.2.3"),
 		),
 	)
 	if err != nil {
 		log.Printf("Could not set resources: ", err)
 	}
+
 	tp := trace.NewTracerProvider(
-		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
-		trace.WithSyncer(exporter),
+		trace.WithSampler(trace.AlwaysSample()),
+		trace.WithSpanProcessor(trace.NewBatchSpanProcessor(exporter)),
 		trace.WithResource(resources),
 	)
 	otel.SetTracerProvider(tp)
