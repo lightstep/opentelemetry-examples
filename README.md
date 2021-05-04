@@ -37,7 +37,6 @@ The following client/server applications use different mechanism for sending dat
 | go-opentracing   | client/server example instrumented via lightstep-tracer-go   |
 | go-opentelemetry | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 | go-launcher      | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
-| py-lstrace       | client/server example instrumented via ls-trace-py           |
 | py-collector     | client/server example instrumented via OpenTelemetry and the OTLP exporter combined with the OpenTelemetry Collector |
 | py-opentelemetry | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 | py-launcher      | client/server example instrumented via OpenTelemetry and the Launcher for configuration |

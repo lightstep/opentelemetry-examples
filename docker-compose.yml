@@ -94,42 +94,6 @@ services:
     ###############################
     ####### Python examples #######
     ###############################
-    py-lstrace-client:
-        container_name: py-lstrace-client
-        image: ghcr.io/lightstep/opentelemetry-examples:py-lstrace-client
-        build:
-            context: ./python/lstrace
-            dockerfile: Dockerfile.client
-        networks:
-            - demo
-        depends_on:
-            - py-lstrace-server
-        env_file:
-            - .env
-        environment:
-            - LS_SERVICE_NAME=py-lstrace-client
-            - LS_SERVICE_VERSION=1.2.1
-            - DESTINATION_URL=http://py-lstrace-server:5000/ping
-        stop_grace_period: 1s
-    py-lstrace-server:
-        container_name: py-lstrace-server
-        image: ghcr.io/lightstep/opentelemetry-examples:py-lstrace-server
-        build:
-            context: ./python/lstrace
-            dockerfile: Dockerfile.server
-        networks:
-            - demo
-        depends_on:
-            - redis
-            - postgres
-            - mysql
-            - mongo
-        env_file:
-            - .env
-        environment:
-            - LS_SERVICE_NAME=py-lstrace-server
-            - LS_SERVICE_VERSION=0.2.2
-        stop_grace_period: 1s
     py-collector-client:
         container_name: py-collector-client
         image: ghcr.io/lightstep/opentelemetry-examples:py-collector-client
@@ -532,7 +496,6 @@ services:
             - py-opentelemetry-server
             - py-launcher-server
             - py-opentracing-server
-            - py-lstrace-server
             - js-lstrace-server
             - js-launcher-server
             - js-ot-shim-server
