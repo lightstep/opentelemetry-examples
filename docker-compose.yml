@@ -75,6 +75,7 @@ services:
         environment:
             - LS_SERVICE_NAME=go-ot-context-server
             - LS_SERVICE_VERSION=9.9.8
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
         stop_grace_period: 1s
     go-ot-context-client:
         container_name: go-ot-context-client
@@ -169,7 +170,6 @@ services:
             - .env
         environment:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-client,service.version=10.10.10
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
             - DESTINATION_URL=http://py-opentelemetry-server:5000/ping
         stop_grace_period: 1s
     py-opentelemetry-server:
@@ -189,7 +189,6 @@ services:
             - .env
         environment:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-server,service.version=10.10.9
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
         stop_grace_period: 1s
     py-launcher-client:
         container_name: py-launcher-client
