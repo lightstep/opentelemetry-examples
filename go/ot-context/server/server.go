@@ -35,7 +35,7 @@ var (
 	componentName  = os.Getenv("LS_SERVICE_NAME")
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
-	collectorURL   = os.Getenv("OTEL_EXPORTER_OTLP_SPAN_ENDPOINT")
+	collectorURL   = os.Getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
