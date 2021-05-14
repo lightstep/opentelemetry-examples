@@ -37,8 +37,5 @@ jobs:
         API_KEY: ${{ secrets.API_KEY }}
       run: ./tools/update-token.sh
 
-    - name: Build images
-      run: docker-compose build --parallel
-
     - name: Run integration test
       run: docker-compose up --exit-code-from integration-test integration-test
