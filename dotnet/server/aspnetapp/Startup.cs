@@ -33,7 +33,7 @@ namespace aspnetapp
                     opt.Propagator = new OpenTelemetry.Context.Propagation.B3Propagator();
                 })
                 .AddOtlpExporter(opt => {
-                    opt.Endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_SPAN_ENDPOINT");
+                    opt.Endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
                     opt.Headers = new Metadata
                     {
                         { "lightstep-access-token", Environment.GetEnvironmentVariable("LS_ACCESS_TOKEN")}
