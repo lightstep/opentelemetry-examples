@@ -5,14 +5,14 @@ RUN apt-get install -y curl
 RUN update-ca-certificates -f
 
 WORKDIR /usr/src/app
-RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent-all.jar
+RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 COPY src ./src
 COPY pom-client.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM openjdk:8
 
-COPY --from=build /usr/src/app/opentelemetry-javaagent-all.jar /app/
+COPY --from=build /usr/src/app/opentelemetry-javaagent.jar /app/
 COPY --from=build /usr/src/app/target/lightstep-launcher-client.jar /app/
 
 ENTRYPOINT java -jar /app/lightstep-launcher-client.jar \
