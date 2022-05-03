@@ -46,4 +46,24 @@ The following client/server applications use different mechanism for sending dat
 | java-launcher    | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
 | js-ot-shim       | client/server example instrumented via OpenTelemetry and JS Launcher with OpenTracing |
 
-### 
+### OpenTelemetry Collector Integrations
+
+Additionally, the repo contains example for producing telemetry via various OpenTelemetry Collector Integrations. The integrations can be found under `./collector/<integration>`. To produce telemetry using these integrations:
+
+1. Clone this repository and `cd` into the directory for the integration of choice:
+
+    `cd ./collector/mysql`
+
+2. Export your Lightstep Access Token
+
+    `export LS_ACCESS_TOKEN=<your token>`.
+
+3. Run the environment using Docker compose
+
+    `docker compose up`
+
+4. Access the Lightstep dashboard for the integration.
+
+------
+
+*Made with* ![:heart:](https://a.slack-edge.com/production-standard-emoji-assets/10.2/apple-medium/2764-fe0f.png) *@ [Lightstep](http://lightstep.com/)*
