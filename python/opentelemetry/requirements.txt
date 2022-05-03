@@ -1,9 +1,9 @@
-protobuf==3.13.0
+protobuf==3.20.1
 flask
 pymongo
 redis
 requests
 sqlalchemy
-opentelemetry-instrumentation==0.20b0
-opentelemetry-exporter-otlp==1.1.0
-opentelemetry-propagator-b3==1.1.0
+opentelemetry-instrumentation
+opentelemetry-exporter-otlp
+opentelemetry-propagator-b3
