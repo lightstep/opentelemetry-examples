@@ -1,7 +1,31 @@
 receivers:
     otlp:
-      protocols:
-          grpc:
+        protocols:
+            grpc:
+            http:
+    redis:
+        endpoint: redis:6379
+
+    mysql:
+      username: testuser
+      password: testpassword
+      endpoint: mysql:3306
+    prometheus:
+      config:
+        scrape_configs:
+          - job_name: 'otel-collector'
+            scrape_interval: 5s
+            static_configs:
+              - targets: ['0.0.0.0:8888']
+    postgresql:
+        endpoint: postgres:5432
+        # transport: tcp
+        username: testuser
+        password: testpassword
+        databases:
+            - opentelemetry-tests
+        tls:
+            insecure: true
   
 exporters:
     prometheus:
@@ -31,11 +55,13 @@ processors:
     batch:
   
 service:
+    telemetry:
+        metrics:
     pipelines:
       traces:
         receivers: [otlp]
         exporters: [logging, otlp]
         processors: [batch]
       metrics:
-        receivers: [otlp]
+        receivers: [mysql, prometheus, redis, postgresql]
         exporters: [logging, otlp]
