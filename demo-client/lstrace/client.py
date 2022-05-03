@@ -39,9 +39,9 @@ if __name__ == "__main__":
     destinations = config_data.get("endpoints")
     tracer.set_tags(
         {
-            "lightstep.service_name": env.str("LS_SERVICE_NAME"),
-            "service.version": env.str("LS_SERVICE_VERSION"),
-            "lightstep.access_token": env.str("LS_ACCESS_TOKEN"),
+            "lightstep.service_name": os.environ.get("LS_SERVICE_NAME"),
+            "service.version": os.environ.get("LS_SERVICE_VERSION"),
+            "lightstep.access_token": os.environ.get("LS_ACCESS_TOKEN"),
         }
     )
     while True:
