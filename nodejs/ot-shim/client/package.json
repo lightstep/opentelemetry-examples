@@ -14,7 +14,7 @@
     "@opentelemetry/plugin-http": "^0.11.0",
     "@opentelemetry/shim-opentracing": "^0.11.0",
     "@opentelemetry/tracing": "^0.11.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.2",
     "lightstep-opentelemetry-launcher-node": "^0.11.0",
     "opentracing": "^0.14.4"
   }
