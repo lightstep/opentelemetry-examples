@@ -44,7 +44,7 @@ services:
         gid: '101'
         mode: 0440
     ports:
-      - "80"
+      - "1080"
     deploy:
       replicas: 2
       resources:

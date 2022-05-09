@@ -10,10 +10,12 @@ receivers:
       load:
       network:
       paging:
-  nginx:
-    endpoint: 'http://nginx:80/status'
+  nginx/proxy:
+    endpoint: 'http://nginx_proxy:80/status'
     collection_interval: 10s
-
+  nginx/appsrv:
+    endpoint: 'http://nginx_appsrv:1080/status'
+    collection_interval: 10s
 exporters:
   logging:
     loglevel: debug
@@ -23,12 +25,12 @@ exporters:
         "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
-  resource:
+  resource/proxy:
     attributes:
     - key: instance.type
       value: "proxy"
       action: insert
-  resource/2:
+  resource/appsrv:
     attributes:
     - key: instance.type
       value: "appsrv"
@@ -37,10 +39,15 @@ processors:
 
 service:
   pipelines:
-    metrics:
-      receivers: [otlp, nginx]
-      processors: []
+    metrics/proxy:
+      receivers: [otlp, nginx/proxy]
+      processors: [resource/proxy]
       exporters: [logging, otlp/public]
+    metrics/appsrv:
+      receivers: [otlp, nginx/appsrv]
+      processors: [resource/appsrv]
+      exporters: [logging, otlp/public]
+
   telemetry:
     logs:
       level: debug
