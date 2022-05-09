@@ -1,0 +1,22 @@
+receivers:
+    redis:
+        endpoint: redis:6379
+  
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [redis]
+        processors: [batch]
+        exporters: [logging, otlp]    
