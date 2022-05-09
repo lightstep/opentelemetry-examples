@@ -1,0 +1,25 @@
+##########################################
+### Builds collector from OTEL contrib
+##########################################
+FROM golang:1.18-alpine as builder
+
+ARG REPO
+ARG LDFLAGS
+ARG REPO_URL=https://github.com/${REPO}
+ENV REPO_PATH=/go/src/github.com/${REPO}
+
+RUN mkdir -p ${REPO_PATH}
+RUN apk add --no-cache git
+
+RUN git clone --depth 1 ${REPO_URL} ${REPO_PATH}
+
+WORKDIR ${REPO_PATH}
+RUN go mod tidy
+# must pass flags for static or will not work on scratch
+RUN GO111MODULE=on CGO_ENABLED=0 go build -ldflags "-extdldflags=-static" -ldflags "-s -w" -o /otelcontribcol ./cmd/otelcontribcol
+
+FROM scratch AS runnable
+# copy ca certs
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# copy bin
+COPY --from=builder /otelcontribcol /otelcontribcol

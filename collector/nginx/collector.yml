@@ -1,0 +1,46 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      memory:
+      load:
+      network:
+      paging:
+  nginx:
+    endpoint: 'http://nginx:80/status'
+    collection_interval: 10s
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  resource:
+    attributes:
+    - key: instance.type
+      value: "proxy"
+      action: insert
+  resource/2:
+    attributes:
+    - key: instance.type
+      value: "appsrv"
+      action: insert
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, nginx]
+      processors: []
+      exporters: [logging, otlp/public]
+  telemetry:
+    logs:
+      level: debug

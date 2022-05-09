@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+  otelcontribcol:
+    build: 
+      context: .
+      args:
+        - REPO=open-telemetry/opentelemetry-collector-contrib
+        - LDFLAGS="-w -s -extldflags=-static"
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["./otelcontribcol", "--config=/conf/collector.yml"]
+
+# deploys a standalone for the proxy and adds instances
+  nginx_proxy:
+    image: nginx:1.19
+    configs:
+      - source: proxy_conf
+        target: /etc/nginx/conf.d/nginx.conf
+        uid: '101'
+        gid: '101'
+        mode: 0440
+    ports:
+      - "8080:80"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.125"
+          memory: 64M
+
+# deploys 2 app instances
+  nginx_appsrv:
+    image: nginx:1.19
+    configs:
+      - source: appsrv_conf
+        target: /etc/nginx/conf.d/nginx.conf
+        uid: '101'
+        gid: '101'
+        mode: 0440
+    ports:
+      - "80"
+    deploy:
+      replicas: 2
+      resources:
+          limits:
+            cpus: "0.25"
+            memory: 128M
+          reservations:
+            cpus: "0.125"
+            memory: 64M
+ 
+# send some traffic so it looks interesting
+  load_gen:
+    depends_on: [nginx_proxy]
+    image: williamyeh/hey
+    command: ["-z", "10m", "-c", "50", "-q", "50", "http://nginx_proxy"]
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  proxy_conf:
+    file: ./nginx-proxy.conf
+  appsrv_conf:
+    file: ./nginx-appsrv.conf
