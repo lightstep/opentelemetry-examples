@@ -1,11 +1,11 @@
-FROM maven:3.8.4-jdk-8 AS build
+FROM maven:3-openjdk-8-slim AS build
 
 RUN apt-get update
 RUN apt-get install -y curl
 RUN update-ca-certificates -f
 
 WORKDIR /usr/src/app
-RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
+RUN curl -o opentelemetry-javaagent.jar https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 COPY src ./src
 COPY pom.xml pom.xml
 COPY client ./client

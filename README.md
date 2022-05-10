@@ -40,7 +40,6 @@ The following client/server applications use different mechanism for sending dat
 | py-collector     | client/server example instrumented via OpenTelemetry and the OTLP exporter combined with the OpenTelemetry Collector |
 | py-opentelemetry | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 | py-launcher      | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
-| js-lstrace       | client/server example instrumented via ls-trace-js           |
 | java             | client/server example instrumented via special agent         |
 | java-otlp        | client/server example instrumented via OpenTelemetry and the OTLP exporter |
 | java-launcher    | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
