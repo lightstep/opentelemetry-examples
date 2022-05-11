@@ -4,7 +4,6 @@
 FROM golang:1.18-alpine as builder
 
 ARG REPO
-ARG LDFLAGS
 ENV REPO_URL=https://github.com/${REPO}
 ENV REPO_PATH=/go/src/github.com/${REPO}
 

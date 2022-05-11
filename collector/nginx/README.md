@@ -1,17 +1,10 @@
 # nginxls = NGINX + LightStep
 
-This example demonstrates integration of the nginxreceiver with a LightStep backend.
+This example demonstrates integration of the nginxreceiver with LightStep.
 
 ## Prerequisites
 
-- You need a LightStep app access-token
-- Substitute your token...
-
-There's a place in the config file (config/collector.yml) for you to insert a TOKEN. If you put your token in file at config/token.txt then you can simply run the following ...
-
-``` sh
-awk 'BEGIN{getline l < "config/token.txt"}/TOKEN/{gsub("TOKEN",l)}1' config/collector.yml.tmpl > config/collector.yml
-```
+- The example requiers an environment variable for your LightStep app access-token named `LS_ACCESS_TOKEN`.
 
 That will build a config for the collector with your lightstep token.
 

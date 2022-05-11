@@ -6,7 +6,6 @@ services:
       context: .
       args:
         - REPO=open-telemetry/opentelemetry-collector-contrib
-        - LDFLAGS="-w -s -extldflags=-static"
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
@@ -24,7 +23,7 @@ services:
         gid: '101'
         mode: 0440
     ports:
-      - "8080:80"
+      - "8080"
     deploy:
       resources:
         limits:
