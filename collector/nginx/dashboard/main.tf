@@ -137,7 +137,6 @@ resource "lightstep_metric_dashboard" "otel_collector_nginxreceiver_dashboard" {
       metric              = "nginx.connections_current"
       timeseries_operator = "count"
 
-
       group_by {
         aggregation_method = "sum"
         keys               = ["instance.type", ]
