@@ -16,6 +16,7 @@ receivers:
   nginx/appsrv:
     endpoint: 'http://nginx_appsrv:1080/status'
     collection_interval: 10s
+
 exporters:
   logging:
     loglevel: debug

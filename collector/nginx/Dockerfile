@@ -1,5 +1,5 @@
 ##########################################
-### Builds collector from OTEL contrib
+### Build collector from HEAD of repo
 ##########################################
 FROM golang:1.18-alpine as builder
 

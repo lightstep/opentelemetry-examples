@@ -54,7 +54,7 @@ services:
             cpus: "0.125"
             memory: 64M
  
-# send some traffic so it looks interesting
+# send some traffic to the proxy
   load_gen:
     depends_on: [nginx_proxy]
     image: williamyeh/hey
