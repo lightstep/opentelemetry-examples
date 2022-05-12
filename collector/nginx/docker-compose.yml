@@ -1,17 +1,18 @@
 version: '3.9'
 
 services:
-  otelcontribcol:
-    build: 
-      context: .
-      args:
-        - REPO=open-telemetry/opentelemetry-collector-contrib
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.50.0
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+      - integrations
     configs:
       - source: collector_conf
         target: /conf/collector.yml
-    command: ["./otelcontribcol", "--config=/conf/collector.yml"]
+    networks:
+      - integrations
 
 # deploys a standalone for the proxy and adds instances
   nginx_proxy:
@@ -32,6 +33,8 @@ services:
         reservations:
           cpus: "0.125"
           memory: 64M
+    networks:
+      - integrations
 
 # deploys 2 app instances
   nginx_appsrv:
@@ -53,12 +56,16 @@ services:
           reservations:
             cpus: "0.125"
             memory: 64M
- 
-# send some traffic to the proxy
+    networks:
+      - integrations
+
+# send some traffic to the proxy, so charts have data
   load_gen:
     depends_on: [nginx_proxy]
     image: williamyeh/hey
     command: ["-z", "10m", "-c", "50", "-q", "50", "http://nginx_proxy"]
+    networks:
+      - integrations
 
 configs:
   collector_conf:
@@ -67,3 +74,6 @@ configs:
     file: ./nginx-proxy.conf
   appsrv_conf:
     file: ./nginx-appsrv.conf
+
+networks:
+  integrations:
