@@ -1,14 +1,14 @@
 ---
 # Ingest metrics using the NGINX integration
 
-The OTEL Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) such that allow for integration into a wide variety of metric sources.
+The OTEL Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
 Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## Requirements
 
-* OpenTelemetry Collector Contrib v0.50.0+
+* OpenTelemetry Collector Contrib v0.51.0+
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ You must have a Lightstep Observability [access token](/docs/create-and-manage-a
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory and it will generate some requests that send metrics to OTEL. You'll want to view this in Lightstep with a dashboard. You can create a 
+You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
 
 ## Configuration
 
