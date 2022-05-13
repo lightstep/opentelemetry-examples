@@ -1,0 +1,82 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.51.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+# deploys a standalone for the proxy and adds instances
+  nginx_proxy:
+    image: nginx:1.19
+    configs:
+      - source: proxy_conf
+        target: /etc/nginx/conf.d/nginx.conf
+        uid: '101'
+        gid: '101'
+        mode: 0440
+    ports:
+      - "8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.125"
+          memory: 64M
+    networks:
+      - integrations
+
+# deploys 2 app instances
+  nginx_appsrv:
+    image: nginx:1.19
+    configs:
+      - source: appsrv_conf
+        target: /etc/nginx/conf.d/nginx.conf
+        uid: '101'
+        gid: '101'
+        mode: 0440
+    ports:
+      - "1080"
+    deploy:
+      replicas: 2
+      resources:
+          limits:
+            cpus: "0.25"
+            memory: 128M
+          reservations:
+            cpus: "0.125"
+            memory: 64M
+    networks:
+      - integrations
+
+# we can send some traffic to the proxy, so charts have data by enabling the
+# profile like `docker-compose --profile loadgen up`
+  load_gen:
+    depends_on: [nginx_proxy]
+    image: williamyeh/hey
+    command: ["-z", "10m", "-c", "50", "-q", "50", "http://nginx_proxy"]
+    # to keep this from starting under regular invocation
+    profiles:
+      - loadgen
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  proxy_conf:
+    file: ./nginx-proxy.conf
+  appsrv_conf:
+    file: ./nginx-appsrv.conf
+
+networks:
+  integrations:
