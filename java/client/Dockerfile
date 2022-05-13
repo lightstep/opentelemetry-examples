@@ -1,16 +1,16 @@
-FROM maven:3.5.2-jdk-8 AS build
+FROM maven:3-openjdk-8-slim AS build
 
 RUN apt-get update
 RUN apt-get install -y curl
 RUN update-ca-certificates -f
 
 WORKDIR /usr/src/app
-RUN wget https://repo1.maven.org/maven2/io/opentracing/contrib/specialagent/opentracing-specialagent/1.7.0/opentracing-specialagent-1.7.0.jar
+RUN curl -o opentracing-specialagent-1.7.0.jar https://repo1.maven.org/maven2/io/opentracing/contrib/specialagent/opentracing-specialagent/1.7.0/opentracing-specialagent-1.7.0.jar
 COPY src ./src
 COPY pom.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:8-jre-alpine
+FROM openjdk:8u322-jre-slim-bullseye
 
 COPY --from=build /usr/src/app/opentracing-specialagent-1.7.0.jar /app/
 COPY --from=build /usr/src/app/target/client-1.0-SNAPSHOT.jar /app/

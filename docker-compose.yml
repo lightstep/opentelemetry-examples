@@ -271,31 +271,6 @@ services:
     ###################################
     ####### Javascript examples #######
     ###################################
-    js-lstrace-server:
-        container_name: js-lstrace-server
-        image: ghcr.io/lightstep/opentelemetry-examples:js-lstrace-server
-        build: ./nodejs/server
-        networks:
-            - demo
-        env_file:
-            - .env
-        environment:
-            - LS_SERVICE_NAME=js-lstrace-server
-        stop_grace_period: 1s
-    js-lstrace-client:
-        container_name: js-lstrace-client
-        image: ghcr.io/lightstep/opentelemetry-examples:js-lstrace-client
-        build: ./nodejs/client
-        networks:
-            - demo
-        depends_on:
-            - js-lstrace-server
-        env_file:
-            - .env
-        environment:
-            - LS_SERVICE_NAME=js-lstrace-client
-            - DESTINATION_URL=http://js-lstrace-server:8080/ping
-        stop_grace_period: 1s
     js-launcher-server:
         container_name: js-launcher-server
         image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-server
@@ -496,7 +471,6 @@ services:
             - py-opentelemetry-server
             - py-launcher-server
             - py-opentracing-server
-            - js-lstrace-server
             - js-launcher-server
             - js-ot-shim-server
             - java-specialagent-server
@@ -566,7 +540,7 @@ services:
         stop_grace_period: 1s
     redis:
         container_name: redis
-        image: redis:4.0-alpine
+        image: redis:7.0-alpine
         networks:
             - demo
         ports:
