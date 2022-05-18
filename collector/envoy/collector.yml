@@ -12,7 +12,7 @@ receivers:
             # params:
             # format: ['prometheus']
           static_configs:
-            - targets: ["front-proxy:8001"]
+            - targets: ["front-envoy:8001"]
 
 exporters:
   logging:
