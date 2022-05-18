@@ -9,8 +9,6 @@ receivers:
         - job_name: otel-envoy-eg
           scrape_interval: 5s
           metrics_path: /stats/prometheus
-            # params:
-            # format: ['prometheus']
           static_configs:
             - targets: ["front-envoy:8001"]
 
