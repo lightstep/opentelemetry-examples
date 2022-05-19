@@ -18,11 +18,11 @@ If you would like to generate load automatically, run this example using `docker
 
 ### Charting the data
 
-You can see the metrics emitted by HAProxy by inspecting its Prometheus end point at: http://localhost:8404/metrics and [build dashboards][ls-docs-dashboards] in Lightstep.
+You can see the metrics emitted by HAProxy by inspecting its Prometheus end point at: http://localhost:8404/metrics and [build dashboards][ls-docs-dashboards] using these metrics in Lightstep.
 
 ## Configuration
 
-You will need a build of the OpenTelemery collector that includes the Prometheus receiver. This example uses the [collector-contrib][docker-collector-contrib] images published to dockerhub. The Installation of the OpenTelemetry Collector varies, please refer to the [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
+You will need a build of the OpenTelemery collector that includes the Prometheus receiver. This example uses the [collector-contrib][docker-collector-contrib] images published to dockerhub. For other ways to install and run the collector see [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
 
 ### Collector Configuration
 
