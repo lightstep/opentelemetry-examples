@@ -31,7 +31,7 @@ services:
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     volumes:
-      - ./collector.yml:/conf/collector.yml:rw
+      - ./collector.yml:/conf/collector.yml:ro
     networks:
       - integrations
 
