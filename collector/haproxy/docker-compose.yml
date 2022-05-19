@@ -10,7 +10,7 @@ services:
       replicas: 3
 
   haproxy:
-    image: haproxytech:latest
+    image: haproxy:latest
     ports:
       - 8080:80
       - 8404:8404
