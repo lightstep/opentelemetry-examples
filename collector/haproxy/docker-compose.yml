@@ -10,7 +10,7 @@ services:
       replicas: 3
 
   haproxy:
-    image: haproxytech/haproxy-alpine:latest
+    image: haproxytech:latest
     ports:
       - 8080:80
       - 8404:8404
