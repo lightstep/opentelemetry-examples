@@ -41,7 +41,8 @@ receivers:
 
 ### HAProxy Configuration
 
-HAProxy exposes metrics via a Prometheus compatible endpoint that needs to be configured in `haproxy.cfg`. See the snippet below for an example, the key line is `http-request use-service prometheus-exporter if { path /metrics }`.
+HAProxy exposes metrics via a Prometheus compatible endpoint that needs to be configured in `haproxy.cfg`. See the snippet below for an example, the key line is `http-request use-service prometheus-exporter if { path /metrics }`. For more information on the `http-request use-service` directive, see the documentation [here][haproxy-use-service-docs]. For more information on HAProxy's Prometheus endpoint see [this blog post][haproxy-prom-blog].
+
 
 ```
 frontend stats
@@ -55,3 +56,5 @@ frontend stats
 [otel-prom-receiver]: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver
 [ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
 [docker-collector-contrib]: https://hub.docker.com/r/otel/opentelemetry-collector-contrib
+[haproxy-use-service-docs]: https://www.haproxy.com/documentation/hapee/latest/onepage/#4.2-http-request%20use-service
+[haproxy-prom-blog]: https://www.haproxy.com/blog/haproxy-exposes-a-prometheus-metrics-endpoint/
