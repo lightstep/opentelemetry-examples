@@ -1,20 +1,41 @@
 # Ingest HAProxy metrics using OTel Collector's Prometheus receiver
 
-The OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] and HAProxy exposes metrics via a Prometheus compatible endpoint. This example shows how to configure the Collector and HAProxy to export metrics to Lightstep Observability.
+HAProxy emits metrics via a Prometheus compatible endpoint and [OpenTelemetry Collector Contrib][otel-collector-contrib] has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape those metrics. The examples in this repo show how to configure HAProxy and the Collector to send metrics to Lightstep Observability.
 
 ## Requirements
 
+* HAProxy v2.0+
 * OpenTelemetry Collector Contrib v0.51.0+
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Lightstep Observability [access token][ls-docs-access-token] for the project to report metrics to.
 
 ## Running the Example
 
-This example assumes you have exported your access token as `LS_ACCESS_TOKEN`. You can run this example with `docker-compose up` in this directory. HAProxy is mapped to port 8080 on the host machine and requests to `http://localhost:8080/*`, where `*` can be any path, will be routed to one of three echo server instances.
+**Set LS_ACCESS_TOKEN as an environment variable**
 
-If you would like to generate load automatically, run this example using `docker-compose --profile loadgen up`.
+The `docker-compose.yml` assumes your access token has been set as an environment variable named `LS_ACCESS_TOKEN`. Set the environment variable using the method of your choosing, for example:
+
+```
+export LS_ACCESS_TOKEN=<YOUR-TOKEN>
+```
+
+**Example wihout load generation**
+
+```
+docker-compose up
+```
+
+Note: This example sets up HAProxy to listen on port 8080 and it will forward requests to any path to a pool of echo servers. You can drive load by making requests such as `curl http://localhost:8080/foo`, `curl http://localhost:8080/bar`, `curl http://localhost:8080/any/path`.
+
+**Example with load generation**
+
+You can run the example from the previous step with load generation using the following command. Load is generated using [wrk](https://github.com/wg/wrk).
+
+```
+docker-compose --profile loadgen up
+```
 
 ### Charting the data
 
@@ -22,7 +43,22 @@ You can see the metrics emitted by HAProxy by inspecting its Prometheus end poin
 
 ## Configuration
 
-You will need a build of the OpenTelemery collector that includes the Prometheus receiver. This example uses the [collector-contrib][docker-collector-contrib] images published to dockerhub. For other ways to install and run the collector see [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
+Below you will find relevant snippets of configuration needed to configure the HAProxy Prometheus endpoint and how to configure the Colllector's Prometheus receiver to scrape it. Look at the [docker-compose.yml](docker-compose.yml) and [haproxy.cfg](haproxy.cfg) files in this directory for more details.
+
+### HAProxy Configuration
+
+HAProxy has native support for Prometheus, but it must be enabled in your HAProxy configuration file. The line `http-request use-service rometheus-exporter if { path /metrics }` directive needs to be added to your existing `frontend stats` stats section. See below for an example:
+
+~~~
+frontend stats
+  bind *:8404
+  http-request use-service prometheus-exporter if { path /metrics }
+  stats enable
+  stats uri /
+  stats refresh 10s
+~~~
+
+See the official HAProxy [blog post][haproxy-prom-blog] for more details about its Prometheus endpoint.
 
 ### Collector Configuration
 
@@ -39,22 +75,11 @@ receivers:
               - targets: ['haproxy:8404']
 ```
 
-### HAProxy Configuration
+The OpenTelemetry repo provides additional details and options for [Prometheus receiver configuration][otel-prom-receiver].
 
-HAProxy exposes metrics via a Prometheus compatible endpoint that needs to be configured in `haproxy.cfg`. See the snippet below for an example, the key line is `http-request use-service prometheus-exporter if { path /metrics }`. For more information on the `http-request use-service` directive, see the documentation [here][haproxy-use-service-docs]. For more information on HAProxy's Prometheus endpoint see [this blog post][haproxy-prom-blog].
-
-
-```
-frontend stats
-  bind *:8404
-  http-request use-service prometheus-exporter if { path /metrics }
-  stats enable
-  stats uri /
-  stats refresh 10s
-```
-
+[otel-collector-contrib]: https://github.com/open-telemetry/opentelemetry-collector-contrib
 [otel-prom-receiver]: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver
+[ls-docs-access-token]: https://docs.lightstep.com/docs/create-and-manage-access-tokens
 [ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
 [docker-collector-contrib]: https://hub.docker.com/r/otel/opentelemetry-collector-contrib
-[haproxy-use-service-docs]: https://www.haproxy.com/documentation/hapee/latest/onepage/#4.2-http-request%20use-service
 [haproxy-prom-blog]: https://www.haproxy.com/blog/haproxy-exposes-a-prometheus-metrics-endpoint/
