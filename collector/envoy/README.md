@@ -1,6 +1,6 @@
 # Ingest Envoy metrics using OTEL Collector's Prometheus receiver
 
-This example illustrates how you can ingest Envoy metrics using the OTEL collector's Prometheus receiver. Envoy exposes a Prometheus compatible endpoint with the metrics.
+This example illustrates how you can ingest Envoy metrics using the OTEL collector's Prometheus receiver. Envoy exposes a Prometheus compatible metrics endpoint.
 
 ## Requirements
 
