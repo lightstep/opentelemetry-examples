@@ -1,9 +1,6 @@
 # Ingest Envoy metrics using OTEL Collector's Prometheus receiver
 
-The OTEL Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
-
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
-{: .callout}
+This example illustrates how you can ingest Envoy metrics using the OTEL collector's Prometheus receiver. Envoy exposes a Prometheus compatible endpoint with the metrics.
 
 ## Requirements
 
