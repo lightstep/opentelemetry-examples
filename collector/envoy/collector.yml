@@ -19,6 +19,8 @@ exporters:
     endpoint: ingest.lightstep.com:443
     headers:
         "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  file:
+    path: statsout/collector-out.json
 
 processors:
   batch:
@@ -28,4 +30,4 @@ service:
     metrics:
       receivers: [otlp, prometheus/front-proxy]
       processors: [batch]
-      exporters: [otlp/public]
+      exporters: [otlp/public, file]
