@@ -1,0 +1,28 @@
+receivers:
+  mongodb:
+    hosts:
+      - endpoint: localhost:27017
+    username: otel
+    password: $MONGO_PASSWORD
+    collection_interval: 60s
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.staging.lightstep.com:443
+    headers:
+             "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+service:
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    metrics:
+     receivers: [mongodb]
+     processors: [batch]
+     exporters: [logging,otlp]  
