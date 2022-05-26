@@ -4,6 +4,7 @@ receivers:
       http:
       grpc:
   elasticsearch:
+<<<<<<< HEAD
     metrics:
       elasticsearch.node.fs.disk.available:
         enabled: true
@@ -13,6 +14,16 @@ receivers:
       ca_file: /elastic-ca.crt
     username: elastic
     password: changeme
+=======
+    nodes: ["es01"]
+    endpoint: https://es01:9200
+    tls:
+      cert_file: /certs/es01/es01.crt
+      key_file: /certs/es01/es01.key
+      ca_file: /certs/ca/ca.crt
+    username: elastic
+    password: otelpass
+>>>>>>> ccf7152 (# This is a combination of 2 commits.)
 
 exporters:
   logging:
