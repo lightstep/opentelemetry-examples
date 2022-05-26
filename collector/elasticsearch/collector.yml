@@ -1,0 +1,35 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+  elasticsearch:
+    metrics:
+      elasticsearch.node.fs.disk.available:
+        enabled: false
+    nodes: ["es01", "es02", "es03"]
+    skip_cluster_metrics: true
+    endpoint: http://localhost:9200
+    username: otel
+    password: password
+    collection_interval: 10s
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  file:
+    path: statsout/collector-out.json
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, elasticsearch]
+      processors: [batch]
+      exporters: [otlp/public, file]
