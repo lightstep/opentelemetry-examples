@@ -9,7 +9,7 @@ COPY src ./src
 COPY pom-client.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:8
+FROM openjdk:11.0-jre-slim-buster 
 
 COPY --from=build /usr/src/app/target/lightstep-ottrace-client.jar /app/
 
