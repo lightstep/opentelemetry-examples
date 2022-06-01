@@ -10,7 +10,7 @@ COPY src ./src
 COPY pom-client.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:8
+FROM openjdk:8-jre-slim-bullseye
 
 COPY --from=build /usr/src/app/opentelemetry-javaagent.jar /app/
 COPY --from=build /usr/src/app/target/lightstep-otlp-client.jar /app/

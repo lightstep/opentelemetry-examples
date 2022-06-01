@@ -1,4 +1,3 @@
-
 SHELL = /bin/sh
 
 .PHONY: run_from_bin
