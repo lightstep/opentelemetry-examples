@@ -5,6 +5,5 @@ redis
 requests
 sqlalchemy
 opentelemetry-instrumentation==0.26b1
-opentelemetry-instrumentation
 opentelemetry-exporter-otlp
 opentelemetry-propagator-b3
