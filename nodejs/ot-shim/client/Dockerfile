@@ -1,4 +1,4 @@
-FROM node:12.22-bullseye-slim
+FROM node:14-buster-slim
 
 # Create app directory
 WORKDIR /usr/src/client
