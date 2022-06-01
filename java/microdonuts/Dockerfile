@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-8-slim AS build
+FROM maven:3-eclipse-temurin-11 AS build
 
 RUN apt-get update
 RUN apt-get install -y curl
