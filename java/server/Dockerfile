@@ -10,7 +10,7 @@ COPY src ./src
 COPY pom.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:8-jre-slim-bullseye
+FROM openjdk:11.0-jre-slim-buster 
 
 COPY --from=build /usr/src/app/opentracing-specialagent-1.7.0.jar /app/
 COPY --from=build /usr/src/app/target/server-1.0-SNAPSHOT.jar /app/
