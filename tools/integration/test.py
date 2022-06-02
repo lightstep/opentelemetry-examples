@@ -79,7 +79,9 @@ def send_request(url):
 def create_trace():
     span_id = None
     with tracer.start_as_current_span("integration_test_requests") as span:
+        span_id = span.get_span_context().span_id
         for url in _get_destinations():
+            url = "{}?{}".format(url, span_id)
             with tracer.start_as_current_span("send_request_to {}".format(url)) as s:
                 try:
                     res = send_request(url)
@@ -90,7 +92,7 @@ def create_trace():
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
                     s.set_status(Status(StatusCode.ERROR))
-        span_id = span.get_span_context().span_id
+        
     return span_id
 
 
