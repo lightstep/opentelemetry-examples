@@ -419,24 +419,6 @@ services:
             - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
             - DESTINATION_URL=http://java-opentracing-server:10001/order
         stop_grace_period: 1s
-    ##############################
-    ####### .NET examples ########
-    ##############################
-    dotnet-otlp-server:
-        container_name: dotnet-otlp-server
-        image: ghcr.io/lightstep/opentelemetry-examples:dotnet-otlp-server
-        build:
-            context: ./dotnet/server
-            dockerfile: Dockerfile
-        networks:
-            - demo
-        env_file:
-            - .env
-        environment:
-            - LS_SERVICE_NAME=dotnet-otlp-server
-            - LS_SERVICE_VERSION=15.15.15
-            - DESTINATION_URL=http://dotnet-otlp-server
-        stop_grace_period: 1s
     ################################
     ####### Integration test #######
     ################################
@@ -461,7 +443,6 @@ services:
             - java-otlp-server
             - java-launcher-server
             - java-opentracing-server
-            - dotnet-otlp-server
         env_file:
             - .env
         environment:
