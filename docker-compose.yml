@@ -512,6 +512,16 @@ services:
         ports:
             - 0.0.0.0:6379:6379
         stop_grace_period: 1s
+    apache:
+        build: ./collector/apache/httpd
+        container_name: apache
+        ports:
+            - '8080:80'
+        networks:
+            - demo
+        volumes:
+            - ./collector/apache/httpd/website:/usr/local/apache2/htdocs
+        stop_grace_period: 1s
     otel-collector:
         container_name: otel-collector
         image: otel/opentelemetry-collector-contrib:0.50.0
