@@ -10,7 +10,7 @@ COPY src ./src
 COPY pom-server.xml pom.xml
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:11.0-jre-slim-buster 
+FROM ibmjava:8-jre 
 
 COPY --from=build /usr/src/app/opentelemetry-javaagent.jar /app/
 COPY --from=build /usr/src/app/target/lightstep-otlp-server.jar /app/
