@@ -1,7 +1,6 @@
 version: "3.8"
 services:
   otel-collector:
-    # container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:0.51.0
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
@@ -10,7 +9,13 @@ services:
         target: /conf/collector.yml
     volumes:
       - ./statsout:/statsout
-    command: ["--config=/conf/collector.yml"]
+      - certs:/certs
+    command: ['--config=/conf/collector.yml']
+      # ['/bin/sh', '
+      # echo "Waiting for certificate";
+      # until [ ! -f /certs/ca.crt ]; do sleep 10; done;
+      # /otelcol-contrib --config=/conf/collector.yml
+      # ']
 
 # we can send some traffic to the proxy, so charts have data by enabling the loadgen
 # profile like `docker-compose --profile loadgen up`
@@ -27,4 +32,5 @@ configs:
     file: ./collector.yml
 
 volumes:
-  statsout-volume:
+  statsout:
+    driver: local

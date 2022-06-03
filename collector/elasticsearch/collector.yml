@@ -4,15 +4,13 @@ receivers:
       http:
       grpc:
   elasticsearch:
-    metrics:
-      elasticsearch.node.fs.disk.available:
-        enabled: false
-    nodes: ["es01", "es02", "es03"]
-    skip_cluster_metrics: true
-    endpoint: http://localhost:9200
-    username: otel
-    password: password
-    collection_interval: 10s
+    nodes: ["es01"]
+    endpoint: https://es01:9200
+    tls:
+      cert_file: /certs/es01/es01.crt
+      key_file: /certs/es01/es01.key
+    username: elastic
+    password: otelpass
 
 exporters:
   logging:
