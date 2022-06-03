@@ -1,0 +1,9 @@
+---
+http.host: "0.0.0.0"
+
+## X-Pack security credentials
+xpack.monitoring.elasticsearch.hosts: ${ELASTICSEARCH_HOST_PORT}
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.username: ${ELASTIC_USERNAME}
+xpack.monitoring.elasticsearch.password: ${ELASTIC_PASSWORD}
+xpack.monitoring.elasticsearch.ssl.certificate_authority: /certs/ca.crt

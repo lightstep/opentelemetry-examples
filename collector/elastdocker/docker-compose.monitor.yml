@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+
+  # Prometheus Exporters ------------------------------
+  elasticsearch-exporter:
+    image: justwatch/elasticsearch_exporter:1.1.0
+    restart: always
+    command: ["--es.uri", "https://${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}@${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}",
+              "--es.ssl-skip-verify",
+              "--es.all",
+              "--es.snapshots",
+              "--es.indices"]
+    ports:
+      - "9114:9114"
+
+  logstash-exporter:
+    image: alxrem/prometheus-logstash-exporter
+    restart: always
+    ports:
+      - "9304:9304"
+    command: ["-logstash.host", "${LOGSTASH_HOST}"]
+
+  # Cluster Logs Shipper ------------------------------
+  filebeat-cluster-logs:
+    image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
+    restart: always
+    # -e flag to log to stderr and disable syslog/file output
+    command: -e --strict.perms=false
+    user: root
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      KIBANA_HOST_PORT: ${KIBANA_HOST}:${KIBANA_PORT}
+      ELASTICSEARCH_HOST_PORT: https://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+    volumes:
+      - ./filebeat/filebeat.monitoring.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro

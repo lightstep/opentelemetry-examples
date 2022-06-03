@@ -4,14 +4,14 @@ receivers:
       http:
       grpc:
   elasticsearch:
-    nodes: ["es01"]
-    endpoint: https://es01:9200
+    nodes: ["elasticsearch"]
+    endpoint: https://elasticsearch:9200
     tls:
-      cert_file: /certs/es01/es01.crt
-      key_file: /certs/es01/es01.key
-      ca_file: /certs/ca/ca.crt
+      cert_file: /elasticsearch.crt
+      key_file: /elasticsearch.key
+      ca_file: /elastic-ca.crt
     username: elastic
-    password: otelpass
+    password: changeme
 
 exporters:
   logging:

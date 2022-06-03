@@ -1,0 +1,122 @@
+version: '3.5'
+
+# To Join any other app setup using another network, change name and set external = true
+networks:
+  default:
+    name: elastic
+    external: false
+
+# will contain all elasticsearch data.
+volumes:
+  elasticsearch-data:
+
+secrets:
+  elasticsearch.keystore:
+    file: ./secrets/keystore/elasticsearch.keystore
+  elasticsearch.service_tokens:
+    file: ./secrets/service_tokens
+  elastic.ca:
+    file: ./secrets/certs/ca/ca.crt
+  elasticsearch.certificate:
+    file: ./secrets/certs/elasticsearch/elasticsearch.crt
+  elasticsearch.key:
+    file: ./secrets/certs/elasticsearch/elasticsearch.key
+  kibana.certificate:
+    file: ./secrets/certs/kibana/kibana.crt
+  kibana.key:
+    file: ./secrets/certs/kibana/kibana.key
+
+services:
+  elasticsearch:
+    image: elastdocker/elasticsearch:${ELK_VERSION}
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: ${ELK_VERSION}
+    restart: unless-stopped
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTIC_CLUSTER_NAME: ${ELASTIC_CLUSTER_NAME}
+      ELASTIC_NODE_NAME: ${ELASTIC_NODE_NAME}
+      ELASTIC_INIT_MASTER_NODE: ${ELASTIC_INIT_MASTER_NODE}
+      ELASTIC_DISCOVERY_SEEDS: ${ELASTIC_DISCOVERY_SEEDS}
+      ES_JAVA_OPTS: "-Xmx${ELASTICSEARCH_HEAP} -Xms${ELASTICSEARCH_HEAP} -Des.enforce.bootstrap.checks=true -Dlog4j2.formatMsgNoLookups=true"
+      bootstrap.memory_lock: "true"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+    secrets:
+      - source: elasticsearch.keystore
+        target: /usr/share/elasticsearch/config/elasticsearch.keystore
+      - source: elasticsearch.service_tokens
+        target: /usr/share/elasticsearch/config/service_tokens
+      - source: elastic.ca
+        target: /usr/share/elasticsearch/config/certs/ca.crt
+      - source: elasticsearch.certificate
+        target: /usr/share/elasticsearch/config/certs/elasticsearch.crt
+      - source: elasticsearch.key
+        target: /usr/share/elasticsearch/config/certs/elasticsearch.key
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 200000
+        hard: 200000
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -sf --insecure https://$ELASTIC_USERNAME:$ELASTIC_PASSWORD@localhost:9200/_cat/health | grep -ioE 'green|yellow' || echo 'not green/yellow cluster status'"]
+
+  logstash:
+    image: elastdocker/logstash:${ELK_VERSION}
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    restart: unless-stopped
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    secrets:
+      - source: elastic.ca
+        target: /certs/ca.crt
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTICSEARCH_HOST_PORT: https://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+      LS_JAVA_OPTS: "-Xmx${LOGSTASH_HEAP} -Xms${LOGSTASH_HEAP} -Dlog4j2.formatMsgNoLookups=true"
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    healthcheck:
+      test: ["CMD", "curl", "-s" ,"-XGET", "http://127.0.0.1:9600"]
+
+  kibana:
+    image: elastdocker/kibana:${ELK_VERSION}
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    restart: unless-stopped
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config:ro
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTICSEARCH_HOST_PORT: https://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
+    env_file:
+      - ./secrets/.env.kibana.token
+    secrets:
+      - source: elastic.ca
+        target: /certs/ca.crt
+      - source: kibana.certificate
+        target: /certs/kibana.crt
+      - source: kibana.key
+        target: /certs/kibana.key
+    ports:
+      - "5601:5601"
