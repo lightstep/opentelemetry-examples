@@ -1,4 +1,0 @@
-elastic-otel-collector-1  | 2022/06/03 22:06:40 proto: duplicate proto type registered: jaeger.api_v2.PostSpansRequest
-elastic-otel-collector-1  | 2022/06/03 22:06:40 proto: duplicate proto type registered: jaeger.api_v2.PostSpansResponse
-elastic-otel-collector-1  | Error: invalid map resolver config: no URIs
-elastic-otel-collector-1  | 2022/06/03 22:06:40 collector server run finished with error: invalid map resolver config: no URIs
