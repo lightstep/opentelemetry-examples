@@ -10,8 +10,6 @@ receivers:
     nodes: ["elasticsearch"]
     endpoint: "https://elasticsearch:9200"
     tls:
-      # cert_file: /elasticsearch.crt
-      # key_file: /elasticsearch.key
       ca_file: /elastic-ca.crt
     username: elastic
     password: changeme
