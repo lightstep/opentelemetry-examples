@@ -7,6 +7,8 @@ services:
     configs:
       - source: collector_conf
         target: /conf/collector.yml
+    depends_on:
+      - elasticsearch
     secrets:
       # you can make these certs with `make certs`
       # the secrets are defined in docker-compose.yml
@@ -29,12 +31,6 @@ services:
     # to keep this from starting under regular invocation
     profiles:
       - loadgen
-# a service for test
-  netcheck:
-    image: alpine/curl
-    secrets:
-      - source: elastic.ca
-        target: /elastic-ca.crt
 
 configs:
   collector_conf:

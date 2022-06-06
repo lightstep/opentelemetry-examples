@@ -29,6 +29,7 @@ secrets:
   elasticsearch.key:
     file: ./secrets/certs/elasticsearch/elasticsearch.key
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 services:
   elasticsearch:
@@ -67,6 +68,8 @@ version: "3.8"
   kibana.key:
     file: ./secrets/certs/kibana/kibana.key
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
+=======
+>>>>>>> 43056f9 (simplify example)
 
 services:
   elasticsearch:
@@ -148,6 +151,7 @@ services:
     healthcheck:
       test: ["CMD", "sh", "-c", "curl -sf --insecure https://$ELASTIC_USERNAME:$ELASTIC_PASSWORD@localhost:9200/_cat/health | grep -ioE 'green|yellow' || echo 'not green/yellow cluster status'"]
 
+<<<<<<< HEAD
   logstash:
     image: elastdocker/logstash:${ELK_VERSION}
     build:
@@ -229,3 +233,5 @@ volumes:
     ports:
       - "5601:5601"
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
+=======
+>>>>>>> 43056f9 (simplify example)

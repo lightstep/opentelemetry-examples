@@ -1,6 +1,7 @@
 # Monitoring Elasticsearch
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## About this Configuration
 
 Elasticsearch is frequently run as part of the ELK stack with Logstash and Kibana. For clarity we limited this example to a single Elasticsearch node to cover just the information that you need to integrate with Lightstep.
@@ -30,6 +31,13 @@ Note that the file receiver of the OTEL receiver is also configured for this exa
 Some parts of this configuration are derived from the [elastdocker](https://github.com/sherifabdlnaby/elastdocker/) model configuration. It is used and provided under a commercially permissive MIT license.
 =======
 ## The 
+=======
+## Setup
+
+`make setup`
+
+## 
+>>>>>>> 43056f9 (simplify example)
 
 
 
@@ -138,55 +146,14 @@ Elastdocker differs from `deviantony/docker-elk` in the following points.
 
 # Setup
 
-1. Clone the Repository
-     ```bash
-     git clone https://github.com/sherifabdlnaby/elastdocker.git
-     ```
-2. Initialize Elasticsearch Keystore and TLS Self-Signed Certificates
+1. Initialize Elasticsearch Keystore and TLS Self-Signed Certificates
     ```bash
     $ make setup
     ```
     > **For Linux's docker hosts only**. By default virtual memory [is not enough](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html) so run the next command as root `sysctl -w vm.max_map_count=262144`
-3. Start Elastic Stack
-    ```bash
-    $ make elk           <OR>         $ docker-compose up -d
-    ```
-4. Visit Kibana at [https://localhost:5601](https://localhost:5601) or `https://<your_public_ip>:5601`
 
-    Default Username: `elastic`, Password: `changeme`
-
-    > - Notice that Kibana is configured to use HTTPS, so you'll need to write `https://` before `localhost:5601` in the browser.
     > - Modify `.env` file for your needs, most importantly `ELASTIC_PASSWORD` that setup your superuser `elastic`'s password, `ELASTICSEARCH_HEAP` & `LOGSTASH_HEAP` for Elasticsearch & Logstash Heap Size.
     
-> Whatever your Host (e.g AWS EC2, Azure, DigitalOcean, or on-premise server), once you expose your host to the network, ELK component will be accessible on their respective ports. Since the enabled TLS uses a self-signed certificate, it is recommended to SSL-Terminate public traffic using your signed certificates. 
-
-> 🏃🏻‍♂️ To start ingesting logs, you can start by running `make collect-docker-logs` which will collect your host's container logs.
-
-## Additional Commands
-
-<details><summary>Expand</summary>
-<p>
-
-#### To Start Monitoring and Prometheus Exporters
-```shell
-$ make monitoring
-```
-#### To Start Tools
-```shell
-$ make tools
-```
-#### To Ship Docker Container Logs to ELK 
-```shell
-$ make collect-docker-logs
-```
-#### To Start **Elastic Stack, Tools and Monitoring**
-```
-$ make all
-```
-#### To Start 2 Extra Elasticsearch nodes (recommended for experimenting only)
-```shell
-$ make nodes
-```
 #### To Rebuild Images
 ```shell
 $ make build
@@ -200,9 +167,6 @@ $ make down
 ```shell
 $ make prune
 ```
-
-</p>
-</details>
 
 # Configuration
 
@@ -227,62 +191,15 @@ To Re-generate Keystore:
 make keystore
 ```
 
-### Notes
-
-
-- ⚠️ Elasticsearch HTTP layer is using SSL, thus mean you need to configure your elasticsearch clients with the `CA` in `secrets/certs/ca/ca.crt`, or configure client to ignore SSL Certificate Verification (e.g `--insecure` in `curl`).
-
-- Adding Two Extra Nodes to the cluster will make the cluster depending on them and won't start without them again.
-
-- Makefile is a wrapper around `Docker-Compose` commands, use `make help` to know every command.
-
-- Elasticsearch will save its data to a volume named `elasticsearch-data`
-
-- Elasticsearch Keystore (that contains passwords and credentials) and SSL Certificate are generated in the `./secrets` directory by the setup command.
-
-- Make sure to run `make setup` if you changed `ELASTIC_PASSWORD` and to restart the stack afterwards.
-
-- For Linux Users it's recommended to set the following configuration (run as `root`)
-    ```
-    sysctl -w vm.max_map_count=262144
-    ```
-    By default, Virtual Memory [is not enough](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html).
-
----------------------------
-
-![Intro](https://user-images.githubusercontent.com/16992394/156664447-c24c49f4-4282-4d6a-81a7-10743cfa384e.png)
-![Alerting](https://user-images.githubusercontent.com/16992394/156664848-d14f5e58-8f80-497d-a841-914c05a4b69c.png)
-![Maps](https://user-images.githubusercontent.com/16992394/156664562-d38e11ee-b033-4b91-80bd-3a866ad65f56.png)
-![ML](https://user-images.githubusercontent.com/16992394/156664695-5c1ed4a7-82f3-47a6-ab5c-b0ce41cc0fbe.png)
-
-
-# Monitoring The Cluster
-
-### Via Self-Monitoring
-
-Head to Stack Monitoring tab in Kibana to see cluster metrics for all stack components.
-
-![Overview](https://user-images.githubusercontent.com/16992394/156664539-cc7e1a69-f1aa-4aca-93f6-7aedaabedd2c.png)
-![Moniroting](https://user-images.githubusercontent.com/16992394/156664647-78cfe2af-489d-4c35-8963-9b0a46904cf7.png)
-
-> In Production, cluster metrics should be shipped to another dedicated monitoring cluster.
-
-### Via Prometheus Exporters
-If you started Prometheus Exporters using `make monitoring` command. Prometheus Exporters will expose metrics at the following ports.
-
-| **Prometheus Exporter**      | **Port**     | **Recommended Grafana Dashboard**                                         |
-|--------------------------    |----------    |------------------------------------------------  |
-| `elasticsearch-exporter`     | `9114`       | [Elasticsearch by Kristian Jensen](https://grafana.com/grafana/dashboards/4358)                                                |
-| `logstash-exporter`          | `9304`       | [logstash-monitoring by dpavlos](https://github.com/dpavlos/logstash-monitoring)                                               |
-
-![Metrics](https://user-images.githubusercontent.com/16992394/78685076-89a58900-78f1-11ea-959b-ce374fe51500.jpg)
-
-
 # License
 [MIT License](https://raw.githubusercontent.com/sherifabdlnaby/elastdocker/master/LICENSE)
+<<<<<<< HEAD
 Copyright (c) 2020 Sherif Abdel-Naby
 
 # Contribution
 
 PR(s) are Open and Welcomed.
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
+=======
+Copyright (c) 90% Sherif Abdel-Naby 2020-2022 + 10% Lightstep 2022
+>>>>>>> 43056f9 (simplify example)

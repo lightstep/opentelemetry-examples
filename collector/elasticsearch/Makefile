@@ -1,6 +1,7 @@
 .DEFAULT_GOAL:=help
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # --------------------------
 .PHONY: setup keystore certs all elastic build down stop restart rm logs
 
@@ -20,8 +21,10 @@ ELK_NODES := elasticsearch-1 elasticsearch-2
 ELK_MAIN_SERVICES := ${ELK_SERVICES} ${ELK_MONITORING} ${ELK_TOOLS}
 ELK_ALL_SERVICES := ${ELK_MAIN_SERVICES} ${ELK_NODES} ${ELK_LOG_COLLECTION}
 
+=======
+>>>>>>> 43056f9 (simplify example)
 # --------------------------
-.PHONY: setup keystore certs all elk monitoring tools build down stop restart rm logs
+.PHONY: setup keystore certs all elastic build down stop restart rm logs
 
 keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
 	docker-compose -f docker-compose.setup.yml run --rm keystore
@@ -34,6 +37,7 @@ setup:		    ## Generate Elasticsearch SSL Certs and Keystore.
 	@make certs
 	@make keystore
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 elastic:		    ## Start Elastic.
 	docker-compose up -d --build
@@ -80,51 +84,46 @@ all:		    ## Start Elk and all its component (ELK, Monitoring, and Tools).
 	docker-compose ${COMPOSE_ALL_FILES} up -d --build ${ELK_MAIN_SERVICES}
 
 elk:		    ## Start ELK.
+=======
+elastic:		    ## Start Elastic.
+>>>>>>> 43056f9 (simplify example)
 	docker-compose up -d --build
 
 up:
-	@make elk
-	@echo "Visit Kibana: https://localhost:5601"
+	@make elastic
 
-monitoring:		## Start ELK Monitoring.
-	@docker-compose ${COMPOSE_MONITORING} up -d --build ${ELK_MONITORING}
+build:			## Build ElasticSearch and all its extra components.
+	@docker-compose build 
 
-collect-docker-logs:		## Start Filebeat that collects all Host Docker Logs and ship it to ELK
-	@docker-compose ${COMPOSE_LOGGING} up -d --build ${ELK_LOG_COLLECTION}
-
-tools:		    ## Start ELK Tools (ElastAlert, Curator).
-	@docker-compose ${COMPOSE_TOOLS} up -d --build ${ELK_TOOLS}
-
-nodes:		    ## Start Two Extra Elasticsearch Nodes
-	@docker-compose ${COMPOSE_NODES} up -d --build ${ELK_NODES}
-
-build:			## Build ELK and all its extra components.
-	@docker-compose ${COMPOSE_ALL_FILES} build ${ELK_ALL_SERVICES}
 ps:				## Show all running containers.
-	@docker-compose ${COMPOSE_ALL_FILES} ps
+	@docker-compose ps
 
-down:			## Down ELK and all its extra components.
-	@docker-compose ${COMPOSE_ALL_FILES} down
+down:			## Down ElasticSearch and all its extra components.
+	@docker-compose down
 
-stop:			## Stop ELK and all its extra components.
-	@docker-compose ${COMPOSE_ALL_FILES} stop ${ELK_ALL_SERVICES}
+stop:			## Stop Elasticsearch and all its extra components.
+	@docker-compose stop 
 	
-restart:		## Restart ELK and all its extra components.
-	@docker-compose ${COMPOSE_ALL_FILES} restart ${ELK_ALL_SERVICES}
+restart:		## Restart ElasticSearch and all its extra components.
+	@docker-compose restart 
 
-rm:				## Remove ELK and all its extra components containers.
-	@docker-compose $(COMPOSE_ALL_FILES) rm -f ${ELK_ALL_SERVICES}
+rm:				## Remove ElasticSearch and all its extra components containers.
+	@docker-compose rm
 
 logs:			## Tail all logs with -n 1000.
-	@docker-compose $(COMPOSE_ALL_FILES) logs --follow --tail=1000 ${ELK_ALL_SERVICES}
+	@docker-compose logs --follow --tail=1000 
 
-images:			## Show all Images of ELK and all its extra components.
-	@docker-compose $(COMPOSE_ALL_FILES) images ${ELK_ALL_SERVICES}
+images:			## Show all Images of ElasticSearch and all its extra components.
+	@docker-compose images 
 
-prune:			## Remove ELK Containers and Delete ELK-related Volume Data (the elastic_elasticsearch-data volume)
+prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
 	@make stop && make rm
+<<<<<<< HEAD
 	@docker volume prune -f --filter label=com.docker.compose.project=elastic
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
+=======
+	@docker volume prune -f --filter label=com.docker.compose.project=Elastic
+>>>>>>> 43056f9 (simplify example)
 
 help:       	## Show this help.
 	@echo "Make Application Docker Images and Containers using Docker-Compose files in 'docker' Dir."

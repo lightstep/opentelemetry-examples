@@ -24,8 +24,6 @@ receivers:
 =======
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
     tls:
-      # cert_file: /elasticsearch.crt
-      # key_file: /elasticsearch.key
       ca_file: /elastic-ca.crt
     username: elastic
 <<<<<<< HEAD
