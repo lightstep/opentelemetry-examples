@@ -8,7 +8,8 @@ services:
       - source: collector_conf
         target: /conf/collector.yml
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
     secrets:
       # you can make these certs with `make certs`
       # the secrets are defined in docker-compose.yml
