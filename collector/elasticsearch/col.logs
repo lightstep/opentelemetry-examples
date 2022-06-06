@@ -1,8 +1,0 @@
-elastic-otel-collector-1  | 2022/06/06 14:36:47 proto: duplicate proto type registered: jaeger.api_v2.PostSpansRequest
-elastic-otel-collector-1  | 2022/06/06 14:36:47 proto: duplicate proto type registered: jaeger.api_v2.PostSpansResponse
-elastic-otel-collector-1  | Error: failed to get config: cannot resolve the configuration: unable to parse yaml: yaml: line 8: did not find expected key
-elastic-otel-collector-1  | 2022/06/06 14:36:47 collector server run finished with error: failed to get config: cannot resolve the configuration: unable to parse yaml: yaml: line 8: did not find expected key
-elastic-otel-collector-1  | 2022/06/06 14:43:48 proto: duplicate proto type registered: jaeger.api_v2.PostSpansRequest
-elastic-otel-collector-1  | 2022/06/06 14:43:48 proto: duplicate proto type registered: jaeger.api_v2.PostSpansResponse
-elastic-otel-collector-1  | Error: failed to get config: cannot resolve the configuration: unable to parse yaml: yaml: line 10: did not find expected key
-elastic-otel-collector-1  | 2022/06/06 14:43:48 collector server run finished with error: failed to get config: cannot resolve the configuration: unable to parse yaml: yaml: line 10: did not find expected key
