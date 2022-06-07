@@ -47,6 +47,7 @@ elastic:		    ## Start Elastic.
 
 up:
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
 		make setup; echo "Setup complete."; fi
 	@make elastic
@@ -96,6 +97,9 @@ elastic:		    ## Start Elastic.
 up:
 =======
 	if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
+=======
+	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
+>>>>>>> 93728d9 (update rules and names)
 		make setup; echo "Setup complete."; fi
 >>>>>>> b10d96e ([es] Remove unused example parts)
 	@make elastic
@@ -117,6 +121,8 @@ restart:		## Restart ElasticSearch and all its extra components.
 
 rm:				## Remove ElasticSearch and all its extra components containers.
 	@docker-compose rm
+	@rm -rf secrets
+	@rm -rf statsout
 
 logs:			## Tail all logs with -n 1000.
 	@docker-compose logs --follow --tail=1000 
@@ -137,8 +143,12 @@ prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Vol
 	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
 
 clean:
+<<<<<<< HEAD
 	rm -rf secrets
 >>>>>>> b10d96e ([es] Remove unused example parts)
+=======
+	@make rm
+>>>>>>> 93728d9 (update rules and names)
 
 help:       	## Show this help.
 	@echo "Make Application Docker Images and Containers using Docker-Compose files in 'docker' Dir."

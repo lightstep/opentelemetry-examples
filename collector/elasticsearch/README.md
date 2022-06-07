@@ -29,6 +29,7 @@ Note that the file receiver of the OTEL receiver is also configured for this exa
 ## License
 
 Some parts of this configuration are derived from the [elastdocker](https://github.com/sherifabdlnaby/elastdocker/) model configuration. It is used and provided under a commercially permissive MIT license.
+<<<<<<< HEAD
 =======
 ## The 
 =======
@@ -203,3 +204,5 @@ PR(s) are Open and Welcomed.
 =======
 Copyright (c) 90% Sherif Abdel-Naby 2020-2022 + 10% Lightstep 2022
 >>>>>>> 43056f9 (simplify example)
+=======
+>>>>>>> 93728d9 (update rules and names)
