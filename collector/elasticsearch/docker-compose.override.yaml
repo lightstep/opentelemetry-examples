@@ -7,15 +7,18 @@ services:
     configs:
       - source: collector_conf
         target: /conf/collector.yml
+    secrets:
+      # you can make these certs with `make certs`
+      # the secrets are defined in docker-compose.yml
+      - source: elastic.ca
+        target: /elastic-ca.crt
+      - source: elasticsearch.certificate
+        target: /elasticsearch.crt
+      - source: elasticsearch.key
+        target: /elasticsearch.key
     volumes:
       - ./statsout:/statsout
-      - certs:/certs
-    command: ['--config=/conf/collector.yml']
-      # ['/bin/sh', '
-      # echo "Waiting for certificate";
-      # until [ ! -f /certs/ca.crt ]; do sleep 10; done;
-      # /otelcol-contrib --config=/conf/collector.yml
-      # ']
+    command: ["--config=/conf/collector.yml"]
 
 # we can send some traffic to the proxy, so charts have data by enabling the loadgen
 # profile like `docker-compose --profile loadgen up`
@@ -26,6 +29,12 @@ services:
     # to keep this from starting under regular invocation
     profiles:
       - loadgen
+# a service for test
+  netcheck:
+    image: alpine/curl
+    secrets:
+      - source: elastic.ca
+        target: /elastic-ca.crt
 
 configs:
   collector_conf:

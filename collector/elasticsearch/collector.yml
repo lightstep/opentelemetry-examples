@@ -5,11 +5,15 @@ receivers:
       grpc:
   elasticsearch:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> cbfd42f (Refactor docker-compose and .env)
     metrics:
       elasticsearch.node.fs.disk.available:
         enabled: true
     nodes: ["elasticsearch"]
     endpoint: "https://elasticsearch:9200"
+<<<<<<< HEAD
     tls:
       ca_file: /elastic-ca.crt
     username: elastic
@@ -17,13 +21,19 @@ receivers:
 =======
     nodes: ["es01"]
     endpoint: https://es01:9200
+=======
+>>>>>>> cbfd42f (Refactor docker-compose and .env)
     tls:
-      cert_file: /certs/es01/es01.crt
-      key_file: /certs/es01/es01.key
-      ca_file: /certs/ca/ca.crt
+      # cert_file: /elasticsearch.crt
+      # key_file: /elasticsearch.key
+      ca_file: /elastic-ca.crt
     username: elastic
+<<<<<<< HEAD
     password: otelpass
 >>>>>>> ccf7152 (# This is a combination of 2 commits.)
+=======
+    password: changeme
+>>>>>>> cbfd42f (Refactor docker-compose and .env)
 
 exporters:
   logging:
