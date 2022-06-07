@@ -26,6 +26,8 @@ receivers:
             - opentelemetry-tests
         tls:
             insecure: true
+    apache:
+        endpoint: "http://apache:80/server-status?auto"
   
 exporters:
     prometheus:
@@ -63,5 +65,5 @@ service:
         exporters: [logging, otlp]
         processors: [batch]
       metrics:
-        receivers: [mysql, prometheus, redis, postgresql]
+        receivers: [mysql, prometheus, redis, postgresql, apache]
         exporters: [logging, otlp]

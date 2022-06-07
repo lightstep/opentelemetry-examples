@@ -1,0 +1,74 @@
+version: "3.2"
+services:
+  rabbitmq-leader:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq-leader'
+    hostname: leader
+    ports:
+        - 5672:5672
+        - 15692:15692
+    volumes:
+      - ./rabbitmq-leader.conf:/etc/rabbitmq.conf
+    networks:
+        - localhost
+    environment: # https://www.rabbitmq.com/configure.html#customise-environment
+        - RABBITMQ_NODENAME=leader
+        - RABBITMQ_NODE_TYPE=stats
+        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
+        - RABBITMQ_ULIMIT_NOFILES=65536
+        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
+        - RABBITMQ_ERLANG_COOKIE=12ADJA3
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+  rabbitmq-node-2:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq-2'
+    hostname:  node2
+    ports:
+        - 5672
+        - 15672
+        - 15692
+    volumes:
+      - ./rabbitmq-node-2.conf:/etc/rabbitmq.conf
+    networks:
+        - localhost
+    environment: # https://www.rabbitmq.com/configure.html#customise-environment
+        - RABBITMQ_NODENAME=node2
+        - RABBITMQ_NODE_TYPE=stats
+        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
+        - RABBITMQ_ULIMIT_NOFILES=65536
+        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
+        - RABBITMQ_ERLANG_COOKIE=12ADJA3
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+  rabbitmq-node-3:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq-3'
+    hostname:  node3
+    ports:
+        - 5672
+        - 15672
+    volumes:
+      - ./rabbitmq-node-3.conf:/etc/rabbitmq.conf
+    networks:
+        - localhost
+    environment: # https://www.rabbitmq.com/configure.html#customise-environment
+        - RABBITMQ_NODENAME=node3
+        - RABBITMQ_NODE_TYPE=stats
+        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
+        - RABBITMQ_ULIMIT_NOFILES=65536
+        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
+        - RABBITMQ_ERLANG_COOKIE=12ADJA3
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+networks:
+  localhost:
