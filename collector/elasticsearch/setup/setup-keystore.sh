@@ -4,12 +4,6 @@ set -e
 GENERATED_KEYSTORE=/usr/share/elasticsearch/config/elasticsearch.keystore
 OUTPUT_KEYSTORE=/secrets/keystore/elasticsearch.keystore
 
-<<<<<<< HEAD
-=======
-GENERATED_SERVICE_TOKENS=/usr/share/elasticsearch/config/service_tokens
-OUTPUT_SERVICE_TOKENS=/secrets/service_tokens
-
->>>>>>> 43056f9 (simplify example)
 # Password Generate
 PW=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16 ;)
 ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-$PW}"

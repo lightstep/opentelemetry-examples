@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cbfd42f (Refactor docker-compose and .env)
 version: '3.5'
 
 # To Join any other app setup using another network, change name and set external = true
@@ -17,19 +13,12 @@ volumes:
 secrets:
   elasticsearch.keystore:
     file: ./secrets/keystore/elasticsearch.keystore
-<<<<<<< HEAD
-=======
-  elasticsearch.service_tokens:
-    file: ./secrets/service_tokens
->>>>>>> cbfd42f (Refactor docker-compose and .env)
   elastic.ca:
     file: ./secrets/certs/ca/ca.crt
   elasticsearch.certificate:
     file: ./secrets/certs/elasticsearch/elasticsearch.crt
   elasticsearch.key:
     file: ./secrets/certs/elasticsearch/elasticsearch.key
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 services:
   elasticsearch:
@@ -58,180 +47,14 @@ services:
       - source: elasticsearch.key
         target: /usr/share/elasticsearch/config/certs/elasticsearch.key
     ports:
-      - "9200:9200"
-      - "9300:9300"
-=======
-version: "3.8"
-=======
-  kibana.certificate:
-    file: ./secrets/certs/kibana/kibana.crt
-  kibana.key:
-    file: ./secrets/certs/kibana/kibana.key
->>>>>>> cbfd42f (Refactor docker-compose and .env)
-=======
->>>>>>> 43056f9 (simplify example)
-
-services:
-  elasticsearch:
-    image: elastdocker/elasticsearch:${ELK_VERSION}
-    build:
-      context: elasticsearch/
-      args:
-        ELK_VERSION: ${ELK_VERSION}
-    restart: unless-stopped
-    environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTIC_CLUSTER_NAME: ${ELASTIC_CLUSTER_NAME}
-      ELASTIC_NODE_NAME: ${ELASTIC_NODE_NAME}
-      ELASTIC_INIT_MASTER_NODE: ${ELASTIC_INIT_MASTER_NODE}
-      ELASTIC_DISCOVERY_SEEDS: ${ELASTIC_DISCOVERY_SEEDS}
-      ES_JAVA_OPTS: "-Xmx${ELASTICSEARCH_HEAP} -Xms${ELASTICSEARCH_HEAP} -Des.enforce.bootstrap.checks=true -Dlog4j2.formatMsgNoLookups=true"
-      bootstrap.memory_lock: "true"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-    secrets:
-      - source: elasticsearch.keystore
-        target: /usr/share/elasticsearch/config/elasticsearch.keystore
-      - source: elasticsearch.service_tokens
-        target: /usr/share/elasticsearch/config/service_tokens
-      - source: elastic.ca
-        target: /usr/share/elasticsearch/config/certs/ca.crt
-      - source: elasticsearch.certificate
-        target: /usr/share/elasticsearch/config/certs/elasticsearch.crt
-      - source: elasticsearch.key
-        target: /usr/share/elasticsearch/config/certs/elasticsearch.key
-    ports:
-<<<<<<< HEAD
       - ${ES_PORT}:9200
-    environment:
-      - node.name=es01
-      - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01,es02,es03
-      - discovery.seed_hosts=es02,es03
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/es01/es01.key
-      - xpack.security.http.ssl.certificate=certs/es01/es01.crt
-      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.http.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.key=certs/es01/es01.key
-      - xpack.security.transport.ssl.certificate=certs/es01/es01.crt
-      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.license.self_generated.type=${LICENSE}
-    mem_limit: ${MEM_LIMIT}
->>>>>>> ccf7152 (# This is a combination of 2 commits.)
-=======
-      - "9200:9200"
-      - "9300:9300"
->>>>>>> cbfd42f (Refactor docker-compose and .env)
     ulimits:
       memlock:
         soft: -1
         hard: -1
-<<<<<<< HEAD
-<<<<<<< HEAD
       nofile:
         soft: 200000
         hard: 200000
     healthcheck:
       test: ["CMD", "sh", "-c", "curl -sf --insecure https://$ELASTIC_USERNAME:$ELASTIC_PASSWORD@localhost:9200/_cat/health | grep -ioE 'green|yellow' || echo 'not green/yellow cluster status'"]
-=======
-=======
-      nofile:
-        soft: 200000
-        hard: 200000
->>>>>>> cbfd42f (Refactor docker-compose and .env)
-    healthcheck:
-      test: ["CMD", "sh", "-c", "curl -sf --insecure https://$ELASTIC_USERNAME:$ELASTIC_PASSWORD@localhost:9200/_cat/health | grep -ioE 'green|yellow' || echo 'not green/yellow cluster status'"]
 
-<<<<<<< HEAD
-  logstash:
-    image: elastdocker/logstash:${ELK_VERSION}
-    build:
-      context: logstash/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    restart: unless-stopped
-    volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    secrets:
-      - source: elastic.ca
-        target: /certs/ca.crt
-    environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTICSEARCH_HOST_PORT: https://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
-      LS_JAVA_OPTS: "-Xmx${LOGSTASH_HEAP} -Xms${LOGSTASH_HEAP} -Dlog4j2.formatMsgNoLookups=true"
-    ports:
-      - "5044:5044"
-      - "9600:9600"
-    healthcheck:
-      test: ["CMD", "curl", "-s" ,"-XGET", "http://127.0.0.1:9600"]
-
-  kibana:
-    image: elastdocker/kibana:${ELK_VERSION}
-    build:
-      context: kibana/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    restart: unless-stopped
-    volumes:
-      - ./kibana/config/:/usr/share/kibana/config:ro
-    environment:
-<<<<<<< HEAD
-      - SERVERNAME=kibana
-      - ELASTICSEARCH_HOSTS=https://es01:9200
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
-    mem_limit: ${MEM_LIMIT}
-    healthcheck:
-      test:
-        [
-            "CMD-SHELL",
-          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 120
-
-volumes:
-  certs:
-    driver: local
-  esdata01:
-    driver: local
-  esdata02:
-    driver: local
-  esdata03:
-    driver: local
-  kibanadata:
-    driver: local
->>>>>>> ccf7152 (# This is a combination of 2 commits.)
-
-=======
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTICSEARCH_HOST_PORT: https://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}
-    env_file:
-      - ./secrets/.env.kibana.token
-    secrets:
-      - source: elastic.ca
-        target: /certs/ca.crt
-      - source: kibana.certificate
-        target: /certs/kibana.crt
-      - source: kibana.key
-        target: /certs/kibana.key
-    ports:
-      - "5601:5601"
->>>>>>> cbfd42f (Refactor docker-compose and .env)
-=======
->>>>>>> 43056f9 (simplify example)
