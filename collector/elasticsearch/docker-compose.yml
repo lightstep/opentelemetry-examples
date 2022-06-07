@@ -13,8 +13,6 @@ volumes:
 secrets:
   elasticsearch.keystore:
     file: ./secrets/keystore/elasticsearch.keystore
-  elasticsearch.service_tokens:
-    file: ./secrets/service_tokens
   elastic.ca:
     file: ./secrets/certs/ca/ca.crt
   elasticsearch.certificate:
@@ -24,11 +22,7 @@ secrets:
 
 services:
   elasticsearch:
-    image: elastdocker/elasticsearch:${ELK_VERSION}
-    build:
-      context: elasticsearch/
-      args:
-        ELK_VERSION: ${ELK_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     restart: unless-stopped
     environment:
       ELASTIC_USERNAME: ${ELASTIC_USERNAME}
@@ -41,13 +35,11 @@ services:
       bootstrap.memory_lock: "true"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./configs/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
     secrets:
       - source: elasticsearch.keystore
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
-      - source: elasticsearch.service_tokens
-        target: /usr/share/elasticsearch/config/service_tokens
       - source: elastic.ca
         target: /usr/share/elasticsearch/config/certs/ca.crt
       - source: elasticsearch.certificate

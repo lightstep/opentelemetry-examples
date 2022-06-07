@@ -4,9 +4,6 @@ set -e
 GENERATED_KEYSTORE=/usr/share/elasticsearch/config/elasticsearch.keystore
 OUTPUT_KEYSTORE=/secrets/keystore/elasticsearch.keystore
 
-GENERATED_SERVICE_TOKENS=/usr/share/elasticsearch/config/service_tokens
-OUTPUT_SERVICE_TOKENS=/secrets/service_tokens
-
 # Password Generate
 PW=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16 ;)
 ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-$PW}"
@@ -31,16 +28,6 @@ echo "Saving new elasticsearch.keystore"
 mkdir -p "$(dirname $OUTPUT_KEYSTORE)"
 mv $GENERATED_KEYSTORE $OUTPUT_KEYSTORE
 chmod 0644 $OUTPUT_KEYSTORE
-
-# Replace current Service Tokens File
-if [ -f "$OUTPUT_SERVICE_TOKENS" ]; then
-    echo "Remove old service_tokens file"
-    rm $OUTPUT_SERVICE_TOKENS
-fi
-
-echo "Saving new service_tokens file"
-mv $GENERATED_SERVICE_TOKENS $OUTPUT_SERVICE_TOKENS
-chmod 0644 $OUTPUT_SERVICE_TOKENS
 
 printf "======= Keystore setup completed successfully =======\n"
 printf "=====================================================\n"
