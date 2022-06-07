@@ -22,6 +22,8 @@ Edit the .env file to adjust variables for your configuration.
 
 The base `docker-commpose.yml` file includes the Elasticsearch node. The file `docker-compose.override.yml` includes the OTEL Collector. And `docker-compose.setup.yml` includes services that setup the requisite Elastic keystore and certificates.
 
+Note that the file receiver of the OTEL receiver is also configured for this example to simplify inspection of the output.
+
 ## License
 
-Some parts of this configuration are derived from the [elastdocker](https://github.com/sherifabdlnaby/elastdocker/) model configuration. It is provided with a commercially permissive MIT license.
+Some parts of this configuration are derived from the [elastdocker](https://github.com/sherifabdlnaby/elastdocker/) model configuration. It is used and provided under a commercially permissive MIT license.
