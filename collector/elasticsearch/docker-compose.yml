@@ -47,7 +47,8 @@ services:
       - source: elasticsearch.key
         target: /usr/share/elasticsearch/config/certs/elasticsearch.key
     ports:
-      - ${ES_PORT}:9200
+      - ${ELASTICSEARCH_PORT}:9200
+      - 9300:9300
     ulimits:
       memlock:
         soft: -1

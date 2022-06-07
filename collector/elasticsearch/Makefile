@@ -5,11 +5,6 @@
 
 keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
 	docker-compose -f docker-compose.setup.yml run --rm keystore
-# --------------------------
-.PHONY: setup keystore certs all elastic build down stop restart rm logs
-
-keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
-	docker-compose -f docker-compose.setup.yml run --rm keystore
 
 certs:		    ## Generate Elasticsearch SSL Certs.
 	docker-compose -f docker-compose.setup.yml run --rm certs
@@ -21,11 +16,6 @@ setup:		    ## Generate Elasticsearch SSL Certs and Keystore.
 elastic:		    ## Start Elastic.
 	docker-compose up -d --build
 
-up:
-	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
-		make setup; echo "Setup complete."; fi
-	@make elastic
-
 build:			## Build ElasticSearch and all its extra components.
 	@docker-compose build 
 
@@ -55,58 +45,18 @@ images:			## Show all Images of ElasticSearch and all its extra components.
 prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
 	@make stop && make rm
 	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
-
-clean:
-	@make rm
 
 all:		    ## Start Elk and all its component (ELK, Monitoring, and Tools).
 	docker-compose ${COMPOSE_ALL_FILES} up -d --build ${ELK_MAIN_SERVICES}
 
-elk:		    ## Start ELK.
-
-elastic:		    ## Start Elastic.
-	docker-compose up -d --build
-
 up:
-	if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
 	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
 		make setup; echo "Setup complete."; fi
 	@make elastic
 
-build:			## Build ElasticSearch and all its extra components.
-	@docker-compose build 
-
-ps:				## Show all running containers.
-	@docker-compose ps
-
-down:			## Down ElasticSearch and all its extra components.
-	@docker-compose down
-
-stop:			## Stop Elasticsearch and all its extra components.
-	@docker-compose stop 
-	
-restart:		## Restart ElasticSearch and all its extra components.
-	@docker-compose restart 
-
-rm:				## Remove ElasticSearch and all its extra components containers.
-	@docker-compose rm
-	@rm -rf secrets
-	@rm -rf statsout
-
-logs:			## Tail all logs with -n 1000.
-	@docker-compose logs --follow --tail=1000 
-
-images:			## Show all Images of ElasticSearch and all its extra components.
-	@docker-compose images 
-
-prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
-	@make stop && make rm
-	@docker volume prune -f --filter label=com.docker.compose.project=elastic
-	@docker volume prune -f --filter label=com.docker.compose.project=Elastic
-	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
-
 clean:
 	rm -rf secrets
+	rm -rf statsout
 	@make rm
 
 help:       	## Show this help.
