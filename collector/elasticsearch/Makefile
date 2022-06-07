@@ -5,7 +5,6 @@
 
 keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
 	docker-compose -f docker-compose.setup.yml run --rm keystore
-
 certs:		    ## Generate Elasticsearch SSL Certs.
 	docker-compose -f docker-compose.setup.yml run --rm certs
 
@@ -17,6 +16,8 @@ elastic:		    ## Start Elastic.
 	docker-compose up -d --build
 
 up:
+	if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
+		make setup; echo "Setup complete."; fi
 	@make elastic
 
 build:			## Build ElasticSearch and all its extra components.
@@ -45,7 +46,10 @@ images:			## Show all Images of ElasticSearch and all its extra components.
 
 prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
 	@make stop && make rm
-	@docker volume prune -f --filter label=com.docker.compose.project=Elastic
+	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
+
+clean:
+	rm -rf secrets
 
 help:       	## Show this help.
 	@echo "Make Application Docker Images and Containers using Docker-Compose files in 'docker' Dir."
