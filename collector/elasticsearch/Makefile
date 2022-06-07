@@ -28,8 +28,11 @@ ELK_ALL_SERVICES := ${ELK_MAIN_SERVICES} ${ELK_NODES} ${ELK_LOG_COLLECTION}
 
 keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
 	docker-compose -f docker-compose.setup.yml run --rm keystore
+<<<<<<< HEAD
 
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
+=======
+>>>>>>> b10d96e ([es] Remove unused example parts)
 certs:		    ## Generate Elasticsearch SSL Certs.
 	docker-compose -f docker-compose.setup.yml run --rm certs
 
@@ -43,6 +46,7 @@ elastic:		    ## Start Elastic.
 	docker-compose up -d --build
 
 up:
+<<<<<<< HEAD
 	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
 		make setup; echo "Setup complete."; fi
 	@make elastic
@@ -90,6 +94,10 @@ elastic:		    ## Start Elastic.
 	docker-compose up -d --build
 
 up:
+=======
+	if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
+		make setup; echo "Setup complete."; fi
+>>>>>>> b10d96e ([es] Remove unused example parts)
 	@make elastic
 
 build:			## Build ElasticSearch and all its extra components.
@@ -119,11 +127,18 @@ images:			## Show all Images of ElasticSearch and all its extra components.
 prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
 	@make stop && make rm
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@docker volume prune -f --filter label=com.docker.compose.project=elastic
 >>>>>>> cbfd42f (Refactor docker-compose and .env)
 =======
 	@docker volume prune -f --filter label=com.docker.compose.project=Elastic
 >>>>>>> 43056f9 (simplify example)
+=======
+	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
+
+clean:
+	rm -rf secrets
+>>>>>>> b10d96e ([es] Remove unused example parts)
 
 help:       	## Show this help.
 	@echo "Make Application Docker Images and Containers using Docker-Compose files in 'docker' Dir."
