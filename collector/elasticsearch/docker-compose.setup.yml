@@ -2,11 +2,11 @@ version: '3.5'
 
 services:
   keystore:
-    image: elastdocker/elasticsearch:${ELK_VERSION}
+    image: elastdocker/elasticsearch:${ELASTIC_VERSION}
     build:
       context: elasticsearch/
       args:
-        ELK_VERSION: ${ELK_VERSION}
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
     command: bash /setup/setup-keystore.sh
     user: "0"
     volumes:
@@ -16,11 +16,11 @@ services:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
 
   certs:
-    image: elastdocker/elasticsearch:${ELK_VERSION}
+    image: elastdocker/elasticsearch:${ELASTIC_VERSION}
     build:
       context: elasticsearch/
       args:
-        ELK_VERSION: ${ELK_VERSION}
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
     command: bash /setup/setup-certs.sh
     user: "0"
     volumes:
