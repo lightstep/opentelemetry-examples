@@ -4,7 +4,8 @@ pymongo
 redis
 requests
 sqlalchemy
-opentelemetry-launcher
+opentelemetry-instrumentation==0.30b1
+opentelemetry-launcher==1.8.0
 opentelemetry-opentracing-shim
 opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-flask
