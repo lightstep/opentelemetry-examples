@@ -7,8 +7,6 @@ receivers:
     endpoint: "zookeeper:2181"
 
 exporters:
-  logging:
-    loglevel: debug
   otlp/public:
     endpoint: ingest.lightstep.com:443
     headers:
