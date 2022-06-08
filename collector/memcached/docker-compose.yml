@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  memcached:
+    image: memcached:latest
+    networks:
+      - integrations
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.51.0
+    command: ["--config=/conf/collector.yml"]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+      - ./collector.yml:/conf/collector.yml:ro
+    networks:
+      - integrations
+
+networks:
+  integrations:
