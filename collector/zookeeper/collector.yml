@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+  zookeeper:
+    endpoint: "zookeeper:2181"
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  file:
+    path: statsout/collector-out.json
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, zookeeper]
+      processors: [batch]
+      exporters: [otlp/public, file]

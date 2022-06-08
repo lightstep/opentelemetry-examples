@@ -1,8 +1,7 @@
 version: '3.9'
 
 services:
-  zookeeper1:
-    hostname: zookeeper1
+  zookeeper:
     image: zookeeper
     ports:
       - ${ZOO_PORT}:2181
@@ -13,6 +12,12 @@ services:
     configs:
       - source: zoo_conf
         target: /conf/zoo.cfg
+    healthcheck:
+      test: echo stat | nc -z zookeeper 2181 || exit -1
+      interval: 10s
+      timeout: 20s
+      retries: 10
+      start_period: 30s
 
 configs:
   zoo_conf:
