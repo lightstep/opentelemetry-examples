@@ -25,7 +25,6 @@ endpoints:
 - http://java-otlp-server:8083/ping
 - http://java-launcher-server:8084/ping
 - http://java-opentracing-server:10001/order
-- http://dotnet-otlp-server
 services:
 - go-opentracing-server
 - go-opentelemetry-server
@@ -40,4 +39,3 @@ services:
 - java-otlp-server
 - java-launcher-server
 - java-opentracing-server
-- dotnet-otlp-server
