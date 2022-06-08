@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  zookeeper1:
+    hostname: zookeeper1
+    image: zookeeper
+    ports:
+      - ${ZOO_PORT}:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=${ALLOW_ANONYMOUS_LOGIN}
+    networks:
+      - integrations
+    configs:
+      - source: zoo_conf
+        target: /conf/zoo.cfg
+
+configs:
+  zoo_conf:
+    file: ./zoo.cfg
+
+networks:
+  integrations:
