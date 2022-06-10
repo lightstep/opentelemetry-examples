@@ -22,7 +22,6 @@ services:
             - integrations
         volumes:
             - ./collector.yml:/conf/collector.yml:rw
-            - ./opentelemetry-jmx-metrics.jar:/opt/opentelemetry-jmx-metrics.jar
     loadgen:
         image: williamyeh/wrk
         container_name: wrk
