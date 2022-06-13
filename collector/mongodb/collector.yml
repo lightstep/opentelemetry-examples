@@ -13,7 +13,7 @@ exporters:
   logging:
     loglevel: debug
   otlp:
-    endpoint: ingest.staging.lightstep.com:443
+    endpoint: ingest.lightstep.com:443
     headers:
              "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
