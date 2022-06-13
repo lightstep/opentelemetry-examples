@@ -1,0 +1,22 @@
+receivers:
+    apache:
+        endpoint: "http://apache:80/server-status?auto"
+
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+
+service:
+    pipelines:
+      metrics:
+        receivers: [apache]
+        processors: [batch]
+        exporters: [logging, otlp]
