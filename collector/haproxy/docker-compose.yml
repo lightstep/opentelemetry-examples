@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  echoserver:
+    image: hashicorp/http-echo:latest
+    command: ["-text", "hello world"]
+    networks:
+      - integrations
+    deploy:
+      mode: replicated
+      replicas: 3
+
+  haproxy:
+    image: haproxy:latest
+    ports:
+      - 8080:80
+      - 8404:8404
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - integrations
+    depends_on:
+      - echoserver
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.51.0
+    command: ["--config=/conf/collector.yml"]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+      - ./collector.yml:/conf/collector.yml:ro
+    networks:
+      - integrations
+
+  loadgen:
+    image: williamyeh/wrk
+    container_name: wrk
+    command: ["-t12", "-c400", "-d10m", "http://haproxy/foo"]
+    networks:
+      - integrations
+    depends_on:
+      - haproxy
+    # to keep this from starting under regular invocation
+    profiles:
+      - loadgen
+
+networks:
+  integrations:

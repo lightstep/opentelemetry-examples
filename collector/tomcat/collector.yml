@@ -1,0 +1,25 @@
+receivers:
+    jmx/tomcat:
+      jar_path: /opt/opentelemetry-jmx-metrics.jar
+      endpoint: tomcat:9090
+      target_system: jvm,tomcat
+      collection_interval: 1s
+
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [jmx/tomcat]
+        processors: [batch]
+        exporters: [logging, otlp]    
