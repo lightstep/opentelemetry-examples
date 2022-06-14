@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  postgres:
+      image: postgres:10.5
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+      ports:
+        - '5438:5432'
+      volumes:
+        - ./postgres-data:/var/lib/postgresql/data
+        # copy the sql script to create tables
+        - ./sql/example_create_tables.sql:/docker-entrypoint-initdb.d/example_create_tables.sql
+        # copy the sql script to fill tables
+        - ./sql/fake_data_fill_tables.sql:/docker-entrypoint-initdb.d/fake_data_fill_tables.sql
+      networks:
+        - integrations
+  otel-collector:
+      container_name: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.51.0
+      command: ["--config=/conf/collector.yml"]
+      environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+      networks:
+          - integrations
+      volumes:
+          - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
