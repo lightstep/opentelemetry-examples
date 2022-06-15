@@ -6,10 +6,13 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strings"
+	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -20,10 +23,19 @@ import (
 
 var (
 	tracer         trace.Tracer
-	serviceName    string = "diceroller-service"
+	serviceName    string = "test-go-server"
 	serviceVersion string = "0.1.0"
 	collectorAddr  string = "localhost:4318" // HTTP endpoint for collector
 )
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const (
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+)
+
+var src = rand.NewSource(time.Now().UnixNano())
 
 func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 	exporter, err :=
@@ -67,21 +79,54 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 	)
 }
 
-func handleRollDice(w http.ResponseWriter, r *http.Request) {
-	// Create a child span called dice-roller that tracks only this function call
-	_, span := tracer.Start(r.Context(), "dice-roller")
-	defer span.End()
+func randString(n int) string {
+	sb := strings.Builder{}
+	sb.Grow(n)
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			sb.WriteByte(letterBytes[idx])
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
 
-	value := rand.Intn(6) + 1
-	fmt.Fprintf(w, "%d", value)
+	return sb.String()
 }
 
 // Wrap the handleRollDice so that telemetry data
 // can be automatically generated for it
 func wrapHandler() {
-	handler := http.HandlerFunc(handleRollDice)
-	wrappedHandler := otelhttp.NewHandler(handler, "rolldice")
-	http.Handle("/rolldice", wrappedHandler)
+	handler := http.HandlerFunc(handlePing)
+	wrappedHandler := otelhttp.NewHandler(handler, "ping")
+	http.Handle("/ping", wrappedHandler)
+}
+
+func handlePing(w http.ResponseWriter, r *http.Request) {
+	operationName := "ping"
+	_, span := tracer.Start(r.Context(), operationName)
+	defer span.End()
+
+	length := rand.Intn(1024)
+	log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
+
+	pingResult := randString(length)
+	span.SetAttributes(
+		attribute.String("result", pingResult),
+		attribute.String("library.language", "go"),
+		attribute.String("library.version", "v1.7.0"),
+	)
+
+	// setting span as error
+	span.SetStatus(codes.Ok, "Success")
+
+	// setting span event
+	span.AddEvent(fmt.Sprint(r.Header))
+
+	fmt.Fprintf(w, pingResult)
 }
 
 func main() {
@@ -106,7 +151,7 @@ func main() {
 
 	wrapHandler()
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8081", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
