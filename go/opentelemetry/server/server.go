@@ -1,12 +1,3 @@
-//
-// example code to test lightstep/opentelemetry-exporter-go
-//
-// usage:
-//   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LS_SERVICE_NAME=demo-server-go \
-//   LS_SERVICE_VERSION=0.1.8 \
-//   go run server.go
-
 package main
 
 import (
@@ -15,133 +6,108 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
-	"strings"
-	"time"
 
-	"github.com/gorilla/mux"
-	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
-	"go.opentelemetry.io/contrib/propagators/b3"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/otlp"
-	"go.opentelemetry.io/otel/exporters/otlp/otlpgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/sdk/trace"
-	"google.golang.org/grpc/credentials"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var (
-	componentName  = os.Getenv("LS_SERVICE_NAME")
-	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
-	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
-	collectorURL   = os.Getenv("LS_SATELLITE_URL")
-	insecure       = os.Getenv("LS_INSECURE")
+	tracer         trace.Tracer
+	serviceName    string = "diceroller-service"
+	serviceVersion string = "0.1.0"
+	collectorAddr  string = "localhost:4318" // HTTP endpoint for collector
 )
 
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const (
-	letterIdxBits = 6                    // 6 bits to represent a letter index
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-)
-
-var src = rand.NewSource(time.Now().UnixNano())
-
-func randString(n int) string {
-	sb := strings.Builder{}
-	sb.Grow(n)
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			sb.WriteByte(letterBytes[idx])
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return sb.String()
-}
-
-func initExporter(url string, token string) *otlp.Exporter {
-	headers := map[string]string{
-		"lightstep-access-token": token,
-	}
-
-	secureOption := otlpgrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
-	if len(insecure) > 0 {
-		secureOption = otlpgrpc.WithInsecure()
-	}
-
-	exporter, err := otlp.NewExporter(
-		context.Background(),
-		otlpgrpc.NewDriver(
-			secureOption,
-			otlpgrpc.WithEndpoint(url),
-			otlpgrpc.WithHeaders(headers),
-		),
-	)
+func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
+	exporter, err :=
+		otlptracehttp.New(ctx,
+			// WithInsecure lets us use http instead of https.
+			// This is just for local development.
+			otlptracehttp.WithInsecure(),
+			otlptracehttp.WithEndpoint(collectorAddr),
+		)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	return exporter
+
+	// This includes the following resources:
+	//
+	// - sdk.language, sdk.version
+	// - service.name, service.version, environment
+	//
+	// Including these resources is a good practice because it is commonly
+	// used by various tracing backends to let you more accurately
+	// analyze your telemetry data.
+	resource, rErr :=
+		resource.Merge(
+			resource.Default(),
+			resource.NewWithAttributes(
+				semconv.SchemaURL,
+				semconv.ServiceNameKey.String(serviceName),
+				semconv.ServiceVersionKey.String(serviceVersion),
+				attribute.String("environment", "getting-started"),
+			),
+		)
+
+	if rErr != nil {
+		panic(rErr)
+	}
+
+	return sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exporter),
+		sdktrace.WithResource(resource),
+	)
 }
 
-func initTracer() {
-	b3 := b3.B3{}
-	// Register the B3 propagator globally.
-	otel.SetTextMapPropagator(b3)
+func handleRollDice(w http.ResponseWriter, r *http.Request) {
+	// Create a child span called dice-roller that tracks only this function call
+	_, span := tracer.Start(r.Context(), "dice-roller")
+	defer span.End()
 
-	if len(collectorURL) == 0 {
-		collectorURL = "localhost:4317"
-	}
+	value := rand.Intn(6) + 1
+	fmt.Fprintf(w, "%d", value)
+}
 
-	if len(componentName) == 0 {
-		componentName = "test-go-server"
-	}
-
-	if len(serviceVersion) == 0 {
-		serviceVersion = "0.0.0"
-	}
-
-	exporter := initExporter(collectorURL, lsToken)
-
-	resources, err := resource.New(
-		context.Background(),
-		resource.WithAttributes(
-			attribute.String("service.name", componentName),
-			attribute.String("service.version", serviceVersion),
-			attribute.String("library.language", "go"),
-			attribute.String("library.version", "1.2.3"),
-		),
-	)
-	if err != nil {
-		log.Printf("Could not set resources: ", err)
-	}
-	tp := trace.NewTracerProvider(
-		trace.WithConfig(trace.Config{DefaultSampler: trace.AlwaysSample()}),
-		trace.WithSyncer(exporter),
-		trace.WithResource(resources),
-	)
-	otel.SetTracerProvider(tp)
+// Wrap the handleRollDice so that telemetry data
+// can be automatically generated for it
+func wrapHandler() {
+	handler := http.HandlerFunc(handleRollDice)
+	wrappedHandler := otelhttp.NewHandler(handler, "rolldice")
+	http.Handle("/rolldice", wrappedHandler)
 }
 
 func main() {
-	initTracer()
-	fmt.Printf("Starting server on http://localhost:8081\n")
-	r := mux.NewRouter()
-	// re-enable once the new version of otel-go and otel-go-contrib is released
-	r.Use(muxtrace.Middleware(componentName))
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		length := rand.Intn(1024)
-		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
-		fmt.Fprintf(w, randString(length))
-	})
-	http.Handle("/", r)
+	ctx := context.Background()
 
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	tp := newTraceProvider(ctx)
+	defer func() { _ = tp.Shutdown(ctx) }()
+
+	otel.SetTracerProvider(tp)
+
+	// Register context and baggage propagation.
+	// Although not strictly necessary, for this sample,
+	// it is required for distributed tracing.
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(
+			propagation.TraceContext{},
+			propagation.Baggage{},
+		),
+	)
+
+	tracer = tp.Tracer(serviceName)
+
+	wrapHandler()
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
