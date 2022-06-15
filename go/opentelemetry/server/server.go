@@ -1,3 +1,9 @@
+//
+// example code to test lightstep/opentelemetry-exporter-go
+//
+// usage:
+//   go run server.go
+
 package main
 
 import (
