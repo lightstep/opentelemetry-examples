@@ -1,7 +1,7 @@
 .DEFAULT_GOAL:=help
 
 # --------------------------
-.PHONY: all zookeeper up build down stop restart rm logs
+.PHONY: zookeeper up build down stop restart rm logs
 
 zookeeper:		    ## Start Zookeeper.
 	@make up
