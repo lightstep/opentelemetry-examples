@@ -12,15 +12,6 @@ import (
 )
 
 func main() {
-	// mongodb://otel:otel@localhost:27017/?authMechanism=SCRAM-SHA-1&authSource=otel
-	//clientOptions := options.Client()
-	//connString := fmt.Sprintf("mongodb://%s", "localhost:27017")
-	//clientOptions.ApplyURI(connString)
-	//clientOptions.SetAuth(options.Credential{
-	//	Username: "otel",
-	//	Password: "otel",
-	//})
-
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://root:rootpassword@localhost:27017"))
 	if err != nil {
 		panic(err)
