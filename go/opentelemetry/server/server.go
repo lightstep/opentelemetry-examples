@@ -101,7 +101,7 @@ func randString(n int) string {
 // can be automatically generated for it
 func wrapHandler() {
 	handler := http.HandlerFunc(handlePing)
-	wrappedHandler := otelhttp.NewHandler(handler, "ping")
+	wrappedHandler := otelhttp.NewHandler(handler, "pingHandler")
 	http.Handle("/ping", wrappedHandler)
 }
 
@@ -115,7 +115,7 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 
 	pingResult := randString(length)
 	span.SetAttributes(
-		attribute.String("result", pingResult),
+		// attribute.String("result", pingResult),
 		attribute.String("library.language", "go"),
 		attribute.String("library.version", "v1.7.0"),
 	)
@@ -147,7 +147,7 @@ func main() {
 		),
 	)
 
-	tracer = tp.Tracer(serviceName)
+	tracer = tp.Tracer(serviceName, trace.WithInstrumentationVersion(serviceVersion))
 
 	wrapHandler()
 
