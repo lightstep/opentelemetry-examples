@@ -1,10 +1,13 @@
 .DEFAULT_GOAL:=help
 
 # --------------------------
-.PHONY: setup keystore certs all elastic build down stop restart rm logs
+.PHONY: all zookeeper up build down stop restart rm logs
 
 zookeeper:		    ## Start Zookeeper.
-	docker-compose up -d --build
+	@make up
+
+up:                 ## Start hte 
+	@docker-compose up -d --build
 
 build:			## Build Zookeeper and all its extra components.
 	@docker-compose build 
