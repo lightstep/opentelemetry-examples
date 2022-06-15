@@ -1,32 +1,19 @@
-version: "3.7"
+version: '3.7'
 services:
-  mongodb:
-      container_name: mongodb
-      image: mongodb:5.0.7
-      restart: always
-      environment:
-          MONGO_INITDB_DATABASE: admin
-          MONGO_INITDB_ROOT_USERNAME: otel
-          MONGO_INITDB_ROOT_PASSWORD: testpassword
-      networks:
-          - integrations
-      volumes:
-        # seeding scripts
-        - ./mongo-entrypoint:/docker-entrypoint-initdb.d
-        # named volumes
-        - mongodb:/data/db
-        - mongoconfig:/data/configdb
-      ports:
-          - 27017:27017
-  otel-collector:
-      container_name: otel-collector
-      image: otel/opentelemetry-collector-contrib:0.50.0
-      command: ["--config=/conf/collector.yml"]
-      environment:
-        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
-      networks:
-          - integrations
-      volumes:
-          - ./collector.yml:/conf/collector.yml:rw
-networks:
-    integrations:
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: otel
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
+
+
