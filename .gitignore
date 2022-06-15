@@ -13,3 +13,4 @@ dependency-reduced-pom.xml
 *.jar
 .swp
 config/collector-config.yaml
+*scratchpad*
