@@ -16,8 +16,8 @@ exporters:
     loglevel: debug
   otlp:
     endpoint: ingest.lightstep.com:443
-      headers: 
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+    headers: 
+       "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 service:
   telemetry:
