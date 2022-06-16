@@ -88,10 +88,6 @@ func makeRequest(ctx context.Context) {
 	_, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
 	
-	ctx = trace.ContextWithSpan(ctx, span)
-	childSpan := trace.SpanFromContext(ctx)
-	childSpan.End()	
-
 	span.SetAttributes(
 		attribute.String("response", string(body)),
 	)
