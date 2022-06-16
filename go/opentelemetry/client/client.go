@@ -75,6 +75,8 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 }
 
 func makeRequest(ctx context.Context) {
+	ctx, span := tracer.Start(ctx, "makeRequest")
+	defer span.End()
 	res, err := otelhttp.Get(ctx, targetURL)
 	if err != nil {
 		fmt.Println(err)
@@ -85,9 +87,6 @@ func makeRequest(ctx context.Context) {
 	fmt.Printf("Body : %s", body)
 	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
 
-	_, span := tracer.Start(ctx, "makeRequest")
-	defer span.End()
-	
 	span.SetAttributes(
 		attribute.String("response", string(body)),
 	)
