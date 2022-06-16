@@ -1,0 +1,30 @@
+receivers:
+  mongodb:
+    hosts:
+      - endpoint: mongodb:27017
+    username: root
+    password: rootpassword
+    collection_interval: 5s
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers: 
+       "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+service:
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    metrics:
+     receivers: [mongodb]
+     processors: [batch]
+     exporters: [logging,otlp]  
