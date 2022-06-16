@@ -1,0 +1,20 @@
+version: "3.2"
+services:
+  ibmmq-leader:
+    image: ibmcom/mq:latest
+    container_name: 'ibmmq-leader'
+    environment:
+      - MQ_DEV=true
+      - MQ_ADMIN_PASSWORD=password
+      - LICENSE=accept
+      - MQ_APP_PASSWORD=password
+      - MQ_ENABLE_METRICS=true
+    volumes:
+      - ./mqs.ini:/var/mqm/mqm
+    ports:
+      - 9157:9157
+    networks:
+      - localhost
+
+networks:
+  localhost:
