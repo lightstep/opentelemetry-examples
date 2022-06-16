@@ -126,7 +126,7 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 		attribute.String("library.version", "v1.7.0"),
 	)
 
-	// setting span as error
+	// setting span as successful
 	span.SetStatus(codes.Ok, "Success")
 
 	// setting span event
