@@ -3,10 +3,10 @@ receivers:
     protocols:
       http:
       grpc:
-  prometheus/front-proxy:
+  prometheus/zookeeper:
     config:
       scrape_configs:
-        - job_name: otel-envoy-eg
+        - job_name: otel-zookeeper-eg
           scrape_interval: 5s
           static_configs:
             - targets: ["zookeeper:7000"]
@@ -18,6 +18,8 @@ exporters:
     endpoint: ingest.lightstep.com:443
     headers:
         "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  file:
+    path: statsout/collector-out.json
 
 processors:
   batch:
@@ -25,6 +27,6 @@ processors:
 service:
   pipelines:
     metrics:
-      receivers: [otlp, prometheus/front-proxy]
+      receivers: [otlp, prometheus/zookeeper]
       processors: [batch]
-      exporters: [otlp/public]
+      exporters: [otlp/public, file]

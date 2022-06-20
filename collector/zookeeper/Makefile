@@ -4,32 +4,36 @@
 .PHONY: all zookeeper build down stop restart rm logs
 
 zookeeper:		    ## Start Zookeeper.
-	docker-compose up -d --build
+	mkdir -p statsout
+	chmod 777 -R statsout
+	touch statsout/collector-out.json
+	chmod 777 statsout/collector-out.json
+	docker compose up -d --build
 
 build:			## Build Zookeeper and all its extra components.
-	@docker-compose build 
+	@docker compose build 
 
 ps:				## Show all running containers.
-	@docker-compose ps
+	@docker compose ps
 
 down:			## Down Zookeeper and all its extra components.
-	@docker-compose down
+	@docker compose down
 
 stop:			## Stop Zookeepersearch and all its extra components.
-	@docker-compose stop 
+	@docker compose stop 
 	
 restart:		## Restart Zookeeper and all its extra components.
-	@docker-compose restart 
+	@docker compose restart 
 
 rm:				## Remove Zookeeper and all its extra components containers.
-	@docker-compose rm
+	@docker compose rm
 	@rm -rf statsout
 
 logs:			## Tail all logs with -n 1000.
-	@docker-compose logs --follow --tail=1000 
+	@docker compose logs --follow --tail=1000 
 
 images:			## Show all Images of Zookeeper and all its extra components.
-	@docker-compose images 
+	@docker compose images 
 
 prune:			## Remove Zookeeper Containers and Delete Zookeeper-related Volume Data 
 	@make stop && make rm
