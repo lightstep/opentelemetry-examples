@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+    tomcat:
+        container_name: tomcat
+        image: 'bitnami/tomcat:9.0'
+        environment:
+            - 'CATALINA_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9090 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
+            - 'JAVA_OPTS=-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Xms256m -Xmx512m'
+            - 'ALLOW_EMPTY_PASSWORD=yes'
+        ports:
+            - 0.0.0.0:9090:9090
+        stop_grace_period: 1s
+        networks:
+            - integrations
+    otel-collector:
+        container_name: otel-collector
+        build: .
+        command: ["--config=/conf/collector.yml"]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        networks:
+            - integrations
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+    loadgen:
+        image: williamyeh/wrk
+        container_name: wrk
+        command: ["-t12", "-c400", "-d10m", "http://tomcat:8080/foo"]
+        networks:
+            - integrations
+        depends_on:
+            - tomcat
+        stop_grace_period: 1s
+        # to keep this from starting under regular invocation
+        profiles:
+            - loadgen
+networks:
+    integrations:
