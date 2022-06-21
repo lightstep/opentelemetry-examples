@@ -1,21 +1,62 @@
-# Monitoring Elasticsearch with Lightstep
+# Ingest ZooKeeper metrics using OTEL Collector's Prometheus receiver
 
-## About this Configuration
+This example illustrates how you can ingest ZooKeeper metrics using the OTEL collector's Prometheus receiver. ZooKeeper exposes a Prometheus compatible metrics endpoint.
 
-This is intended to be the simplest practical example for collecting Elasticsearch metrics with the OTEL Collector, sending data to Lightstep. While Elasticsearch is usually run in multinode clusters and often as part of the "ELK stack" with Logstash and Kibana, this example focuses on illustrating Collector configuration for one node for clarity.
+## Requirements
+
+* OpenTelemetry Collector Contrib v0.51.0+
+
+## Prerequisites
+
+You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics.
 
 ## Running the Example
 
-The file `.env` contains important configuration values which are also referenced in other files such as `collector.yml` and the docker compose configuration. Be sure to set the values here appropriately for your situation.
+You can run this example with `docker compose up` or `make up` in this directory.
 
-Make sure that you have set the environment variable `LS_ACCESS_TOKEN`. Then you can run `make up`. If you don't already have certificates then it will automatically run `make setup` for you to generate certificates and the Elastic keystore. See the Makefile for additional make rules.
+## Configuration
 
-## Additional Resources
+Installation of the OpenTelemetry Collector varies, please refer to the [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
 
-You can find more details about configuration in OTEL Collector's [elasticsearchreceiver docs](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/elasticsearchreceiver). 
+The example configuration used for this project shows how to configure OTEL's prometheus receiver to collect metrics from an ZooKeeper endpoint. Note that the Prometheus receiver in the OTEL project provides more configuration options, but we can use defaults for most of them with ZooKeeper.
 
-After you run `docker compose -f docker-compose.setup.yml`, you can run the example with `docker compose up`. For convenience there's also a make rule you can run with `make up`. This will detect whether setup has been run and will run it if needed.
+``` yaml
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+  prometheus/zookeeper:
+    config:
+      scrape_configs:
+        - job_name: otel-zookeeper-eg
+          static_configs:
+            - targets: ["zookeeper:7000"]
 
-https://zookeeper.apache.org/doc/current/zookeeperMonitor.html#Prometheus
+exporters:
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
+processors:
+  batch:
 
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, prometheus/zookeeper]
+      processors: [batch]
+      exporters: [otlp/public]
+
+```
+
+You must enable the Prometheus MetricsProvider in Zookeeper by setting 
+```bash
+metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider
+```
+in the zoo.cfg.
+
+## Additional resources
+
+* For information about configuring Zookeeper to provide monitoring compatible with the OTEL Collector's Prometheus receiver see the [Zookeeper Monitor Guide](https://zookeeper.apache.org/doc/r3.7.0/zookeeperMonitor.html#Prometheus).
