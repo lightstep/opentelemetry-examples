@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bullseye
+FROM python:3-alpine3.15
 
 
 ADD requirements.txt requirements.txt
