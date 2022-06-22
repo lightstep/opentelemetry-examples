@@ -32,6 +32,7 @@ receivers:
     hostmetrics:
         scrapers:
             cpu:
+            disk:
   
 exporters:
     prometheus:
