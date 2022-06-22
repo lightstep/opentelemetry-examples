@@ -1,26 +1,28 @@
-version: "3.7"
+version: '3.7'
 services:
-  mysql:
-      container_name: mysql
-      image: mysql:5.7
-      restart: always
-      environment:
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpassword
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: opentelemetry-tests
-      networks:
-          - integrations
-      stop_grace_period: 1s
+  wildfly:
+    build: 
+      context: ./wildfly
+      args:
+        WILDFLY_NAME: wildfly_otel
+        CLUSTER_PW: secret_password
+    container_name: "wildfly"
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    networks:
+      - integrations
+    volumes:
+      - "./ping/deployments:/opt/jboss/wildfly/standalone/deployments"
   otel-collector:
-      container_name: otel-collector
-      image: otel/opentelemetry-collector-contrib:0.50.0
-      command: ["--config=/conf/collector.yml"]
-      environment:
-        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
-      networks:
-          - integrations
-      volumes:
-          - ./collector.yml:/conf/collector.yml:rw
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.53.0
+    command: ["--config=/conf/collector.yml"]
+    environment:
+      LS_ACCESS_TOKEN: 7Z/HRPdJujtcdlsuR9Mq9bfTFfD9CSD5Mhbjemq0GofmL+0qnWRSqrvhlQpOGzmMK7XxANuBNYK9xbyHI/Y0q/+ffmFuEopJTUuMiHAt
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:rw
 networks:
     integrations:
