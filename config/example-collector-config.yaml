@@ -33,6 +33,7 @@ receivers:
         scrapers:
             cpu:
             disk:
+            filesystem:
   
 exporters:
     prometheus:
