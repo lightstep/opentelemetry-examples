@@ -2,10 +2,11 @@ receivers:
    hostmetrics:
        scrapers:
           cpu: 
+          disk:
+          paging:
           load: 
           process: 
           processes: 
-          disk: 
           filesystem: 
           network: 
        scrape_interval: 5s
