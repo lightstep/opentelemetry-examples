@@ -19,7 +19,7 @@ services:
     image: otel/opentelemetry-collector-contrib:0.53.0
     command: ["--config=/conf/collector.yml"]
     environment:
-      LS_ACCESS_TOKEN: 7Z/HRPdJujtcdlsuR9Mq9bfTFfD9CSD5Mhbjemq0GofmL+0qnWRSqrvhlQpOGzmMK7XxANuBNYK9xbyHI/Y0q/+ffmFuEopJTUuMiHAt
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
     networks:
         - integrations
     volumes:
