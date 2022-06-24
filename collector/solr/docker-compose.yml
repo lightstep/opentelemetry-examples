@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  solr:
+    image: solr
+    ports:
+    - "8983:8983"
+    volumes:
+      - data:/opt/solr/server/solr/otelcores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - otelcores
+    networks:
+        - integrations
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.53.0
+    command: ["--config=/conf/collector.yml"]
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
+volumes:
+      data:
