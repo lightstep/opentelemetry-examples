@@ -4,6 +4,6 @@ pymongo
 redis
 requests
 sqlalchemy
-opentelemetry-instrumentation
+opentelemetry-instrumentation==0.30b1
 opentelemetry-exporter-otlp
 opentelemetry-propagator-b3
