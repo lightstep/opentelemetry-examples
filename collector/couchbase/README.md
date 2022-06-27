@@ -28,9 +28,6 @@ receivers:
     config:
       scrape_configs:
         - job_name: otel-couchbase-eg
-          basic_auth:
-            username: Administrator 
-            password: password
           static_configs:
             - targets: ["couchbase:8091"]
 
