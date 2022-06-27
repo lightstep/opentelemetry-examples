@@ -1,7 +1,7 @@
 .DEFAULT_GOAL:=help
 
 # --------------------------
-.PHONY: setup keystore certs all elastic build down stop restart rm logs
+.PHONY: setup keystore certs elastic build down stop restart rm logs
 
 keystore:		## Setup Elasticsearch Keystore, by initializing passwords, and add credentials defined in `keystore.sh`.
 	docker-compose -f docker-compose.setup.yml run --rm keystore
@@ -45,9 +45,6 @@ images:			## Show all Images of ElasticSearch and all its extra components.
 prune:			## Remove ElasticSearch Containers and Delete ElasticSearch-related Volume Data (the Elastic_Elasticsearch-data volume)
 	@make stop && make rm
 	@docker volume prune -f --filter label=com.docker.compose.project=elasticsearch
-
-all:		    ## Start Elk and all its component (ELK, Monitoring, and Tools).
-	docker-compose ${COMPOSE_ALL_FILES} up -d --build ${ELK_MAIN_SERVICES}
 
 up:
 	@if [ ! -d "secrets" ]; then echo "Did not find secrets directory. Starting setup."; \
