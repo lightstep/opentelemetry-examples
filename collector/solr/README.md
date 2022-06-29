@@ -32,9 +32,9 @@ The example configuration, used for this project shows using processors to add m
 ``` yaml
 # add the receiver configuration for your integration
 receivers:
-  jmx:
+  jmx/solr:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: jmx:9999
+    endpoint: solr:8983
     target_system: jvm,solr
 
 processors:
@@ -54,7 +54,7 @@ service:
       level: "debug"
   pipelines:
     metrics:
-     receivers: [jmx]
+     receivers: [jmx/solr]
      processors: [batch]
      exporters: [logging,otlp]  
 
