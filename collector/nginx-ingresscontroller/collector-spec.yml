@@ -9,6 +9,7 @@ spec:
       secretKeyRef:
         name: lightstep-secret
         key: lightstep-access-token
+        optional: false # make sure the secret exists
   config: |
     receivers:
       prometheus/nginx:
