@@ -3,6 +3,10 @@ services:
     solr:
         container_name: solr
         image: solr
+        environment:
+            - 'CATALINA_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9090 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
+            - 'JAVA_OPTS=-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Xms256m -Xmx512m'
+            - 'ALLOW_EMPTY_PASSWORD=yes'
         ports:
             - 8983:8983
         stop_grace_period: 1s
