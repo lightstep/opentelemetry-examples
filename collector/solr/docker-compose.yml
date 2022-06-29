@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+    solr:
+        container_name: solr
+        image: solr
+        environment:
+            - 'JAVA_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=18983 -Dcom.sun.management.jmxremote.rmi.port=18983 -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false-Xms256m -Xmx6144m'
+            - 'ENABLE_REMOTE_JMX_OPTS=true'
+            - 'RMI_PORT=18983'
+        ports:
+            - 18983:8983
+        stop_grace_period: 1s
+        volumes:
+            - data:/opt/solr/server/solr/otelcores
+        entrypoint:
+            - docker-entrypoint.sh
+            - solr-precreate
+            - otelcores
+        networks:
+            - integrations
+    otel-collector:
+        container_name: otel-collector
+        build: .
+        command: ["--config=/conf/collector.yml"]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        networks:
+            - integrations
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
+volumes:
+      data:
