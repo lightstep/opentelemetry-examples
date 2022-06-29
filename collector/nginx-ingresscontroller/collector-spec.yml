@@ -3,6 +3,12 @@ kind: OpenTelemetryCollector
 metadata:
   name: simplest
 spec:
+  env:
+  - name: LS_ACCESS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: lightstep-secret
+        key: lightstep-access-token
   config: |
     receivers:
       prometheus/nginx:
@@ -19,7 +25,7 @@ spec:
       otlp/public:
         endpoint: ingest.lightstep.com:443
         headers:
-          - "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+          "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
     service:
       pipelines:
