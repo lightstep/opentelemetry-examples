@@ -1,0 +1,29 @@
+piVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: simplest
+spec:
+  config: |
+    receivers:
+      prometheus/nginx-ic:
+        endpoint: 'http://otel-example:9113'
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+
+    exporters:
+      otlp/public:
+        endpoint: ingest.lightstep.com:443
+        headers:
+          "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [otlp, prometheus/nginx-ic]
+          processors: [batch]
+          exporters: [logging]
+EOF
