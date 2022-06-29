@@ -4,9 +4,25 @@ services:
         container_name: solr
         image: solr
         environment:
-            - 'CATALINA_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9090 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
-            - 'JAVA_OPTS=-Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8 -Xms256m -Xmx512m'
-            - 'ALLOW_EMPTY_PASSWORD=yes'
+            - 'JAVA_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8983 -Dcom.sun.management.jmxremote.rmi.port=8983 -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false-Xms256m -Xmx6144m'
+            - 'ENABLE_REMOTE_JMX_OPTS=true'
+            - 'RMI_PORT=8983'
+
+# -Dcom.sun.management.jmxremote \
+# -Dcom.sun.management.jmxremote.local.only=false \
+# -Dcom.sun.management.jmxremote.ssl=false \
+# -Dcom.sun.management.jmxremote.authenticate=false \
+# -Dcom.sun.management.jmxremote.port=18983 \
+# -Dcom.sun.management.jmxremote.rmi.port=18983
+
+#             docker run --name solr-issue11 solr /bin/bash -c 'sed -i -e s/ENABLE_REMOTE_JMX_OPTS=.false./ENABLE_REMOTE_JMX_OPTS=true/ /opt/solr/bin/solr.in.sh; grep ENABLE_REMOTE_JMX_OPTS /opt/solr/bin/solr.in.sh; /bin/bash -x /opt/solr/bin/solr -f'
+# ENABLE_REMOTE_JMX_OPTS=true
+# ...
+# + . /opt/solr/bin/solr.in.sh
+# ...
+# ++ ENABLE_REMOTE_JMX_OPTS=true
+# ...
+# + exec java -server -Xms512m -Xmx512m -XX:NewRatio=3 -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=8 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ConcGCThreads=4 -XX:ParallelGCThreads=4 -XX:+CMSScavengeBeforeRemark -XX:PretenureSizeThreshold=64m -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=50 -XX:CMSMaxAbortablePrecleanTime=6000 -XX:+CMSParallelRemarkEnabled -XX:+ParallelRefProcEnabled -verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/opt/solr/server/logs/solr_gc.log -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=18983 -Dcom.sun.management.jmxremote.rmi.port=18983 -Djetty.port=8983 -DSTOP.PORT=7983 -DSTOP.KEY=solrrocks -Duser.timezone=UTC -Djetty.home=/opt/solr/server -Dsolr.solr.home=/opt/solr/server/solr -Dsolr.install.dir=/opt/solr -Xss256k -jar start.jar --module=http
         ports:
             - 8983:8983
         stop_grace_period: 1s

@@ -1,6 +1,7 @@
 FROM curlimages/curl:7.82.0 as curler
 ARG JMX_JAR_VERSION=v1.14.0
 USER root
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 RUN curl -L \
     --output /opentelemetry-jmx-metrics.jar \
     "https://github.com/open-telemetry/opentelemetry-java-contrib/releases/download/${JMX_JAR_VERSION}/opentelemetry-jmx-metrics.jar"
