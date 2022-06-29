@@ -3,7 +3,7 @@ const people = require('./people.json');
 
 var client = new SolrNode({
   host: '127.0.0.1',
-  port: '8983',
+  port: '18983',
   core: 'otelcores',
   protocol: 'http'
 });

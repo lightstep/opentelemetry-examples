@@ -14,11 +14,21 @@ Please note that not all metrics receivers available for the OpenTelemetry Colle
 
 You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
+## OpenSSL command to generate your private key and public certificate
+```sh
+openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
+```
+
+## Review the created certificate
+```sh
+openssl x509 -text -noout -in certificate.pem
+```
+
 ## Running the Example
 
 You can run this example with `docker-compose up` in this directory.
 
-### Add docs to core
+### Add Document Data to Solr Core
 ```sh
 cd nodeapp && npm i && node index.js
 ```
