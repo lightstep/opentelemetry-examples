@@ -28,6 +28,13 @@ receivers:
             insecure: true
     apache:
         endpoint: "http://apache:80/server-status?auto"
+
+    hostmetrics:
+        scrapers:
+            cpu:
+            disk:
+            filesystem:
+            paging:
   
 exporters:
     prometheus:
@@ -65,5 +72,5 @@ service:
         exporters: [logging, otlp]
         processors: [batch]
       metrics:
-        receivers: [mysql, prometheus, redis, postgresql, apache]
+        receivers: [mysql, prometheus, redis, postgresql, apache, hostmetrics]
         exporters: [logging, otlp]
