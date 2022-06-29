@@ -1,5 +1,5 @@
 FROM curlimages/curl:7.82.0 as curler
-ARG JMX_JAR_VERSION=v1.14.0
+ARG JMX_JAR_VERSION=v1.15.0
 USER root
 RUN curl -L \
     --output /opentelemetry-jmx-metrics.jar \
