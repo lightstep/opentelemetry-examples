@@ -1,12 +1,14 @@
 FROM jboss/wildfly
 
+ARG BOOTCLASS_PATH="-Xbootclasspath/a:"
+
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 
-ARG WILDFLY_NAME
-ARG CLUSTER_PW
+ARG JAVA_OPTS
+ARG LOGMANAGER
+ARG LOGMANAGER_JAR
+ARG WILDLFY_COMMON_JAR
 
-ENV WILDFLY_NAME=${WILDFLY_NAME}
-ENV CLUSTER_PW=${CLUSTER_PW}
+ENV JAVA_OPTS="${JAVA_OPTS}${JAVA_OPTS}${LOGMANAGER}${BOOTCLASS_PATH}${JBOSS_HOME}${LOGMANAGER_JAR}${JBOSS_HOME}${WILDLFY_COMMON_JAR}"
 
-
-ENTRYPOINT /opt/jboss/wildfly/bin/standalone.sh -b=0.0.0.0 -bmanagement=0.0.0.0 -Djboss.server.default.config=standalone-full-ha.xml -Djboss.node.name=${WILDFLY_NAME} -Djava.net.preferIPv4Stack=true -Djgroups.bind_addr=$(hostname -i) -Djboss.messaging.cluster.password=${CLUSTER_PW}
+ENTRYPOINT /opt/jboss/wildfly/bin/standalone.sh -Djboss.bind.address.management=0.0.0.0 -Djboss.bind.address=0.0.0.0

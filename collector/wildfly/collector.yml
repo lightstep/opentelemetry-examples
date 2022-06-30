@@ -1,8 +1,9 @@
 receivers:
-  jmx:
-    jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: jmx:9999
-    target_system: jvm,wildfly
+  jmx/wildfly:
+      jar_path: /opt/opentelemetry-jmx-metrics.jar
+      endpoint: wildfly:19990
+      target_system: jvm,wildfly
+      collection_interval: 5s
 
 processors:
   batch:
@@ -21,6 +22,6 @@ service:
       level: "debug"
   pipelines:
     metrics:
-     receivers: [jmx]
+     receivers: [jmx/wildfly]
      processors: [batch]
      exporters: [logging,otlp]  
