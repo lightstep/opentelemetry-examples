@@ -1,0 +1,25 @@
+receivers:
+    jmx/solr:
+      jar_path: /opt/opentelemetry-jmx-metrics.jar
+      endpoint: solr:18983
+      target_system: jvm,solr
+      collection_interval: 1s
+
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [jmx/solr]
+        processors: [batch]
+        exporters: [logging, otlp]    
