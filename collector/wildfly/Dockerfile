@@ -13,10 +13,6 @@ RUN curl -L -s \
 FROM ibmjava:8-jre
 WORKDIR /
 
-# COPY certificate.pem /usr/local/share/ca-certificates/certificate.crt
-
-# RUN cat /usr/local/share/ca-certificates/certificate.crt >> /etc/ssl/certs/ca-certificates.crt
-
 COPY --from=curler /opentelemetry-jmx-metrics.jar /opt/opentelemetry-jmx-metrics.jar
 COPY --from=curler /otelcol-contrib /otelcol-contrib
 
