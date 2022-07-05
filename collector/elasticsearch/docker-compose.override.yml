@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.53.0
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
@@ -19,8 +19,15 @@ services:
         target: /elasticsearch.crt
       - source: elasticsearch.key
         target: /elasticsearch.key
+    volumes:
+      - ./statsout:/statsout
     command: ["--config=/conf/collector.yml"]
 
 configs:
   collector_conf:
     file: ./collector.yml
+
+      # This provides output for the file receiver
+volumes:
+  statsout:
+    driver: local
