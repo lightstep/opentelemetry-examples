@@ -1,4 +1,33 @@
 ---
+
+# Install NGINX Ingress Helm Operator
+
+Generally instructions are from https://github.com/nginxinc/nginx-ingress-helm-operator#readme
+1. Deploy the Operator and associated resources
+	a. clone the operator
+```sh
+	git clone https://github.com/nginxinc/nginx-ingress-helm-operator/
+	cd nginx-ingress-helm-operator/
+	git checkout v1.0.0
+```
+	b. deploy it the operator to the k8s environment
+```sh
+	make deploy IMG=nginx/nginx-ingress-operator:1.0.0
+```
+
+2. Deploy the NGINX Ingress Controller using the Operator
+	- There's a sample config at https://github.com/nginxinc/nginx-ingress-helm-operator/blob/main/config/samples/charts_v1alpha1_nginxingress.yaml
+	- Command is like `kubectl create -n my-nginx-ingress -f nginx-ingress-controller.yaml`
+
+3. Check that resources were deployed
+	- `kubectl -n my-nginx-ingress get all`
+
+4. Delete the Ingress Controller
+	- `kubectl delete -f nginx-ingress-controller.yaml`
+
+5. Delete the namespace
+	- `kubectl delete namespace my-nginx-ingress`
+
 # Ingest NGINX Ingress Controller metrics with the OTEL Operator
 
 Here's a potentially (probably not) relevant tutorial for running opentracing: https://github.com/opentracing-contrib/nginx-opentracing/blob/master/doc/Tutorial.md.

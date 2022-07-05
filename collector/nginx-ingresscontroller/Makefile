@@ -1,13 +1,12 @@
-NGINX_OP := nginx-ic-example
+NGINX_OP := my-nginx-ingress
 
-OTEL := otel-ingerss
-NGINX := nginx-ingress
-
-# directory where we'll download NGINX Ingress Operator
-NGINX_DIR := nginx-ingress-operator
+OTEL := otel-ingress
 
 create-cluster :
 	kind create cluster --name $(NGINX_OP)-cluster
+
+build-dev :
+	kubectl kustomize -n my-namespace overlays/dev
 
 add-repositories : 	## add repository where we can get the nginx ingress controller
 	helm repo add nginx-stable https://helm.nginx.com/stable
@@ -17,29 +16,32 @@ add-repositories : 	## add repository where we can get the nginx ingress control
 
 # TODO: make clone contingent on not finding dir
 install-nginx-ingress-operator :
-	if [ ! -d $(NGINX_DIR) ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator $(NGINX_DIR); fi
-	cd $(NGINX_DIR); git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
-	# see: https://github.com/nginxinc/nginx-ingress-helm-operator/blob/v1.0.0/docs/manual-installation.md
+	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
+	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
 
 create-namespaces :
-	# kubectl create namespace $(NGINX)
-	kubectl create namespace $(NGINX_OP)
+	kubectl create -f ns.yaml
 
-deploy-nginx-ingress :
-	kubectl apply -f nginx-ingress.yaml # this goes into --namespace nginx-ingress
+create-ingress-controller :
+	kubectl create -f nginx-ingress-controller.yaml
+
+inspect-namespace :
+	kubectl -n my-nginx-ingress  get all
+
+# deploy-nginx-ingress :
+#	kubectl apply -f nginx-ingress.yaml # this goes into --namespace nginx-ingress
 
 install-cert-manager :  	## install the cert - otel-operator depends on this - it goes in namespace=cert-manager
 	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
 
 install-otel-operator : ## install the otel-operator
-	helm install --namespace $(NGINX_OP) $(OTEL) open-telemetry/opentelemetry-operator 
-	# kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
+	helm install -n $(NGINX_OP) $(OTEL) open-telemetry/opentelemetry-operator 
 
 deploy-collector :  ## creates from the collector spec. You should run `create` first - but you only need to run create once.
-	kubectl apply -f collector-spec.yml --namespace $(NGINX_OP)
+	kubectl apply -f collector-spec.yml
 
 deploy-lightstep-secret : 	## add your lightstep-access-token for the environment variable
-	kubectl apply -f lightstep-secret.yml --namespace $(NGINX_OP)
+	kubectl apply -f lightstep-secret.yml
 
 deploy-nginx-secret :
 	kubectl apply -f $(NGINX_DIR)/examples/default-server-secret.yaml
@@ -268,17 +270,14 @@ get-metadata-certification:
 
 RELEASE=otel-example
 
-add-repository : 	## add repository where we can get the nginx ingress controller
+add-repository : 		## add repository where we can get the nginx ingress controller
 	helm repo add nginx-stable https://helm.nginx.com/stable
 	helm repo update
 
-install-ic : add-repository ## install ingress controller and expose prometheus metrics
-	helm install $(RELEASE) nginx-stable/nginx-ingress --set prometheus.create=true
+install-ic : add-repository 	## install ingress controller
+	helm install $(RELEASE) nginx-stable/nginx-ingress
 
-install-cert-manager :  	## install the cert manager that otel-operator depends upon
-	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
-
-install-otel-operator : install-cert-manager 	## install the otel-operator
+install-otel-operator : 	## install the otel-operator
 	kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
 
 create-lightstep-secret : 	## add your lightstep-access-token for the environment variable
@@ -288,6 +287,7 @@ up :  ## simply creates from the collector spec. You should run `create` first.
 	kubectl apply -f collector-spec.yml
 
 create : install-otel-operator install-ic collector-up create-lightstep-secret
+
 
 uninstall-ic :
 	helm uninstall $(RELEASE)

@@ -1,37 +1,39 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: simplest
+  name: otel-collector
 spec:
   env:
   - name: LS_ACCESS_TOKEN
     valueFrom:
       secretKeyRef:
-        name: lightstep-secret
+        name: my-nginx-ingress/lightstep-secret
         key: lightstep-access-token
-        optional: false # make sure the secret exists
+        optional: false # require the secret to exist
   config: |
     receivers:
-      prometheus/nginx:
+      prometheus:
         config:
           scrape_configs:
             - job_name: otel-nginx-eg
               static_configs:
                 - targets: ["otel-example:9113"]
-
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          processors: [batch]
+          exporters: [otlp/public]
     processors:
       batch:
-
     exporters:
       otlp/public:
         endpoint: ingest.lightstep.com:443
         headers:
           "lightstep-access-token": "${LS_ACCESS_TOKEN}"
-
     service:
       pipelines:
         metrics:
-          receivers: [prometheus/nginx]
+          receivers: [prometheus]
           processors: [batch]
           exporters: [otlp/public]
-
