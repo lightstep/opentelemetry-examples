@@ -1,13 +1,14 @@
 receivers:
-  jmx:
+  jmx/cassandra:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: localhost:9999
+    endpoint: cassandra:19042
     target_system: jvm,cassandra
+    collection_interval: 5s
   
 exporters:
     logging:
         loglevel: debug
-    # configuring otlp to Lightstep
+
     otlp:
       endpoint: ingest.lightstep.com:443
       headers: 
@@ -19,6 +20,6 @@ processors:
 service:
     pipelines:
       metrics:
-        receivers: [jmx]
+        receivers: [jmx/cassandra]
         processors: [batch]
         exporters: [logging, otlp]    

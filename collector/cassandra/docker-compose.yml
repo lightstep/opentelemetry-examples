@@ -1,20 +1,22 @@
 version: "3.7"
 services:
     cassandra:
+        container_name: cassandra
         image: docker.io/bitnami/cassandra:latest
         ports:
             - '7199:7199'
             - '7000:7000'
-            - '9042:9042'
+            - '19042:9042'
         volumes:
             - ./schema/cassandra:/docker-entrypoint-initdb.d
             - 'cassandra_data:/bitnami'
         healthcheck:
-        test: [ "CMD", "/opt/bitnami/cassandra/bin/cqlsh", "-u cassandra", "-p cassandra" ,"-e \"describe keyspaces\"" ]
-        interval: 15s
-        timeout: 10s
-        retries: 10
+            test: [ "CMD", "/opt/bitnami/cassandra/bin/cqlsh", "-u cassandra", "-p cassandra" ,"-e \"describe keyspaces\"" ]
+            interval: 15s
+            timeout: 10s
+            retries: 10
         environment:
+            - 'JVM_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=19042 -Dcom.sun.management.jmxremote.rmi.port=19042 -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
             - CASSANDRA_SEEDS=cassandra
             - CASSANDRA_PASSWORD_SEEDER=yes
             - CASSANDRA_PASSWORD=cassandra
@@ -22,7 +24,7 @@ services:
             - integrations
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector-contrib:0.50.0
+        build: .
         command: ["--config=/conf/collector.yml"]
         environment:
             LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
