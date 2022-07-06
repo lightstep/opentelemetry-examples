@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  etcd-raft-leader:
+    build: .
+    ports:
+      - 2379:2379
+      - 2380:2380
+    networks:
+      - raft-mesh
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_NODE_NAME=etcd-raft-leader
+      - ETCD_CONFIG=/etc/etcd.conf
+networks:
+  raft-mesh:
+    driver: bridge
