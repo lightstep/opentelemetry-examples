@@ -1,4 +1,4 @@
-FROM jboss/wildfly:9.0.2.Final
+FROM jboss/wildfly
 
 ARG BOOTCLASS_PATH="-Xbootclasspath/a:"
 

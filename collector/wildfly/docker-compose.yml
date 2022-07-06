@@ -4,14 +4,14 @@ services:
     build: 
       context: ./wildfly
       args:
-        JAVA_OPTS: '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=19990 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false '
+        JAVA_OPTS: '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8080 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.net.preferIPv4Stack=true '
         LOGMANAGER: '-Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dorg.jboss.logging.Logger.pluginClass=org.jboss.logging.logmanager.LoggerPluginImpl -Dsun.util.logging.disableCallerCheck=true '
         LOGMANAGER_JAR: '/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.1.18.Final.jar:'
         WILDLFY_COMMON_JAR: '/modules/system/layers/base/org/wildfly/common/main/wildfly-common-1.5.4.Final.jar'
     container_name: "wildfly"
     ports:
       - "8080:8080"
-      - "19990:9990"
+      - "9990:9990"
     networks:
       - integrations
     volumes:
