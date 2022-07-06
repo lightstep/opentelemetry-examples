@@ -1,7 +1,7 @@
 receivers:
     jmx/hbase:
       jar_path: /opt/opentelemetry-jmx-metrics.jar
-      endpoint: hbase:9090
+      endpoint: hbase:16010
       target_system: jvm,hbase
       collection_interval: 3s
 
