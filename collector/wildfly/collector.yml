@@ -1,7 +1,7 @@
 receivers:
   jmx/wildfly:
       jar_path: /opt/opentelemetry-jmx-metrics.jar
-      endpoint: wildfly:8080
+      endpoint: wildfly:19990
       target_system: jvm,wildfly
       collection_interval: 5s
 
