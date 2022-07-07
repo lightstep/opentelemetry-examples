@@ -18,7 +18,7 @@ spec:
           scrape_configs:
             - job_name: otel-nginx-eg
               static_configs:
-                - targets: ["otel-example:9113"]
+                - targets: ["my-nginx-ingress-nginx-ingress:9113"]
     processors:
       batch:
     exporters:
