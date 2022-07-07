@@ -1,13 +1,14 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-collector
+  name: my-otel-collector
 spec:
+  mode: deployment
   env:
   - name: LS_ACCESS_TOKEN
     valueFrom:
       secretKeyRef:
-        name: my-nginx-ingress/lightstep-secret
+        name: lightstep-secret
         key: lightstep-access-token
         optional: false # require the secret to exist
   config: |

@@ -1,12 +1,25 @@
-NGINX_OP := my-nginx-ingress
+NGINX_RELEASE := my-ingress
+OTEL_RELEASE := my-collector
+NAMESPACE := my-example
 
-OTEL := otel-ingress
+build : install-cert-manager add-repositories wait install-operators wait deploy-instances
 
-create-cluster :
-	kind create cluster --name $(NGINX_OP)-cluster
+clean :
+	$(MAKE) uninstall-operators
+	$(MAKE) delete-instances
 
-build-dev :
-	kubectl kustomize -n my-namespace overlays/dev
+wait :
+	sleep 30
+
+restart : _delete-cluster _create-cluster prereqs build 
+
+prereqs : _create-cluster create-namespace 
+
+_create-cluster :
+	kind create cluster --name $(NAMESPACE)-cluster
+
+_delete-cluster :
+	kind delete cluster --name $(NAMESPACE)-cluster
 
 add-repositories : 	## add repository where we can get the nginx ingress controller
 	helm repo add nginx-stable https://helm.nginx.com/stable
@@ -14,55 +27,45 @@ add-repositories : 	## add repository where we can get the nginx ingress control
 	helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 	helm  repo update
 
-# TODO: make clone contingent on not finding dir
-install-nginx-ingress-operator :
+_install-nginx-ingress-operator :
 	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
 	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
 
-create-namespaces :
+create-namespace :
 	kubectl create -f ns.yaml
-
-create-ingress-controller :
-	kubectl create -f nginx-ingress-controller.yaml
-
-inspect-namespace :
-	kubectl -n my-nginx-ingress  get all
-
-# deploy-nginx-ingress :
-#	kubectl apply -f nginx-ingress.yaml # this goes into --namespace nginx-ingress
 
 install-cert-manager :  	## install the cert - otel-operator depends on this - it goes in namespace=cert-manager
 	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
 
-install-otel-operator : ## install the otel-operator
-	helm install -n $(NGINX_OP) $(OTEL) open-telemetry/opentelemetry-operator 
+_install-otel-operator :
+	helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
 
-deploy-collector :  ## creates from the collector spec. You should run `create` first - but you only need to run create once.
-	kubectl apply -f collector-spec.yml
+uninstall-otel-operator :
+	helm uninstall $(OTEL_RELEASE)
 
-deploy-lightstep-secret : 	## add your lightstep-access-token for the environment variable
-	kubectl apply -f lightstep-secret.yml
+install-operators : ## install the otel-operator
+	$(MAKE) _install-nginx-ingress-operator
+	$(MAKE) _install-otel-operator
 
-deploy-nginx-secret :
-	kubectl apply -f $(NGINX_DIR)/examples/default-server-secret.yaml
+deploy-instances :
+	kubectl apply -n $(NAMESPACE) -k overlays/dev/collector
+	kubectl apply -n $(NAMESPACE) -k overlays/dev/ingress
 
-create : install-ic install-otel-operator create-lightstep-secret
+delete-instances :
+	kubectl delete -n $(NAMESPACE) -k overlays/dev/collector
+	kubectl delete -n $(NAMESPACE) -k overlays/dev/ingress
+
+uninstall-operators :
+	helm uninstall $(OTEL_RELEASE)
+	helm uninstall $(NGINX_RELEASE)
 
 check-values :
-	helm get values $(OTEL)
-	helm get values $(NGINX)
+	helm get values $(OTEL_RELEASE)
+	helm get values $(NGINX_RELEASE)
 
-uninstall:
-	helm uninstall $(OTEL)
-
-upgrade-ic : 	## upgrade ingress-controller
-	helm upgrade $(NGINX) nginx-stable/nginx-ingress --namespace $(NGINX_OP)
-
-
-status :  	## 
-	helm status $(OTEL) --namespace $(NGINX_OP)
-	helm status $(NGINX) --namespace $(NGINX_OP)
-
+delete :
+	delete-instances
+	uninstall-operators
 
 ## ========================================================================================================================
 
@@ -88,7 +91,8 @@ endif
 # To re-generate a bundle for any other default channel without changing the default setup, you can:
 # - use the DEFAULT_CHANNEL as arg of the bundle target (e.g make bundle DEFAULT_CHANNEL=stable)
 # - use environment variables to overwrite this value (e.g export DEFAULT_CHANNEL="stable")
-DEFAULT_CHANNEL = "alpha"
+# DEFAULT_CHANNEL = "alpha"
+DEFAULT_CHANNEL = "stable"
 ifneq ($(origin DEFAULT_CHANNEL), undefined)
 BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
 endif
@@ -258,43 +262,14 @@ endif
 catalog-build: opm ## Build a catalog image.
 	$(OPM) index add --container-tool docker --mode semver --tag $(CATALOG_IMG) --bundles $(BUNDLE_IMGS) $(FROM_INDEX_OPT)
 
-# Push the catalog image.
-.PHONY: catalog-push
-catalog-push: ## Push a catalog image.
-	$(MAKE) docker-push IMG=$(CATALOG_IMG)
 
-# Get medatada to prepare the bundle to be submitted at https://github.com/redhat-openshift-ecosystem/certified-operators/
-.PHONY: get-metadata-certification
-get-metadata-certification:
-	@./$(NGINX_DIR)/hack/get_image_info.sh ${IMAGE_TAG_BASE} ${VERSION}
-
-RELEASE=otel-example
+# RELEASE=otel-example
 
 add-repository : 		## add repository where we can get the nginx ingress controller
 	helm repo add nginx-stable https://helm.nginx.com/stable
 	helm repo update
 
-install-ic : add-repository 	## install ingress controller
-	helm install $(RELEASE) nginx-stable/nginx-ingress
-
-install-otel-operator : 	## install the otel-operator
-	kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
-
-create-lightstep-secret : 	## add your lightstep-access-token for the environment variable
-	kubectl apply -f lightstep-secret.yml
-
-up :  ## simply creates from the collector spec. You should run `create` first.
-	kubectl apply -f collector-spec.yml
-
-create : install-otel-operator install-ic collector-up create-lightstep-secret
-
-
-uninstall-ic :
-	helm uninstall $(RELEASE)
-
-upgrade-ic : 	## upgrade ingress-controller
-	helm upgrade $(RELEASE) nginx-stable/nginx-ingress
-
-status-ic :  	## status of ingress-controller
-	helm status $(RELEASE)
+status :  	## status of ingress-controller
+	helm status $(OTEL_RELEASE) -n $(NAMESPACE)
+	helm status $(NGINX_RELEASE) -n $(NAMESPACE)
 
