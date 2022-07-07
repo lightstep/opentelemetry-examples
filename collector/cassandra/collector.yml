@@ -1,7 +1,7 @@
 receivers:
   jmx/cassandra:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: cassandra:19042
+    endpoint: cassandra:17199
     target_system: jvm,cassandra
     collection_interval: 5s
   
