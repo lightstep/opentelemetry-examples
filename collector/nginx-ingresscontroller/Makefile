@@ -22,7 +22,7 @@ clean :
 ##@ deployment
 
 deploy-instances :
-	kubectl apply -n $(NAMESPACE) -f collector/
+	kubectl apply -n $(NAMESPACE) -k collector/
 	kubectl apply -n $(NAMESPACE) -f ingress/
 
 create-namespace :

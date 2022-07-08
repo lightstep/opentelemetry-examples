@@ -1,0 +1,40 @@
+apiVersion: charts.nginx.org/v1alpha1
+kind: NginxIngress
+# https://github.com/nginxinc/nginx-ingress-helm-operator/blob/main/examples/deployment-oss-min/README.md
+# from https://github.com/nginxinc/nginx-ingress-helm-operator/blob/v1.0.0/config/samples/charts_v1alpha1_nginxingress.yaml
+metadata:
+  name: my-nginx-ingress
+spec:
+  # Default values copied from <project_dir>/helm-charts/nginx-ingress/values.yaml
+  controller:
+    defaultTLS:
+      secret: my-example/default-server-secret
+    enableCustomResources: true
+    image:
+      pullPolicy: IfNotPresent
+      repository: nginx/nginx-ingress
+      tag: 2.2.0-ubi
+    ingressClass: nginx
+    kind: deployment
+    nginxStatus:
+      allowCidrs: 127.0.0.1
+      enable: true
+      port: 8080
+    nginxplus: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    service:
+      create: true
+      type: LoadBalancer
+      customPorts:
+        - name: prometheus
+          port: 9113
+          targetPort: 9113
+  rbac:
+    create: true
+  prometheus:
+    create: true
+    port: 9113
+    scheme: http
