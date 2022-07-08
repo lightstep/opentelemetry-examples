@@ -2,6 +2,9 @@
 
 ## Running this Example
 
+The NGINX Ingress Controller Operator is a Helm based operator created with the [Operator Framework](https://sdk.operatorframework.io/).
+
+
 ### Prerequisites
 
 To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration. 
@@ -58,7 +61,7 @@ This action is in this repo's Makefile by the rule `install-nginx-ingress-operat
 
 4. Deploy an NGINX Ingress Controller instance
 
-```
+```sh
 TODO: add command to deploy ingress controller
 ```
 
@@ -87,5 +90,4 @@ kubectl delete namespace nginx-ingress-operator-system
 ```
 
 Then you can proceed to delete any individual resources that may be in the default namespace. Look over it with `kubectl get all` and delete accordingly.
-
 

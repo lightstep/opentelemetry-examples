@@ -1,49 +1,78 @@
-NGINX_RELEASE := my-ingress
-OTEL_RELEASE := my-collector
-NAMESPACE := my-example
+NGINX_RELEASE := my-ingress-release
 
-# This Makefile organizes the steps for running this demo. The all command should work if 
-# you already have a cluster.
+OTEL_RELEASE := my-collector-release
 
-all : install-cert-manager create-namespace add-repositories wait install-operators wait deploy-instances ## default target: build the example with kind 
+OTEL_OPERATOR_NAMESPACE := otel-collector-operator-system
+
+NGINX_OPERATOR_NAMESPACE := nginx-ingress-operator-system
+
+EXAMPLE_NAMESPACE := my-example
+
+all : | setup install-operators deploy-instances
+
+setup : install-cert-manager add-repositories create-namespace 
+install-operators : _install-nginx-ingress-operator _install-otel-operator
+deploy-instances : _deploy-collector _deploy-nginx
 
 ##@ convenience
 
-restart : _delete-cluster _create-cluster prereqs all 
-
-delete :
-	delete-instances
-	uninstall-operators
-
 clean :
-	$(MAKE) uninstall-operators
-	$(MAKE) delete-instances
+	@echo ** Deleting namespaces. **
+	@kubectl delete namespace $(EXAMPLE_NAMESPACE)
+	@kubectl delete namespace $(OTEL_OPERATOR_NAMESPACE)
+	@kubectl delete namespace $(NGINX_OPERATOR_NAMESPACE)
+	@kubectl delete namespace cert-manager
+	@echo ** Namespaces have been deleted. **
 
 ##@ deployment
 
-deploy-instances :
-	kubectl apply -n $(NAMESPACE) -k collector/
-	kubectl apply -n $(NAMESPACE) -f ingress/
+_wait-for-nginx-operator :
+	@echo ** Waiting for NGINX Operator. **
+	@kubectl wait deployment -n $(NGINX_OPERATOR_NAMESPACE) nginx-ingress-operator-controller-manager --for condition=Available=True --timeout=120s
+	@echo ** NGINX Operator running. **
+
+_wait-for-collector-operator :
+	@echo ** Waiting for OTEL Operator. **
+	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) opentelemetry-operator-controller-manager --for condition=Available=True --timeout=120s
+	@echo ** Otel Operator running is. **
+
+_deploy-nginx :
+	$(MAKE) _wait-for-nginx-operator 
+	@kubectl apply -n $(EXAMPLE_NAMESPACE) -f ingress/
+
+_deploy-collector :
+	$(MAKE) _wait-for-collector-operator
+	@kubectl apply -n $(EXAMPLE_NAMESPACE) -k collector/
 
 create-namespace :
-	kubectl create -f ns.yaml
+	@echo ** Creating namespace: $(EXAMPLE_NAMESPACE) **
+	@kubectl create namespace $(EXAMPLE_NAMESPACE)
 
 install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
-	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+	@echo ** Installing cert-manager in cluster. **
+	@kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+	@echo ** cert-manager install done. **
+
+_wait-for-cert-manager :
+	@echo ** Waiting for cert-manager deployments to become available. **
+	@kubectl wait deployment -n cert-manager cert-manager --for condition=Available=True --timeout=90s 
+	@kubectl wait deployment -n cert-manager cert-manager-cainjector --for condition=Available=True --timeout=90s 
+	@kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Available=True --timeout=90s 
+	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances
-	kubectl delete -n $(NAMESPACE) -f collector/
-	kubectl delete -n $(NAMESPACE) -f ingress/
+	kubectl delete -n $(EXAMPLE_NAMESPACE) -f collector/
+	kubectl delete -n $(EXAMPLE_NAMESPACE) -f ingress/
 
 ##@ monitoring
 
 status : 	## check status of controllers
-	helm status $(OTEL_RELEASE) -n $(NAMESPACE)
-	helm status $(NGINX_RELEASE) -n $(NAMESPACE)
+	helm status $(OTEL_RELEASE) -n $(EXAMPLE_NAMESPACE)
+	helm status $(NGINX_RELEASE) -n $(EXAMPLE_NAMESPACE)
 
 get-values :
-	helm get values $(OTEL_RELEASE) -n $(NAMESPACE)
-	helm get values $(NGINX_RELEASE) -n $(NAMESPACE)
+	helm get values $(OTEL_RELEASE) -n $(EXAMPLE_NAMESPACE)
+	helm get values $(NGINX_RELEASE) -n $(EXAMPLE_NAMESPACE)
 
 wait :
 	sleep 50
@@ -51,34 +80,30 @@ wait :
 ##@ cluster prep
 
 _create-cluster : ## create kind cluster. Kind also configures kubectl to use this cluster. 
-	kind create cluster --name $(NAMESPACE)-cluster
+	kind create cluster --name $(EXAMPLE_NAMESPACE)-cluster
 
 _delete-cluster : ## delete the kind cluster with this name
-	kind delete cluster --name $(NAMESPACE)-cluster
+	kind delete cluster --name $(EXAMPLE_NAMESPACE)-cluster
 
 add-repositories : 	## add repository where we can get the nginx ingress controller
+	@echo 'Adding repositories'
 	helm repo add nginx-stable https://helm.nginx.com/stable
 	helm repo update
 	helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 	helm  repo update
+	@echo 'Repositories added'
 
 prereqs : _create-cluster create-namespace 
 
 ##@ operators
 
-install-operators : ## install the otel-operator
-	$(MAKE) _install-nginx-ingress-operator
-	$(MAKE) _install-otel-operator
-
 _install-otel-operator :
-	helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
+	$(MAKE) _wait-for-cert-manager # otel-operator requires cert-manager
+	helm install -n $(OTEL_OPERATOR_NAMESPACE) --create-namespace $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
 
 _install-nginx-ingress-operator :
 	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
 	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
-
-uninstall-otel-operator :
-	helm uninstall $(OTEL_RELEASE)
 
 uninstall-operators :
 	helm uninstall $(OTEL_RELEASE)
