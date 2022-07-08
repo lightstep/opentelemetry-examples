@@ -54,10 +54,11 @@ services:
       - hbase_data:/hbase-data
       - hbase_zookeeper_data:/zookeeper-data
     ports:
-      - 16000:16000
-      - 16010:16010
-      - 16020:16020
-      - 16030:16030
+      - 16000:16000 # Master API
+      - 16010:16010 # Master UI
+      - 16020:16020 # Region Server API
+      - 16030:16030 # Region Server UI
+      - 10101:10101
       - 2888:2888
       - 3888:3888
       - 2181:2181
