@@ -53,12 +53,17 @@ services:
     volumes:
       - hbase_data:/hbase-data
       - hbase_zookeeper_data:/zookeeper-data
+      - ./conf/hbase-env.sh:/opt/hbase-1.2.6/conf/hbase-env.sh
     ports:
       - 16000:16000 # Master API
       - 16010:16010 # Master UI
       - 16020:16020 # Region Server API
       - 16030:16030 # Region Server UI
       - 10101:10101
+      - 10102:10102
+      - 10103:10103
+      - 10104:10104
+      - 10105:10105
       - 2888:2888
       - 3888:3888
       - 2181:2181
@@ -66,6 +71,18 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075"
     env_file:
       - ./hbase-standalone.env
+    networks:
+      - integrations
+  otel-collector:
+    container_name: otel-collector
+    build: .
+    command: ["--config=/conf/collector.yml"]
+    environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:rw
 
 volumes:
   hadoop_namenode:
@@ -73,3 +90,5 @@ volumes:
   hadoop_historyserver:
   hbase_data:
   hbase_zookeeper_data:
+networks:
+    integrations:
