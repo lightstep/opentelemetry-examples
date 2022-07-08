@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+    activemq:
+        container_name: activemq
+        image: webcenter/activemq:latest
+        restart: always
+        environment:
+            ACTIVEMQ_SUNJMX_START: -Djava.rmi.server.hostname=activemq -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=10991 -Dcom.sun.management.jmxremote.rmi.port=10991 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+            ACTIVEMQ_CONFIG_NAME: amqp-srv1
+            ACTIVEMQ_CONFIG_DEFAULTACCOUNT: 'false'
+            ACTIVEMQ_ADMIN_LOGIN: admin
+            ACTIVEMQ_ADMIN_PASSWORD: admin
+            ACTIVEMQ_USERS_otelproducer: producerpassword
+            ACTIVEMQ_GROUPS_writes: otelproducer
+            ACTIVEMQ_USERS_otelconsumer: consumerpassword
+            ACTIVEMQ_GROUPS_reads: otelconsumer
+            ACTIVEMQ_CONFIG_TOPICS_topic1: mytopic1
+            ACTIVEMQ_CONFIG_TOPICS_topic2: mytopic2
+            ACTIVEMQ_CONFIG_QUEUES_queue1: myqueue1
+            ACTIVEMQ_CONFIG_QUEUES_queue2: myqueue2
+            ACTIVEMQ_CONFIG_MINMEMORY: 1024
+            ACTIVEMQ_CONFIG_MAXMEMORY: 4096
+            ACTIVEMQ_CONFIG_SCHEDULERENABLED: 'true'
+        ports:
+            - '5672:5672'
+            - '8161:8161'
+            - '10991:10991'
+            - '61616:61616'
+            - '61613:61613'
+        networks:
+            - integrations
+        stop_grace_period: 1s
+    otel-collector:
+        container_name: otel-collector
+        build: .
+        command: [ "--config=/conf/collector.yml" ]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        networks:
+            - integrations
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
