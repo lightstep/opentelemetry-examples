@@ -1,5 +1,4 @@
 /**
- * collectd - contrib/docker/rootfs_prefix/rootfs_prefix.c
  * Copyright (C) 2016-2018  Marc Fournier
  * Copyright (C) 2016-2018  Ruben Kerkhof
  *
