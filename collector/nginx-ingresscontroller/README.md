@@ -1,54 +1,89 @@
 ---
 
-# Install NGINX Ingress Helm Operator
+## Running this Example
 
-Generally instructions are from https://github.com/nginxinc/nginx-ingress-helm-operator#readme
-1. Deploy the Operator and associated resources
-	a. clone the operator
+To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration.
+
+
+## Steps
+
+### 1. Create a cluster
+
+First you'll need to create a cluster by a method of your choice. `kind create cluster` works well on Linux and is satisfactory for our purposes on MacOS.
+
+### 2. Install the OTEL collector operator 
+
+#### a. Installation prerequisite 
+
+The OTEL collector operator depends on cert-manager, so we install that first.
+
+TODO: link to install instructions for OTEL Collector Operator and write command of this step
+
+Since the Collector operator depends on the condition of cert-manager, so lets wait on the prerequisites before we proceed.
+
+```
+kubectl wait deployment -n cert-manager cert-manager --for condition=Available=True --timeout=90s 
+kubectl wait deployment -n cert-manager cert-manager-caininjector --for condition=Available=True --timeout=90s 
+kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Available=True --timeout=90s 
+```
+
+#### b. Collector installation
+
+Installing the Collector is straightforward. As we usually do when installing Helm charts, we'll start by adding the repo.
+
+TODO: Link the Collector operator/helm install instructions
+
+```sh
+TODO: add commands for add/update repository
+```
+
+```sh
+TODO: add command installing the OTEL collector
+```
+
+3. Install the [NGINX Ingress Controller Operator](https://github.com/nginxinc/nginx-ingress-helm-operator#readme).
+
+Installing the NGINX Ingress Controller Operator requires some manual steps at this time. First we need a copy of the repo. Then we can use the Makefile in that repository root to complete the installation. We do that in this sequence of commands.
+
 ```sh
 	git clone https://github.com/nginxinc/nginx-ingress-helm-operator/
 	cd nginx-ingress-helm-operator/
 	git checkout v1.0.0
-```
-	b. deploy it the operator to the k8s environment
-```sh
 	make deploy IMG=nginx/nginx-ingress-operator:1.0.0
 ```
 
-2. Deploy the NGINX Ingress Controller using the Operator
-	- There's a sample config at https://github.com/nginxinc/nginx-ingress-helm-operator/blob/main/config/samples/charts_v1alpha1_nginxingress.yaml
-	- Command is like `kubectl create -n my-nginx-ingress -f nginx-ingress-controller.yaml`
+This action is in this repo's Makefile by the rule `install-nginx-ingress-operator`.
 
-3. Check that resources were deployed
-	- `kubectl -n my-nginx-ingress get all`
+4. Deploy an NGINX Ingress Controller instance
 
-4. Delete the Ingress Controller
-	- `kubectl delete -f nginx-ingress-controller.yaml`
+```
+TODO: add command to deploy ingress controller
+```
 
-5. Delete the namespace
-	- `kubectl delete namespace my-nginx-ingress`
+5. Deploy the Collector instance
 
-# Ingest NGINX Ingress Controller metrics with the OTEL Operator
+```
+TODO: add command to deploy ingress controller
+```
 
-Here's a potentially (probably not) relevant tutorial for running opentracing: https://github.com/opentracing-contrib/nginx-opentracing/blob/master/doc/Tutorial.md.
+This command illustrates using the kustomize option (`-k`) which is what the repo is presently configured for. To make it work you'll need to make a file at `collector/patch.token.yaml`, which is just a copy of `collector/secret.yaml` with your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But it would also be fine to delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above.
 
-* Docs for Ingress Controllers (k8s objects): https://kubernetes.github.io/ingress-nginx/
-* Tutorial example by NGINX on running NGINX Ingress Controller: https://github.com/nginxinc/kubernetes-ingress/tree/main/examples/complete-example
-* Docs for OTEL Operator: https://github.com/open-telemetry/opentelemetry-operator) 
-- start by installing cert manager
-- then install the other part 
+6. Make sure everything installed in a good state 
 
-In your helm chart you'll need to set `prometheus.create` to true.
+At this point we expect to see the metrics sent to our account in Lightstep.
 
-You can set variables when you initialize helm like this...
+7. Delete the Resources 
 
-helm install my-release nginx-stable/nginx-ingress --set prometheus.create=true
+If you used Kind to run this example then the simplest way to delete the resources is to delete the cluster with `kind delete cluster` or `kind delete clusters name-of-my-cluster`.
 
-Here are the variables you can configure with helm...
-https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm
+In other environments you will want to begin by deleting the namespaces.
 
-prometheus.create           Expose NGINX or NGINX Plus metrics in the Prometheus format.                    false
-prometheus.portConfigures   the port to scrape the metrics.                                                 9113
-prometheus.schemeConfigures the HTTP scheme that requests must use to connect to the Prometheus endpoint.   http
-prometheus.secret           Specifies the namespace/name of a Kubernetes TLS secret which can be used to 
-                            establish a secure HTTPS connection with the Prometheus endpoint.               owq
+```sh
+kubectl delete namespace my-example
+kubectl delete namespace cert-manager
+kubectl delete namespace nginx-ingress-operator-system 
+```
+
+Then you can proceed to delete any individual resources that may be in the default namespace. Look over it with `kubectl get all` and delete accordingly.
+
+
