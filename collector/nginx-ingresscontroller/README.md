@@ -2,7 +2,9 @@
 
 ## Running this Example
 
-To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration.
+### Prerequisites
+
+To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration. 
 
 
 ## Steps
@@ -76,7 +78,7 @@ At this point we expect to see the metrics sent to our account in Lightstep.
 
 If you used Kind to run this example then the simplest way to delete the resources is to delete the cluster with `kind delete cluster` or `kind delete clusters name-of-my-cluster`.
 
-In other environments you will want to begin by deleting the namespaces.
+If you will be keeping your cluster then it's simplest to begin by deleting the namespaces.
 
 ```sh
 kubectl delete namespace my-example
