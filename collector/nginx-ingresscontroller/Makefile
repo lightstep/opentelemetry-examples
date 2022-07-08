@@ -2,23 +2,58 @@ NGINX_RELEASE := my-ingress
 OTEL_RELEASE := my-collector
 NAMESPACE := my-example
 
-build : install-cert-manager add-repositories wait install-operators wait deploy-instances
+# This Makefile organizes the steps for running this demo. The all command should work if 
+# you already have a cluster.
+
+all : install-cert-manager create-namespace add-repositories wait install-operators wait deploy-instances ## default target: build the example with kind 
+
+##@ convenience
+
+restart : _delete-cluster _create-cluster prereqs all 
+
+delete :
+	delete-instances
+	uninstall-operators
 
 clean :
 	$(MAKE) uninstall-operators
 	$(MAKE) delete-instances
 
+##@ deployment
+
+deploy-instances :
+	kubectl apply -n $(NAMESPACE) -f collector/
+	kubectl apply -n $(NAMESPACE) -f ingress/
+
+create-namespace :
+	kubectl create -f ns.yaml
+
+install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
+	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+
+undeploy-instances : 	## delete instances
+	kubectl delete -n $(NAMESPACE) -f collector/
+	kubectl delete -n $(NAMESPACE) -f ingress/
+
+##@ monitoring
+
+status : 	## check status of controllers
+	helm status $(OTEL_RELEASE) -n $(NAMESPACE)
+	helm status $(NGINX_RELEASE) -n $(NAMESPACE)
+
+get-values :
+	helm get values $(OTEL_RELEASE) -n $(NAMESPACE)
+	helm get values $(NGINX_RELEASE) -n $(NAMESPACE)
+
 wait :
-	sleep 30
+	sleep 50
 
-restart : _delete-cluster _create-cluster prereqs build 
+##@ cluster prep
 
-prereqs : _create-cluster create-namespace 
-
-_create-cluster :
+_create-cluster : ## create kind cluster. Kind also configures kubectl to use this cluster. 
 	kind create cluster --name $(NAMESPACE)-cluster
 
-_delete-cluster :
+_delete-cluster : ## delete the kind cluster with this name
 	kind delete cluster --name $(NAMESPACE)-cluster
 
 add-repositories : 	## add repository where we can get the nginx ingress controller
@@ -27,45 +62,27 @@ add-repositories : 	## add repository where we can get the nginx ingress control
 	helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 	helm  repo update
 
-_install-nginx-ingress-operator :
-	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
-	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
+prereqs : _create-cluster create-namespace 
 
-create-namespace :
-	kubectl create -f ns.yaml
-
-install-cert-manager :  	## install the cert - otel-operator depends on this - it goes in namespace=cert-manager
-	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
-
-_install-otel-operator :
-	helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
-
-uninstall-otel-operator :
-	helm uninstall $(OTEL_RELEASE)
+##@ operators
 
 install-operators : ## install the otel-operator
 	$(MAKE) _install-nginx-ingress-operator
 	$(MAKE) _install-otel-operator
 
-deploy-instances :
-	kubectl apply -n $(NAMESPACE) -k overlays/dev/collector
-	kubectl apply -n $(NAMESPACE) -k overlays/dev/ingress
+_install-otel-operator :
+	helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
 
-delete-instances :
-	kubectl delete -n $(NAMESPACE) -k overlays/dev/collector
-	kubectl delete -n $(NAMESPACE) -k overlays/dev/ingress
+_install-nginx-ingress-operator :
+	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
+	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
+
+uninstall-otel-operator :
+	helm uninstall $(OTEL_RELEASE)
 
 uninstall-operators :
 	helm uninstall $(OTEL_RELEASE)
 	helm uninstall $(NGINX_RELEASE)
-
-check-values :
-	helm get values $(OTEL_RELEASE)
-	helm get values $(NGINX_RELEASE)
-
-delete :
-	delete-instances
-	uninstall-operators
 
 ## ========================================================================================================================
 
@@ -123,9 +140,6 @@ endif
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
 
-.PHONY: all
-all: docker-build
-
 ##@ General
 
 # The help target prints out all targets with their descriptions organized
@@ -157,23 +171,21 @@ docker-build: ## Build docker image with the manager.
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
 
-##@ Deployment
-
 .PHONY: install
 install: kustomize ## Install CRDs into the K8s cluster specified in ~/.kube/config.
 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
-.PHONY: uninstall-nginx-ic
-uninstall-nginx-ic: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
+.PHONY: uninstall-nginx-operator
+uninstall-nginx-operator: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-.PHONY: deploy
-deploy: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
+.PHONY: deploy-nginx
+deploy-nginx: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
-.PHONY: undeploy
-undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
+.PHONY: undeploy-nginx
+undeploy-nginx: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	$(KUSTOMIZE) build config/default | kubectl delete -f -
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -262,14 +274,4 @@ endif
 catalog-build: opm ## Build a catalog image.
 	$(OPM) index add --container-tool docker --mode semver --tag $(CATALOG_IMG) --bundles $(BUNDLE_IMGS) $(FROM_INDEX_OPT)
 
-
-# RELEASE=otel-example
-
-add-repository : 		## add repository where we can get the nginx ingress controller
-	helm repo add nginx-stable https://helm.nginx.com/stable
-	helm repo update
-
-status :  	## status of ingress-controller
-	helm status $(OTEL_RELEASE) -n $(NAMESPACE)
-	helm status $(NGINX_RELEASE) -n $(NAMESPACE)
 
