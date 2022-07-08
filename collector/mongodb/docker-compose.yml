@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0.7
+    environment:
+      MONGO_INITDB_DATABASE: otel
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    networks:
+      - integrations
+    volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      - mongodb_data_container:/data/db
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.51.0
+    command: ["--config=/conf/collector.yml"]
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:rw
+volumes:
+  mongodb_data_container:
+networks:
+    integrations:

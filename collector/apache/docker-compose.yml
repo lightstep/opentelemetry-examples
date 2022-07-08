@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+    apache:
+        build: ./httpd
+        container_name: apache
+        ports:
+            - '8080:80'
+        networks:
+            - integrations
+        volumes:
+            - ./httpd/website:/usr/local/apache2/htdocs
+        stop_grace_period: 1s
+    otel-collector:
+        container_name: otel-collector
+        image: otel/opentelemetry-collector-contrib:0.50.0
+        command: ["--config=/conf/collector.yml"]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        networks:
+            - integrations
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:

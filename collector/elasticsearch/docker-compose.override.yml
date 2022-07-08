@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    secrets:
+      # you can make these certs with `make certs` or `make setup`
+      # the secrets are defined in docker-compose.yml
+      - source: elastic.ca
+        target: /elastic-ca.crt
+      - source: elasticsearch.certificate
+        target: /elasticsearch.crt
+      - source: elasticsearch.key
+        target: /elasticsearch.key
+    command: ["--config=/conf/collector.yml"]
+
+configs:
+  collector_conf:
+    file: ./collector.yml
