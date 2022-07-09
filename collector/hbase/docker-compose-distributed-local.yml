@@ -12,6 +12,8 @@ services:
       - ./hadoop.env
     ports:
       - 50070:50070
+    networks:
+      - integrations
 
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
@@ -24,6 +26,8 @@ services:
       - ./hadoop.env
     ports:
       - 50075:50075
+    networks:
+      - integrations
 
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
@@ -56,6 +60,8 @@ services:
       - ./hadoop.env
     ports:
       - 8188:8188
+    networks:
+      - integrations
   
   zoo:
     image: zookeeper:3.4.10
@@ -65,10 +71,14 @@ services:
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
     ports:
       - 2181:2181
+    networks:
+      - integrations
 
   hbase-master:
     image: bde2020/hbase-master:1.0.0-hbase1.2.6
     container_name: hbase-master
+    volumes:
+      - ./conf/hbase-env.sh:/opt/hbase-1.2.6/conf/hbase-env.sh
     hostname: hbase-master
     env_file:
       - ./hbase-distributed-local.env
@@ -76,6 +86,8 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181"
     ports:
       - 16010:16010
+    networks:
+      - integrations
 
   hbase-region:
     image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
@@ -88,8 +100,22 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181 hbase-master:16010"
     ports:
       - 16030:16030
+    networks:
+      - integrations
+  otel-collector:
+    container_name: otel-collector
+    build: .
+    command: ["--config=/conf/collector.yml"]
+    environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:rw
 
 volumes:
   hadoop_namenode:
   hadoop_datanode:
   hadoop_historyserver:
+networks:
+    integrations:
