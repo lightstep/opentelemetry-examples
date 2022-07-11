@@ -61,7 +61,7 @@ _wait-for-cert-manager :
 	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances
-	kubectl delete -n $(EXAMPLE_NAMESPACE) -f collector/
+	kubectl delete -n $(EXAMPLE_NAMESPACE) -k collector/
 	kubectl delete -n $(EXAMPLE_NAMESPACE) -f ingress/
 
 ##@ monitoring
@@ -73,9 +73,6 @@ status : 	## check status of controllers
 get-values :
 	helm get values $(OTEL_RELEASE) -n $(EXAMPLE_NAMESPACE)
 	helm get values $(NGINX_RELEASE) -n $(EXAMPLE_NAMESPACE)
-
-wait :
-	sleep 50
 
 ##@ cluster prep
 
