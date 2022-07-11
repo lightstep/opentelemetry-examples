@@ -1,0 +1,26 @@
+receivers:
+  elasticsearch:
+    nodes: ["elasticsearch"]
+    endpoint: "https://elasticsearch:9200"
+    tls:
+      ca_file: /elastic-ca.crt
+    username: elastic
+    password: changeme
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [elasticsearch]
+      processors: [batch]
+      exporters: [otlp/public, logging]
