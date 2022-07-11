@@ -11,8 +11,8 @@ EXAMPLE_NAMESPACE := my-example
 all : | setup install-operators deploy-instances
 
 setup : install-cert-manager add-repositories create-namespaces
-install-operators : _install-nginx-ingress-operator install-otel-operator
-deploy-instances : _deploy-collector _deploy-nginx
+install-operators : install-nginx-ingress-operator install-otel-operator
+deploy-instances : deploy-collector deploy-nginx
 
 ##@ convenience
 
@@ -36,11 +36,11 @@ _wait-for-collector-operator :
 	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) opentelemetry-operator-controller-manager --for condition=Available=True --timeout=120s
 	@echo ** Otel Operator running is. **
 
-_deploy-nginx :
+deploy-nginx :
 	$(MAKE) _wait-for-nginx-operator 
 	@kubectl apply -n $(EXAMPLE_NAMESPACE) -f ingress/
 
-_deploy-collector :
+deploy-collector :
 	$(MAKE) _wait-for-collector-operator
 	@kubectl apply -n $(EXAMPLE_NAMESPACE) -k collector/
 
@@ -97,10 +97,9 @@ prereqs : _create-cluster create-namespaces
 
 install-otel-operator :
 	$(MAKE) _wait-for-cert-manager # otel-operator requires cert-manager
-	# helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator
 	helm install $(OTEL_RELEASE) -n $(OTEL_OPERATOR_NAMESPACE) --create-namespace open-telemetry/opentelemetry-operator
 
-_install-nginx-ingress-operator :
+install-nginx-ingress-operator :
 	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
 	cd nginx-ingress-helm-operator; git checkout v1.0.0; $(MAKE) deploy IMG=nginx/nginx-ingress-operator:1.0.0;
 
