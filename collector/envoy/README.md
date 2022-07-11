@@ -12,7 +12,7 @@ You must have a Lightstep Observability [access token](/docs/create-and-manage-a
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
+You can run this example with `docker-compose up` in this directory.
 
 ## Configuration
 
