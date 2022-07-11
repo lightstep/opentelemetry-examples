@@ -20,7 +20,3 @@ configs:
   collector_conf:
     file: ./collector.yml
 
-      # This provides output for the file receiver
-volumes:
-  statsout:
-    driver: local

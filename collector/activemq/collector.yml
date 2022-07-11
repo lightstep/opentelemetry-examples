@@ -1,0 +1,23 @@
+receivers:
+  jmx/activemq:
+    jar_path: /opt/opentelemetry-jmx-metrics.jar
+    endpoint: activemq:10991
+    target_system: jvm,activemq
+  
+exporters:
+    logging:
+        loglevel: debug
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [jmx/activemq]
+        processors: [batch]
+        exporters: [logging, otlp]    
