@@ -22,9 +22,19 @@ First you'll need to create a cluster by a method of your choice. `kind create c
 
 The OTEL collector operator depends on cert-manager, so we install that first.
 
-TODO: link to install instructions for OTEL Collector Operator and write command of this step
+```sh
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+```
 
-Since the Collector operator depends on the condition of cert-manager, so lets wait on the prerequisites before we proceed.
+Or we can add the OTEL helm charts and install the operator from there with something like this...
+
+```sh
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm repo update
+helm install your-release-name -n your-otel-operator-namespace open-telemetry/opentelemetry-operator
+```
+
+Since the Collector operator depends on the condition of cert-manager, we'll wait on the prerequisites before we proceed.
 
 ```
 kubectl wait deployment -n cert-manager cert-manager --for condition=Available=True --timeout=90s 
@@ -34,16 +44,20 @@ kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Ava
 
 #### b. Collector installation
 
-Installing the Collector is straightforward. As we usually do when installing Helm charts, we'll start by adding the repo.
+Installing the Collector is straightforward. As we usually do when installing Helm charts, we'll start by adding the chart collection to our helm repo and updating.
 
-TODO: Link the Collector operator/helm install instructions
+Now we can either install the OpenTelemetry Operator by applying the manifest like...
 
 ```sh
-TODO: add commands for add/update repository
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
 ```
 
+Or we can use the helm charts like ... 
+
 ```sh
-TODO: add command installing the OTEL collector
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm repo update
+helm install your-release-name -n your-collector-operator-namespace --create-namespace
 ```
 
 3. Install the [NGINX Ingress Controller Operator](https://github.com/nginxinc/nginx-ingress-helm-operator#readme).
@@ -62,20 +76,22 @@ This action is in this repo's Makefile by the rule `install-nginx-ingress-operat
 4. Deploy an NGINX Ingress Controller instance
 
 ```sh
-TODO: add command to deploy ingress controller
+kubectl apply -f ingress/
 ```
 
 5. Deploy the Collector instance
 
-```
-TODO: add command to deploy ingress controller
+```sh
+kubectl apply -k collector/
 ```
 
-This command illustrates using the kustomize option (`-k`) which is what the repo is presently configured for. To make it work you'll need to make a file at `collector/patch.token.yaml`, which is just a copy of `collector/secret.yaml` with your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But it would also be fine to delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above.
+This command illustrates uses the kustomize flag (`-k`) to add the secret we need in the Collector environment to the manifest. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But it would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above assuming you want to store the access token in the file.
 
 6. Make sure everything installed in a good state 
 
 At this point we expect to see the metrics sent to our account in Lightstep.
+
+TODO: put commands to view resources
 
 7. Delete the Resources 
 
