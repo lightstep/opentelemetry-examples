@@ -1,8 +1,9 @@
 receivers:
-  jmx:
+  jmx/hadoop:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: jmx:9999
+    endpoint: hadoop:5677
     target_system: jvm,hadoop
+    collection_interval: 3s
 
 processors:
   batch:
@@ -21,6 +22,6 @@ service:
       level: "debug"
   pipelines:
     metrics:
-     receivers: [jmx]
+     receivers: [jmx/hadoop]
      processors: [batch]
      exporters: [logging,otlp]  

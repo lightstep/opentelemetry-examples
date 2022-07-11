@@ -88,9 +88,9 @@ The example configuration, used for this project shows using processors to add m
 ``` yaml
 # add the receiver configuration for your integration
 receivers:
-  jmx:
+  jmx/hadoop:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: jmx:9999
+    endpoint: hadoop:9999
     target_system: jvm,hadoop
 
 processors:
@@ -110,7 +110,7 @@ service:
       level: "debug"
   pipelines:
     metrics:
-     receivers: [jmx]
+     receivers: [jmx/hadoop]
      processors: [batch]
      exporters: [logging,otlp]  
 ```
