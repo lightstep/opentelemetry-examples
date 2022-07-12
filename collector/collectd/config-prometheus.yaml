@@ -8,7 +8,7 @@ receivers:
           scrape_interval: 5s
           metrics_path: "/metrics"
           static_configs:
-            - targets: [":9103"]
+            - targets: ["collectd:9103"]
 exporters:
   logging:
     logLevel: debug
@@ -20,4 +20,4 @@ service:
   pipelines:
     metrics:
       receivers: [prometheus/collectd]
-      exporters: [logging, otlp]
+      exporters: [logging]

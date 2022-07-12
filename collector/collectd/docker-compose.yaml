@@ -1,33 +1,39 @@
-
-version: "3.2"
+version: "3.7"
 
 services:
     collectd:
       container_name: collectd
+      hostname: collectd
       build: .
       depends_on:
         - "pgsql"
       networks:
-        - bud
+        - integration
+      ports:
+        - "9103:9103"
     otel-collector:
       container_name: otel-collect
+      hostname: otel-collector
       image: otel/opentelemetry-collector-contrib:0.50.0
       command: ["--config=/conf/config-prometheus.yaml"]
       environment:
-        LS_ACCESS_TOKEN: "XXXX"
+        LS_ACCESS_TOKEN: ${LIGHTSTEP_ACCESS_TOKEN}
       networks:
-          - bud
+          - integration
       volumes:
           - ./config-prometheus.yaml:/conf/config-prometheus.yaml:rw
     pgsql:
       container_name: pgsql
+      hostname: pgsql
       image: postgres
       environment:
-        POSTGRES_DB: "0.0.0.0"
         POSTGRES_USER: "otel"
         POSTGRES_PASSWORD: "otel"
       networks:
-          - bud
+          - integration
+      ports:
+        - "5432:5432"
 
 networks:
-  bud:
+  integration:
+    driver: bridge

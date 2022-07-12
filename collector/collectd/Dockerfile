@@ -11,17 +11,19 @@ RUN apt-get update \
     collectd-core \
     collectd-utils \
     build-essential \
+    zsh \
  && make -C /usr/src/rootfs_prefix/ \
  && apt-get --purge remove build-essential \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 COPY collectd.conf /etc/collectd/collectd.conf
-COPY collectd.conf.d /etc/collectd/collectd.conf.d
+COPY run-collectd.sh /usr/local/sbin/run-collectd.sh
+
+RUN chmod u+x /usr/local/sbin/run-collectd.sh
 
 ENV LD_PRELOAD /usr/src/rootfs_prefix/rootfs_prefix.so
 
 EXPOSE 9103
 
-ENTRYPOINT ["/usr/sbin/collectd"]
-CMD ["-f"]
+ENTRYPOINT ["/usr/local/sbin/run-collectd.sh", "8"]
