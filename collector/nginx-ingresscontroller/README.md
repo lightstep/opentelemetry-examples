@@ -24,14 +24,6 @@ The OTEL collector operator depends on cert-manager, so we install that first.
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
 ```
 
-Or we can add the OTEL helm charts and install the operator from there with something like this...
-
-```sh
-helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-helm repo update
-helm install your-release-name -n your-otel-operator-namespace open-telemetry/opentelemetry-operator
-```
-
 Since the Collector operator depends on the condition of cert-manager, we'll wait on the prerequisites before we proceed.
 
 ```
