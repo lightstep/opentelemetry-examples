@@ -75,7 +75,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075"
     env_file:
-      - ./hbase-standalone.env
+      - ./hbase.env
     networks:
       - integrations
   otel-collector:
