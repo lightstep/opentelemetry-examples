@@ -2,16 +2,16 @@ version: "3.7"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     container_name: namenode
     restart: always
     ports:
       - 9870:9870
       - 9000:9000
-      - 8004:8004
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
-      - ./conf/hadoop-env.sh:/opt/hadoop-3.2.1/etc/hadoop/hadoop-env.sh
+      - ./conf/hadoop-env.sh:/opt/hadoop-2.7.4/etc/hadoop/hadoop-env.sh
+      - ./conf/yarn-env.sh:/opt/hadoop-2.7.4/etc/hadoop/yarn-env.sh
     environment:
       - CLUSTER_NAME=otel
     env_file:
@@ -20,7 +20,7 @@ services:
       - integrations
 
   datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
     container_name: datanode
     restart: always
     volumes:
@@ -33,7 +33,7 @@ services:
       - integrations
   
   resourcemanager:
-    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
     container_name: resourcemanager
     restart: always
     environment:
@@ -44,7 +44,7 @@ services:
       - integrations
 
   nodemanager1:
-    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop2.7.4-java8
     container_name: nodemanager
     restart: always
     environment:
@@ -55,7 +55,7 @@ services:
       - integrations
   
   historyserver:
-    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
     container_name: historyserver
     restart: always
     environment:
