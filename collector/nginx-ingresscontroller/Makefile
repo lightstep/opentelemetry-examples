@@ -97,7 +97,7 @@ prereqs : _create-cluster create-namespaces
 
 install-otel-operator :
 	$(MAKE) _wait-for-cert-manager # otel-operator requires cert-manager
-	helm install $(OTEL_RELEASE) -n $(OTEL_OPERATOR_NAMESPACE) --create-namespace open-telemetry/opentelemetry-operator
+	helm install -n $(OTEL_OPERATOR_NAMESPACE) --create-namespace $(OTEL_RELEASE) open-telemetry/opentelemetry-operator 
 
 install-nginx-ingress-operator :
 	if [ ! -d nginx-ingress-helm-operator ]; then git clone https://github.com/nginxinc/nginx-ingress-helm-operator; fi
