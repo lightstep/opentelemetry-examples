@@ -96,13 +96,35 @@ Now we need to enable Prometheus metrics. We do that in the Operator by configur
 
 5. Deploy the Collector instance
 
-We deploy the OTEL Collector with a `kustomize` configuration. In this case, it's a convenient way to overlay our secret API key, which can differ by environment. To use this approach you'll need to copy `collector/secret.yaml` to `collector/.patch.token.yaml`.
+The first thing you need to do is configure the OTEL Collector's Prometheus Receiver to look for metrics at the endpoint where we've exposed by the NGINX Ingress Controller. You can approach this a variety of ways, but we're going to illustrate by embedding the configuration into the pod definition. In the spec you provide the Operator for the OpenTelemetryCollector kind you need to add a key for config, end the line with the | which indicates that a multi-line value follows.
+
+```yaml
+spec:
+  ...
+  config: |
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: otel-nginx-eg
+              static_configs:
+                - targets: ["my-nginx-nginx-ingress:9113"]
+  ...
+    exporters:
+      otlp/public:
+        endpoint: ingest.lightstep.com:443
+        headers:
+          "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  ...
+```
+
+This example provides a method for injecting the access token secret by `kustomize` merging a hidden at `collector/.patch.token.yaml`, which is the same as `collector/secret.yaml`, but it contains the real access token. You'll need to establish something consistent with your practices for managing secret.
 
 ```sh
 kubectl apply -k collector/
 ```
 
-This command illustrates uses the kustomize flag (`-k`) to add the secret we need in the Collector environment to the manifest. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But it would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above assuming you want to store the access token in the file.
+This command uses the kustomize flag (`-k`) to override the access token with the real value. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But the example would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above, assuming you you have another mechanism to get the access token variable into the environment.
 
 6. Make sure everything installed in a good state 
 
