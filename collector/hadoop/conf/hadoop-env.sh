@@ -278,7 +278,7 @@ export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
 # and therefore may override any similar flags set in HADOOP_OPTS
 #
 # a) Set JMX options
-export HDFS_NAMENODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=5677 $HDFS_NAMENODE_OPTS"
+export HDFS_NAMENODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=15677 -Djava.rmi.server.hostname=hadoop -Dcom.sun.management.jmxremote.local.only=false $HDFS_NAMENODE_OPTS"
 #
 # b) Set garbage collection logs
 # export HDFS_NAMENODE_OPTS="${HADOOP_GC_SETTINGS} -Xloggc:${HADOOP_LOG_DIR}/gc-rm.log-$(date +'%Y%m%d%H%M')"
@@ -308,7 +308,8 @@ export HDFS_NAMENODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.managem
 #
 # This is the default:
 # export HDFS_DATANODE_OPTS="-Dhadoop.security.logger=ERROR,RFAS"
-export HDFS_DATANODE_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=5679 $HDFS_DATANODE_OPTS"
+export HDFS_DATANODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=15677 -Djava.rmi.server.hostname=hadoop -Dcom.sun.management.jmxremote.local.only=false $HDFS_DATANODE_OPTS"
+
 # On secure datanodes, user to run the datanode as after dropping privileges.
 # This **MUST** be uncommented to enable secure HDFS if using privileged ports
 # to provide authentication of data transfer protocol.  This **MUST NOT** be

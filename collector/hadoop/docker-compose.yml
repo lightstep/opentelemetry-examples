@@ -1,26 +1,27 @@
-version: "3.7"
+version: "3"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
     container_name: namenode
     restart: always
     ports:
       - 9870:9870
       - 9000:9000
+      - 15677:5677
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
-      - ./conf/hadoop-env.sh:/opt/hadoop-2.7.4/etc/hadoop/hadoop-env.sh
-      - ./conf/yarn-env.sh:/opt/hadoop-2.7.4/etc/hadoop/yarn-env.sh
+      - ./conf/hadoop-env.sh:/opt/hadoop-3.2.1/etc/hadoop/hadoop-env.sh
+      - ./conf/yarn-env.sh:/opt/hadoop-3.2.1/etc/hadoop/yarn-env.sh
     environment:
-      - CLUSTER_NAME=otel
+      - CLUSTER_NAME=test
     env_file:
       - ./hadoop.env
     networks:
-      - integrations
+          - integrations
 
   datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode
     restart: always
     volumes:
@@ -30,10 +31,10 @@ services:
     env_file:
       - ./hadoop.env
     networks:
-      - integrations
+        - integrations
   
   resourcemanager:
-    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
     container_name: resourcemanager
     restart: always
     environment:
@@ -41,10 +42,10 @@ services:
     env_file:
       - ./hadoop.env
     networks:
-      - integrations
+        - integrations
 
   nodemanager1:
-    image: bde2020/hadoop-nodemanager:2.0.0-hadoop2.7.4-java8
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
     container_name: nodemanager
     restart: always
     environment:
@@ -52,10 +53,10 @@ services:
     env_file:
       - ./hadoop.env
     networks:
-      - integrations
+        - integrations
   
   historyserver:
-    image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
     container_name: historyserver
     restart: always
     environment:
@@ -65,10 +66,11 @@ services:
     env_file:
       - ./hadoop.env
     networks:
-      - integrations
+        - integrations
 
   otel-collector:
     container_name: otel-collector
+    restart: always
     build: .
     command: ["--config=/conf/collector.yml"]
     environment:
@@ -77,9 +79,10 @@ services:
         - integrations
     volumes:
         - ./collector.yml:/conf/collector.yml:rw
+
 networks:
     integrations:
-
+  
 volumes:
   hadoop_namenode:
   hadoop_datanode:

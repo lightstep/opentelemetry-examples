@@ -45,7 +45,7 @@
 # export YARN_RESOURCEMANAGER_OPTS="-Dyarn.server.resourcemanager.appsummary.log.file=rm-appsummary.log -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY"
 #
 # b) Set JMX options
-export YARN_RESOURCEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 $YARN_RESOURCEMANAGER_OPTS"
+export YARN_RESOURCEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 -Djava.rmi.server.hostname=hadoop -Dcom.sun.management.jmxremote.local.only=false $YARN_RESOURCEMANAGER_OPTS"
 #
 # c) Set garbage collection logs from hadoop-env.sh
 # export YARN_RESOURCE_MANAGER_OPTS="${HADOOP_GC_SETTINGS} -Xloggc:${HADOOP_LOG_DIR}/gc-rm.log-$(date +'%Y%m%d%H%M')"
@@ -73,7 +73,9 @@ export YARN_RESOURCEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.
 #
 # See ResourceManager for some examples
 #
-export YARN_NODEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=5680 $YARN_NODEMANAGER_OPTS"
+export YARN_NODEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 -Djava.rmi.server.hostname=hadoop -Dcom.sun.management.jmxremote.local.only=false $YARN_NODEMANAGER_OPTS"
+
+
 ###
 # TimeLineServer specific parameters
 ###
