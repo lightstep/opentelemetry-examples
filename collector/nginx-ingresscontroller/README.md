@@ -73,12 +73,33 @@ Installing the NGINX Ingress Controller Operator requires some manual steps at t
 
 This action is in this repo's Makefile by the rule `install-nginx-ingress-operator`.
 
-4. Deploy an NGINX Ingress Controller instance
+5. Deploy an NGINX Ingress Controller instance
 
-The file at `ingress/values.yaml` tells the NGINX Ingress Controller Operator how to operate our instance. 
+The file at `ingress/values.yaml` tells the NGINX Ingress Controller Operator how to operate our instance. And `ingress/default-server-secret.yaml` provides a TLS cert for the purpose of the demo. 
 
 ```sh
 kubectl apply -f ingress/
+```
+
+For purposes of monitoring via the Prometheus endpoint, we need to tend to two places in our configuration. In the first place we need to customPorts to our service. This needs to map the port where Prometheus metrics are exposed to a port where it will be exposed in the Kubernetes Service.
+
+```yaml
+    service:
+      create: true
+      type: LoadBalancer
+      customPorts:
+        - name: prometheus
+          port: 9113
+          targetPort: 9113
+```
+
+Now we need to enable Prometheus metrics. We do that in the Operator by configuring a prometheus section in the spec. The port we choose here needs to match what we map from in customPorts. And we need to be sure that create is true. We could configure security by adding a TLS cert as a secret for Prometheus. See the [NGINX docs](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm) for details of configuration with the helm chart.
+
+```yaml  
+  prometheus:
+    create: true
+    port: 9113
+    scheme: http
 ```
 
 5. Deploy the Collector instance
@@ -95,7 +116,7 @@ This command illustrates uses the kustomize flag (`-k`) to add the secret we nee
 
 At this point we expect to see the metrics sent to our account in Lightstep.
 
-We should also be able to see
+We should also be able to see that our deployments are in good health with a command like `kubectl get all -n my-example`.
 
 7. Cleanup example work
 
