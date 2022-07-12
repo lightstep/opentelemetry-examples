@@ -1,9 +1,7 @@
 ---
+# Monitoring NGINX Ingress Controller
 
-## Running this Example
-
-The NGINX Ingress Controller Operator is a Helm based operator created with the [Operator Framework](https://sdk.operatorframework.io/).
-
+This example demonstrates monitoring the NGINX Ingress Controller via the Prometheus metrics endpoint with the OTEL Collector. The example configuration deploys the NGINX Ingress Controller and the OTEL Collector via their Kubernetes operators, each of which we deploy using helm charts. 
 
 ### Prerequisites
 
@@ -62,6 +60,8 @@ helm install your-release-name -n your-collector-operator-namespace --create-nam
 
 3. Install the [NGINX Ingress Controller Operator](https://github.com/nginxinc/nginx-ingress-helm-operator#readme).
 
+The NGINX Ingress Controller Operator is a Helm based operator created with the [Operator Framework](https://sdk.operatorframework.io/). 
+
 Installing the NGINX Ingress Controller Operator requires some manual steps at this time. First we need a copy of the repo. Then we can use the Makefile in that repository root to complete the installation. We do that in this sequence of commands.
 
 ```sh
@@ -75,11 +75,15 @@ This action is in this repo's Makefile by the rule `install-nginx-ingress-operat
 
 4. Deploy an NGINX Ingress Controller instance
 
+The file at `ingress/values.yaml` tells the NGINX Ingress Controller Operator how to operate our instance. 
+
 ```sh
 kubectl apply -f ingress/
 ```
 
 5. Deploy the Collector instance
+
+We deploy the OTEL Collector with a `kustomize` configuration. In this case, it's a convenient way to overlay our secret API key, which can differ by environment. To use this approach you'll need to copy `collector/secret.yaml` to `collector/.patch.token.yaml`.
 
 ```sh
 kubectl apply -k collector/
@@ -91,18 +95,19 @@ This command illustrates uses the kustomize flag (`-k`) to add the secret we nee
 
 At this point we expect to see the metrics sent to our account in Lightstep.
 
-TODO: put commands to view resources
+We should also be able to see
 
-7. Delete the Resources 
+7. Cleanup example work
 
 If you used Kind to run this example then the simplest way to delete the resources is to delete the cluster with `kind delete cluster` or `kind delete clusters name-of-my-cluster`.
 
-If you will be keeping your cluster then it's simplest to begin by deleting the namespaces.
+If you can't delete your cluster then it's simplest to begin by deleting the namespaces.
 
 ```sh
 kubectl delete namespace my-example
 kubectl delete namespace cert-manager
 kubectl delete namespace nginx-ingress-operator-system 
+kubectl delete namespace my-otel-collector-operator-system-namespace
 ```
 
 Then you can proceed to delete any individual resources that may be in the default namespace. Look over it with `kubectl get all` and delete accordingly.
