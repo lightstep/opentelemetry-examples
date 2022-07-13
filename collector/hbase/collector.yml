@@ -1,0 +1,24 @@
+receivers:
+    jmx/hbase:
+      jar_path: /opt/opentelemetry-jmx-metrics.jar
+      endpoint: hbase:10101
+      target_system: jvm,hbase
+      collection_interval: 3s
+
+exporters:
+    logging:
+        loglevel: debug
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [jmx/hbase]
+        processors: [batch]
+        exporters: [logging, otlp] 
