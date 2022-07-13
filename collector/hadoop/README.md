@@ -17,11 +17,7 @@ You must have a Lightstep Observability [access token](/docs/create-and-manage-a
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the Hadoop service. You'll want to view this in Lightstep with a dashboard. 
-
-#### Changes
-
-Version 2.0.0 introduces uses wait_for_it script for the cluster startup
+You can run this example with `docker-compose up` in this directory. You'll want to view this in Lightstep with a dashboard. 
 
 #### Hadoop Docker
 
@@ -35,12 +31,7 @@ To deploy an example HDFS cluster, run:
 Run example wordcount job:
 ``` sh
   make wordcount
-```
-
-Or deploy in swarm:
-``` sh
-docker stack deploy -c docker-compose-v3.yml hadoop
-```
+``
 
 `docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `dockerhadoop_default`.
 
@@ -90,7 +81,7 @@ The example configuration, used for this project shows using processors to add m
 receivers:
   jmx/hadoop:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: hadoop:9999
+    endpoint: namenode:8004
     target_system: jvm,hadoop
 
 processors:
