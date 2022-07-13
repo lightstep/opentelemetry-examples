@@ -22,7 +22,6 @@
 ##
 ## yarn-env.sh > hadoop-env.sh > hard-coded defaults
 ##
-## YARN_xyz > HADOOP_xyz > hard-coded defaults
 ##
 
 ###
