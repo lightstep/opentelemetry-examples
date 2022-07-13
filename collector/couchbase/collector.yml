@@ -1,8 +1,4 @@
 receivers:
-  otlp:
-    protocols:
-      http:
-      grpc:
   prometheus/couchbase:
     config:
       scrape_configs:
@@ -18,8 +14,6 @@ exporters:
     endpoint: ingest.lightstep.com:443
     headers:
         "lightstep-access-token": "${LS_ACCESS_TOKEN}"
-  file:
-    path: statsout/collector-out.json
 
 processors:
   batch:
@@ -27,6 +21,6 @@ processors:
 service:
   pipelines:
     metrics:
-      receivers: [otlp, prometheus/couchbase]
+      receivers: [prometheus/couchbase]
       processors: [batch]
-      exporters: [otlp/public, file]
+      exporters: [otlp/public, logging]
