@@ -1,0 +1,35 @@
+receivers:
+  docker_stats:
+    # note: this only works on Docker Desktop for Mac. See: https://docs.docker.com/config/daemon/prometheus/
+    container_labels_to_metric_labels:
+      my.container.label: my-metric-label
+      my.other.container.label: my-other-metric-label
+    env_vars_to_metric_labels:
+      MY_ENVIRONMENT_VARIABLE: my-metric-label
+      MY_OTHER_ENVIRONMENT_VARIABLE: my-other-metric-label
+    provide_per_core_cpu_metrics: true
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics/proxy:
+      receivers: [docker_stats]
+      processors: [batch]
+      exporters: [logging, otlp/public]
+    metrics/appsrv:
+      receivers: [docker_stats]
+      processors: [batch]
+      exporters: [logging, otlp/public]
+  telemetry:
+    logs:
+      level: debug
