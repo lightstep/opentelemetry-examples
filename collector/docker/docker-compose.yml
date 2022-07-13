@@ -9,13 +9,19 @@ services:
     configs:
       - source: collector_conf
         target: /conf/collector.yml
-    command: ["--config=/conf/collector.yml"]
+    volumes:
+      - startup:./startup:x
+    command: ["./startup"]
+        # command: " otel --config=/conf/collector.yml"
     networks:
       - integrations
 
 configs:
   collector_conf:
     file: ./collector.yml
+
+volumes:
+  - startup
 
 networks:
   integrations:
