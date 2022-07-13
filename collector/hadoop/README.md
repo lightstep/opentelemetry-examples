@@ -15,6 +15,21 @@ Please note that not all metrics receivers available for the OpenTelemetry Colle
 
 You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
+## To enable JMX in Hadoop
+
+* [hadoop-env.sh](/collector/hadoop/conf/hadoop-env.sh)
+```sh
+export HDFS_NAMENODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8004 $HDFS_NAMENODE_OPTS"
+export HDFS_DATANODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8006 $HDFS_DATANODE_OPTS"
+```
+
+* [yarn-env-sh](/collector/hadoop/conf/yarn-env.sh)
+```sh
+export YARN_RESOURCEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 $YARN_RESOURCEMANAGER_OPTS"
+export YARN_NODEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 $YARN_NODEMANAGER_OPTS"
+```
+
+
 ## Running the Example
 
 You can run this example with `docker-compose up` in this directory. You'll want to view this in Lightstep with a dashboard. 
