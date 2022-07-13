@@ -25,7 +25,7 @@ You can run this example with `docker-compose up` in this directory. You'll want
 
 To deploy an example HDFS cluster, run:
 ``` sh
-  docker-compose up
+  docker compose up
 ```
 
 Run example wordcount job:
@@ -35,7 +35,7 @@ Run example wordcount job:
 
 `docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `dockerhadoop_default`.
 
-Run `docker network inspect` on the network (e.g. `dockerhadoop_default`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
+Run `docker network inspect` on the network (e.g. `hadoop_integrations`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
 
 * Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
 * History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
