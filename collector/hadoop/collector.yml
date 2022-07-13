@@ -1,7 +1,7 @@
 receivers:
   jmx/hadoop:
     jar_path: /opt/opentelemetry-jmx-metrics.jar
-    endpoint: hadoop:15677
+    endpoint: namenode:8004
     target_system: jvm,hadoop
     collection_interval: 3s
 
