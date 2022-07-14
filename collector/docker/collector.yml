@@ -16,11 +16,7 @@ processors:
 
 service:
   pipelines:
-    metrics/proxy:
-      receivers: [docker_stats]
-      processors: [batch]
-      exporters: [logging, otlp/public]
-    metrics/appsrv:
+    metrics:
       receivers: [docker_stats]
       processors: [batch]
       exporters: [logging, otlp/public]
