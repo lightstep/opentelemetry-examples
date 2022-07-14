@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-touch /var/run/docker.sock
-chown root:docker /var/run/docker.sock
-usermod -a -G docker $(whoami)
