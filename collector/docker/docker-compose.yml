@@ -2,26 +2,22 @@ version: '3.9'
 
 services:
   otel-collector:
-    container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel
+    image: otel/opentelemetry-collector-contrib
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
       - source: collector_conf
         target: /conf/collector.yml
     volumes:
-      - startup:./startup:x
-    command: ["./startup"]
-        # command: " otel --config=/conf/collector.yml"
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["--config=/conf/collector.yml"]
+    ports:
+      - 9100:9100
     networks:
       - integrations
-
 configs:
   collector_conf:
     file: ./collector.yml
-
-volumes:
-  - startup
-
 networks:
   integrations:
