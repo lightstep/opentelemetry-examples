@@ -1,12 +1,6 @@
 receivers:
   docker_stats:
-    # note: this only works on Docker Desktop for Mac. See: https://docs.docker.com/config/daemon/prometheus/
-    container_labels_to_metric_labels:
-      my.container.label: my-metric-label
-      my.other.container.label: my-other-metric-label
-    env_vars_to_metric_labels:
-      MY_ENVIRONMENT_VARIABLE: my-metric-label
-      MY_OTHER_ENVIRONMENT_VARIABLE: my-other-metric-label
+    endpoint: http://0.0.0.0:9100
     provide_per_core_cpu_metrics: true
 
 exporters:
