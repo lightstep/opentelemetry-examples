@@ -1,6 +1,6 @@
 receivers:
   docker_stats:
-    endpoint: http://0.0.0.0:9100
+    endpoint: http://localhost:9100
     provide_per_core_cpu_metrics: true
 
 exporters:
