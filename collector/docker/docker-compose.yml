@@ -11,11 +11,14 @@ services:
         target: /conf/collector.yml
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    user: 10002:997
     command: ["--config=/conf/collector.yml"]
     networks:
       - integrations
+
 configs:
   collector_conf:
     file: ./collector.yml
+
 networks:
   integrations:
