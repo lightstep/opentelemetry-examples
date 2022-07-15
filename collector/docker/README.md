@@ -19,9 +19,16 @@ You set the user and group in Docker Compose with the `user` key. The value is a
 
 To run as the docker group, we can pick any integer other than 0 for the uid and set the group ID to that of the docker group. You can see the `gid` with `getent group docker`. On my Debian 11 machine it's 997. 
 
-## Running the Example
+You also have to tell the Docker daemon to expose the metrics at a particular location. To do this you add something like the following to your `/etc/docker/daemon.json`. 
 
-> WARNING: This example mounts the Docker socket in a container which creates certain security risks. You can learn more about how to manage this risk [Docker's documentation on protecting access](https://docs.docker.com/engine/security/protect-access/) to the daemon socket for real world suggestions.
+```
+{
+        "metrics-addr": "127.0.0.1:9100",
+}
+```
 
-The command to run this example simply is `docker compose up -d --build`. 
+You may need to restart the Docker daemon after you change the configuration. If you use a systemd distribution then it's `sudo systemctl restart docker.service`.
 
+## Running the example
+
+You can just run `docker compose up -d --build` after you confirm your configuration.
