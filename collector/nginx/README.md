@@ -16,7 +16,7 @@ You must have a Lightstep Observability [access token](/docs/create-and-manage-a
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
+You can run this example with `docker-compose up` in this directory. 
 
 ## Configuration
 
@@ -27,17 +27,6 @@ The example configuration, used for this project shows using processors to add m
 ``` yaml
 # add the receiver configuration for your integration
 receivers:
-  otlp:
-    protocols:
-      http:
-      grpc:
-  hostmetrics:
-    collection_interval: 10s
-    scrapers:
-      memory:
-      load:
-      network:
-      paging:
   nginx/proxy:
     endpoint: 'http://nginx_proxy:8080/status'
     collection_interval: 10s
@@ -54,30 +43,16 @@ exporters:
         "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
-  resource/proxy:
-    attributes:
-    - key: instance.type
-      value: "proxy"
-      action: insert
-  resource/appsrv:
-    attributes:
-    - key: instance.type
-      value: "appsrv"
-      action: insert
   batch:
 
 service:
   pipelines:
     metrics/proxy:
-      receivers: [otlp, nginx/proxy]
-      processors: [resource/proxy]
+      receivers: [nginx/proxy]
+      processors: [batch]
       exporters: [logging, otlp/public]
     metrics/appsrv:
-      receivers: [otlp, nginx/appsrv]
-      processors: [resource/appsrv]
+      receivers: [nginx/appsrv]
+      processors: [batch]
       exporters: [logging, otlp/public]
-
-  telemetry:
-    logs:
-      level: debug
 ```
