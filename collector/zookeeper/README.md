@@ -22,10 +22,6 @@ The example configuration used for this project shows how to configure OTEL's pr
 
 ``` yaml
 receivers:
-  otlp:
-    protocols:
-      http:
-      grpc:
   prometheus/zookeeper:
     config:
       scrape_configs:
@@ -34,6 +30,8 @@ receivers:
             - targets: ["zookeeper:7000"]
 
 exporters:
+  logging:
+    loglevel: debug
   otlp/public:
     endpoint: ingest.lightstep.com:443
     headers:
@@ -45,9 +43,9 @@ processors:
 service:
   pipelines:
     metrics:
-      receivers: [otlp, prometheus/zookeeper]
+      receivers: [prometheus/zookeeper]
       processors: [batch]
-      exporters: [otlp/public]
+      exporters: [otlp/public, logging]
 
 ```
 
