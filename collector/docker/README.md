@@ -1,3 +1,4 @@
+---
 # Ingest Docker metrics using OTEL Collector's Prometheus receiver
 
 This example illustrates how you can ingest Docker metrics using the OTEL collector's Prometheus receiver. Docker exposes a Prometheus compatible metrics endpoint.
@@ -8,53 +9,19 @@ This example illustrates how you can ingest Docker metrics using the OTEL collec
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project you want to report metrics. This example is configured to recognize this in the environment variable `LS_ACCESS_TOKEN`.
+
+## Configuration Requirements
+
+A container that will use the Docker socket needs read/write permission on the host. And that's how we use the Docker API. So you can either run the container collecting metrics as a user with this permission (usually `root`, a.k.a. `0`) or under the group with this permission (usually `docker`). It's considered bad practice to run as the root user, but you should know that the docker group has equivalent privileges to root. There's more information about configuration and relevant security issues in the docs on [post installation steps for Linux](https://docs.docker.com/engine/install/linux-postinstall/) and [Docker daemon attack surface](https://docs.docker.com/engine/security/#docker-daemon-attack-surface).
+
+You set the user and group in Docker Compose with the `user` key. The value is a string containing the id integer for the user or a colon separated user and group pair - `uid:gid`.
+
+To run as the docker group, we can pick any integer other than 0 for the uid and set the group ID to that of the docker group. You can see the `gid` with `getent group docker`. On my Debian 11 machine it's 997. 
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
+> WARNING: This example mounts the Docker socket in a container which creates certain security risks. You can learn more about how to manage this risk [Docker's documentation on protecting access](https://docs.docker.com/engine/security/protect-access/) to the daemon socket for real world suggestions.
 
-## Configuration
+The command to run this example simply is `docker compose up -d --build`. 
 
-Installation of the OpenTelemetry Collector varies, please refer to the [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
-
-The example configuration used for this project shows how to configure OTEL's prometheus receiver to collect metrics from a Docker endpoint. Note that Docker provides metrics at a custom path of `/stats/prometheus` instead of the usual `/metrics` endpoint.
-
-``` yaml
-receivers:
-  otlp:
-    protocols:
-      http:
-      grpc:
-  prometheus/front-proxy:
-    config:
-      scrape_configs:
-        - job_name: otel-docker-eg
-          scrape_interval: 5s
-          metrics_path: /stats/prometheus
-          static_configs:
-            - targets: ["docker:8001"]
-
-exporters:
-  logging:
-    loglevel: debug
-  otlp/public:
-    endpoint: ingest.lightstep.com:443
-    headers:
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
-
-processors:
-  batch:
-
-service:
-  pipelines:
-    metrics:
-      receivers: [otlp, prometheus/front-proxy]
-      processors: [batch]
-      exporters: [otlp/public]
-
-```
-
-## Additional resources
-
-* This example is based on [dockerProxy's front-proxy sandbox](https://www.dockerproxy.io/docs/docker/latest/start/sandboxes/front_proxy). See [dockerProxy's sandboxes](https://www.dockerproxy.io/docs/docker/latest/start/sandboxes/) for alternative examples.
