@@ -51,7 +51,14 @@ create-namespaces :
 
 install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
 	@echo ** Installing cert-manager in cluster. **
-	@kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+	@helm repo add jetstack https://charts.jetstack.io
+	@helm repo update
+	@helm install \
+		cert-manager jetstack/cert-manager
+		--namespace cert-manager \
+		--create-namespace \
+		--version v1.8.2 \
+		--set installCRDs=true
 	@echo ** cert-manager install done. **
 
 _wait-for-cert-manager :
