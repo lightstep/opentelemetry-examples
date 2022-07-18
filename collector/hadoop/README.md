@@ -50,13 +50,7 @@ Run example wordcount job:
 
 `docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `hadoop_integrations`.
 
-Run `docker network inspect` on the network (e.g. `hadoop_integrations`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
-
-* Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
-* History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
-* Datanode: http://<dockerhadoop_IP_address>:9864/
-* Nodemanager: http://<dockerhadoop_IP_address>:8042/node
-* Resource manager: http://<dockerhadoop_IP_address>:8088/
+Run `docker network inspect` on the network (e.g. `hadoop_integrations`) to find the IP the hadoop interfaces are published on.
 
 ## Configure Environment Variables
 
