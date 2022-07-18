@@ -73,7 +73,7 @@ The file at `ingress/values.yaml` tells the NGINX Ingress Controller Operator ho
 kubectl apply -f ingress/
 ```
 
-For purposes of monitoring via the Prometheus endpoint, we need to tend to two places in our configuration. In the first place we need to customPorts to our service. This needs to map the port where Prometheus metrics are exposed to a port where it will be exposed in the Kubernetes Service.
+For purposes of monitoring via the Prometheus endpoint, we need to tend to two places in our configuration. In the first place we need to add customPorts to our service. This needs to map the port where Prometheus metrics are exposed to a port where it will be exposed in the Kubernetes Service.
 
 ```yaml
     service:
