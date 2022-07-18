@@ -21,7 +21,14 @@ First you'll need to create a cluster by a method of your choice. `kind create c
 The OTEL collector operator depends on cert-manager, so we install that first.
 
 ```sh
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.8.2 \
+  --set installCRDs=true
 ```
 
 Since the Collector operator depends on the condition of cert-manager, we'll wait on the prerequisites before we proceed.
@@ -35,12 +42,6 @@ kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Ava
 #### b. Collector installation
 
 Installing the Collector is straightforward. As we usually do when installing Helm charts, we'll start by adding the chart collection to our helm repo and updating.
-
-Now we can either install the OpenTelemetry Operator by applying the manifest like...
-
-```sh
-kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
-```
 
 Or we can use the helm charts like ... 
 
@@ -147,3 +148,7 @@ kubectl delete namespace my-otel-collector-operator-system-namespace
 
 Then you can proceed to delete any individual resources that may be in the default namespace. Look over it with `kubectl get all` and delete accordingly.
 
+## Additional Resources
+
+* NGINX demonstrates collecting Ingress Controller metrics with the OTEL Collector and sending to Lightstep in their reference architecture. See more at the [NGINX blog](https://www.nginx.com/blog/integrating-opentelemetry-modern-apps-reference-architecture-progress-report/#metrics-collection).
+* For additional detail on collecting metrics with the OTEL Collector documentation please see ["Replace Prometheus with an OpenTelemetry Collector"](https://docs.lightstep.com/docs/replace-prometheus-with-an-otel-collector-on-kubernetes).
