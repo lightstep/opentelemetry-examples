@@ -1,3 +1,0 @@
-This is a word count 
-Testing
-12345
