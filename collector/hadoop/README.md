@@ -23,7 +23,7 @@ export HDFS_NAMENODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.managem
 export HDFS_DATANODE_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8006 $HDFS_DATANODE_OPTS"
 ```
 
-* [yarn-env-sh](/collector/hadoop/conf/yarn-env.sh)
+* [yarn-env.sh](/collector/hadoop/conf/yarn-env.sh)
 ```sh
 export YARN_RESOURCEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 $YARN_RESOURCEMANAGER_OPTS"
 export YARN_NODEMANAGER_OPTS="-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=8002 $YARN_NODEMANAGER_OPTS"
@@ -48,7 +48,7 @@ Run example wordcount job:
   make wordcount
 ``
 
-`docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `dockerhadoop_default`.
+`docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `hadoop_integrations`.
 
 Run `docker network inspect` on the network (e.g. `hadoop_integrations`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
 
