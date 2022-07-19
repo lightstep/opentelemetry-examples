@@ -10,8 +10,8 @@ EXAMPLE_NAMESPACE := my-example
 
 all : | setup install-operators deploy-instances
 
-setup : install-cert-manager add-repositories create-namespaces
-install-operators : install-nginx-ingress-operator install-otel-operator
+setup : add-repositories create-namespaces
+install-operators : | install-cert-manager install-nginx-ingress-operator install-otel-operator
 deploy-instances : deploy-collector deploy-nginx
 
 ##@ convenience
