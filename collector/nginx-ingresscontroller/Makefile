@@ -61,8 +61,6 @@ install-cert-manager :  	## install cert manager. otel-operator requires this - 
 _wait-for-cert-manager :
 	@echo ** Waiting for cert-manager deployments to become available. **
 	@kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE) --for condition=Available=True --timeout=90s 
-	# @kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE)-cainjector --for condition=Available=True --timeout=90s 
-	# @kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELASE)-webhook --for condition=Available=True --timeout=90s 
 	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances
@@ -111,10 +109,11 @@ install-nginx-ingress-operator :
 uninstall-operators :
 	helm uninstall $(OTEL_RELEASE)
 	helm uninstall $(NGINX_RELEASE)
+	helm uninstall $(CERT_MANAGER_RELEASE)
 
 ## ========================================================================================================================
 
-##@ General
+##@ general
 
 # The help target prints out all targets with their descriptions organized
 # beneath their categories. The categories are represented by '##@' and the
