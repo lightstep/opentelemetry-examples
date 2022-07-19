@@ -18,10 +18,12 @@ spec:
           scrape_configs:
             - job_name: otel-nginx-eg
               static_configs:
-                - targets: [my-nginx-ingress-nginx-ingress.my-example.svc.cluster.local:9113]
+                - targets: [nginx-ingress-controller.my-example.svc.cluster.local:9113]
     processors:
       batch:
     exporters:
+      logging:
+        loglevel: debug
       otlp/public:
         endpoint: ingest.lightstep.com:443
         headers:
@@ -31,4 +33,4 @@ spec:
         metrics:
           receivers: [prometheus]
           processors: [batch]
-          exporters: [otlp/public]
+          exporters: [logging, otlp/public]
