@@ -1,11 +1,11 @@
 receivers:
-  elasticsearch:
-    nodes: ["elasticsearch"]
-    endpoint: "https://elasticsearch:9200"
-    tls:
-      ca_file: /elastic-ca.crt
-    username: elastic
-    password: changeme
+  prometheus/couchbase:
+    config:
+      scrape_configs:
+        - job_name: otel-couchbase-eg
+          scrape_interval: 5s
+          static_configs:
+            - targets: ["couchbase:8091"]
 
 exporters:
   logging:
@@ -21,6 +21,6 @@ processors:
 service:
   pipelines:
     metrics:
-      receivers: [elasticsearch]
+      receivers: [prometheus/couchbase]
       processors: [batch]
       exporters: [otlp/public, logging]

@@ -1,11 +1,11 @@
 receivers:
-  elasticsearch:
-    nodes: ["elasticsearch"]
-    endpoint: "https://elasticsearch:9200"
-    tls:
-      ca_file: /elastic-ca.crt
-    username: elastic
-    password: changeme
+  prometheus/zookeeper:
+    config:
+      scrape_configs:
+        - job_name: otel-zookeeper-eg
+          scrape_interval: 5s
+          static_configs:
+            - targets: ["zookeeper:7000"]
 
 exporters:
   logging:
@@ -21,6 +21,6 @@ processors:
 service:
   pipelines:
     metrics:
-      receivers: [elasticsearch]
+      receivers: [prometheus/zookeeper]
       processors: [batch]
       exporters: [otlp/public, logging]

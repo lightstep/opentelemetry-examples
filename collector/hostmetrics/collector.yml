@@ -9,6 +9,7 @@ receivers:
           processes: 
           filesystem: 
           network: 
+          memory:
        scrape_interval: 5s
        collector_interval: 5s
 

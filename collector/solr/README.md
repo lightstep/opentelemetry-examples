@@ -1,5 +1,5 @@
 ---
-# Ingest metrics using the NGINX integration
+# Ingest metrics using the Solr integration
 
 The OTEL Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
@@ -8,15 +8,30 @@ Please note that not all metrics receivers available for the OpenTelemetry Colle
 
 ## Requirements
 
-* OpenTelemetry Collector Contrib v0.51.0+
+* OpenTelemetry Collector Contrib v0.53.0+
 
 ## Prerequisites
 
 You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
+## OpenSSL command to generate your private key and public certificate
+```sh
+openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
+```
+
+## Review the created certificate
+```sh
+openssl x509 -text -noout -in certificate.pem
+```
+
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. 
+You can run this example with `docker-compose up` in this directory.
+
+### Add Document Data to Solr Core
+```sh
+cd nodeapp && npm i && node index.js
+```
 
 ## Configuration
 
@@ -27,32 +42,30 @@ The example configuration, used for this project shows using processors to add m
 ``` yaml
 # add the receiver configuration for your integration
 receivers:
-  nginx/proxy:
-    endpoint: 'http://nginx_proxy:8080/status'
-    collection_interval: 10s
-  nginx/appsrv:
-    endpoint: 'http://nginx_appsrv:1080/status'
-    collection_interval: 10s
-
-exporters:
-  logging:
-    loglevel: debug
-  otlp/public:
-    endpoint: ingest.lightstep.com:443
-    headers:
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  jmx/solr:
+    jar_path: /opt/opentelemetry-jmx-metrics.jar
+    endpoint: solr:8983
+    target_system: jvm,solr
 
 processors:
   batch:
 
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers: 
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
 service:
+  telemetry:
+    logs:
+      level: "debug"
   pipelines:
-    metrics/proxy:
-      receivers: [nginx/proxy]
-      processors: [batch]
-      exporters: [logging, otlp/public]
-    metrics/appsrv:
-      receivers: [nginx/appsrv]
-      processors: [batch]
-      exporters: [logging, otlp/public]
+    metrics:
+     receivers: [jmx/solr]
+     processors: [batch]
+     exporters: [logging,otlp]  
+
 ```
