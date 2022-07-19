@@ -46,7 +46,12 @@ To deploy an example HDFS cluster, run:
 Run example wordcount job:
 ``` sh
   make wordcount
-``
+```
+
+To clean/remove HDFS container and wordcount job:
+``` sh
+  make cleanup
+```
 
 `docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `hadoop_integrations`.
 

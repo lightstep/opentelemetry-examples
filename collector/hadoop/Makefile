@@ -10,3 +10,8 @@ wordcount:
 	docker run --network ${DOCKER_NETWORK} --env-file ${ENV_FILE} bde2020/hadoop-namenode:$(tag) hdfs dfs -cat /output/*
 	docker run --network ${DOCKER_NETWORK} --env-file ${ENV_FILE} bde2020/hadoop-namenode:$(tag) hdfs dfs -rm -r /output
 	docker run --network ${DOCKER_NETWORK} --env-file ${ENV_FILE} bde2020/hadoop-namenode:$(tag) hdfs dfs -rm -r /input
+
+cleanup:
+	docker stop $(shell docker ps -a -q)
+	docker rm $(shell docker ps -a -q)
+	docker rmi $(shell docker images -a -q)
