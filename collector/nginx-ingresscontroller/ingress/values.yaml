@@ -26,6 +26,7 @@ spec:
         cpu: 100m
         memory: 128Mi
     service:
+      name: nginx-ingress-controller
       create: true
       type: LoadBalancer
       customPorts:
