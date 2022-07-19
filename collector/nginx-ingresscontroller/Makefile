@@ -1,10 +1,10 @@
 NGINX_RELEASE := my-ingress-release
-
 OTEL_RELEASE := my-collector-release
+CERT_MANAGER_RELEASE := my-cert-manager-release
 
 OTEL_OPERATOR_NAMESPACE := otel-collector-operator-system
-
 NGINX_OPERATOR_NAMESPACE := nginx-ingress-operator-system
+CERT_MANAGER_NAMESPACE := cert-manager
 
 EXAMPLE_NAMESPACE := my-example
 
@@ -21,10 +21,10 @@ clean :
 	@kubectl delete namespace $(EXAMPLE_NAMESPACE)
 	@kubectl delete namespace $(OTEL_OPERATOR_NAMESPACE)
 	@kubectl delete namespace $(NGINX_OPERATOR_NAMESPACE)
-	@kubectl delete namespace cert-manager
+	@kubectl delete namespace $(CERT_MANAGER_NAMESPACE)
 	@echo ** Namespaces have been deleted. **
 
-##@deployment:
+##@ deployment:
 
 _wait-for-nginx-operator :
 	@echo ** Waiting for NGINX Operator. **
@@ -51,21 +51,18 @@ create-namespaces :
 
 install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
 	@echo ** Installing cert-manager in cluster. **
-	@helm repo add jetstack https://charts.jetstack.io
-	@helm repo update
-	@helm install \
-		cert-manager jetstack/cert-manager
-		--namespace cert-manager \
+	@helm install $(CERT_MANAGER_RELEASE) jetstack/cert-manager \
+		--namespace $(CERT_MANAGER_NAMESPACE) \
 		--create-namespace \
-		--version v1.8.2 \
+		--version v1.8.0 \
 		--set installCRDs=true
 	@echo ** cert-manager install done. **
 
 _wait-for-cert-manager :
 	@echo ** Waiting for cert-manager deployments to become available. **
-	@kubectl wait deployment -n cert-manager cert-manager --for condition=Available=True --timeout=90s 
-	@kubectl wait deployment -n cert-manager cert-manager-cainjector --for condition=Available=True --timeout=90s 
-	@kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Available=True --timeout=90s 
+	@kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE) --for condition=Available=True --timeout=90s 
+	# @kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE)-cainjector --for condition=Available=True --timeout=90s 
+	# @kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELASE)-webhook --for condition=Available=True --timeout=90s 
 	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances
@@ -90,13 +87,14 @@ _create-cluster : ## create kind cluster. Kind also configures kubectl to use th
 _delete-cluster : ## delete the kind cluster with this name
 	kind delete cluster --name $(EXAMPLE_NAMESPACE)-cluster
 
-add-repositories : 	## add repository where we can get the nginx ingress controller
-	@echo 'Adding repositories'
-	helm repo add nginx-stable https://helm.nginx.com/stable
-	helm repo update
-	helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-	helm  repo update
-	@echo 'Repositories added'
+add-repositories : 	## add repositories for helm charts
+	echo 'Adding repositories'
+	@helm repo add jetstack https://charts.jetstack.io
+	@helm repo add nginx-stable https://helm.nginx.com/stable
+	@helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+	echo 'Repositories added'
+	@helm  repo update
+	echo 'Repositories updated'
 
 prereqs : _create-cluster create-namespaces
 
