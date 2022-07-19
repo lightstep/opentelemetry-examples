@@ -1,0 +1,4 @@
+.*
+!/.gitignore
+
+*nginx-ingress-helm-operator/
