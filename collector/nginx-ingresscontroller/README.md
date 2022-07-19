@@ -24,7 +24,7 @@ The OTEL collector operator depends on cert-manager, so we install that first.
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm install \
-  cert-manager jetstack/cert-manager \
+  my-cert-manager-release jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
   --version v1.8.2 \
@@ -35,8 +35,6 @@ Since the Collector operator depends on the condition of cert-manager, we'll wai
 
 ```
 kubectl wait deployment -n cert-manager cert-manager --for condition=Available=True --timeout=90s 
-kubectl wait deployment -n cert-manager cert-manager-caininjector --for condition=Available=True --timeout=90s 
-kubectl wait deployment -n cert-manager cert-manager-webhook --for condition=Available=True --timeout=90s 
 ```
 
 #### b. Collector installation
