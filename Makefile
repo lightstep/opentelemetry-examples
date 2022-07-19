@@ -1,18 +1,7 @@
-# User must set GOOS, GOARCH, GOPATH, LIGHTSTEP_API_KEY in their environment for full use of this Makefile
-# GOOS, GOARCH, GOPATH may be automatically set with env depending on your platform - if not run go env
-# and export the given vars
-#
-# otelcontrib_$(GOOS)_$(GOARCH) must exist in ${GOPATH}/bin
-
 SHELL = /bin/sh
 
-API_KEY:=$(shell echo ${LIGHTSTEP_API_KEY})
-GOOS:=$(shell echo ${GOOS})
-GOARCH:=$(shell echo ${GOARCH})
-GOPATH:=$(shell echo ${GOPATH})
-
-.PHONY: run-collector-from-bin
-run-collector-from-bin:
+.PHONY: run_from_bin
+run_from_bin:
 ifndef RUN_CONFIG
 	$(error RUN_CONFIG variable was not defined)
 endif
@@ -43,8 +32,8 @@ ifndef COMPONENT
 endif
 	(cd receiver/$(COMPONENT) && docker compose down)
 
-.PHONY: new-component
-new-component:
+.PHONY: new_component
+new_component:
 ifndef COMPONENT
 	$(error COMPONENT variable was not defined)
 else
@@ -55,8 +44,8 @@ else
 	sed -i '' -e 's/component/$(COMPONENT)/g' collector/$(COMPONENT)/docker-compose.yaml
 endif
 
-# new-prometheus-component creates a new component that uses a prometheus receiver
-.PHONY: new-component-prometheus
+# new_component creates a new component that uses a prometheus receiver
+.PHONY: new_component_prometheus
 new_component_prometheus:
 ifndef COMPONENT
 	$(error COMPONENT variable was not defined)
@@ -67,19 +56,3 @@ else
 	sed -i '' -e 's/component/$(COMPONENT)/g' collector/$(COMPONENT)/config.yaml
 	sed -i '' -e 's/component/$(COMPONENT)/g' collector/$(COMPONENT)/docker-compose.yaml
 endif
-
-.PHONY: replace-api-key
-replace-api-key:
-ifndef API_KEY
-	$(error API_KEY is not defined)
-endif
-ifndef COMPONENT
-	$(error COMPONENT is not defined)
-endif
-	sed -i '' s/${LIGHTSTEP_ACCESS_TOKEN}/$(API_KEY)/g' collector/$(COMPONENT)/config.yaml
-
-.PHONY: run-component-project-api-key
-run-component-project-api-key: replace-api-key run-collector-from-bin docker-component-run
-
-.PHONY: run-component-project
-run-component-project: run-collector-from-bin docker-component-run

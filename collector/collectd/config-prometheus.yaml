@@ -10,8 +10,6 @@ receivers:
           static_configs:
             - targets: ["collectd:9103"]
 exporters:
-  logging:
-    logLevel: debug
   otlp:
     endpoint: ingest.lightstep.com:443
     headers:
@@ -20,4 +18,4 @@ service:
   pipelines:
     metrics:
       receivers: [prometheus/collectd]
-      exporters: [logging]
+      exporters: [otlp]
