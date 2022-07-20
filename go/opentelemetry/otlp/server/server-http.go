@@ -182,6 +182,7 @@ func main() {
 
 	wrapHandler()
 
+	fmt.Printf("Starting server on http://localhost:8081\n")
 	err = http.ListenAndServe(":8081", nil)
 	if err != nil {
 		log.Fatal(err)
