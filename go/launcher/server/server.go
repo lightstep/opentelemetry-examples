@@ -93,7 +93,7 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, pingResult)
 }
 
-func init() {
+func otelInit() {
 	if len(endpoint) == 0 {
 		endpoint = "ingest.lightstep.com:443"
 		log.Printf("Using default LS endpoint %s", endpoint)
@@ -115,7 +115,7 @@ func init() {
 }
 
 func main() {
-
+	otelInit()
 	otelLauncher := launcher.ConfigureOpentelemetry(
 		launcher.WithServiceName(serviceName),
 		launcher.WithServiceVersion(serviceVersion),
