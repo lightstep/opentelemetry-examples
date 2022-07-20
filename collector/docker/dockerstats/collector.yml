@@ -1,6 +1,6 @@
 receivers:
   docker_stats:
-    endpoint: http://localhost:9100
+    endpoint: "http://${DEFAULT_IPV4}:2375"
     provide_per_core_cpu_metrics: true
 
 exporters:

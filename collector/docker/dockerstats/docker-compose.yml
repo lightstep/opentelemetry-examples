@@ -5,6 +5,7 @@ services:
     container_name: otel
     image: otel/opentelemetry-collector-contrib
     environment:
+      DEFAULT_IPV4: ${DEFAULT_IPV4}
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
       - source: collector_conf
