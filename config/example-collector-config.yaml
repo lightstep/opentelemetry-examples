@@ -31,11 +31,16 @@ receivers:
 
     hostmetrics:
         scrapers:
-            cpu:
-            disk:
-            filesystem:
-            paging:
-  
+          cpu:
+          disk:
+          paging:
+          load:
+          process:
+          processes:
+          filesystem:
+          network:
+          memory:
+
 exporters:
     prometheus:
         endpoint: "0.0.0.0:8889"
@@ -61,6 +66,8 @@ exporters:
     #   endpoint: jaeger:6831
 
 processors:
+    resourcedetection:
+        detectors: [system]
     batch:
   
 service:
@@ -73,4 +80,5 @@ service:
         processors: [batch]
       metrics:
         receivers: [mysql, prometheus, redis, postgresql, apache, hostmetrics]
+        processors: [resourcedetection, batch]
         exporters: [logging, otlp]
