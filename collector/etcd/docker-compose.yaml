@@ -1,18 +1,58 @@
-version: "3.9"
+x-variables:
+    flag_etcd_clustering: &env_etcd_clustering 'FLAGS=--initial-cluster=us-east=http://us-east:2380,us-west=http://us-west:2380,eu-central=http://eu-central:2380,ap-south=http://ap-south:2380,af-south=http://af-south:2380'
 
+    common_settings: &build_and_ports
+        build: .
+        ports:
+            - 2379
+            - 2380
+            - 5050 # <- metrics port
 services:
-  etcd-raft-leader:
-    build: .
-    ports:
-      - 2379:2379
-      - 2380:2380
-    networks:
-      - raft-mesh
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-      - ETCD_NODE_NAME=etcd-raft-leader
-      - ETCD_CONFIG=/etc/etcd.conf
-networks:
-  raft-mesh:
-    driver: bridge
+    us-east:
+        <<: *build_and_ports
+        environment:
+            - NAME=us-east
+            - *env_etcd_clustering
+        volumes:
+            - us-east:/etcd_data
+    us-west:
+        <<: *build_and_ports
+        environment:
+            - NAME=us-east
+            - *env_etcd_clustering
+        volumes:
+            - us-west:/etcd_data
+    us-west:
+        <<: *build_and_ports
+        environment:
+            - NAME=us-east
+            - *env_etcd_clustering
+        volumes:
+            - us-west:/etcd_data
+    eu-central:
+        <<: *build_and_ports
+        environment:
+            - NAME=eu-central
+            - *env_etcd_clustering
+        volumes:
+            - eu-central:/etcd_data
+    ap-south:
+        <<: *build_and_ports
+        environment:
+            - NAME=ap-south
+            - *env_etcd_clustering
+        volumes:
+            - ap-south:/etcd_data
+    af-south:
+        <<: *build_and_ports
+        environment:
+            - NAME=af-south
+            - *env_etcd_clustering
+        volumes:
+            - af-south:/etcd_data
+volumes:
+    us-east:
+    us-west:
+    eu-central:
+    ap-south:
+    af-south:
