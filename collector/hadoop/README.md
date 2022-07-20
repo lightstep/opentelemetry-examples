@@ -55,7 +55,7 @@ Run example wordcount job:
 
 To clean/remove HDFS container and wordcount job:
 ``` sh
-  make remove_images
+  make cleanups
 ```
 
 *Obs: For users who have Docker 19 older version intalled, might make use of the below command to remove containers:

@@ -11,10 +11,10 @@ wordcount:
 	docker run --network ${DOCKER_NETWORK} --env-file ${ENV_FILE} bde2020/hadoop-namenode:$(tag) hdfs dfs -rm -r /output
 	docker run --network ${DOCKER_NETWORK} --env-file ${ENV_FILE} bde2020/hadoop-namenode:$(tag) hdfs dfs -rm -r /input
 
-remove_images:
-	docker rmi $(shell docker images 'hadoop_otel-collector' -q)
-	docker rmi $(shell docker images 'bde2020/hadoop-nodemanager' -q)
-	docker rmi $(shell docker images 'bde2020/hadoop-resourcemanager' -q)
-	docker rmi $(shell docker images 'bde2020/hadoop-namenode' -q)
-	docker rmi $(shell docker images 'bde2020/hadoop-historyserver' -q)
-	docker rmi $(shell docker images 'bde2020/hadoop-datanode' -q)
+cleanups:
+	docker run --rm hadoop_otel-collector:$(tag)
+	docker run --rm bde2020/hadoop-nodemanager:$(tag)
+	docker run --rm bde2020/hadoop-resourcemanager:$(tag)
+	docker run --rm bde2020/hadoop-namenode:$(tag)
+	docker run --rm bde2020/hadoop-historyserver:$(tag)
+	docker run --rm bde2020/hadoop-datanode:$(tag)
