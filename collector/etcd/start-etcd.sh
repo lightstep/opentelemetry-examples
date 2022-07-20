@@ -16,8 +16,5 @@ FLAGS=$(echo -n "${FLAGS} \n
     --listen-metrics-urls=http://0.0.0.0:5050"
 )
 
-
-# --config-file=/etc/etcd.conf"
-
 echo -n "Running etcd ${FLAGS}"
 /usr/local/bin/etcd $(echo -n ${FLAGS})
