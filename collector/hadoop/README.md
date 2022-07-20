@@ -38,12 +38,12 @@ You can run this example with `docker-compose up` in this directory. You'll want
 
 ### Quick Start
 
-To deploy an example HDFS cluster, run:
+To deploy an example HDFS cluster, run to pull and start:
 ``` sh
   docker compose up
 ```
 
-To stop, run:
+To stop and remove, run:
 ``` sh
   docker compose down
 ```
@@ -55,13 +55,7 @@ Run example wordcount job:
 
 To clean/remove HDFS container and wordcount job:
 ``` sh
-  make cleanups
-```
-
-*Obs: For users who have Docker 19 older version intalled, might make use of the below command to remove containers:
-
-```sh
-  docker run --rm <image>
+  make remove_all_images
 ```
 
 `docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `hadoop_integrations`.
