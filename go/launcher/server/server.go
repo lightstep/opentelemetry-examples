@@ -93,9 +93,10 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, pingResult)
 }
 
-func otelInit() {
+func newLauncher() launcher.Launcher {
 	if len(endpoint) == 0 {
 		endpoint = "ingest.lightstep.com:443"
+		// endpoint = "0.0.0.0:4317"	// Use for Collector
 		log.Printf("Using default LS endpoint %s", endpoint)
 	}
 
@@ -112,20 +113,26 @@ func otelInit() {
 	if len(lsToken) == 0 {
 		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
 	}
-}
 
-func main() {
-	otelInit()
 	otelLauncher := launcher.ConfigureOpentelemetry(
 		launcher.WithServiceName(serviceName),
 		launcher.WithServiceVersion(serviceVersion),
 		launcher.WithAccessToken(lsToken),
+		// launcher.WithSpanExporterInsecure(true),		// Use for Collector
 		launcher.WithSpanExporterEndpoint(endpoint),
+		launcher.WithMetricExporterEndpoint(endpoint),
+		// launcher.WithMetricExporterInsecure(true),	// Use for Collector
 		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
 		launcher.WithResourceAttributes(map[string]string{
 			string(semconv.ContainerNameKey): "my-container-name",
 		}),
 	)
+
+	return otelLauncher
+}
+
+func main() {
+	otelLauncher := newLauncher()
 	defer otelLauncher.Shutdown()
 
 	tracer = otel.Tracer(serviceName)
