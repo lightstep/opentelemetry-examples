@@ -9,7 +9,6 @@
 package main
 
 import (
-	// "context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -43,6 +42,45 @@ const (
 )
 
 var src = rand.NewSource(time.Now().UnixNano())
+
+func newLauncher() launcher.Launcher {
+	if len(endpoint) == 0 {
+		endpoint = "ingest.lightstep.com:443"
+		// endpoint = "0.0.0.0:4317"	// Use for Collector
+		log.Printf("Using default LS endpoint %s", endpoint)
+	}
+
+	if len(serviceName) == 0 {
+		serviceName = "test-go-server-launcher"
+		log.Printf("Using default service name %s", serviceName)
+	}
+
+	if len(serviceVersion) == 0 {
+		serviceVersion = "0.1.0"
+		log.Printf("Using default service version %s", serviceVersion)
+	}
+
+	// Comment out if sending data to Collector
+	if len(lsToken) == 0 {
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
+	}
+
+	otelLauncher := launcher.ConfigureOpentelemetry(
+		launcher.WithServiceName(serviceName),
+		launcher.WithServiceVersion(serviceVersion),
+		launcher.WithAccessToken(lsToken),
+		// launcher.WithSpanExporterInsecure(true),		// Use for Collector
+		launcher.WithSpanExporterEndpoint(endpoint),
+		launcher.WithMetricExporterEndpoint(endpoint),
+		// launcher.WithMetricExporterInsecure(true),	// Use for Collector
+		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
+		launcher.WithResourceAttributes(map[string]string{
+			string(semconv.ContainerNameKey): "my-container-name",
+		}),
+	)
+
+	return otelLauncher
+}
 
 func randString(n int) string {
 	sb := strings.Builder{}
@@ -91,44 +129,6 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 	span.AddEvent(fmt.Sprint(r.Header))
 
 	fmt.Fprintf(w, pingResult)
-}
-
-func newLauncher() launcher.Launcher {
-	if len(endpoint) == 0 {
-		endpoint = "ingest.lightstep.com:443"
-		// endpoint = "0.0.0.0:4317"	// Use for Collector
-		log.Printf("Using default LS endpoint %s", endpoint)
-	}
-
-	if len(serviceName) == 0 {
-		serviceName = "test-go-server-launcher"
-		log.Printf("Using default service name %s", serviceName)
-	}
-
-	if len(serviceVersion) == 0 {
-		serviceVersion = "0.1.0"
-		log.Printf("Using default service version %s", serviceVersion)
-	}
-
-	if len(lsToken) == 0 {
-		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
-	}
-
-	otelLauncher := launcher.ConfigureOpentelemetry(
-		launcher.WithServiceName(serviceName),
-		launcher.WithServiceVersion(serviceVersion),
-		launcher.WithAccessToken(lsToken),
-		// launcher.WithSpanExporterInsecure(true),		// Use for Collector
-		launcher.WithSpanExporterEndpoint(endpoint),
-		launcher.WithMetricExporterEndpoint(endpoint),
-		// launcher.WithMetricExporterInsecure(true),	// Use for Collector
-		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
-		launcher.WithResourceAttributes(map[string]string{
-			string(semconv.ContainerNameKey): "my-container-name",
-		}),
-	)
-
-	return otelLauncher
 }
 
 func main() {
