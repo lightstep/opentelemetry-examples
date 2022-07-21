@@ -12,7 +12,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	// "net/http"
 	"log"
 	"os"
 	"time"
@@ -23,15 +22,6 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 	"go.opentelemetry.io/otel/trace"
-	// "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	// "go.opentelemetry.io/otel"
-	// "go.opentelemetry.io/otel/attribute"
-	// "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	// "go.opentelemetry.io/otel/propagation"
-	// "go.opentelemetry.io/otel/sdk/resource"
-	// sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	// semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
-	// "go.opentelemetry.io/otel/trace"
 )
 
 var (
@@ -60,9 +50,10 @@ func newLauncher() launcher.Launcher {
 		log.Printf("Using default service version %s", serviceVersion)
 	}
 
-	// if len(lsToken) == 0 {
-	// 	log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
-	// }
+	// Comment out if sending data to Collector
+	if len(lsToken) == 0 {
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
+	}
 
 	otelLauncher := launcher.ConfigureOpentelemetry(
 		launcher.WithServiceName(serviceName),
@@ -109,25 +100,6 @@ func main() {
 	defer otelLauncher.Shutdown()
 
 	tracer = otel.Tracer(serviceName)
-
-	// ctx := context.Background()
-
-	// tp := newTraceProvider(ctx)
-	// defer func() { _ = tp.Shutdown(ctx) }()
-
-	// otel.SetTracerProvider(tp)
-
-	// // Register context and baggage propagation.
-	// // Although not strictly necessary, for this sample,
-	// // it is required for distributed tracing.
-	// otel.SetTextMapPropagator(
-	// 	propagation.NewCompositeTextMapPropagator(
-	// 		propagation.TraceContext{},
-	// 		propagation.Baggage{},
-	// 	),
-	// )
-
-	// tracer = tp.Tracer(serviceName, trace.WithInstrumentationVersion(serviceVersion))
 
 	for {
 		makeRequest(ctx)
