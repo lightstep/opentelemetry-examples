@@ -26,7 +26,21 @@ receivers:
             - opentelemetry-tests
         tls:
             insecure: true
-  
+    apache:
+        endpoint: "http://apache:80/server-status?auto"
+
+    hostmetrics:
+        scrapers:
+          cpu:
+          disk:
+          paging:
+          load:
+          process:
+          processes:
+          filesystem:
+          network:
+          memory:
+
 exporters:
     prometheus:
         endpoint: "0.0.0.0:8889"
@@ -52,6 +66,8 @@ exporters:
     #   endpoint: jaeger:6831
 
 processors:
+    resourcedetection:
+        detectors: [system]
     batch:
   
 service:
@@ -63,5 +79,6 @@ service:
         exporters: [logging, otlp]
         processors: [batch]
       metrics:
-        receivers: [mysql, prometheus, redis, postgresql]
+        receivers: [mysql, prometheus, redis, postgresql, apache, hostmetrics]
+        processors: [resourcedetection, batch]
         exporters: [logging, otlp]

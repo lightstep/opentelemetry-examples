@@ -1,0 +1,26 @@
+receivers:
+  prometheus/zookeeper:
+    config:
+      scrape_configs:
+        - job_name: otel-zookeeper-eg
+          scrape_interval: 5s
+          static_configs:
+            - targets: ["zookeeper:7000"]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/zookeeper]
+      processors: [batch]
+      exporters: [otlp/public, logging]
