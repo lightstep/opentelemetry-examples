@@ -4,7 +4,7 @@
 // usage:
 //	 export OTEL_LOG_LEVEL=debug
 //	 export LS_ACCESS_TOKEN="<your_access_token>"
-//   go run server.go
+//   go run server-direct.go
 
 package main
 
@@ -22,7 +22,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
+	// semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -46,12 +46,11 @@ var src = rand.NewSource(time.Now().UnixNano())
 func newLauncher() launcher.Launcher {
 	if len(endpoint) == 0 {
 		endpoint = "ingest.lightstep.com:443"
-		// endpoint = "0.0.0.0:4317"	// Use for Collector
 		log.Printf("Using default LS endpoint %s", endpoint)
 	}
 
 	if len(serviceName) == 0 {
-		serviceName = "test-go-server-launcher"
+		serviceName = "test-go-server-launcher-direct"
 		log.Printf("Using default service name %s", serviceName)
 	}
 
@@ -60,7 +59,6 @@ func newLauncher() launcher.Launcher {
 		log.Printf("Using default service version %s", serviceVersion)
 	}
 
-	// Comment out if sending data to Collector
 	if len(lsToken) == 0 {
 		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
 	}
@@ -69,14 +67,12 @@ func newLauncher() launcher.Launcher {
 		launcher.WithServiceName(serviceName),
 		launcher.WithServiceVersion(serviceVersion),
 		launcher.WithAccessToken(lsToken),
-		// launcher.WithSpanExporterInsecure(true),		// Use for Collector
 		launcher.WithSpanExporterEndpoint(endpoint),
 		launcher.WithMetricExporterEndpoint(endpoint),
-		// launcher.WithMetricExporterInsecure(true),	// Use for Collector
 		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
-		launcher.WithResourceAttributes(map[string]string{
-			string(semconv.ContainerNameKey): "my-container-name",
-		}),
+		// launcher.WithResourceAttributes(map[string]string{
+		// 	string(semconv.ContainerNameKey): "my-container-name",
+		// }),
 	)
 
 	return otelLauncher
