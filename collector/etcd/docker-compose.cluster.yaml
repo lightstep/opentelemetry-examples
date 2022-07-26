@@ -50,7 +50,7 @@ services:
         environment:
             - LS_ACCESS_TOKEN=${LIGHTSTEP_ACCESS_TOKEN}
         volumes:
-            - ./config-prometheus.yaml:/conf/config-prometheus.yaml:rw
+            - ./config-prometheus.cluster.yaml:/conf/config-prometheus.yaml:rw
 
 volumes:
     us-east:
