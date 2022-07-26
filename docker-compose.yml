@@ -465,7 +465,8 @@ services:
             - demo
         depends_on:
             - go-opentracing-server
-            - go-opentelemetry-server
+            - go-opentelemetry-server-collector
+            - go-opentelemetry-server-otlp
             - go-launcher-server
             - py-collector-server
             - py-opentelemetry-server
