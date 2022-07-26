@@ -24,11 +24,20 @@
   ```
   make run-client
   ```
-  * Test DB
+  * Create DB
   ```
-  CREATE DATABASE IF NOT EXISTS tutorial
+  CREATE DATABASE IF NOT EXISTS tutorial;
+  ```
+  * Create table
+  ```
   CREATE TABLE tutorial.xyz (a UInt8, d Date) ENGINE = MergeTree() ORDER BY (a) PARTITION BY toYYYYMM(d);
+  ```
+  * Insert record data
+  ```
   INSERT INTO tutorial.xyz values(8,'2022-07-25');
+  ```
+    * Query records
+  ```
   SELECT * FROM tutorial.xyz;
   ```
 * Clean up
@@ -62,12 +71,14 @@ receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'clickhouse-server'
-          metrics_path: '/v1/agent/metrics'
-          params:
-            format: ['prometheus']
+        - job_name: 'clickhouse'
+          scrape_interval: 3s
+          metrics_path: '/metrics'
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
           static_configs:
-            - targets: ['localhost:8123']
+            - targets: ['clickhouse:8001']
 ```
 
 
