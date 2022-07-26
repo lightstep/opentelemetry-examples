@@ -32,7 +32,7 @@ services:
        stop_grace_period: 1s
     go-opentelemetry-server-collector:
         container_name: go-opentelemetry-server-collector
-        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server-collector
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server
         build: ./go/opentelemetry/collector/server
         networks:
             - demo
@@ -48,7 +48,7 @@ services:
         stop_grace_period: 1s
     go-opentelemetry-client-collector:
        container_name: go-opentelemetry-client-collector
-       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client-collector
+       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client
        build: ./go/opentelemetry/collector/client
        networks:
            - demo
@@ -66,7 +66,7 @@ services:
        stop_grace_period: 1s
     go-opentelemetry-server-otlp:
         container_name: go-opentelemetry-server-otlp
-        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server-otlp
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server
         build: ./go/opentelemetry/otlp/server
         networks:
             - demo
@@ -82,7 +82,7 @@ services:
         stop_grace_period: 1s
     go-opentelemetry-client-otlp:
        container_name: go-opentelemetry-client-otlp
-       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client-otlp
+       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client
        build: ./go/opentelemetry/otlp/client
        networks:
            - demo
