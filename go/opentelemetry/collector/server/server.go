@@ -20,7 +20,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -32,7 +32,7 @@ var (
 	tracer         trace.Tracer
 	serviceName    string = "test-go-server-collector"
 	serviceVersion string = "0.1.0"
-	collectorAddr  string = "localhost:4318" // HTTP endpoint for collector
+	collectorAddr  string = "localhost:4317" // gRPC endpoint for collector
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -46,11 +46,11 @@ var src = rand.NewSource(time.Now().UnixNano())
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	exporter, err :=
-		otlptracehttp.New(ctx,
+		otlptracegrpc.New(ctx,
 			// WithInsecure lets us use http instead of https.
 			// This is just for local development.
-			otlptracehttp.WithInsecure(),
-			otlptracehttp.WithEndpoint(collectorAddr),
+			otlptracegrpc.WithInsecure(),
+			otlptracegrpc.WithEndpoint(collectorAddr),
 		)
 
 	return exporter, err
