@@ -139,7 +139,6 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 
 	pingResult := randString(length)
 	span.SetAttributes(
-		// attribute.String("result", pingResult),
 		attribute.String("library.language", "go"),
 		attribute.String("library.version", "v1.7.0"),
 	)
@@ -156,21 +155,16 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 func main() {
 	ctx := context.Background()
 
-	// Configure a new exporter using environment variables for sending data to Honeycomb over gRPC.
 	exp, err := newExporter(ctx)
 	if err != nil {
 		log.Fatalf("failed to initialize exporter: %v", err)
 	}
 
-	// Create a new tracer provider with a batch span processor and the otlp exporter.
 	tp := newTraceProvider(exp)
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
 
-	// Register context and baggage propagation.
-	// Although not strictly necessary, for this sample,
-	// it is required for distributed tracing.
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
 			propagation.TraceContext{},

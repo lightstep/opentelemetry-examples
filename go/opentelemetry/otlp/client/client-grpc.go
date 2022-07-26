@@ -115,33 +115,22 @@ func makeRequest(ctx context.Context) {
 		attribute.String("response", string(body)),
 	)
 
-	// span.AddEvent("Making the request.", trace.WithAttributes(attribute.String("bleh", "Sup!")))
-	// span.AddEvent("Making the request. Workin' workin' workin'")
-	// span.AddEvent("writing response", trace.WithAttributes(
-	// 	attribute.String("content", "hello world"),
-	// 	attribute.Int("answer", 42),
-	// ))
 	span.AddEvent("Cancelled wait due to external signal", trace.WithAttributes(attribute.Int("pid", 4328), attribute.String("signal", "SIGHUP")))
 }
 
 func main() {
 	ctx := context.Background()
 
-	// Configure a new exporter using environment variables for sending data to Honeycomb over gRPC.
 	exp, err := newExporter(ctx)
 	if err != nil {
 		log.Fatalf("failed to initialize exporter: %v", err)
 	}
 
-	// Create a new tracer provider with a batch span processor and the otlp exporter.
 	tp := newTraceProvider(exp)
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
 
-	// Register context and baggage propagation.
-	// Although not strictly necessary, for this sample,
-	// it is required for distributed tracing.
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
 			propagation.TraceContext{},
