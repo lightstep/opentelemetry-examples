@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -27,25 +28,47 @@ import (
 
 var (
 	tracer         trace.Tracer
-	serviceName    string = "test-go-client-collector"
-	serviceVersion string = "0.1.0"
-	collectorAddr  string = "localhost:4317" // gRPC endpoint for collector
-	targetURL      string = "http://localhost:8081/ping"
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	lsEnvironment  = os.Getenv("LS_ENVIRONMENT")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+
+	if len(endpoint) == 0 {
+		endpoint = "localhost:4317"
+		log.Printf("Using default LS endpoint %s", endpoint)
+	}
+
 	exporter, err :=
 		otlptracegrpc.New(ctx,
 			// WithInsecure lets us use http instead of https.
 			// This is just for local development.
 			otlptracegrpc.WithInsecure(),
-			otlptracegrpc.WithEndpoint(collectorAddr),
+			otlptracegrpc.WithEndpoint(endpoint),
 		)
 
 	return exporter, err
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+
+	if len(serviceName) == 0 {
+		serviceName = "test-go-client-collector"
+		log.Printf("Using default service name %s", serviceName)
+	}
+
+	if len(serviceVersion) == 0 {
+		serviceVersion = "0.1.0"
+		log.Printf("Using default service version %s", serviceVersion)
+	}
+
+	if len(lsEnvironment) == 0 {
+		lsEnvironment = "dev"
+		log.Printf("Using default environment %s", lsEnvironment)
+	}
 
 	// This includes the following resources:
 	//
@@ -79,6 +102,11 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 func makeRequest(ctx context.Context) {
 	ctx, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
+
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
 
 	span.AddEvent("Making a request")
 	res, err := otelhttp.Get(ctx, targetURL)

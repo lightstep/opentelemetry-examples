@@ -20,17 +20,17 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	// semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
 var (
 	tracer         trace.Tracer
-	serviceName           = os.Getenv("LS_SERVICE_NAME")
-	serviceVersion        = os.Getenv("LS_SERVICE_VERSION")
-	endpoint              = os.Getenv("LS_SATELLITE_URL")
-	lsToken               = os.Getenv("LS_ACCESS_TOKEN")
-	targetURL      string = "http://localhost:8081/ping"
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
 func newLauncher() launcher.Launcher {
@@ -60,9 +60,9 @@ func newLauncher() launcher.Launcher {
 		launcher.WithSpanExporterEndpoint(endpoint),
 		launcher.WithMetricExporterEndpoint(endpoint),
 		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
-		// launcher.WithResourceAttributes(map[string]string{
-		// 	string(semconv.ContainerNameKey): "my-container-name",
-		// }),
+		launcher.WithResourceAttributes(map[string]string{
+			string(semconv.ContainerNameKey): "my-container-name",
+		}),
 	)
 
 	return otelLauncher
@@ -71,6 +71,11 @@ func newLauncher() launcher.Launcher {
 func makeRequest(ctx context.Context) {
 	ctx, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
+
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
 
 	span.AddEvent("Making a request")
 	res, err := otelhttp.Get(ctx, targetURL)

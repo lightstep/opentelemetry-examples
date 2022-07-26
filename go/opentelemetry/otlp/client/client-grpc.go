@@ -28,12 +28,12 @@ import (
 
 var (
 	tracer         trace.Tracer
-	serviceName           = os.Getenv("LS_SERVICE_NAME")
-	serviceVersion        = os.Getenv("LS_SERVICE_VERSION")
-	endpoint              = os.Getenv("LS_SATELLITE_URL")
-	lsToken               = os.Getenv("LS_ACCESS_TOKEN")
-	lsEnvironment         = os.Getenv("LS_ENVIRONMENT")
-	targetURL      string = "http://localhost:8081/ping"
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
+	lsEnvironment  = os.Getenv("LS_ENVIRONMENT")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
@@ -99,6 +99,11 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 func makeRequest(ctx context.Context) {
 	ctx, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
+
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
 
 	span.AddEvent("Did some cool stuff")
 	res, err := otelhttp.Get(ctx, targetURL)

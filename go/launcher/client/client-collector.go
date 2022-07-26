@@ -25,10 +25,10 @@ import (
 
 var (
 	tracer         trace.Tracer
-	serviceName           = os.Getenv("LS_SERVICE_NAME")
-	serviceVersion        = os.Getenv("LS_SERVICE_VERSION")
-	endpoint              = os.Getenv("LS_SATELLITE_URL")
-	targetURL      string = "http://localhost:8081/ping"
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
 func newLauncher() launcher.Launcher {
@@ -66,6 +66,11 @@ func newLauncher() launcher.Launcher {
 func makeRequest(ctx context.Context) {
 	ctx, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
+
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
 
 	span.AddEvent("Making a request")
 	res, err := otelhttp.Get(ctx, targetURL)
