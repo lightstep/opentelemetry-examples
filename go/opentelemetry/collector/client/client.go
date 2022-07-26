@@ -10,12 +10,13 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	// "net/http"
+	"log"
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -32,7 +33,7 @@ var (
 	targetURL      string = "http://localhost:8081/ping"
 )
 
-func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
+func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	exporter, err :=
 		otlptracehttp.New(ctx,
 			// WithInsecure lets us use http instead of https.
@@ -41,9 +42,10 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 			otlptracehttp.WithEndpoint(collectorAddr),
 		)
 
-	if err != nil {
-		panic(err)
-	}
+	return exporter, err
+}
+
+func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 
 	// This includes the following resources:
 	//
@@ -69,7 +71,7 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 	}
 
 	return sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
+		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(resource),
 	)
 }
@@ -99,7 +101,12 @@ func makeRequest(ctx context.Context) {
 func main() {
 	ctx := context.Background()
 
-	tp := newTraceProvider(ctx)
+	exp, err := newExporter(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize exporter: %v", err)
+	}
+
+	tp := newTraceProvider(exp)
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
