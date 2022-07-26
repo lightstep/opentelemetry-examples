@@ -24,11 +24,20 @@
   ```
   make run-client
   ```
-  * Test DB
+  * Create DB
   ```
-  CREATE DATABASE IF NOT EXISTS tutorial
+  CREATE DATABASE IF NOT EXISTS tutorial;
+  ```
+  * Create table
+  ```
   CREATE TABLE tutorial.xyz (a UInt8, d Date) ENGINE = MergeTree() ORDER BY (a) PARTITION BY toYYYYMM(d);
+  ```
+  * Insert record data
+  ```
   INSERT INTO tutorial.xyz values(8,'2022-07-25');
+  ```
+    * Query records
+  ```
   SELECT * FROM tutorial.xyz;
   ```
 * Clean up
