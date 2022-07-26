@@ -19,6 +19,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -43,7 +44,7 @@ const (
 
 var src = rand.NewSource(time.Now().UnixNano())
 
-func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
+func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	exporter, err :=
 		otlptracehttp.New(ctx,
 			// WithInsecure lets us use http instead of https.
@@ -52,9 +53,10 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 			otlptracehttp.WithEndpoint(collectorAddr),
 		)
 
-	if err != nil {
-		panic(err)
-	}
+	return exporter, err
+}
+
+func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 
 	// This includes the following resources:
 	//
@@ -80,7 +82,7 @@ func newTraceProvider(ctx context.Context) *sdktrace.TracerProvider {
 	}
 
 	return sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
+		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(resource),
 	)
 }
@@ -121,7 +123,6 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 
 	pingResult := randString(length)
 	span.SetAttributes(
-		// attribute.String("result", pingResult),
 		attribute.String("library.language", "go"),
 		attribute.String("library.version", "v1.7.0"),
 	)
@@ -138,14 +139,16 @@ func handlePing(w http.ResponseWriter, r *http.Request) {
 func main() {
 	ctx := context.Background()
 
-	tp := newTraceProvider(ctx)
+	exp, err := newExporter(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize exporter: %v", err)
+	}
+
+	tp := newTraceProvider(exp)
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
 
-	// Register context and baggage propagation.
-	// Although not strictly necessary, for this sample,
-	// it is required for distributed tracing.
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
 			propagation.TraceContext{},
@@ -158,7 +161,7 @@ func main() {
 	wrapHandler()
 
 	fmt.Printf("Starting server on http://localhost:8081\n")
-	err := http.ListenAndServe(":8081", nil)
+	err = http.ListenAndServe(":8081", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
