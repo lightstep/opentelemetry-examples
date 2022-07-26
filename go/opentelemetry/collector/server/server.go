@@ -12,6 +12,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -30,9 +31,10 @@ import (
 
 var (
 	tracer         trace.Tracer
-	serviceName    string = "test-go-server-collector"
-	serviceVersion string = "0.1.0"
-	collectorAddr  string = "localhost:4317" // gRPC endpoint for collector
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	lsEnvironment  = os.Getenv("LS_ENVIRONMENT")
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -45,18 +47,38 @@ const (
 var src = rand.NewSource(time.Now().UnixNano())
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+	if len(endpoint) == 0 {
+		endpoint = "localhost:4317"
+		log.Printf("Using default LS endpoint %s", endpoint)
+	}
+
 	exporter, err :=
 		otlptracegrpc.New(ctx,
 			// WithInsecure lets us use http instead of https.
 			// This is just for local development.
 			otlptracegrpc.WithInsecure(),
-			otlptracegrpc.WithEndpoint(collectorAddr),
+			otlptracegrpc.WithEndpoint(endpoint),
 		)
 
 	return exporter, err
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+
+	if len(serviceName) == 0 {
+		serviceName = "test-go-server-collector"
+		log.Printf("Using default service name %s", serviceName)
+	}
+
+	if len(serviceVersion) == 0 {
+		serviceVersion = "0.1.0"
+		log.Printf("Using default service version %s", serviceVersion)
+	}
+
+	if len(lsEnvironment) == 0 {
+		lsEnvironment = "dev"
+		log.Printf("Using default environment %s", lsEnvironment)
+	}
 
 	// This includes the following resources:
 	//
