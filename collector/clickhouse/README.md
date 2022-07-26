@@ -47,14 +47,11 @@ See the [Clickhouse Telemetry Docs][clickhouse-docs-telemetry] for comprehensive
 
 ## Configure clickhouse
 
-clickhouse has native support for Prometheus, but you need to set the `prometheus_retention_time` configuration option to a number greater than zero for it to be enabled. The documentation also recommends setting `disable_hostname` to `true` to prevent metrics from being prefixed with hostname. See the clickhouse Server configuration example below in HCL format. Adapt as needed for other formats (json, yaml, etc).
+Clickhouse accepts trace context over a native protocol that is used for communication between ClickHouse servers or between the client and server. 
 
-```hcl
-telemetry {
-  prometheus_retention_time = "60s"
-  disable_hostname = true
-}
-```
+ClickHouse creates `trace spans` for each query and some of the query execution stages, such as query planning or distributed queries so the tracing information is exported to Prometheus.
+
+For manual testing, trace context headers conforming to the Trace Context recommendation can be supplied to `clickhouse-client` using `--opentelemetry-traceparent` and `--opentelemetry-tracestate` flags.
 
 ## Configure the Collector
 
