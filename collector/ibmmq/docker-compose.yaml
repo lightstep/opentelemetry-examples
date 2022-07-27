@@ -2,6 +2,7 @@ version: "3.2"
 services:
   ibmmq-leader:
     image: ibmcom/mq:latest
+    hostname: ibmmq-leader
     container_name: 'ibmmq-leader'
     environment:
       - MQ_DEV=true
@@ -12,9 +13,20 @@ services:
     volumes:
       - ./mqs.ini:/var/mqm/mqm
     ports:
-      - 9157:9157
+      - 9157
     networks:
-      - localhost
-
+      - integrations
+  otel-collector:
+      container_name: otel-collect
+      hostname: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.50.0
+      command: ["--config=/conf/config-prometheus.yaml"]
+      environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+      networks:
+          - integrations
+      volumes:
+          - ./config-prometheus.yaml:/conf/config-prometheus.yaml:rw
 networks:
-  localhost:
+  integrations:
+    driver: bridge
