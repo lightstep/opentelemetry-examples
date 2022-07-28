@@ -1,6 +1,10 @@
 //
 // example code to test lightstep/opentelemetry-exporter-go
 //
+// NOTE: Requires that you run a Collector instance
+// (see collector/vanilla/readme.md for details on how to run the
+// Collector locally)
+//
 // usage:
 //   go run server.go
 
