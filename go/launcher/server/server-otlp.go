@@ -3,7 +3,7 @@
 //
 // usage:
 //	 export OTEL_LOG_LEVEL=debug
-//	 export LS_ACCESS_TOKEN="<your_access_token>"
+//   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
 //   go run server-direct.go
 
 package main

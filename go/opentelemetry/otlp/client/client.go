@@ -3,26 +3,23 @@
 //
 // usage:
 //   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
-//   go run server-http.go
+//   go run client.go
 
 package main
 
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
-	"math/rand"
-	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -33,43 +30,39 @@ import (
 var (
 	tracer         trace.Tracer
 	serviceName    = os.Getenv("LS_SERVICE_NAME")
-	urlPath        = "traces/otlp/v0.9"
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 	endpoint       = os.Getenv("LS_SATELLITE_URL")
 	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	lsEnvironment  = os.Getenv("LS_ENVIRONMENT")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
-
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const (
-	letterIdxBits = 6                    // 6 bits to represent a letter index
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-)
-
-var src = rand.NewSource(time.Now().UnixNano())
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+
 	if len(endpoint) == 0 {
 		endpoint = "ingest.lightstep.com:443"
-		log.Printf("Using default LS endpoint %s/%s", endpoint, urlPath)
+		log.Printf("Using default LS endpoint %s", endpoint)
+	}
+
+	if len(lsToken) == 0 {
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
 	}
 
 	var headers = map[string]string{
 		"lightstep-access-token": lsToken,
 	}
 
-	client := otlptracehttp.NewClient(
-		otlptracehttp.WithHeaders(headers),
-		otlptracehttp.WithEndpoint(endpoint),
-		otlptracehttp.WithURLPath(urlPath),
+	client := otlptracegrpc.NewClient(
+		otlptracegrpc.WithHeaders(headers),
+		otlptracegrpc.WithEndpoint(endpoint),
 	)
 	return otlptrace.New(ctx, client)
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+
 	if len(serviceName) == 0 {
-		serviceName = "test-go-server-http"
+		serviceName = "test-go-client-grpc"
 		log.Printf("Using default service name %s", serviceName)
 	}
 
@@ -104,53 +97,31 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 	)
 }
 
-func randString(n int) string {
-	sb := strings.Builder{}
-	sb.Grow(n)
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			sb.WriteByte(letterBytes[idx])
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return sb.String()
-}
-
-// Wrap the handleRollDice so that telemetry data
-// can be automatically generated for it
-func wrapHandler() {
-	handler := http.HandlerFunc(handlePing)
-	wrappedHandler := otelhttp.NewHandler(handler, "pingHandler")
-	http.Handle("/ping", wrappedHandler)
-}
-
-func handlePing(w http.ResponseWriter, r *http.Request) {
-	operationName := "ping"
-	_, span := tracer.Start(r.Context(), operationName)
+func makeRequest(ctx context.Context) {
+	ctx, span := tracer.Start(ctx, "makeRequest")
 	defer span.End()
 
-	length := rand.Intn(1024)
-	log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
 
-	pingResult := randString(length)
+	span.AddEvent("Did some cool stuff")
+	res, err := otelhttp.Get(ctx, targetURL)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Printf("Body : %s", body)
+	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
+
 	span.SetAttributes(
-		attribute.String("library.language", "go"),
-		attribute.String("library.version", "v1.7.0"),
+		attribute.String("response", string(body)),
 	)
 
-	// setting span as successful
-	span.SetStatus(codes.Ok, "Success")
-
-	// setting span event
-	span.AddEvent(fmt.Sprint(r.Header))
-
-	fmt.Fprintf(w, pingResult)
+	span.AddEvent("Cancelled wait due to external signal", trace.WithAttributes(attribute.Int("pid", 4328), attribute.String("signal", "SIGHUP")))
 }
 
 func main() {
@@ -175,11 +146,9 @@ func main() {
 
 	tracer = tp.Tracer(serviceName, trace.WithInstrumentationVersion(serviceVersion))
 
-	wrapHandler()
-
-	fmt.Printf("Starting server on http://localhost:8081\n")
-	err = http.ListenAndServe(":8081", nil)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		makeRequest(ctx)
+		time.Sleep(1 * time.Second)
 	}
+
 }
