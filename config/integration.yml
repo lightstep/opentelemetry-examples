@@ -31,7 +31,7 @@ services:
 - go-opentracing-server
 - go-opentelemetry-collector-server
 - go-opentelemetry-otlp-server
-# - go-launcher-server
+- go-launcher-server
 - py-collector-server
 - py-opentelemetry-server
 - py-launcher-server
