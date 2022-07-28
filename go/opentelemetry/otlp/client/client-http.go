@@ -2,7 +2,8 @@
 // example code to test lightstep/opentelemetry-exporter-go
 //
 // usage:
-//   go run client.go
+// 	 export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
+//   go run client-http.go
 
 package main
 
