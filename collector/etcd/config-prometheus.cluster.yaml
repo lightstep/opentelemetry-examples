@@ -1,0 +1,23 @@
+receivers:
+  prometheus/collectd:
+    use_start_time_metric: false
+    start_time_metric_regex: '^(.+_)*process_start_time_seconds$'
+    config:
+      scrape_configs:
+        - job_name: 'component-scraper'
+          scrape_interval: 5s
+          metrics_path: "/metrics"
+          static_configs:
+            - targets: ["us-east:5050", "us-west:5050", "ap-south:5050", "ap-south:5050", "af-south:5050"]
+exporters:
+  logging:
+    logLevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      - lightstep-access-token: ${LS_ACCESS_TOKEN}
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/collectd]
+      exporters: [logging, otlp]
