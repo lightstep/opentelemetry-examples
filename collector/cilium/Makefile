@@ -15,11 +15,9 @@ CILIUM_URL="https://github.com/cilium/cilium-cli/releases/latest/download/cilium
 HUBBLE_VERSION := $(shell curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
 HUBBLE_URL="https://github.com/cilium/hubble/releases/download/$(HUBBLE_VERSION)/hubble-linux-amd64.tar.gz"
 
-KIND_CGROUP:=$(shell docker inspect -f '{{.State.Pid}}' kind-control-plane)
-
 # the API Address values are accessible with `kubectl context-info`
-API_SERVER_IP := 127.0.0.1
-API_SERVER_PORT := 45811 
+# API_SERVER_IP := 127.0.0.1
+# API_SERVER_PORT := 45811 
 
 all : | setup install-operators deploy-instances
 
@@ -31,13 +29,14 @@ deploy-instances : deploy-collector
 # TODO either make this work or delete it
 # it should be making a comparison and bailing if the command results aren't the same
 check-kind-nodes-have-cgroup :
+	KIND_CGROUP:=$(shell docker inspect -f '{{.State.Pid}}' cilium-demo-cluster-control-plane)
 	if [ "`sudo ls -al /proc/$(KIND_CGROUP)/ns/cgroup`" != "`sudo ls -al /proc/self/ns/cgroup`" ]; then \
 		echo "ERROR: kind nodes do not have their own cgroup"; \
 		echo "See: note at https://docs.cilium.io/en/stable/gettingstarted/kind/"; \
 		exit 1; \
 	fi
 
-##@ convenience
+##@ tools
 
 install-cilium-cli-linux:
 	curl -L --remote-name-all $(CILIUM_VERSION){,.sha256sum}
@@ -51,6 +50,9 @@ install-hubble-cli-linux:
 	sudo tar xzvfC hubble-linux-amd64.tar.gz /usr/local/bin
 	rm hubble-linux-amd64.tar.gz*
 
+##@ setup
+
+# TODO ask what can actually accomplish this - taint all nodes
 taint-nodes:
 	kubectl taint nodes --all taint=node.cilium.io/agent-not-ready NoExecute
 
@@ -58,14 +60,30 @@ load-cilium-image:
 	docker pull quay.io/cilium/cilium:v1.12.0
 	kind load docker-image --name $(CLUSTER_NAME) quay.io/cilium/cilium:v1.12.0
 
+add-repositories : 	## add repositories for helm charts
+	# echo 'Adding repositories'
+	helm repo add jetstack https://charts.jetstack.io
+	helm repo add cilium https://helm.cilium.io/
+	helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+	# echo 'Repositories added'
+	helm  repo update
+	# echo 'Repositories updated'
+
+
+##@ install operators
+
 install-cilium-operator: upgrade-cilium-operator
 
 ## NOTE: if you say kubeProxyReplacement=strict then you evict pods if they can't replace kubeproxy
 ## we use partial. See: https://docs.cilium.io/en/stable/gettingstarted/kubeproxy-free/#kubeproxy-free
 
+# agent port: 9962
+# operator port: 9964
+# hubble port: 
 upgrade-cilium-operator: 
 	helm upgrade cilium cilium/cilium --version 1.12.0 \
 		--install \
+		--wait \
 		--namespace kube-system \
 		--set kubeProxyReplacement=partial \
 		--set socketLB.enabled=false \
@@ -74,16 +92,13 @@ upgrade-cilium-operator:
 		--set hostPort.enabled=true \
 		--set bpf.masquerade=false \
 		--set image.pullPolicy=IfNotPresent \
-		--set ipam.mode=kubernetes
-
-		# --set k8sServiceHost=${API_SERVER_IP} \
-		# --set k8sServicePort=${API_SERVER_PORT} \
-		# --set prometheus.enabled=true \
-		# --set prometheus.port=9090 \
-		# --set operator.prometheus.enabled=true \
-		# --set operator.prometheus.port=9091 \
-		# --set hubble.relay.enabled=true \
-		# --set hubble.metrics.enabled="{dnx,drop,tcp,flow,icmp,http}"
+		--set ipam.mode=kubernetes \
+		--set hubble.relay.enabled=true \
+		--set hubble.ui.enabled=true \
+		--set prometheus.enabled=true \
+		--set operator.prometheus.enabled=true \
+		--set hubble.prometheus.enabled=true \
+		--set hubble.metrics.enabled="{dns,drop,tcp,flow,icmp,http}"
 
 wait-for-cilium:
 	kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True
@@ -102,19 +117,10 @@ clean :
 
 ##@ deployment:
 
-_wait-for-nginx-operator :
-	@echo ** Waiting for CILIUM Operator. **
-	@kubectl wait deployment -n $(CILIUM_OPERATOR_NAMESPACE) cilium-operator-controller-manager --for condition=Available=True --timeout=120s
-	@echo ** CILIUM Operator running. **
-
 _wait-for-collector-operator :
 	@echo ** Waiting for OTEL Operator. **
 	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) opentelemetry-operator-controller-manager --for condition=Available=True --timeout=120s
 	@echo ** Otel Operator running is. **
-
-deploy-nginx :
-	$(MAKE) _wait-for-nginx-operator 
-	@kubectl apply -n $(DEMO_NAMESPACE) -f ingress/
 
 deploy-collector :
 	$(MAKE) _wait-for-collector-operator
@@ -126,34 +132,32 @@ create-namespaces :
 	@echo ** Namespaces created **
 
 install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
-	echo ** Installing cert-manager in cluster. **
 	helm install $(CERT_MANAGER_RELEASE) jetstack/cert-manager \
+		--wait \
 		--namespace $(CERT_MANAGER_NAMESPACE) \
 		--create-namespace \
 		--version v1.8.0 \
 		--set installCRDs=true
-	echo ** cert-manager install done. **
 
 _wait-for-cert-manager :
 	@echo ** Waiting for cert-manager deployments to become available. **
 	@kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE) --for condition=Available=True --timeout=90s 
 	@echo ** cert-manager deployments are now avaliable. **
 
-undeploy-instances : 	## delete instances
-	kubectl delete -n $(DEMO_NAMESPACE) -k collector/
-	kubectl delete -n $(DEMO_NAMESPACE) -f ingress/
-
 ##@ monitoring
 
 status : 	## check status of controllers
 	helm status $(OTEL_RELEASE) -n $(DEMO_NAMESPACE)
-	helm status $(CILIUM_RELEASE) -n $(DEMO_NAMESPACE)
+	helm status $(CILIUM_RELEASE) -n kube-system
 
-get-values :
+values :
 	helm get values $(OTEL_RELEASE) -n $(DEMO_NAMESPACE)
-	helm get values $(CILIUM_RELEASE) -n $(DEMO_NAMESPACE)
+	helm get values $(CILIUM_RELEASE) -n kube-system
 
-##@ cluster prep
+logs :
+	kubectl logs -n $(DEMO_NAMESPACE) otel
+
+##@ cluster management
 
 create-cluster:
 	# this is just a demo cluster. What's important in the config is that you not
@@ -163,21 +167,17 @@ create-cluster:
 delete-cluster : ## delete the kind cluster with this name
 	kind delete cluster --name $(CLUSTER_NAME)
 
-add-repositories : 	## add repositories for helm charts
-	echo 'Adding repositories'
-	@helm repo add jetstack https://charts.jetstack.io
-	@helm repo add cilium https://helm.cilium.io/
-	@helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-	echo 'Repositories added'
-	@helm  repo update
-	echo 'Repositories updated'
+
 
 ##@ operators
 
 install-otel-operator :
-	$(MAKE) _wait-for-cert-manager # otel-operator requires cert-manager
-	helm install -n $(OTEL_OPERATOR_NAMESPACE) --create-namespace $(OTEL_RELEASE) open-telemetry/opentelemetry-operator 
-
+	$(MAKE) _wait-for-cert-manager # don't have to use it, because we run install with --wait.. but it's good extra
+	helm install $(OTEL_RELEASE) open-telemetry/opentelemetry-operator \
+		--wait \
+		-n $(OTEL_OPERATOR_NAMESPACE) \
+		--create-namespace
+		
 uninstall-operators :
 	helm uninstall $(OTEL_RELEASE)
 	helm uninstall $(CILIUM_RELEASE)
