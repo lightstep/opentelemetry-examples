@@ -60,7 +60,7 @@ func newLauncher() launcher.Launcher {
 	}
 
 	if len(lsToken) == 0 {
-		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ACCESS_TOKEN")
 	}
 
 	otelLauncher := launcher.ConfigureOpentelemetry(

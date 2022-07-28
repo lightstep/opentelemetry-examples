@@ -72,10 +72,8 @@ services:
             - demo
         env_file:
             - .env
-        depends_on:
-            - otel-collector
         environment:
-            - LS_SATELLITE_URL=otel-collector:4317
+            - LS_SATELLITE_URL=ingest.lightstep.com:443
             - LS_INSECURE=1
             - LS_SERVICE_NAME=go-opentelemetry-otlp-server
             - LS_SERVICE_VERSION=9.9.1
@@ -88,11 +86,10 @@ services:
            - demo
        depends_on:
            - go-opentelemetry-otlp-server
-           - otel-collector
        env_file:
            - .env
        environment:
-           - LS_SATELLITE_URL=otel-collector:4317
+           - LS_SATELLITE_URL=ingest.lightstep.com:443
            - LS_INSECURE=1
            - LS_SERVICE_NAME=go-opentelemetry-otlp-client
            - LS_SERVICE_VERSION=9.9.2
@@ -104,9 +101,12 @@ services:
         build: ./go/launcher/server
         networks:
             - demo
+        depends_on:
+            - otel-collector
         env_file:
             - .env
         environment:
+            - LS_SATELLITE_URL=otel-collector:4317
             - LS_SERVICE_NAME=go-launcher-server
             - LS_SERVICE_VERSION=9.9.9
         stop_grace_period: 1s
@@ -118,9 +118,11 @@ services:
            - demo
        depends_on:
            - go-launcher-server
+           - otel-collector
        env_file:
            - .env
        environment:
+           - LS_SATELLITE_URL=otel-collector:4317
            - LS_SERVICE_NAME=go-launcher-client
            - LS_SERVICE_VERSION=9.9.8
            - DESTINATION_URL=http://go-launcher-server:8081/ping
