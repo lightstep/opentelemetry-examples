@@ -30,9 +30,9 @@ services:
            - LS_SERVICE_VERSION=1.2.7
            - DESTINATION_URL=http://go-opentracing-server:8081/ping
        stop_grace_period: 1s
-    go-opentelemetry-server-collector:
-        container_name: go-opentelemetry-server-collector
-        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server-collector
+    go-opentelemetry-collector-server:
+        container_name: go-opentelemetry-collector-server
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-collector-server
         build: ./go/opentelemetry/collector/server
         networks:
             - demo
@@ -43,30 +43,30 @@ services:
         environment:
             - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
-            - LS_SERVICE_NAME=go-opentelemetry-server-collector
+            - LS_SERVICE_NAME=go-opentelemetry-collector-server
             - LS_SERVICE_VERSION=9.9.1
         stop_grace_period: 1s
-    go-opentelemetry-client-collector:
-       container_name: go-opentelemetry-client-collector
-       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client-collector
+    go-opentelemetry-collector-client:
+       container_name: go-opentelemetry-collector-client
+       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-collector-client
        build: ./go/opentelemetry/collector/client
        networks:
            - demo
        depends_on:
-           - go-opentelemetry-server-collector
+           - go-opentelemetry-collector-server
            - otel-collector
        env_file:
            - .env
        environment:
            - LS_SATELLITE_URL=otel-collector:4317
            - LS_INSECURE=1
-           - LS_SERVICE_NAME=go-opentelemetry-client-collector
+           - LS_SERVICE_NAME=go-opentelemetry-collector-client
            - LS_SERVICE_VERSION=9.9.2
-           - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
+           - DESTINATION_URL=http://go-opentelemetry-collector-server:8081/ping
        stop_grace_period: 1s
-    go-opentelemetry-server-otlp:
-        container_name: go-opentelemetry-server-otlp
-        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-server-otlp
+    go-opentelemetry-otlp-server:
+        container_name: go-opentelemetry-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-otlp-server
         build: ./go/opentelemetry/otlp/server
         networks:
             - demo
@@ -77,26 +77,26 @@ services:
         environment:
             - LS_SATELLITE_URL=otel-collector:4317
             - LS_INSECURE=1
-            - LS_SERVICE_NAME=go-opentelemetry-server-otlp
+            - LS_SERVICE_NAME=go-opentelemetry-otlp-server
             - LS_SERVICE_VERSION=9.9.1
         stop_grace_period: 1s
-    go-opentelemetry-client-otlp:
-       container_name: go-opentelemetry-client-otlp
-       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-client-otlp
+    go-opentelemetry-otlp-client:
+       container_name: go-opentelemetry-otlp-client
+       image: ghcr.io/lightstep/opentelemetry-examples:go-opentelemetry-otlp-client
        build: ./go/opentelemetry/otlp/client
        networks:
            - demo
        depends_on:
-           - go-opentelemetry-server-otlp
+           - go-opentelemetry-otlp-server
            - otel-collector
        env_file:
            - .env
        environment:
            - LS_SATELLITE_URL=otel-collector:4317
            - LS_INSECURE=1
-           - LS_SERVICE_NAME=go-opentelemetry-client-otlp
+           - LS_SERVICE_NAME=go-opentelemetry-otlp-client
            - LS_SERVICE_VERSION=9.9.2
-           - DESTINATION_URL=http://go-opentelemetry-server:8081/ping
+           - DESTINATION_URL=http://go-opentelemetry-otlp-server:8081/ping
        stop_grace_period: 1s
     go-launcher-server:
         container_name: go-launcher-server
@@ -465,8 +465,8 @@ services:
             - demo
         depends_on:
             - go-opentracing-server
-            - go-opentelemetry-server-collector
-            - go-opentelemetry-server-otlp
+            - go-opentelemetry-collector-server
+            - go-opentelemetry-otlp-server
             - go-launcher-server
             - py-collector-server
             - py-opentelemetry-server
