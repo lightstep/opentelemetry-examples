@@ -45,7 +45,7 @@ func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	}
 
 	if len(lsToken) == 0 {
-		log.Fatalf("Lightstep token missing. Please set environment variable LS_ENVIRONMENT")
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ACCESS_TOKEN")
 	}
 
 	var headers = map[string]string{
