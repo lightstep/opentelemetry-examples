@@ -15,9 +15,9 @@ exporters:
   otlp:
     endpoint: ingest.lightstep.com:443
     headers:
-      - lightstep-access-token: ${LIGHTSTEP_ACCESS_TOKEN}
+      - lightstep-access-token: ${LS_ACCESS_TOKEN}
 service:
   pipelines:
     metrics:
       receivers: [prometheus/collectd]
-      exporters: [logging]
+      exporters: [logging, otlp]

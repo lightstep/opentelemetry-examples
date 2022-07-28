@@ -20,7 +20,7 @@ services:
         image: otel/opentelemetry-collector-contrib:0.50.0
         command: ["--config=/conf/config-prometheus.yaml"]
         environment:
-            - LS_ACCESS_TOKEN=${LIGHTSTEP_ACCESS_TOKEN}
+            - LS_ACCESS_TOKEN=${LS_ACCESS_TOKEN}
         volumes:
             - ./config-prometheus.single.yaml:/conf/config-prometheus.yaml:rw
 
