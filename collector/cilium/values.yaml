@@ -18,7 +18,7 @@ spec:
           scrape_configs:
             - job_name: otel-nginx-eg
               static_configs:
-                - targets: [cilium-agent.kube-system.svc.cluster.local:9964]
+                - targets: [cilium-agent.kube-system.svc.cluster.local:${}]
     processors:
       batch:
     exporters:

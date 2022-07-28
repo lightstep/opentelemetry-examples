@@ -1,26 +1,41 @@
-CILIUM_RELEASE := my-cilium-release
-OTEL_RELEASE := my-collector-release
-CERT_MANAGER_RELEASE := my-cert-manager-release
+CILIUM_RELEASE := cilium-release
+OTEL_RELEASE := collector-release
+CERT_MANAGER_RELEASE := cert-manager-release
 
 OTEL_OPERATOR_NAMESPACE := otel-collector-operator-system
 CILIUM_OPERATOR_NAMESPACE := cilium-operator-system
 CERT_MANAGER_NAMESPACE := cert-manager
 
-CLUSTER_NAME := cilium-demo
 
-EXAMPLE_NAMESPACE := my-example
-
+DEMO_NAMESPACE := cilium-demo
+CLUSTER_NAME := $(DEMO_NAMESPACE)-cluster
 
 CILIUM_URL="https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz"
 
 HUBBLE_VERSION := $(shell curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
 HUBBLE_URL="https://github.com/cilium/hubble/releases/download/$(HUBBLE_VERSION)/hubble-linux-amd64.tar.gz"
 
+KIND_CGROUP:=$(shell docker inspect -f '{{.State.Pid}}' kind-control-plane)
+
+# the API Address values are accessible with `kubectl context-info`
+API_SERVER_IP := 127.0.0.1
+API_SERVER_PORT := 45811 
+
 all : | setup install-operators deploy-instances
 
-setup : add-repositories create-namespaces
-install-operators : | install-cert-manager install-cilium-operator install-otel-operator
-deploy-instances : deploy-collector deploy-nginx
+setup : | create-cluster add-repositories create-namespaces load-cilium-image
+install-operators : | install-cilium-operator wait-for-cilium install-cert-manager install-otel-operator
+deploy-instances : deploy-collector 
+
+
+# TODO either make this work or delete it
+# it should be making a comparison and bailing if the command results aren't the same
+check-kind-nodes-have-cgroup :
+	if [ "`sudo ls -al /proc/$(KIND_CGROUP)/ns/cgroup`" != "`sudo ls -al /proc/self/ns/cgroup`" ]; then \
+		echo "ERROR: kind nodes do not have their own cgroup"; \
+		echo "See: note at https://docs.cilium.io/en/stable/gettingstarted/kind/"; \
+		exit 1; \
+	fi
 
 ##@ convenience
 
@@ -36,38 +51,42 @@ install-hubble-cli-linux:
 	sudo tar xzvfC hubble-linux-amd64.tar.gz /usr/local/bin
 	rm hubble-linux-amd64.tar.gz*
 
-create-cluster:
-	# this is just a demo cluster. What's important in the config is that you not
-	# try to demo this with a single-node test cluster.
-	kind create cluster --name $(CLUSTER_NAME) --config kind-config.yaml 
-
 taint-nodes:
 	kubectl taint nodes --all taint=node.cilium.io/agent-not-ready NoExecute
 
-add-repo:
-	helm repo add cilium https://helm.cilium.io/
-	helm repo update
+load-cilium-image:
+	docker pull quay.io/cilium/cilium:v1.12.0
+	kind load docker-image --name $(CLUSTER_NAME) quay.io/cilium/cilium:v1.12.0
 
-install-cilium-operator:
-	helm upgrade cilium cilium/cilium --version 1.10.13 \
-		--namespace kube-system \
-		--set prometheus.enabled=true \
-		--set prometheus.port=9090 \
-		--set operator.prometheus.enabled=true \
-		--set operator.prometheus.port=9090 \
-		--set hubble.relay.enabled=true \
-		--set hubble.metrics.enabled="{dnx,drop,tcp,flow,icmp,http}"
+install-cilium-operator: upgrade-cilium-operator
 
-upgrade-cilium-operator:
-	helm upgrade cilium cilium/cilium --version 1.10.13 \
+## NOTE: if you say kubeProxyReplacement=strict then you evict pods if they can't replace kubeproxy
+## we use partial. See: https://docs.cilium.io/en/stable/gettingstarted/kubeproxy-free/#kubeproxy-free
+
+upgrade-cilium-operator: 
+	helm upgrade cilium cilium/cilium --version 1.12.0 \
+		--install \
 		--namespace kube-system \
-		--reuse-values \
-		--set prometheus.enabled=true \
-		--set prometheus.port=9090 \
-		--set operator.prometheus.enabled=true \
-		--set operator.prometheus.port=9090 \
-		--set hubble.relay.enabled=true \
-		--set hubble.metrics.enabled="{dnx,drop,tcp,flow,icmp,http}"
+		--set kubeProxyReplacement=partial \
+		--set socketLB.enabled=false \
+		--set externalIPs.enabled=true \
+		--set nodePort.enabled=true \
+		--set hostPort.enabled=true \
+		--set bpf.masquerade=false \
+		--set image.pullPolicy=IfNotPresent \
+		--set ipam.mode=kubernetes
+
+		# --set k8sServiceHost=${API_SERVER_IP} \
+		# --set k8sServicePort=${API_SERVER_PORT} \
+		# --set prometheus.enabled=true \
+		# --set prometheus.port=9090 \
+		# --set operator.prometheus.enabled=true \
+		# --set operator.prometheus.port=9091 \
+		# --set hubble.relay.enabled=true \
+		# --set hubble.metrics.enabled="{dnx,drop,tcp,flow,icmp,http}"
+
+wait-for-cilium:
+	kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True
 
 # TODO fix whatever makes this one broken in the awk 
 restart-unmanaged-pods:
@@ -75,7 +94,7 @@ restart-unmanaged-pods:
 
 clean :
 	@echo ** Deleting namespaces. **
-	@kubectl delete namespace $(EXAMPLE_NAMESPACE)
+	@kubectl delete namespace $(DEMO_NAMESPACE)
 	@kubectl delete namespace $(OTEL_OPERATOR_NAMESPACE)
 	@kubectl delete namespace $(CILIUM_OPERATOR_NAMESPACE)
 	@kubectl delete namespace $(CERT_MANAGER_NAMESPACE)
@@ -95,25 +114,25 @@ _wait-for-collector-operator :
 
 deploy-nginx :
 	$(MAKE) _wait-for-nginx-operator 
-	@kubectl apply -n $(EXAMPLE_NAMESPACE) -f ingress/
+	@kubectl apply -n $(DEMO_NAMESPACE) -f ingress/
 
 deploy-collector :
 	$(MAKE) _wait-for-collector-operator
-	@kubectl apply -n $(EXAMPLE_NAMESPACE) -k collector/
+	@kubectl apply -n $(DEMO_NAMESPACE) -k collector/
 
 create-namespaces :
-	@echo ** Creating namespace: $(EXAMPLE_NAMESPACE) **
-	@kubectl create namespace $(EXAMPLE_NAMESPACE) --dry-run=client -o yaml | kubectl apply -f -
+	@echo ** Creating namespace: $(DEMO_NAMESPACE) **
+	@kubectl create namespace $(DEMO_NAMESPACE) --dry-run=client -o yaml | kubectl apply -f -
 	@echo ** Namespaces created **
 
 install-cert-manager :  	## install cert manager. otel-operator requires this - in namespace=cert-manager.
-	@echo ** Installing cert-manager in cluster. **
-	@helm install $(CERT_MANAGER_RELEASE) jetstack/cert-manager \
+	echo ** Installing cert-manager in cluster. **
+	helm install $(CERT_MANAGER_RELEASE) jetstack/cert-manager \
 		--namespace $(CERT_MANAGER_NAMESPACE) \
 		--create-namespace \
 		--version v1.8.0 \
 		--set installCRDs=true
-	@echo ** cert-manager install done. **
+	echo ** cert-manager install done. **
 
 _wait-for-cert-manager :
 	@echo ** Waiting for cert-manager deployments to become available. **
@@ -121,37 +140,37 @@ _wait-for-cert-manager :
 	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances
-	kubectl delete -n $(EXAMPLE_NAMESPACE) -k collector/
-	kubectl delete -n $(EXAMPLE_NAMESPACE) -f ingress/
+	kubectl delete -n $(DEMO_NAMESPACE) -k collector/
+	kubectl delete -n $(DEMO_NAMESPACE) -f ingress/
 
 ##@ monitoring
 
 status : 	## check status of controllers
-	helm status $(OTEL_RELEASE) -n $(EXAMPLE_NAMESPACE)
-	helm status $(CILIUM_RELEASE) -n $(EXAMPLE_NAMESPACE)
+	helm status $(OTEL_RELEASE) -n $(DEMO_NAMESPACE)
+	helm status $(CILIUM_RELEASE) -n $(DEMO_NAMESPACE)
 
 get-values :
-	helm get values $(OTEL_RELEASE) -n $(EXAMPLE_NAMESPACE)
-	helm get values $(CILIUM_RELEASE) -n $(EXAMPLE_NAMESPACE)
+	helm get values $(OTEL_RELEASE) -n $(DEMO_NAMESPACE)
+	helm get values $(CILIUM_RELEASE) -n $(DEMO_NAMESPACE)
 
 ##@ cluster prep
 
-_create-cluster : ## create kind cluster. Kind also configures kubectl to use this cluster. 
-	kind create cluster --name $(EXAMPLE_NAMESPACE)-cluster
+create-cluster:
+	# this is just a demo cluster. What's important in the config is that you not
+	# try to demo this with a single-node test cluster.
+	kind create cluster --name $(CLUSTER_NAME) --config kind-config.yaml 
 
-_delete-cluster : ## delete the kind cluster with this name
-	kind delete cluster --name $(EXAMPLE_NAMESPACE)-cluster
+delete-cluster : ## delete the kind cluster with this name
+	kind delete cluster --name $(CLUSTER_NAME)
 
 add-repositories : 	## add repositories for helm charts
 	echo 'Adding repositories'
 	@helm repo add jetstack https://charts.jetstack.io
-	@helm repo add nginx-stable https://helm.nginx.com/stable
+	@helm repo add cilium https://helm.cilium.io/
 	@helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 	echo 'Repositories added'
 	@helm  repo update
 	echo 'Repositories updated'
-
-prereqs : _create-cluster create-namespaces
 
 ##@ operators
 
