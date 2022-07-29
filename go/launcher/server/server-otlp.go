@@ -69,7 +69,7 @@ func newLauncher() launcher.Launcher {
 		launcher.WithAccessToken(lsToken),
 		launcher.WithSpanExporterEndpoint(endpoint),
 		launcher.WithMetricExporterEndpoint(endpoint),
-		launcher.WithPropagators([]string{"tracecontext", "b3", "baggage"}),
+		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
 		launcher.WithResourceAttributes(map[string]string{
 			string(semconv.ContainerNameKey): "my-container-name",
 		}),
