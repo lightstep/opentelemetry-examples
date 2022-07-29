@@ -2,33 +2,38 @@ version: '3.7'
 
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.51.0
-    command: ["--config=/conf/collector.yml"]
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
     ports:
       - 8888:8888
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     volumes:
-      - ./collector.yml:/conf/collector.yml:ro
-    networks:
-      - integrations
+      - ./collector.yml:/conf/collector.yml:rw
     depends_on:
-      - clickhouse-server
-
-  clickhouse-server:
-     image: yandex/clickhouse-server
-     container_name: clickhouse-server
-     ports:
-     - "8123:8123"
-     - "9000:9000"
-     - "9009:9009"
-     networks:
-      - integrations
-     
-     ulimits:
-      nproc: 65535
-      nofile:
-       soft: 262144
-       hard: 262144
-networks:
-    integrations:
+      - roach1
+      - roach2
+      - roach3
+  roach1:
+    container_name: roach1
+    hostname: roach1
+    image: cockroachdb/cockroach
+    command: [ "start", "--insecure", "--accept-sql-without-tls", "--join=roach1,roach2,roach3" ]
+    ports: [ "8080:8080", "26257:26257" ]
+  roach2:
+    container_name: roach2
+    hostname: roach2
+    image: cockroachdb/cockroach
+    command: [ "start", "--insecure", "--accept-sql-without-tls", "--join=roach1,roach2,roach3" ]
+  roach3:
+    container_name: roach3
+    hostname: roach3
+    image: cockroachdb/cockroach
+    command: [ "start", "--insecure",  "--accept-sql-without-tls", "--join=roach1,roach2,roach3" ]
+  # Initialize the cluster
+  roach-init:
+    image: cockroachdb/cockroach
+    depends_on: [ roach1 ]
+    volumes: [ "./config/roach-init.sh:/cockroach/init.sh" ]
+    command: [ "shell", "/cockroach/init.sh" ]
