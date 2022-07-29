@@ -1,10 +1,9 @@
 //
-// example code to test lightstep/otel-launcher-go/launcher
+// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
+// using the Go Launcher
 //
 // usage:
-//   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LS_SERVICE_NAME=demo-client-go \
-//   LS_SERVICE_VERSION=0.1.8 \
+//	 export OTEL_LOG_LEVEL=debug
 //   go run client.go
 
 package main
@@ -12,45 +11,95 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
+	"io/ioutil"
+	"log"
 	"os"
 	"time"
 
 	"github.com/lightstep/otel-launcher-go/launcher"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var (
-	destinationURL = os.Getenv("DESTINATION_URL")
+	tracer         trace.Tracer
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
-func makeRequest() {
-	httpClient := &http.Client{
-		Transport: otelhttp.NewTransport(http.DefaultTransport),
+func newLauncher() launcher.Launcher {
+	if len(endpoint) == 0 {
+		endpoint = "localhost:4317" // Collector endpoint
+		log.Printf("Using default LS endpoint %s", endpoint)
 	}
-	tracer := otel.Tracer("otel-example/client")
-	_, span := tracer.Start(context.Background(), "makeRequest")
-	defer span.End()
-	req, _ := http.NewRequest("GET", destinationURL, nil)
 
-	res, err := httpClient.Do(req)
+	if len(serviceName) == 0 {
+		serviceName = "test-go-client-launcher-collector"
+		log.Printf("Using default service name %s", serviceName)
+	}
+
+	if len(serviceVersion) == 0 {
+		serviceVersion = "0.1.0"
+		log.Printf("Using default service version %s", serviceVersion)
+	}
+
+	otelLauncher := launcher.ConfigureOpentelemetry(
+		launcher.WithServiceName(serviceName),
+		launcher.WithServiceVersion(serviceVersion),
+		launcher.WithSpanExporterInsecure(true), // Use for Collector
+		launcher.WithSpanExporterEndpoint(endpoint),
+		launcher.WithMetricExporterEndpoint(endpoint),
+		launcher.WithMetricExporterInsecure(true), // Use for Collector
+		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
+		launcher.WithResourceAttributes(map[string]string{
+			string(semconv.ContainerNameKey): "my-container-name",
+		}),
+	)
+
+	return otelLauncher
+}
+
+func makeRequest(ctx context.Context) {
+	ctx, span := tracer.Start(ctx, "makeRequest")
+	defer span.End()
+
+	if len(targetURL) == 0 {
+		targetURL = "http://localhost:8081/ping"
+		log.Printf("Using default targetURL %s", targetURL)
+	}
+
+	span.AddEvent("Making a request")
+	res, err := otelhttp.Get(ctx, targetURL)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer res.Body.Close()
-	fmt.Printf("Request to %s, got %d bytes\n", destinationURL, res.ContentLength)
+	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Printf("Body : %s", body)
+	fmt.Printf("Request to %s, got %d bytes\n", targetURL, res.ContentLength)
+
+	span.SetAttributes(
+		attribute.String("response", string(body)),
+	)
+
+	span.AddEvent("Made a request", trace.WithAttributes(attribute.String("greeting", "Hello"), attribute.String("farewell", "Bye")))
 }
 
 func main() {
-	otel := launcher.ConfigureOpentelemetry()
-	defer otel.Shutdown()
-	if len(destinationURL) == 0 {
-		destinationURL = "http://localhost:8081"
-	}
+	ctx := context.Background()
+	otelLauncher := newLauncher()
+	defer otelLauncher.Shutdown()
+
+	tracer = otel.Tracer(serviceName)
+
 	for {
-		makeRequest()
+		makeRequest(ctx)
 		time.Sleep(1 * time.Second)
 	}
 

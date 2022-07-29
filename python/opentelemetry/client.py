@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 #
-# example code to test ls-trace-py
+# example code to test opentelemetry
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
 #   LS_SERVICE_NAME=demo-python \
 #   LS_SERVICE_VERSION=0.0.8 \
-#   ls-trace-run python client.py
+#   opentelemetry-instrument python client.py
 
 import os
 import time

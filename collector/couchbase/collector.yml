@@ -1,0 +1,26 @@
+receivers:
+  prometheus/couchbase:
+    config:
+      scrape_configs:
+        - job_name: otel-couchbase-eg
+          scrape_interval: 5s
+          static_configs:
+            - targets: ["couchbase:8091"]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/couchbase]
+      processors: [batch]
+      exporters: [otlp/public, logging]

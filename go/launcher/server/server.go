@@ -1,10 +1,9 @@
 //
-// example code to test lightstep/otel-launcher-go/launcher
+// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
+// using the Go Launcher
 //
 // usage:
-//   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-//   LS_SERVICE_NAME=demo-server-go \
-//   LS_SERVICE_VERSION=0.1.8 \
+//	 export OTEL_LOG_LEVEL=debug
 //   go run server.go
 
 package main
@@ -18,9 +17,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/lightstep/otel-launcher-go/launcher"
-	muxtrace "go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var (
+	tracer         trace.Tracer
+	serviceName    = os.Getenv("LS_SERVICE_NAME")
+	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
+	endpoint       = os.Getenv("LS_SATELLITE_URL")
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -31,6 +41,38 @@ const (
 )
 
 var src = rand.NewSource(time.Now().UnixNano())
+
+func newLauncher() launcher.Launcher {
+	if len(endpoint) == 0 {
+		endpoint = "localhost:4317" // Collector endpoint
+		log.Printf("Using default LS endpoint %s", endpoint)
+	}
+
+	if len(serviceName) == 0 {
+		serviceName = "test-go-server-launcher-collector"
+		log.Printf("Using default service name %s", serviceName)
+	}
+
+	if len(serviceVersion) == 0 {
+		serviceVersion = "0.1.0"
+		log.Printf("Using default service version %s", serviceVersion)
+	}
+
+	otelLauncher := launcher.ConfigureOpentelemetry(
+		launcher.WithServiceName(serviceName),
+		launcher.WithServiceVersion(serviceVersion),
+		launcher.WithSpanExporterInsecure(true), // Use for Collector
+		launcher.WithSpanExporterEndpoint(endpoint),
+		launcher.WithMetricExporterEndpoint(endpoint),
+		launcher.WithMetricExporterInsecure(true), // Use for Collector
+		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
+		launcher.WithResourceAttributes(map[string]string{
+			string(semconv.ContainerNameKey): "my-container-name",
+		}),
+	)
+
+	return otelLauncher
+}
 
 func randString(n int) string {
 	sb := strings.Builder{}
@@ -50,18 +92,48 @@ func randString(n int) string {
 	return sb.String()
 }
 
-func main() {
-	otel := launcher.ConfigureOpentelemetry()
-	defer otel.Shutdown()
-	fmt.Printf("Starting server on http://localhost:8081\n")
-	r := mux.NewRouter()
-	r.Use(muxtrace.Middleware(os.Getenv("LS_SERVICE_NAME")))
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		length := rand.Intn(1024)
-		log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
-		fmt.Fprintf(w, randString(length))
-	})
-	http.Handle("/", r)
+// Wrap the handleRollDice so that telemetry data
+// can be automatically generated for it
+func wrapHandler() {
+	handler := http.HandlerFunc(handlePing)
+	wrappedHandler := otelhttp.NewHandler(handler, "pingHandler")
+	http.Handle("/ping", wrappedHandler)
+}
 
-	log.Fatal(http.ListenAndServe(":8081", nil))
+func handlePing(w http.ResponseWriter, r *http.Request) {
+	operationName := "ping"
+	_, span := tracer.Start(r.Context(), operationName)
+	defer span.End()
+
+	length := rand.Intn(1024)
+	log.Printf("%s %s %s", r.Method, r.URL.Path, r.Proto)
+
+	pingResult := randString(length)
+	span.SetAttributes(
+		attribute.String("library.language", "go"),
+		attribute.String("library.version", "v1.7.0"),
+	)
+
+	// setting span as successful
+	span.SetStatus(codes.Ok, "Success")
+
+	// setting span event
+	span.AddEvent(fmt.Sprint(r.Header))
+
+	fmt.Fprintf(w, pingResult)
+}
+
+func main() {
+	otelLauncher := newLauncher()
+	defer otelLauncher.Shutdown()
+
+	tracer = otel.Tracer(serviceName)
+
+	wrapHandler()
+
+	fmt.Printf("Starting server on http://localhost:8081\n")
+	err := http.ListenAndServe(":8081", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

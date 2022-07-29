@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+    cassandra:
+        container_name: cassandra
+        image: cassandra:latest
+        ports:
+            - '17199:7199'
+            - '7000:7000'
+            - '9042:9042'
+        volumes:
+            - ./schema/cassandra:/docker-entrypoint-initdb.d
+            - 'cassandra_data:/var/lib/cassandra'
+            - ./configuration/cassandra-env.sh:/etc/cassandra/cassandra-env.sh
+        command: bash -c 'sleep 10;  /usr/local/bin/docker-entrypoint.sh cassandra -f'
+        healthcheck:
+            test: [ "CMD", "/opt/cassandra/bin/cqlsh", "-u cassandra", "-p cassandra" ,"-e \"describe keyspaces\"" ]
+            interval: 15s
+            timeout: 10s
+            retries: 10
+        environment:
+            - LOCAL_JMX=no
+            - CASSANDRA_SEEDS=cassandra
+            - CASSANDRA_PASSWORD_SEEDER=yes
+            - CASSANDRA_PASSWORD=cassandra
+        networks:
+            - integrations
+    otel-collector:
+        container_name: otel-collector
+        build: .
+        command: ["--config=/conf/collector.yml"]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        networks:
+            - integrations
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+volumes:
+    cassandra_data:
+        driver: local
+networks:
+    integrations:
