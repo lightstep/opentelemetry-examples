@@ -486,7 +486,7 @@ services:
             - OTEL_LOG_LEVEL=error
             - LS_SERVICE_NAME=integration-test
             - OTEL_RESOURCE_ATTRIBUTES=service.version=2020.10.02
-            - OTEL_PROPAGATORS=b3,b3multi
+            - OTEL_PROPAGATORS=b3,b3multi,tracecontext
         volumes:
             - ./config:/config/:ro
         stop_grace_period: 1s
