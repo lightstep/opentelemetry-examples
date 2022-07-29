@@ -4,11 +4,11 @@ receivers:
       scrape_configs:
         - job_name: 'clickhouse-server'
           scrape_interval: 3s
-          metrics_path: '/v1/agent/metrics'
+          metrics_path: '/metrics'
           params:
             format: ['prometheus']
           static_configs:
-            - targets: ['clickhouse-server:8123']
+            - targets: ['clickhouse-server:8001']
 
 exporters:
   logging:
@@ -22,6 +22,9 @@ processors:
   batch:
 
 service:
+  telemetry:
+      logs:
+        level: DEBUG
   pipelines:
     metrics:
       receivers: [prometheus]
