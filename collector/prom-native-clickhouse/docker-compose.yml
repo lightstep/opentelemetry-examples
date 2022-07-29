@@ -2,20 +2,19 @@ version: '3.7'
 
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.51.0
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
     command: [ "--config=/conf/collector.yml" ]
     ports:
       - 8888:8888
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     volumes:
-      - ./collector.yml:/conf/collector.yml:ro
-    networks:
-      - clickhouse
+      - ./collector.yml:/conf/collector.yml:rw
     depends_on:
-      - clickhouse-server
+      - clickhouse
 
-  clickhouse-server:
+  clickhouse:
     image: yandex/clickhouse-server
     container_name: clickhouse-server
     restart: always
@@ -26,13 +25,8 @@ services:
       - 9009:9009
     volumes:
       - ./config/prom_conf.xml:/etc/clickhouse-server/config.xml
-    networks:
-      - clickhouse
     ulimits:
       nproc: 65535
       nofile:
         soft: 262144
         hard: 262144
-networks:
-  clickhouse:
-    driver: bridge

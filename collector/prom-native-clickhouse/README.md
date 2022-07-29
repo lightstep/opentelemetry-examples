@@ -71,12 +71,14 @@ receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'clickhouse-server'
-          metrics_path: '/v1/agent/metrics'
-          params:
-            format: ['prometheus']
+        - job_name: 'clickhouse'
+          scrape_interval: 3s
+          metrics_path: '/metrics'
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
           static_configs:
-            - targets: ['localhost:8123']
+            - targets: ['clickhouse:8001']
 ```
 
 
