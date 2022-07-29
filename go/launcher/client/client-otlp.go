@@ -1,10 +1,11 @@
 //
-// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
+// example code to illustrate sending OTel traces to Lightstep directly via OTLP
 // using the Go Launcher
 //
 // usage:
 //	 export OTEL_LOG_LEVEL=debug
-//   go run client.go
+//   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
+//   go run client-otlp.go
 
 package main
 
@@ -29,17 +30,18 @@ var (
 	serviceName    = os.Getenv("LS_SERVICE_NAME")
 	serviceVersion = os.Getenv("LS_SERVICE_VERSION")
 	endpoint       = os.Getenv("LS_SATELLITE_URL")
+	lsToken        = os.Getenv("LS_ACCESS_TOKEN")
 	targetURL      = os.Getenv("DESTINATION_URL")
 )
 
 func newLauncher() launcher.Launcher {
 	if len(endpoint) == 0 {
-		endpoint = "localhost:4317" // Collector endpoint
+		endpoint = "ingest.lightstep.com:443"
 		log.Printf("Using default LS endpoint %s", endpoint)
 	}
 
 	if len(serviceName) == 0 {
-		serviceName = "test-go-client-launcher-collector"
+		serviceName = "test-go-client-launcher-direct"
 		log.Printf("Using default service name %s", serviceName)
 	}
 
@@ -48,13 +50,16 @@ func newLauncher() launcher.Launcher {
 		log.Printf("Using default service version %s", serviceVersion)
 	}
 
+	if len(lsToken) == 0 {
+		log.Fatalf("Lightstep token missing. Please set environment variable LS_ACCESS_TOKEN")
+	}
+
 	otelLauncher := launcher.ConfigureOpentelemetry(
 		launcher.WithServiceName(serviceName),
 		launcher.WithServiceVersion(serviceVersion),
-		launcher.WithSpanExporterInsecure(true), // Use for Collector
+		launcher.WithAccessToken(lsToken),
 		launcher.WithSpanExporterEndpoint(endpoint),
 		launcher.WithMetricExporterEndpoint(endpoint),
-		launcher.WithMetricExporterInsecure(true), // Use for Collector
 		launcher.WithPropagators([]string{"tracecontext", "baggage"}),
 		launcher.WithResourceAttributes(map[string]string{
 			string(semconv.ContainerNameKey): "my-container-name",
