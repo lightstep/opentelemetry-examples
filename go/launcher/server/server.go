@@ -1,5 +1,6 @@
 //
-// example code to test lightstep/opentelemetry-exporter-go
+// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
+// using the Go Launcher
 //
 // usage:
 //	 export OTEL_LOG_LEVEL=debug

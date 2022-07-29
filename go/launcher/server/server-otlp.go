@@ -1,10 +1,11 @@
 //
-// example code to test lightstep/opentelemetry-exporter-go
+// example code to illustrate sending OTel traces to Lightstep directly via OTLP
+// using the Go Launcher
 //
 // usage:
 //	 export OTEL_LOG_LEVEL=debug
 //   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
-//   go run server-direct.go
+//   go run server-otlp.go
 
 package main
 
