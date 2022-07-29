@@ -1,8 +1,8 @@
-# Ingest Clickhouse metrics using the OpenTelemetry Collector
+# Ingest Cockroachdb metrics using the OpenTelemetry Collector
 
 ## Overview
 
- Clickhouse natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Clickhouse and the Collector to send metrics to Lightstep Observability.
+ Cockroachdb natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Cockroachdb and the Collector to send metrics to Lightstep Observability.
 
 ## Prerequisites
 
@@ -20,64 +20,66 @@
   ```
   docker-compose up -d
   ```
-* Run clickhouse client
+* Start the SQL shell in the first container
   ```
-  make run-client
+  docker exec -it roach1 ./cockroach sql --insecure
   ```
-  * Create DB
+  * Run CockroachDB SQL statements
   ```
-  CREATE DATABASE IF NOT EXISTS tutorial;
+  CREATE DATABASE bank;
   ```
-  * Create table
   ```
-  CREATE TABLE tutorial.xyz (a UInt8, d Date) ENGINE = MergeTree() ORDER BY (a) PARTITION BY toYYYYMM(d);
+  CREATE TABLE bank.accounts (id INT PRIMARY KEY, balance DECIMAL);
   ```
-  * Insert record data
   ```
-  INSERT INTO tutorial.xyz values(8,'2022-07-25');
+  INSERT INTO bank.accounts VALUES (1, 1000.50);
   ```
-    * Query records
   ```
-  SELECT * FROM tutorial.xyz;
+  SELECT * FROM bank.accounts;
+  ```
+    * Exit shell
+  ```
+  \q
   ```
 
-* Clean up
+* Stop the cluster
   ```
   docker-compose down`
   ```
 
 ### Explore Metrics in Lightstep
 
-See the [Clickhouse Telemetry Docs][clickhouse-docs-telemetry] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
+See the [Cockroachdb Telemetry Docs][cockroachdb-docs-telemetry] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
 
-### Explore the clickhouse Example
+### Explore the Cockroachdb Example
 
-* The Clickhouse UI is available at [http://127.0.0.1:8123/play?user=default](http://127.0.0.1:8123/play?user=default).
+* Access the DB Console [http://localhost:8080](http://localhost:8080).
 
 
-## Configure clickhouse
+## Configure Cockroachdb
 
-Clickhouse accepts trace context over a native protocol that is used for communication between ClickHouse servers or between the client and server. 
-
-ClickHouse creates `trace spans` for each query and some of the query execution stages, such as query planning or distributed queries so the tracing information is exported to Prometheus.
-
-For manual testing, trace context headers conforming to the Trace Context recommendation can be supplied to `clickhouse-client` using `--opentelemetry-traceparent` and `--opentelemetry-tracestate` flags.
+CockroachDB generates detailed time series metrics for each node in a cluster or a single node.
 
 ## Configure the Collector
 
-Below is a snippet showing how to configure the Prometheus Receiver to scrape the Prometheus endpoint exposed by the Clickhouse Server.
+Below is a snippet showing how to configure the Prometheus Receiver to scrape the Prometheus endpoint exposed by the Cockroachdb Server.
 
 ```yaml
-receivers:
+​​receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'clickhouse-server'
-          metrics_path: '/v1/agent/metrics'
+        - job_name: 'cockroachdb'
+          scrape_interval: 3s
+          metrics_path: '/_status/vars'
           params:
             format: ['prometheus']
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
           static_configs:
-            - targets: ['localhost:8123']
+            - targets: [locahost:8080']
+
 ```
 
 
@@ -85,10 +87,10 @@ receivers:
 ## Additional information
 
 - [OpenTelemetry Collector Prometheus Receiver][otel-prom-receiver]
-- [Clickhouse Telemetry Reference][clickhouse-docs-telemetry]
+- [Cockroachdb Telemetry Reference][cockroachdb-docs-telemetry]
 
 [ls-docs-access-token]: https://docs.lightstep.com/docs/create-and-manage-access-tokens
 [ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
 [otel-prom-receiver]: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver
-[clickhouse-docs-telemetry]: https://clickhouse.com/docs/en/operations/opentelemetry/
-[learn-clickhouse-repo]: https://github.com/ClickHouse/ClickHouse/blob/master/docker/server/README.md
+[cockroachdb-docs-telemetry]: https://www.cockroachlabs.com/docs/v22.1/monitor-cockroachdb-with-prometheus.html/
+[learn-cockroachdb-repo]: https://github.com/Cockroachdb/Cockroachdb/blob/master/docker/server/README.md
