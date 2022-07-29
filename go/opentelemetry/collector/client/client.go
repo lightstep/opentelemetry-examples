@@ -1,5 +1,5 @@
 //
-// example code to test lightstep/opentelemetry-exporter-go
+// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
 //
 // NOTE: Requires that you run a Collector instance
 // (see collector/vanilla/readme.md for details on how to run the
@@ -89,7 +89,7 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 				semconv.SchemaURL,
 				semconv.ServiceNameKey.String(serviceName),
 				semconv.ServiceVersionKey.String(serviceVersion),
-				attribute.String("environment", "getting-started"),
+				attribute.String("environment", lsEnvironment),
 			),
 		)
 

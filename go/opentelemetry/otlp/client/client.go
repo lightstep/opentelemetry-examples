@@ -1,5 +1,5 @@
 //
-// example code to test lightstep/opentelemetry-exporter-go
+// example code to illustrate sending OTel traces to Lightstep directly via OTLP gRPC
 //
 // usage:
 //   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
