@@ -1,3 +1,16 @@
 version: "3.2"
 services:
     component:
+
+exporters:
+  logging:
+    logLevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      - lightstep-access-token: ${LIGHTSTEP_ACCESS_TOKEN}
+service:
+  pipelines:
+    metrics:
+      receivers: [component]
+      exporters: [logging, otlp]

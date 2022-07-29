@@ -1,0 +1,23 @@
+receivers:
+  prometheus/ibmmq:
+    use_start_time_metric: false
+    start_time_metric_regex: '^(.+_)*process_start_time_seconds$'
+    config:
+      scrape_configs:
+        - job_name: 'ibmq-scraper'
+          scrape_interval: 5s
+          metrics_path: "/metrics"
+          static_configs:
+            - targets: ["ibmmq-leader:9157"]
+exporters:
+  logging:
+    logLevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      - lightstep-access-token: ${LS_ACCESS_TOKEN}
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/ibmmq]
+      exporters: [logging, otlp]

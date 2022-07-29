@@ -1,0 +1,28 @@
+x-variables:
+    env_etcd_single_node: &env_etcd_single_node 'FLAGS=--initial-cluster=single=http://single:2380'
+    common_settings: &build_and_ports
+        build: .
+        ports:
+            - 2379
+            - 2380
+            - 5050 # <- prometheus metrics port
+services:
+    single:
+        <<: *build_and_ports
+        environment:
+            - NAME=single
+            - *env_etcd_single_node
+        volumes:
+            - localhost:/etcd_data
+    otel-collector:
+        container_name: otel-collector
+        hostname: otel-collector
+        image: otel/opentelemetry-collector-contrib:0.50.0
+        command: ["--config=/conf/config-prometheus.yaml"]
+        environment:
+            - LS_ACCESS_TOKEN=${LS_ACCESS_TOKEN}
+        volumes:
+            - ./config-prometheus.single.yaml:/conf/config-prometheus.yaml:rw
+
+volumes:
+    localhost:
