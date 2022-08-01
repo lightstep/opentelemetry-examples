@@ -167,8 +167,6 @@ create-cluster:
 delete-cluster : ## delete the kind cluster with this name
 	kind delete cluster --name $(CLUSTER_NAME)
 
-
-
 ##@ operators
 
 install-otel-operator :
@@ -177,7 +175,7 @@ install-otel-operator :
 		--wait \
 		-n $(OTEL_OPERATOR_NAMESPACE) \
 		--create-namespace
-		
+
 uninstall-operators :
 	helm uninstall $(OTEL_RELEASE)
 	helm uninstall $(CILIUM_RELEASE)
