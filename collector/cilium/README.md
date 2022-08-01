@@ -50,9 +50,7 @@ helm install \
 
 #### b. Collector installation
 
-Installing the Collector is straightforward. Assuming you have already added the chart repo, you can install it like this...
-
-Or we can use the helm charts like ... 
+Installing the Collector is straightforward. Assuming you have already added the chart repo, you can install it with the helm chart like this...
 
 ```sh
 helm install your-release-name -n your-collector-operator-namespace --create-namespace
@@ -63,14 +61,29 @@ helm install your-release-name -n your-collector-operator-namespace --create-nam
 Cilium can run as an operator. Note that Hubble is not turned on by default and we have to enable metrics for each of 3 endpoints explicitly.
 
 ```
-TODO show the helm install variation
+	helm upgrade cilium cilium/cilium --version 1.12.0 \
+		--install \
+		--wait \
+		--namespace kube-system \
+		--set kubeProxyReplacement=partial \
+		--set socketLB.enabled=false \
+		--set externalIPs.enabled=true \
+		--set nodePort.enabled=true \
+		--set hostPort.enabled=true \
+		--set bpf.masquerade=false \
+		--set image.pullPolicy=IfNotPresent \
+		--set ipam.mode=kubernetes \
+		--set hubble.relay.enabled=true \
+		--set hubble.ui.enabled=true \
+		--set prometheus.enabled=true \
+		--set operator.prometheus.enabled=true \
+		--set hubble.prometheus.enabled=true \
+		--set hubble.metrics.enabled="{dns,drop,tcp,flow,icmp,http}"
 ```
 
 5. Deploy the Collector instance
 
 The first thing you need to do is configure the OTEL Collector's Prometheus Receiver to look for metrics at the 3 endpoints we exposed. Note that the ports are also available for configuration, but we're using default ports for each.
-
-TODO: update the static config part of this and job_name to match what's in collector/values.yaml
 
 ```yaml
 spec:
@@ -80,15 +93,19 @@ spec:
       prometheus:
         config:
           scrape_configs:
-            - job_name: otel-nginx-eg
+            - job_name: otel-cilium-eg
               static_configs:
-                - targets: ["my-nginx-nginx-ingress:9113"]
+                - targets: 
+                    - cilium-agent.kube-system.svc.cluster.local:9962     # cilium
+                    - cilium-agent.kube-system.svc.cluster.local:9963     # cilium-operator
+                    - hubble-metrics.kube-system.svc.cluster.local:9965   # hubble
   ...
-    exporters:
-      otlp/public:
-        endpoint: ingest.lightstep.com:443
-        headers:
-          "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  service:
+    pipelines:
+      metrics:
+        receivers: [prometheus]
+        processors: [batch]
+        exporters: [logging, otlp/public]
   ...
 ```
 
@@ -120,5 +137,5 @@ helm uninstal cilium-release-name
 ```
 
 ## Additional Resources
-
-TODO links to the three main pages referenced in the final cut.
+[Cilium Docs](https://docs.cilium.io/en/stable/)
+[Cilium Metrics](https://docs.cilium.io/en/stable/operations/metrics/)
