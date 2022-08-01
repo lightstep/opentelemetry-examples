@@ -1,0 +1,60 @@
+x-variables:
+    env_etcd_clustering: &env_etcd_clustering 'FLAGS=--initial-cluster=us-east=http://us-east:2380,us-west=http://us-west:2380,eu-central=http://eu-central:2380,ap-south=http://ap-south:2380,af-south=http://af-south:2380'
+    common_settings: &build_and_ports
+        build: .
+        ports:
+            - 2379
+            - 2380
+            - 5050 # <- metrics port
+services:
+    us-east:
+        <<: *build_and_ports
+        environment:
+            - NAME=us-east
+            - *env_etcd_clustering
+        volumes:
+            - us-east:/etcd_data
+    us-west:
+        <<: *build_and_ports
+        environment:
+            - NAME=us-west
+            - *env_etcd_clustering
+        volumes:
+            - us-west:/etcd_data
+    eu-central:
+        <<: *build_and_ports
+        environment:
+            - NAME=eu-central
+            - *env_etcd_clustering
+        volumes:
+            - eu-central:/etcd_data
+    ap-south:
+        <<: *build_and_ports
+        environment:
+            - NAME=ap-south
+            - *env_etcd_clustering
+        volumes:
+            - ap-south:/etcd_data
+    af-south:
+        <<: *build_and_ports
+        environment:
+            - NAME=af-south
+            - *env_etcd_clustering
+        volumes:
+            - af-south:/etcd_data
+    otel-collector:
+        container_name: otel-collector
+        hostname: otel-collector
+        image: otel/opentelemetry-collector-contrib:0.50.0
+        command: ["--config=/conf/config-prometheus.yaml"]
+        environment:
+            - LS_ACCESS_TOKEN=${LS_ACCESS_TOKEN}
+        volumes:
+            - ./config-prometheus.cluster.yaml:/conf/config-prometheus.yaml:rw
+
+volumes:
+    us-east:
+    us-west:
+    eu-central:
+    ap-south:
+    af-south:
