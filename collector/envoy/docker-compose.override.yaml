@@ -15,7 +15,7 @@ services:
   loadgen:
     depends_on: [nginx_proxy]
     image: williamyeh/hey
-    command: ["-z", "10m", "-c", "50", "-q", "50", "http://front-envoy:8080"]
+    command: ["-z", "10m", "-c", "50", "-q", "50", "http://localhost:8080/service/1"]
     # to keep this from starting under regular invocation
     profiles:
       - loadgen

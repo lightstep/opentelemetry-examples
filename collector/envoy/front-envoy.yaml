@@ -1,3 +1,5 @@
+# see: https://github.com/envoyproxy/envoy/tree/v1.23.0/examples/front-proxy
+
 static_resources:
   listeners:
   - address:
@@ -11,6 +13,20 @@ static_resources:
           "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
           codec_type: AUTO
           stat_prefix: ingress_http
+          tracing:
+            verbose: true
+            provider:
+              # Envoy v1.23.0 and later OpenTelemetry-based tracing configuration
+              name: envoy.tracers.opentelemetry
+              typed_config:
+                "@type": type.googleapis.com/envoy.config.trace.v3.OpenTelemetryConfig
+                grpc_service:
+                  envoy_grpc:
+                    cluster_name: local_collector
+                  initial_metadata:
+                    - key: lightstep-access-token
+                      value: "set-in-collector"
+                service_name: front-envoy
           route_config:
             name: local_route
             virtual_hosts:
@@ -42,6 +58,20 @@ static_resources:
           "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
           codec_type: AUTO
           stat_prefix: ingress_http
+          tracing:
+            verbose: true
+            provider:
+              # Envoy v1.23.0 and later OpenTelemetry-based tracing configuration
+              name: envoy.tracers.opentelemetry
+              typed_config:
+                "@type": type.googleapis.com/envoy.config.trace.v3.OpenTelemetryConfig
+                grpc_service:
+                  envoy_grpc:
+                    cluster_name: local_collector
+                  initial_metadata:
+                    - key: lightstep-access-token
+                      value: "set-in-collector"
+                service_name: front-envoy
           route_config:
             name: local_route
             virtual_hosts:
@@ -151,6 +181,24 @@ static_resources:
               socket_address:
                 address: service2
                 port_value: 8000
+  - name: local_collector
+    connect_timeout: 40s
+    type: strict_dns
+    lb_policy: least_request
+    typed_extension_protocol_options:
+      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+        "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+        explicit_http_config:
+          http2_protocol_options: {} # enable H2 protocol
+    load_assignment:
+      cluster_name: local_collector
+      endpoints:
+        - lb_endpoints:
+          - endpoint:
+              address:
+                socket_address:
+                  address: otel-collector
+                  port_value: 4317
 admin:
   address:
     socket_address:
