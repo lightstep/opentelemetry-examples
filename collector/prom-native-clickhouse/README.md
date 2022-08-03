@@ -20,7 +20,7 @@
   ```
   docker-compose up -d
   ```
-* Run clickhouse client
+* Run clickhouse client image
   ```
   docker run -it --rm --network prom-native-clickhouse_default --link clickhouse-server:clickhouse-server yandex/clickhouse-client --host clickhouse-server
   ```
