@@ -22,7 +22,7 @@
   ```
 * Run clickhouse client
   ```
-  make run-client
+  docker run -it --rm --network prom-native-clickhouse_default --link clickhouse-server:clickhouse-server yandex/clickhouse-client --host clickhouse-server
   ```
   * Create DB
   ```
