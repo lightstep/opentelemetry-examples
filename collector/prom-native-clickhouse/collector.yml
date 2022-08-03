@@ -1,0 +1,34 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'clickhouse'
+          scrape_interval: 3s
+          metrics_path: '/metrics'
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
+          static_configs:
+            - targets: ['clickhouse:8001']
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.staging.lightstep.com:443
+    headers:
+             "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+
+processors:
+  batch:
+
+service:
+  telemetry:
+      logs:
+        level: DEBUG
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp]
