@@ -19,7 +19,7 @@ exporters:
   otlp:
     endpoint: ingest.staging.lightstep.com:443
     headers:
-             "lightstep-access-token": "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
+             "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
   batch:
