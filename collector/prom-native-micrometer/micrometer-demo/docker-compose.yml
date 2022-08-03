@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - micrometer-demo
+
+  micrometer-demo:
+    image: micrometer-demo:latest
+    container_name: 'micrometer-demo'
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    environment:
+      server.port: 8080
+      server.address: 0.0.0.0

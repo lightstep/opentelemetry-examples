@@ -1,0 +1,34 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'micrometer-demo'
+          scrape_interval: 3s
+          metrics_path: '/actuator/prometheus'
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
+          static_configs:
+            - targets: ['movie-quote-service:8080']
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.staging.lightstep.com:443
+    headers:
+             "lightstep-access-token": "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
+
+
+processors:
+  batch:
+
+service:
+  telemetry:
+      logs:
+        level: DEBUG
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp]
