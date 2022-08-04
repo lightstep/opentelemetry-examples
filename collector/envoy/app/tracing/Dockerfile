@@ -1,5 +1,6 @@
 FROM flask_service:python-3.10-slim-bullseye
 
+# envoy v1.23.0
 COPY --from=envoyproxy/envoy-dev:latest /usr/local/bin/envoy /usr/local/bin/envoy
 
 ADD requirements.txt /tmp/requirements.txt

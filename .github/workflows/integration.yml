@@ -1,7 +1,10 @@
 name: Run integration test
 
 on:
-  pull_request:  
+  pull_request:
+    # collector-based examples have their own Dockerfiles/docker-compose.ymls
+    paths-ignore:
+      - 'collector/**'
 
 env:
   DOCKER_BUILDKIT: 1
