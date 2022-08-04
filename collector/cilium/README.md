@@ -1,7 +1,7 @@
 ---
 # Monitoring Cilium & Hubble
 
-This example demonstrates monitoring Cilium and Hubbles with the OTEL Collector's Prometheus Receiver. The example configuration deploys Cilium's Kubernetes operator with Hubble enabled.
+This example demonstrates monitoring Cilium and Hubble with the OTEL Collector's Prometheus Receiver. The example configuration deploys Cilium's Kubernetes operator with Hubble enabled.
 
 ### Prerequisites
 
