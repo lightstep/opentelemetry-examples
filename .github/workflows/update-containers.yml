@@ -12,7 +12,8 @@ jobs:
       matrix:
         component: [
           'go-opentracing-server', 'go-opentracing-client',
-          'go-opentelemetry-server', 'go-opentelemetry-client',
+          'go-opentelemetry-collector-server', 'go-opentelemetry-collector-client',
+          'go-opentelemetry-otlp-server', 'go-opentelemetry-otlp-client',
           'go-launcher-server', 'go-launcher-client',
           'py-collector-client', 'py-collector-server',
           'py-opentelemetry-client', 'py-opentelemetry-server',
