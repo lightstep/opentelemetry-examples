@@ -1,4 +1,4 @@
-# Ingest Envoy metrics using OTEL Collector's Prometheus receiver
+# Ingest Envoy metrics and traces with the OpenTelemetry Collector
 
 This example illustrates how you can ingest Envoy metrics and traces. Envoy exposes a Prometheus compatible metrics endpoint and has built-in (experimental as of v1.23.0) support for generating OpenTelemetry traces.
 
