@@ -1,7 +1,7 @@
 FROM flask_service:python-3.10-slim-bullseye
 
 # envoy v1.23.0
-COPY --from=envoyproxy/envoy-dev:4e2c7adfb393a8ea2a38c94494ccd2ee0fd469f9 /usr/local/bin/envoy /usr/local/bin/envoy
+COPY --from=envoyproxy/envoy-dev:latest /usr/local/bin/envoy /usr/local/bin/envoy
 
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt

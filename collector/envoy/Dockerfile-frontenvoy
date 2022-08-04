@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy-dev:4e2c7adfb393a8ea2a38c94494ccd2ee0fd469f9
+FROM envoyproxy/envoy-dev:latest
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y curl \
