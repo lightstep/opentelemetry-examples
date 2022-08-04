@@ -21,6 +21,10 @@ TRACE_HEADERS_TO_PROPAGATE = [
     # Jaeger header (for native client)
     "uber-trace-id",
 
+    # w3c headers
+    "traceparent",
+    "tracestate",
+
     # SkyWalking headers.
     "sw8"
 ]
@@ -29,10 +33,12 @@ TRACE_HEADERS_TO_PROPAGATE = [
 @app.route('/service/<service_number>')
 def hello(service_number):
     return (
-        'Hello from behind Envoy (service {})! hostname: {} resolved'
+        'Hello from behind Envoy (service {})! hostname: {} resolved, traceparent: {}\n'
         'hostname: {}\n'.format(
             os.environ['SERVICE_NAME'], socket.gethostname(),
-            socket.gethostbyname(socket.gethostname())))
+            request.headers['traceparent'],
+            socket.gethostbyname(socket.gethostname()),
+            ))
 
 
 @app.route('/trace/<service_number>')

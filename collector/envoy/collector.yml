@@ -25,6 +25,9 @@ processors:
 
 service:
   pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging, otlp/public]
     metrics:
       receivers: [otlp, prometheus/front-proxy]
       processors: [batch]
