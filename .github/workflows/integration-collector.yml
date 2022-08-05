@@ -1,0 +1,19 @@
+name: Run integration tests for go/java/js/python
+
+on:
+  pull_request:
+    paths:
+      - 'collector/**'
+
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Validate config
+      run: find ./ -type f -name "docker-compose.yml" -execdir docker-compose -f {} config \;
