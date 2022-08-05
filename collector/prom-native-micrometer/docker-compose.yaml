@@ -19,7 +19,12 @@ services:
     environment:
       - POSTGRES_DB=example
     networks:
-      - spring-postgres
+      - integrations
+    healthcheck:
+      test: curl -m 5 --silent --fail --request GET http://localhost:8080/actuator/health | jq --exit-status -n 'inputs | if has("status") then .status=="UP" else false end' > /dev/null || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 10
   db:
     image: postgres
     restart: always
@@ -28,7 +33,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
-      - spring-postgres
+      - integrations
     environment:
       - POSTGRES_DB=example
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
@@ -40,4 +45,4 @@ secrets:
   db-password:
     file: db/password.txt
 networks:
-  spring-postgres:
+  integrations:

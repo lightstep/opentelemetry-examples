@@ -1,7 +1,7 @@
-package com.company.project.controllers;
+package otel.example.micrometer.controllers;
 
-import com.company.project.entity.Greeting;
-import com.company.project.repository.GreetingRepository;
+import otel.example.micrometer.entity.Greeting;
+import otel.example.micrometer.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

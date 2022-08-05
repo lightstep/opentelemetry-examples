@@ -1,6 +1,6 @@
-package com.company.project.repository;
+package otel.example.micrometer.repository;
 
-import com.company.project.entity.Greeting;
+import otel.example.micrometer.entity.Greeting;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

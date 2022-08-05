@@ -1,4 +1,4 @@
-package com.company.project.entity;
+package otel.example.micrometer.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
