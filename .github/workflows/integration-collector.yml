@@ -10,7 +10,7 @@ env:
   COMPOSE_DOCKER_CLI_BUILD: 1
 
 jobs:
-  validate:
+  validate_collector:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
