@@ -2,9 +2,6 @@ name: Run integration test
 
 on:
   pull_request:
-    # collector-based examples have their own Dockerfiles/docker-compose.ymls
-    paths-ignore:
-      - 'collector/**'
 
 env:
   DOCKER_BUILDKIT: 1
@@ -15,8 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: .github/filters.yaml
     - name: Validate config is up-to-date
+      if: steps.changes.outputs.code-examples == 'true'
       run: ./tools/precommit.sh
 
   test:
@@ -24,9 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: .github/filters.yaml
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
+      if: steps.changes.outputs.code-examples == 'true'
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
@@ -38,13 +43,17 @@ jobs:
         ORG_NAME: ${{ secrets.ORG_NAME }}
         PROJECT_NAME: examples
         API_KEY: ${{ secrets.API_KEY }}
+      if: steps.changes.outputs.code-examples == 'true'
       run: ./tools/update-token.sh
 
     - name: Pull images
+      if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose pull
 
     - name: Build images
+      if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose build --parallel
 
     - name: Run integration test
+      if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose up --exit-code-from integration-test integration-test
