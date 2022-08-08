@@ -1,0 +1,32 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'roach1'
+          scrape_interval: 3s
+          metrics_path: '/_status/vars'
+          params:
+            format: ['prometheus']
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
+          static_configs:
+            - targets: ['roach1:8080', 'roach2:8080', 'roach3:8080']
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.staging.lightstep.com:443
+    headers:
+             "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp]
