@@ -2,9 +2,6 @@ name: Run integration test
 
 on:
   pull_request:
-    # collector-based examples have their own Dockerfiles/docker-compose.ymls
-    paths-ignore:
-      - 'collector/**'
 
 env:
   DOCKER_BUILDKIT: 1
@@ -15,8 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: .github/filters.yaml
     - name: Validate config is up-to-date
+      if: steps.changes.outputs.code-examples == 'true'
       run: ./tools/precommit.sh
 
   test:
