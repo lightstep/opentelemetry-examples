@@ -3,21 +3,22 @@ receivers:
     config:
       scrape_configs:
         - job_name: 'micrometer-demo'
-          scrape_interval: 15s
-          scrape_timeout: 1m
+          scrape_interval: 20s
+          scrape_timeout: 20s
           metrics_path: '/actuator/prometheus'
           tls_config:
             insecure_skip_verify: true
+          scheme: http
           static_configs:
-            - targets: ['backend:8080']
+            - targets: ['host.docker.internal:8080']
 
 exporters:
   logging:
     loglevel: debug
   otlp:
-    endpoint: ingest.staging.lightstep.com:443
+    endpoint: ingest.lightstep.com:443
     headers:
-      "lightstep-access-token": "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 
 processors:

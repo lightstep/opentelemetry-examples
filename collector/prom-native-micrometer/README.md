@@ -47,12 +47,77 @@ See the [Micrometer Telemetry Docs][micrometer-prometheus-docs] for comprehensiv
 
 ### Explore the Micrometer Example
 
-* After the application starts, navigate to [http://localhost:8080](http://localhost:8080).
+Publishing metrics in Spring Boot 2.x: with Micrometer
 
+* After the application starts, metrics will be exposed automatically on the actuator endpoint, which is `/actuator/prometheus`, [http://localhost:8080/actuator/prometheus](http://localhost:8080/actuator/prometheus):
+
+```sh
+$ curl 'http://localhost:8080/actuator/prometheus' -i -X GET
+```
 
 ## Configure Micrometer
 
-Micrometer generates detailed time series metrics for each node in a cluster or a single node.
+##### Adding Prometheus to Spring Boot
+
+For Gradle, add the following implementation:
+```sh
+implementation 'io.micrometer:micrometer-registry-prometheus:latest.release'
+```
+
+For Maven, add the following dependency:
+```sh
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+  <version>${micrometer.version}</version>
+</dependency>
+```
+
+We need to tell Spring Boot’s Actuator which endpoints it should expose:
+So we add this line to `application.properties`:
+```sh
+management.endpoints.web.exposure.include=*
+management.endpoints.web.exposure.include=prometheus,health,info,metric
+ 
+management.health.probes.enabled=true
+management.endpoint.health.show-details=always
+```
+
+##### Using the JDK’s `com.sun.net.httpserver.HttpServer` to expose a scrape endpoint
+
+* With `PrometheusConfig`
+
+```java
+public static PrometheusMeterRegistry prometheus() {
+    PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(new PrometheusConfig() {
+
+        @Override
+        public Duration step() {
+            return Duration.ofSeconds(10);
+        }
+
+        @Override
+        @Nullable
+        public String get(String k) {
+            return null;
+        }
+    });
+    try {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/prometheus", httpExchange -> {
+            String response = prometheusRegistry.scrape();
+            httpExchange.sendResponseHeaders(200, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        });
+        new Thread(server::start).run();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    return prometheusRegistry;
+}
+```
 
 ## Configure the Collector
 
@@ -64,10 +129,9 @@ receivers:
     config:
       scrape_configs:
         - job_name: 'micrometer-demo'
-          scrape_interval: 10s
-          scrape_timeout: 10s
+          scrape_interval: 15s
+          scrape_timeout: 1m
           metrics_path: '/actuator/prometheus'
-          scheme: 'http'
           tls_config:
             insecure_skip_verify: true
           static_configs:
@@ -79,7 +143,7 @@ receivers:
 ## Additional information
 
 - [OpenTelemetry Collector Prometheus Receiver][otel-prom-receiver]
-- [Micrometer Telemetry Reference][micrometer-prometheus-docs]
+- [Micrometer Promethues Reference][micrometer-prometheus-docs]
 
 [ls-docs-access-token]: https://docs.lightstep.com/docs/create-and-manage-access-tokens
 [ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
