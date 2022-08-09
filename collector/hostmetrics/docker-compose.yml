@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+    otel-collector:
+        container_name: otel-collector
+        image: otel/opentelemetry-collector-contrib:0.53.0
+        command: ["--config=/conf/collector.yml"]
+        environment:
+            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+        network_mode: "host"
+        volumes:
+            - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:

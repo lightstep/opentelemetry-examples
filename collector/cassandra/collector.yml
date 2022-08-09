@@ -1,0 +1,25 @@
+receivers:
+  jmx/cassandra:
+    jar_path: /opt/opentelemetry-jmx-metrics.jar
+    endpoint: cassandra:17199
+    target_system: jvm,cassandra
+    collection_interval: 5s
+  
+exporters:
+    logging:
+        loglevel: debug
+
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [jmx/cassandra]
+        processors: [batch]
+        exporters: [logging, otlp]    

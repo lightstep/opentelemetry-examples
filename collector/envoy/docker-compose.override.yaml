@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  otel-collector:
+    # container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.51.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+
+# we can send some traffic to the proxy, so charts have data by enabling the
+# profile like `docker-compose --profile loadgen up`
+  loadgen:
+    depends_on: [nginx_proxy]
+    image: williamyeh/hey
+    command: ["-z", "10m", "-c", "50", "-q", "50", "http://front-envoy:8080/service/1"]
+    # to keep this from starting under regular invocation
+    profiles:
+      - loadgen
+
+configs:
+  collector_conf:
+    file: ./collector.yml

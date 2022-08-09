@@ -13,6 +13,6 @@ dependency-reduced-pom.xml
 *.jar
 .swp
 config/collector-config.yaml
-
-dotnet/server/aspnetapp/bin
-dotnet/server/aspnetapp/obj
+*scratchpad*
+venv/
+*.pyc

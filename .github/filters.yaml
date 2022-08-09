@@ -1,0 +1,7 @@
+code-examples:
+  - 'go/**'
+  - 'java/**'
+  - 'nodejs/**'
+  - 'python/**'
+collector:
+  - 'collector/**'

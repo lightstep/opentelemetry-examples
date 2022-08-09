@@ -12,12 +12,13 @@ jobs:
       matrix:
         component: [
           'go-opentracing-server', 'go-opentracing-client',
-          'go-opentelemetry-server', 'go-opentelemetry-client',
+          'go-opentelemetry-collector-server', 'go-opentelemetry-collector-client',
+          'go-opentelemetry-otlp-server', 'go-opentelemetry-otlp-client',
           'go-launcher-server', 'go-launcher-client',
           'py-collector-client', 'py-collector-server',
           'py-opentelemetry-client', 'py-opentelemetry-server',
           'py-launcher-client', 'py-launcher-server',
-          'demo-client-otlp', 'demo-client-lstrace',
+          'demo-client-otlp',
           'py-opentracing-client', 'py-opentracing-server',
           'js-launcher-server', 'js-launcher-client',
           'js-ot-shim-server', 'js-ot-shim-client',

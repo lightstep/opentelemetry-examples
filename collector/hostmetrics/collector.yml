@@ -1,0 +1,37 @@
+receivers:
+   hostmetrics:
+       scrapers:
+          cpu: 
+          disk:
+          paging:
+          load: 
+          process: 
+          processes: 
+          filesystem: 
+          network: 
+          memory:
+       scrape_interval: 5s
+       collector_interval: 5s
+
+processors:
+    resourcedetection:
+        detectors: [system]
+    batch:
+
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+service:
+    telemetry:
+      metrics:
+    pipelines:
+      metrics:
+        receivers: [hostmetrics]
+        processors: [resourcedetection, batch]
+        exporters: [logging, otlp]    

@@ -1,6 +1,7 @@
 clients:
 - go-opentracing-client
-- go-opentelemetry-client
+- go-opentelemetry-collector-client
+- go-opentelemetry-otlp-client
 - go-launcher-client
 - py-collector-client
 - py-opentelemetry-client
@@ -13,7 +14,8 @@ clients:
 - java-launcher-client
 endpoints:
 - http://go-opentracing-server:8081/ping
-- http://go-opentelemetry-server:8081/ping
+- http://go-opentelemetry-collector-server:8081/ping
+- http://go-opentelemetry-otlp-server:8081/ping
 - http://go-launcher-server:8081/ping
 - http://py-collector-server:5000/ping
 - http://py-opentelemetry-server:5000/ping
@@ -25,10 +27,10 @@ endpoints:
 - http://java-otlp-server:8083/ping
 - http://java-launcher-server:8084/ping
 - http://java-opentracing-server:10001/order
-- http://dotnet-otlp-server
 services:
 - go-opentracing-server
-- go-opentelemetry-server
+- go-opentelemetry-collector-server
+- go-opentelemetry-otlp-server
 - go-launcher-server
 - py-collector-server
 - py-opentelemetry-server
@@ -40,4 +42,3 @@ services:
 - java-otlp-server
 - java-launcher-server
 - java-opentracing-server
-- dotnet-otlp-server

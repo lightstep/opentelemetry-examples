@@ -1,0 +1,34 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+  prometheus/front-proxy:
+    config:
+      scrape_configs:
+        - job_name: otel-envoy-eg
+          scrape_interval: 5s
+          metrics_path: /stats/prometheus
+          static_configs:
+            - targets: ["front-envoy:8001"]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging, otlp/public]
+    metrics:
+      receivers: [otlp, prometheus/front-proxy]
+      processors: [batch]
+      exporters: [otlp/public]
