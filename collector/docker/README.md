@@ -1,7 +1,7 @@
 ---
-# Ingest Docker metrics using OTEL Collector's Prometheus receiver
+# Ingest Docker metrics using OTEL Collector's `dockerstats` or `prometheus` receivers
 
-This example illustrates how you can ingest Docker metrics using the [OTEL collector's `dockerstats` receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/dockerstatsreceiver). 
+This example illustrates how you can ingest Docker metrics using the [OTEL collector's `dockerstats` receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/dockerstatsreceiver#readme) or alternatively with the [`prometheus` receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver#readme).
 
 > WARNING: The `dockerstats` receiver is only supported on Linux.
 
