@@ -129,13 +129,14 @@ receivers:
     config:
       scrape_configs:
         - job_name: 'micrometer-demo'
-          scrape_interval: 15s
-          scrape_timeout: 1m
+          scrape_interval: 20s
+          scrape_timeout: 20s
           metrics_path: '/actuator/prometheus'
           tls_config:
             insecure_skip_verify: true
+          scheme: http
           static_configs:
-            - targets: ['backend:8080']
+            - targets: ['localhost:8080']
 ```
 
 
