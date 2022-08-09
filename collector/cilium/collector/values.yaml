@@ -1,0 +1,45 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: my-otel-collector
+spec:
+  mode: deployment
+  env:
+  - name: CILIUM_AGENT_METRICS_PORT
+    value: "9964"
+  - name: CILIUM_OPERATOR_METRICS_PORT
+    value: "9090"
+  - name: HUBBLE_METRICS_PORT
+    value: "9090"
+  - name: LS_ACCESS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: lightstep-secret
+        key: lightstep_access_token
+        optional: false # require the secret to exist
+  config: |
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: otel-cilium-eg
+              static_configs:
+                - targets: 
+                    - cilium-agent.kube-system.svc.cluster.local:9962     # cilium
+                    - cilium-agent.kube-system.svc.cluster.local:9963     # cilium-operator
+                    - hubble-metrics.kube-system.svc.cluster.local:9965   # hubble
+    processors:
+      batch:
+    exporters:
+      logging:
+        loglevel: debug
+      otlp/public:
+        endpoint: ingest.lightstep.com:443
+        headers:
+          "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          processors: [batch]
+          exporters: [logging, otlp/public]
