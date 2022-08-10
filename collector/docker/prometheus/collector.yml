@@ -1,0 +1,28 @@
+receivers:
+  prometheus/docker:
+    config:
+      scrape_configs:
+        - job_name: docker-otel-eg
+          static_configs:
+            - targets: ["${DEFAULT_IPV4}:2375"]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/docker]
+      processors: [batch]
+      exporters: [logging, otlp/public]
+  telemetry:
+    logs:
+      level: debug

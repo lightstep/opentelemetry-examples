@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel
+    image: otel/opentelemetry-collector-contrib
+    environment:
+      DEFAULT_IPV4: ${DEFAULT_IPV4}
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: 10002:997
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+
+networks:
+  integrations:
