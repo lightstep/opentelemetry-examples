@@ -1,0 +1,18 @@
+FROM node:12.18.3
+
+WORKDIR /usr/src/statsd
+
+# Setup node envs
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+
+RUN git clone https://github.com/statsd/statsd . \
+    && npm install && npm cache clean --force
+
+# Expose required ports
+EXPOSE 8125/udp 8126
+
+COPY statsd_config.js /usr/src/statsd/statsd_config.js
+
+# Start statsd
+ENTRYPOINT [ "node", "stats.js", "statsd_config.js" ]
