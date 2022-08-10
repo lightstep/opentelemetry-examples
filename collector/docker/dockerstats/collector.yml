@@ -1,0 +1,25 @@
+receivers:
+  docker_stats:
+    endpoint: "http://${DEFAULT_IPV4}:2375"
+    provide_per_core_cpu_metrics: true
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [docker_stats]
+      processors: [batch]
+      exporters: [logging, otlp/public]
+  telemetry:
+    logs:
+      level: debug
