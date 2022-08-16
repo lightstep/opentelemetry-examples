@@ -1,0 +1,48 @@
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - backend
+      - db
+  backend:
+    build: backend
+    ports:
+      - 8080:8080
+    environment:
+      - POSTGRES_DB=example
+    networks:
+      - integrations
+    healthcheck:
+      test: curl -m 5 --silent --fail --request GET http://localhost:8080/actuator/health | jq --exit-status -n 'inputs | if has("status") then .status=="UP" else false end' > /dev/null || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 10
+  db:
+    image: postgres
+    restart: always
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - integrations
+    environment:
+      - POSTGRES_DB=example
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 5432
+volumes:
+  db-data:
+secrets:
+  db-password:
+    file: db/password.txt
+networks:
+  integrations:
