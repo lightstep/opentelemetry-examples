@@ -14,5 +14,6 @@ dependency-reduced-pom.xml
 .swp
 config/collector-config.yaml
 *scratchpad*
-venv/
+venv*/
 *.pyc
+__pycache__
