@@ -1,13 +1,18 @@
 from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from random import randint
 from flask import Flask, request
 from common import get_tracer
 import uuid
 
-
+# Init tracer
 tracer = get_tracer()
 
+# Init autoinstrumentation with Flask
 app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
 
 @app.route("/ping")
 def handle_ping():
@@ -26,13 +31,13 @@ def do_roll():
     current_span.set_attribute("operation.other-stuff", [1, 2, 3])
     return res
 
-@tracer.start_as_current_span("ping")
+@tracer.start_as_current_span("handle_ping")
 def handle_ping():
     res = uuid.uuid4().hex
     current_span = trace.get_current_span()
     current_span.set_attribute("library.language", "python"),
     current_span.set_attribute("library.version", "v1.7.0"),
-    current_span.set_status("Success")
+    current_span.set_status(1)
     
     current_span.add_event("Suuuuuppp")
     
