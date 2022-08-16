@@ -2,25 +2,21 @@ receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'vault'
-          scrape_interval: 20s
+        - job_name: 'vault-server'
+          scrape_interval: 10s
           metrics_path: '/v1/sys/metrics'
-          tls_config:
-            insecure_skip_verify: true
-          scheme: http
-          # authorization:
-          #   credentials_file: /etc/prometheus/prometheus-token
+          params:
+            format: ['prometheus']
           static_configs:
             - targets: ['vault-server:8200']
-
+          
 exporters:
   logging:
     loglevel: debug
   otlp:
-    endpoint: ingest.staging.lightstep.com:443
+    endpoint: ingest.lightstep.com:443
     headers:
-      "lightstep-access-token": "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
-
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
   batch:
