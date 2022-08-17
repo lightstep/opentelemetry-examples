@@ -1,0 +1,59 @@
+version: "3.7"
+services:
+  otel-collector: 
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - vault-server
+
+  vault-server:
+    container_name: vault-server
+    image: vault:latest
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: testtoken
+      VAULT_ADDR: http://0.0.0.0:8200
+    ports:
+      - 8200:8200
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./vault:/vault
+    command: ["server", "-dev", "-config=/vault/config/policies/prometheus-metrics.hcl", "-log-level=info"]
+    depends_on:
+      - consul-server
+
+  consul-server:
+    container_name: consul-server
+    restart: always
+    image: consul
+    ports:
+      - 8300:8300
+      - 8400:8400
+      - 8500:8500
+      - "8600:8600/tcp"
+      - "8600:8600/udp"
+    command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1 -config-file=/consul/config/consul-config.json
+    volumes:
+      - ./consul:/consul
+
+  consul-worker:
+    container_name: consul-worker
+    restart: always
+    image: consul
+    ports:
+      - 8301:8300
+      - 8401:8400
+      - 8501:8500
+      - 8601:8600
+    command: agent -server -join consul-server -config-file=/consul/config/consul-config.json
+    volumes:
+      - ./consul/config/consul-config.json:/consul/config/consul-config.json
+    depends_on:
+      - consul-server
