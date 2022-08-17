@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  statsd:
+    build:
+      context: .
+      dockerfile: Dockerfile.statsd
+    hostname: statsd
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    hostname: otel-collector
+    restart: always
+    command: ["--config=/conf/collector.yaml"]
+    environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+        - ./collector.yaml:/conf/collector.yaml:rw
