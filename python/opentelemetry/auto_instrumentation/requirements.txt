@@ -1,0 +1,10 @@
+# OTel-specific
+opentelemetry-distro
+opentelemetry-instrumentation-flask
+opentelemetry-exporter-otlp # required if you don't want to export to console
+opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-grpc
+
+# App-specific
+flask
+requests
