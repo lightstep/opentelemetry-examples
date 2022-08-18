@@ -26,10 +26,12 @@ export GRPC_TRACE=http,call_error,connectivity_state
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
     --traces_exporter console,otlp \
+    --metrics_exporter console \
     --service_name test-py-auto-collector-server \
     python server.py
 ```
 
+To send over HTTP, replace `otlp` with `otlp_proto_http` in the `--traces_exporter` line.
 
 # Send data to Lightstep direct from app (OTLP)
 
@@ -45,10 +47,40 @@ export OTEL_EXPORTER_OTLP_TRACES_HEADERS="<LS_ACCESS_TOKEN>"
 
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
-    --traces_exporter console,otlp \
-    --service_name test-py-auto-otlp \
-    --exporter_otlp_endpoint "ingest.lightstep.com:443" \
+    --traces_exporter console,otlp_proto_grpc \
+    --metrics_exporter console \
+    --service_name test-py-auto-otlp-server \
+    --exporter_otlp_traces_endpoint "ingest.lightstep.com:443" \
     python server.py
 ```
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens)
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+
+To use HTTP instead of gRPC:
+
+```bash
+opentelemetry-instrument \
+    --traces_exporter console,otlp_proto_http \
+    --metrics_exporter console \
+    --service_name test-py-auto-otlp-server \
+    --exporter_otlp_traces_endpoint "https://ingest.lightstep.com/traces/otlp/v0.9" \
+    python server.py
+```
+
+## Run the Client
+
+Do this in a separate terminal window.
+
+```bash
+source ./bin/activate
+opentelemetry-instrument \
+    --traces_exporter console,otlp \
+    --service_name test-py-auto-client \
+    --exporter_otlp_endpoint "ingest.lightstep.com:443" \
+    python client.py test
+```
+
+Where `test` is the parameter being passed to `client.py`.
+## References
+
+More info on `opentelemetry-instrument` [here](https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation).
