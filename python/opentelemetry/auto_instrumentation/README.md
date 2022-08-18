@@ -73,6 +73,9 @@ In a separate terminal window:
 
 ```bash
 source ./bin/activate
+
+export OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
+
 opentelemetry-instrument \
     --traces_exporter console,otlp \
     --service_name test-py-auto-client \
@@ -81,6 +84,9 @@ opentelemetry-instrument \
 ```
 
 Where `test` is the parameter being passed to `client.py`.
+
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+
 ## References
 
 More info on `opentelemetry-instrument` [here](https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation).

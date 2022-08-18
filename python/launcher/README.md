@@ -58,14 +58,19 @@ In a separate terminal window:
 
 ```bash
 source ./bin/activate
+export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+
+# Run Python app with auto-instrumentation
 opentelemetry-instrument \
-    --traces_exporter console,otlp \
-    --service_name test-py-auto-client \
-    --exporter_otlp_endpoint "ingest.lightstep.com:443" \
+    --service_name test-py-auto-launcher-client \
+    --propagators tracecontext \
     python client.py test
 ```
 
 Where `test` is the parameter being passed to `client.py`.
+
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+
 
 ## References
 
