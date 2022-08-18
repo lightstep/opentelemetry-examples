@@ -20,7 +20,7 @@ def get_tracer():
     
     # Service name is required for most backends
     resource = Resource(attributes={
-        SERVICE_NAME: "test-python-server-grpc"
+        SERVICE_NAME: "test-py-manual-server-grpc"
     })
 
     provider = TracerProvider(resource=resource)

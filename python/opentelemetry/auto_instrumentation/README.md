@@ -43,7 +43,7 @@ export FLASK_DEBUG=1
 export GRPC_VERBOSITY=debug
 export GRPC_TRACE=http,call_error,connectivity_state
 
-export OTEL_EXPORTER_OTLP_TRACES_HEADERS="<LS_ACCESS_TOKEN>"
+export OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
 
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
