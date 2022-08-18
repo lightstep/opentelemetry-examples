@@ -8,7 +8,6 @@ source ./bin/activate
 
 # Installs OTel libraries
 pip install -r requirements.txt
-# opentelemetry-bootstrap -a install
 ```
 
 ## Send data to Lightstep direct from app
@@ -22,8 +21,14 @@ export GRPC_TRACE=http,call_error,connectivity_state
 export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 
 python server.py
-
-# In separate terminal
-curl http://localhost:8082/rolldice
 ```
 
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+
+## Run the Client
+
+In a separate terminal window:
+
+```bash
+curl http://localhost:8082/rolldice
+```

@@ -25,13 +25,11 @@ export GRPC_TRACE=http,call_error,connectivity_state
 
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
-    --traces_exporter console,otlp \
-    --metrics_exporter console \
-    --service_name test-py-auto-collector-server \
+    --service_name test-py-auto-launcher-server \
+    --exporter_otlp_traces_endpoint "0.0.0.0:4317" \
+    --exporter_otlp_traces_insecure true \
     python server.py
 ```
-
-To send over HTTP, replace `otlp` with `otlp_proto_http` in the `--traces_exporter` line.
 
 # Send data to Lightstep direct from app (OTLP)
 
@@ -43,29 +41,16 @@ export FLASK_DEBUG=1
 export GRPC_VERBOSITY=debug
 export GRPC_TRACE=http,call_error,connectivity_state
 
-export OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
+export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
-    --traces_exporter console,otlp_proto_grpc \
-    --metrics_exporter console \
-    --service_name test-py-auto-otlp-server \
-    --exporter_otlp_traces_endpoint "ingest.lightstep.com:443" \
+    --service_name test-py-auto-launcher-server \
+    --propagators tracecontext \
     python server.py
 ```
 
 Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
-
-To use HTTP instead of gRPC:
-
-```bash
-opentelemetry-instrument \
-    --traces_exporter console,otlp_proto_http \
-    --metrics_exporter console \
-    --service_name test-py-auto-otlp-server \
-    --exporter_otlp_traces_endpoint "https://ingest.lightstep.com/traces/otlp/v0.9" \
-    python server.py
-```
 
 ## Run the Client
 
@@ -81,6 +66,9 @@ opentelemetry-instrument \
 ```
 
 Where `test` is the parameter being passed to `client.py`.
+
 ## References
 
 More info on `opentelemetry-instrument` [here](https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation).
+
+More info on the Python Launcher [here](https://github.com/lightstep/otel-launcher-python).
