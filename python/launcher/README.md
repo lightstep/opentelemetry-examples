@@ -46,7 +46,6 @@ export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
     --service_name test-py-auto-launcher-server \
-    --propagators tracecontext \
     python server.py
 ```
 
@@ -63,7 +62,6 @@ export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 # Run Python app with auto-instrumentation
 opentelemetry-instrument \
     --service_name test-py-auto-launcher-client \
-    --propagators tracecontext \
     python client.py test
 ```
 

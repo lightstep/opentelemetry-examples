@@ -1,10 +1,10 @@
 # OTel-specific
 opentelemetry-distro
 opentelemetry-instrumentation-flask # Auto-instrumentation for Flask
-opentelemetry-exporter-otlp # Required if you're using an OTel Collector
-opentelemetry-exporter-otlp-proto-http # Required if you're not using an OTel Collector. Use for direct from application via HTTP
-opentelemetry-exporter-otlp-proto-grpc # Required if you're not using an OTel Collector. Use for direct from application via gRPC
+opentelemetry-exporter-otlp
 
-# App-specific
 flask
+pymongo
+redis
 requests
+sqlalchemy

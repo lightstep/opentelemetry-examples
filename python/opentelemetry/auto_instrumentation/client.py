@@ -1,23 +1,37 @@
-from sys import argv
+#!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   LS_SERVICE_NAME=demo-python \
+#   LS_SERVICE_VERSION=0.0.8 \
+#   opentelemetry-instrument python client.py
 
-from requests import get
+import os
+import time
 
+# from common import get_tracer
 from opentelemetry import trace
-from opentelemetry.propagate import inject
 
+# tracer = get_tracer()
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-assert len(argv) == 2
+import requests
 
-with tracer.start_as_current_span("client"):
 
-    with tracer.start_as_current_span("client-server"):
-        headers = {}
-        inject(headers)
-        requested = get(
-            "http://localhost:8082/rolldice",
-            params={"param": argv[1]},
-            headers=headers,
-        )
+def send_requests(url):
+    with tracer.start_as_current_span("client operation"):
+        try:
+            res = requests.get(url)
+            print(f"Request to {url}, got {len(res.content)} bytes")
+        except Exception as e:
+            print(f"Request to {url} failed {e}")
+            pass
 
-        assert requested.status_code == 200
+
+if __name__ == "__main__":
+    target = os.getenv("DESTINATION_URL", "http://localhost:8081/ping")
+    while True:
+        send_requests(target)
+        time.sleep(5)
