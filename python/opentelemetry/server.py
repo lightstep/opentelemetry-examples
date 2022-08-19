@@ -9,10 +9,12 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from common import get_tracer
+from opentelemetry import trace
 
+# from common import get_tracer
+tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-tracer = get_tracer()
+# tracer = get_tracer()
 
 app = flask.Flask(__name__)
 
@@ -48,9 +50,9 @@ def _random_string(length):
 @app.route("/ping")
 def ping():
     length = random.randint(1, 1024)
-    redis_integration(length)
-    pymongo_integration(length)
-    sqlalchemy_integration(length)
+    # redis_integration(length)
+    # pymongo_integration(length)
+    # sqlalchemy_integration(length)
     return _random_string(length)
 
 
@@ -86,4 +88,5 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+#     app.run(host="0.0.0.0")
+    app.run(port=8081, debug=True, use_reloader=False)
