@@ -10,14 +10,13 @@
 
 import os
 import time
+import requests
 
 # from common import get_tracer
 from opentelemetry import trace
 
 # tracer = get_tracer()
 tracer = trace.get_tracer_provider().get_tracer(__name__)
-
-import requests
 
 
 def send_requests(url):
