@@ -1,5 +1,9 @@
 # OTel-specific
 opentelemetry-launcher
-requests
-flask
 protobuf==3.20.1
+
+flask
+pymongo
+redis
+requests
+sqlalchemy
