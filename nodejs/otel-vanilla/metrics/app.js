@@ -12,13 +12,18 @@ const {
 } = require('@opentelemetry/semantic-conventions');
 
 const token = process.env.LS_ACCESS_TOKEN;
+const exportUrl =
+  process.env.LS_METRICS_URL ||
+  'https://ingest.lightstep.com/metrics/otlp/v0.9';
+const serviceName = process.env.LS_SERVICE_NAME || 'otel-js-demo';
+
 const collectorOptions = {
-  url: 'https://ingest.lightstep.com/metrics/otlp/v0.9',
+  url: exportUrl,
   headers: { 'Lightstep-Access-Token': token },
 };
 const metricExporter = new OTLPMetricExporter(collectorOptions);
 const resource = new Resource({
-  [SemanticResourceAttributes.SERVICE_NAME]: 'otel-js-demo',
+  [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
 });
 const meterProvider = new MeterProvider({
   resource,
