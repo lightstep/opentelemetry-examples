@@ -1,0 +1,30 @@
+{ 
+    "server": {
+        "enabled": true,
+        "bootstrap_expect": 3
+    },
+    "data_dir": "/nomad/data/",
+    "bind_addr": "0.0.0.0",
+    "log_level": "INFO",
+    "enable_debug": true,
+    "advertise": {
+        "http": "127.0.0.1:4646",
+        "rpc": "127.0.0.1:4647",
+        "serf": "127.0.0.1:4648"
+    },
+    "client": {
+        "enabled": true,
+        "server_join": {
+            "retry_join": [
+                "127.0.0.1:4647"
+            ]
+        }
+    },
+    "telemetry": {
+        "publish_allocation_metrics": true,
+        "publish_node_metrics": true,
+        "collection_interval": "1s",
+        "disable_hostname": true,
+        "prometheus_metrics": true
+    }
+}
