@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  mon:
+    image: ceph/daemon
+    container_name: mon
+    command: mon
+    environment: 
+      - MON_IP=192.168.1.143
+      - CEPH_PUBLIC_NETWORK=192.168.0.0/24
+    privileged: true
+    volumes:
+      - /etc/ceph:/etc/ceph
+      - /var/lib/ceph/:/var/lib/ceph
+  # mgr:
+  #   image: ceph/daemon
+  #   container_name: mgr
+  #   command: mgr
+  #   privileged: true
+  #   depends_on:
+  #     - mon
+  #   port:
+  #     - 8443:8443
+  #   volumes:
+  #     - /etc/ceph:/etc/ceph
+  #     - /var/lib/ceph/:/var/lib/ceph
+  #     - /dev/:/dev/
+  #   networks:
+  #     - cluster-net
+
+  # osd:
+  #   image: ceph/daemon
+  #   container_name: osd
+  #   command: osd_directory
+  #   environment: 
+  #     - MON_IP=192.168.0.20
+  #     - CEPH_PUBLIC_NETWORK=192.168.0.0/24
+  #   privileged: true
+  #   depends_on:
+  #     - mon
+  #   volumes:
+  #     - /etc/ceph:/etc/ceph
+  #     - /var/lib/ceph/:/var/lib/ceph/
+  #     - ${OSD_PATH}/osd:/var/lib/ceph/osd
+  #   networks:
+  #     - cluster-net
+
+  # rgw:
+  #   image: ceph/daemon:${CEPH_CONTAINER_VERSION}
+  #   container_name: osd
+  #   command: "rgw"
+  #   environment:
+  #     LANG: en_US.utf8
+  #     TZ: UTC
+  #   volumes:
+  #     - ./volumes_data/ceph:/etc/ceph
+  #     - ./volumes_data/lib/:/var/lib/ceph/
+  #   depends_on:
+  #     - osd
+  #   networks:
+  #     - cluster-net
+  #   ports:
+  #     - 8080:7480
+
+  # mds:
+  #   image: ceph/daemon:${CEPH_CONTAINER_VERSION}
+  #   command: "mds"
+  #   hostname: "ceph-mds1-host"
+  #   environment:
+  #     CEPHFS_CREATE: 1
+  #     LANG: en_US.utf8
+  #     TZ: UTC
+  #   volumes:
+  #     - ./volumes_data/ceph:/etc/ceph
+  #     - ./volumes_data/lib/:/var/lib/ceph/
+  #   depends_on:
+  #     - osd
+  #   networks:
+  #     - cluster-net
+
+  # otel-collector:
+  #   container_name: otel-collector
+  #   image: otel/opentelemetry-collector-contrib:0.56.0
+  #   command: [ "--config=/conf/collector.yml" ]
+  #   ports:
+  #     - 8888:8888
+  #   environment:
+  #     LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+  #   volumes:
+  #     - ./collector.yml:/conf/collector.yml:rw
+  #   depends_on:
+  #     - ceph-server
