@@ -6,14 +6,14 @@ services:
     user: mosquitto
     volumes:
       - ./mosquitto:/mosquitto
-      - ./mosquitto/data:/mosquitto/data
+        # - ./mosquitto/data:/mosquitto/data
 
   client:
     image: eclipse-mosquitto
     user: mosquitto
     volumes:
       - ./mosquitto:/mosquitto
-      - ./mosquitto/data:/mosquitto/data
+        # - ./mosquitto/data:/mosquitto/data
     depends_on:
       - broker
 
