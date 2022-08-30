@@ -2,25 +2,37 @@ version: "3"
 
 services:
   broker:
-    container_name: mosquitto-broker
     image: eclipse-mosquitto
     user: mosquitto
     volumes:
-      - ./config:/mosquitto/config
-      - ./data:/mosquitto/data
-      - ./log:/mosquitto/log
+      - ./mosquitto:/mosquitto
+      - ./mosquitto/data:/mosquitto/data
 
   client:
-    container_name: mosquitto-client
     image: eclipse-mosquitto
     user: mosquitto
     volumes:
-      - ./config:/mosquitto/config
-      - ./data:/mosquitto/data
-      - ./log:/mosquitto/log
+      - ./mosquitto:/mosquitto
+      - ./mosquitto/data:/mosquitto/data
     depends_on:
       - broker
 
+  telegraf:
+    container_name: telegraf
+    image: telegraf
+    volumes:
+      - ./telegraf:/telegraf
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: telegraf_conf
+        target: /etc/telegraf/telegraf.conf
+    depends_on:
+      - broker 
+
 configs:
   telegraf_conf:
-    file: ./telegraf.conf
+    file: ./telegraf/telegraf.conf
+
+networks:
+  integrations:
