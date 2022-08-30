@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  broker:
+    container_name: mosquitto-broker
+    image: eclipse-mosquitto
+    user: mosquitto
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+
+  client:
+    container_name: mosquitto-client
+    image: eclipse-mosquitto
+    user: mosquitto
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    depends_on:
+      - broker
+
+configs:
+  telegraf_conf:
+    file: ./telegraf.conf
