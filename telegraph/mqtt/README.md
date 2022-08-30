@@ -54,3 +54,7 @@ The `-h` flag is the hostname where we sending the message. It will go to port 1
 docker compose exec client mosquitto_pub -h broker -t test/topic -m '[{"key1": 9, "key2": 13}]'
 ```
 
+## View the Results in Lightstep
+
+For a message like what the demo illustrated in the last message we should find a metric in Lightstep named `mqtt_consumer_key1`. It will have keys for host which is the container id, topic which we set as "test/topic", and instrumentation.name.
+
