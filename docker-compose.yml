@@ -145,8 +145,9 @@ services:
            - .env
        environment:
            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
+           - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-client,service.version=1.2.9
-           - DESTINATION_URL=http://py-opentelemetry-auto-collector-server:5000/ping
+           - DESTINATION_URL=http://py-opentelemetry-auto-collector-server:8081/ping
        stop_grace_period: 1s
     py-opentelemetry-auto-collector-server:
         container_name: py-opentelemetry-auto-collector-server
@@ -162,7 +163,10 @@ services:
             - .env
         environment:
             - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
+            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-server,service.version=0.2.8
+        ports:
+            - "0.0.0.0:8081:8081"
         stop_grace_period: 1s
     py-opentelemetry-auto-otlp-client:
        container_name: py-opentelemetry-auto-otlp-client
@@ -179,7 +183,7 @@ services:
        environment:
            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-client,service.version=10.10.10
            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
-           - DESTINATION_URL=http://py-opentelemetry-auto-otlp-server:5000/ping
+           - DESTINATION_URL=http://py-opentelemetry-auto-otlp-server:8081/ping
        stop_grace_period: 1s
     py-opentelemetry-auto-otlp-server:
         container_name: py-opentelemetry-auto-otlp-server
@@ -189,11 +193,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
-        depends_on:
-            - redis
-            - postgres
-            - mysql
-            - mongo
+        # depends_on:
+        #     - redis
+        #     - postgres
+        #     - mysql
+        #     - mongo
         env_file:
             - .env
         environment:
@@ -225,11 +229,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
-        depends_on:
-            - redis
-            - postgres
-            - mysql
-            - mongo
+        # depends_on:
+        #     - redis
+        #     - postgres
+        #     - mysql
+        #     - mongo
         env_file:
             - .env
         environment:

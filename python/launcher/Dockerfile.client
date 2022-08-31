@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 RUN opentelemetry-bootstrap -a install
 
 ADD client.py /app/client.py
-CMD ["opentelemetry-instrument", "/app/client.py"]
+CMD ["opentelemetry-instrument", "/app/client.py", "test"]

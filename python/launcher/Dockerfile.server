@@ -10,4 +10,6 @@ RUN pip install -r requirements.txt
 RUN opentelemetry-bootstrap -a install
 
 ADD server.py /app/server.py
+
+EXPOSE 8081
 CMD ["opentelemetry-instrument", "/app/server.py"]
