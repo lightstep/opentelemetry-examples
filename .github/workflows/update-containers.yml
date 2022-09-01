@@ -19,7 +19,7 @@ jobs:
           'py-opentelemetry-auto-otlp-client', 'py-opentelemetry-auto-otlp-server',
           'py-launcher-client', 'py-launcher-server',
           'demo-client-otlp',
-          # 'py-opentracing-client', 'py-opentracing-server',
+          'py-opentracing-client', 'py-opentracing-server',
           'js-launcher-server', 'js-launcher-client',
           'js-ot-shim-server', 'js-ot-shim-client',
           'java-specialagent-server', 'java-specialagent-client',
