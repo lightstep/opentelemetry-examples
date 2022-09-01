@@ -54,7 +54,7 @@ opentelemetry-instrument \
     python server.py
 ```
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Token](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
 
 To use HTTP instead of gRPC:
 

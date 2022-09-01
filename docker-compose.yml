@@ -182,7 +182,8 @@ services:
            - .env
        environment:
            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-client,service.version=10.10.10
-           - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
            - DESTINATION_URL=http://py-opentelemetry-auto-otlp-server:8081/ping
        stop_grace_period: 1s
     py-opentelemetry-auto-otlp-server:
@@ -202,7 +203,8 @@ services:
             - .env
         environment:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-server,service.version=10.10.9
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
         stop_grace_period: 1s
     py-launcher-client:
        container_name: py-launcher-client
@@ -219,7 +221,7 @@ services:
        environment:
            - LS_SERVICE_NAME=py-launcher-client
            - LS_SERVICE_VERSION=10.10.10
-           - DESTINATION_URL=http://py-launcher-server:5000/ping
+           - DESTINATION_URL=http://py-launcher-server:8081/ping
        stop_grace_period: 1s
     py-launcher-server:
         container_name: py-launcher-server
