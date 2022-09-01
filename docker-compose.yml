@@ -165,8 +165,6 @@ services:
             - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
             - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-server,service.version=0.2.8
-        ports:
-            - "0.0.0.0:8081:8081"
         stop_grace_period: 1s
     py-opentelemetry-auto-otlp-client:
        container_name: py-opentelemetry-auto-otlp-client
