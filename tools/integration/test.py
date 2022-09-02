@@ -95,6 +95,8 @@ def create_trace():
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
                     s.set_status(Status(StatusCode.ERROR))
+                    
+        span.add_event(f"Span ID: {span_id}")
         
     return span_id
 
@@ -102,6 +104,7 @@ def create_trace():
 def test_traces():
     # send a trace
     span_id = create_trace()
+    print(f"Span ID: {span_id}")
     assert span_id is not None
 
     # give time for services to report traces
