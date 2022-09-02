@@ -37,6 +37,32 @@ You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lig
   [outputs.opentelemetry.headers]
     lightstep-access-token = "$LS_ACCESS_TOKEN"
 ```
+## Edit the Sample Data
+
+This step is solely to make our dataset easier to see in Lightstep. Unlike the other steps, we won't do anything similar in our real workflows.
+
+The sample data is likely to be older than anything that will show up in your Lightstep account. I used the six most significant digits of [Unix Timestamp](https://www.unixtimestamp.com/) and replaced the first 6 digits I found in timestamps of the sample data. For example, it's September 1, 2022 and the first 6 digits of the current Unix timestamp are 166204. The timestamps in the sample data are 166198, so I replaced 166198 with 166204. It's only worth the trouble if you need
+to see how the data appears in Lightstep Observability.
+
+## Process the Data to OTLP Conventions 
+
+The rename plugin can change attributes. To make our data more like the conventions in OpenTelemetry we'll transform the name first to report this data in a particular namespace. 
+
+```bash
+[[processors.rename]]
+  [[processors.rename.replace]]
+    measurement = "airSensors"
+    dest = "sensors.air"
+```
+
+That takes care of using `sensors.air` in place of the `airSensors` measurement name from the data, but the measurement name and fields are still separated by an `_` like `air.sensors_co` and we'd like a dot separation. For this we can use templates, which are a Telegraf mini-language that describe how to map a dot delimited string to and from outputs. 
+
+```bash
+separator = "."
+templates = [
+    "*.*.field"
+]
+```
 
 ## Run Telegraph
 
@@ -49,7 +75,7 @@ telegraph --config telegraf/telegraf.conf
 Or with Docker use `docker run` as follows:
 
 ```bash
-docker run --rm -v $(pwd)/telegraf:/telegraf -e LS_ACCESS_TOKEN={$LS_ACCESS_TOKEN} telegraf --config telegraf/telegraf.conf
+docker run --rm -v $(pwd)/telegraf:/telegraf -e LS_ACCESS_TOKEN={$LS_ACCESS_TOKEN} telegraf --config /telegraf/telegraf.conf 
 ```
 
 ## View the Results in Lightstep
