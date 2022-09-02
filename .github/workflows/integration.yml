@@ -50,9 +50,9 @@ jobs:
       if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose pull
 
-    - name: Build images
-      if: steps.changes.outputs.code-examples == 'true'
-      run: docker-compose build --parallel
+    # - name: Build images
+    #   if: steps.changes.outputs.code-examples == 'true'
+    #   run: docker-compose build --parallel
 
     - name: Test??
       if: steps.changes.outputs.code-examples == 'true'
