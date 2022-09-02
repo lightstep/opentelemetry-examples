@@ -2,30 +2,19 @@ receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'ceph-server'
-          scrape_interval: 10s
-          metrics_path: '/v1/metrics'
-          params:
-            format: ['prometheus']
+        - job_name: 'ceph'
+          scrape_interval: 15s
+          metrics_path: '/metrics'
           static_configs:
-            - targets: ['ceph-server:4646']
-
-#             vim/usr/local/prometheus/prometheus.yml
-# scrape_configs:
-#   -job_name:'ceph'
-#     honor_labels: true
-#     static_configs:
-#     -targets: ['192.168.1.10:9128']
-#       labels:
-#         instance: Ceph test cluster
+            - targets: ['rgw12:9283']
 
 exporters:
   logging:
     loglevel: debug
   otlp:
-    endpoint: ingest.lightstep.com:443
+    endpoint: ingest.staging.lightstep.com:443
     headers:
-      "lightstep-access-token": ${LS_ACCESS_TOKEN}
+      "lightstep-access-token": "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
 
 processors:
   batch:
