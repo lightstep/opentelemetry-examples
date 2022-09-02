@@ -54,6 +54,10 @@ jobs:
       if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose build --parallel
 
+    - name: Test??
+      if: steps.changes.outputs.code-examples == 'true'
+      run: docker-compose up py-opentelemetry-auto-collector-client
+      
     - name: Run integration test
       if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose up --exit-code-from integration-test integration-test
