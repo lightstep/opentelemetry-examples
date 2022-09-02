@@ -86,8 +86,11 @@ def create_trace():
                 try:
                     res = send_request(url)
                     print(f"Request to {url}, got {len(res.content)} bytes")
+                    print(f"Status code returned: {res.status_code}")
+                    s.add_event(f"Status code returned: {res.status_code}")
                     if res.status_code == 500:
-                        print(f"{res.text}")
+                        s.add_event(f"Response text: {res.text}")
+                        print(f"Response text: {res.text}")
                 except Exception as e:
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
@@ -110,6 +113,7 @@ def test_traces():
 
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
+    print(f"Response: {response.json}")
     assert response.status_code == 200
 
     time.sleep(60)
