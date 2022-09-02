@@ -113,7 +113,7 @@ def test_traces():
 
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
-    print(f"Response: {response.json}")
+    print(f"Response: {response.json()}")
     assert response.status_code == 200
 
     time.sleep(60)
