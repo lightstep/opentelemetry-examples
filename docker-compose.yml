@@ -240,22 +240,22 @@ services:
     #         - LS_SERVICE_NAME=py-launcher-server
     #         - LS_SERVICE_VERSION=10.10.9
     #     stop_grace_period: 1s
-    # # demo-client-otlp:
-    # #    container_name: demo-client-otlp
-    # #    build:
-    # #        context: ./demo-client/otlp
-    # #        dockerfile: Dockerfile
-    # #    networks:
-    # #        - demo
-    # #    env_file:
-    # #        - .env
-    # #    environment:
-    # #        - INTEGRATION_CONFIG_FILE=/config/integration.yml
-    # #        - LS_SERVICE_NAME=demo-client-otlp
-    # #        - LS_SERVICE_VERSION=0.1.1
-    # #    volumes:
-    # #        - ./config:/config/:ro
-    # #    stop_grace_period: 1s
+    # demo-client-otlp:
+    #    container_name: demo-client-otlp
+    #    build:
+    #        context: ./demo-client/otlp
+    #        dockerfile: Dockerfile
+    #    networks:
+    #        - demo
+    #    env_file:
+    #        - .env
+    #    environment:
+    #        - INTEGRATION_CONFIG_FILE=/config/integration.yml
+    #        - LS_SERVICE_NAME=demo-client-otlp
+    #        - LS_SERVICE_VERSION=0.1.1
+    #    volumes:
+    #        - ./config:/config/:ro
+    #    stop_grace_period: 1s
     # py-opentracing-client:
     #    container_name: py-opentracing-client
     #    image: ghcr.io/lightstep/opentelemetry-examples:py-opentracing-client
