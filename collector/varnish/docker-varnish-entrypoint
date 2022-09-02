@@ -1,0 +1,4 @@
+#!/bin/sh
+
+varnishd -f /etc/varnish/default.vcl -a http=:80,HTTP -a proxy=:8443,PROXY -p feature=+http2 -s malloc,$VARNISH_SIZE
+/usr/local/bin/prometheus_varnish_exporter
