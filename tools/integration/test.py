@@ -119,14 +119,15 @@ def test_traces():
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
     print(f"Snapshots response JSON: {response.json()}")
-    current_span.add_event(f"Response: {response.json()}")
+    current_span.set_attribute("snapshots.response", response.json())
+    current_span.set_attribute(f"snapshots.status_code", response.status_code)
     assert response.status_code == 200
 
     time.sleep(60)
 
     url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
     querystring = {"span-id": format(span_id, "x")}
-    current_span.add_event(f"stored-traces request: {url}?{querystring}")
+    current_span.set_attribute("stored-traces.request", f"{url}?{querystring}")
 
     # search the snapshot for our trace
     response = requests.get(url, headers=_get_headers(), params=querystring)
@@ -137,9 +138,9 @@ def test_traces():
         response = requests.get(url, headers=_get_headers(), params=querystring)
 
     assert response.status_code == 200
-    current_span.add_event(f"Stored Traces response JSON: {response.json()}")
+    current_span.set_attribute("stored-traces.response", response.json())
     results = response.json()
-    current_span.add_event(f"Stored Traces response status code: {response.status_code}")
+    current_span.set_attribute("stored-traces.status_code", response.status_code)
     reporters = (
         results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
     )
