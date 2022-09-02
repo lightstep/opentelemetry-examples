@@ -87,8 +87,8 @@ def create_trace():
                     res = send_request(url)
                     print(f"Request to {url}, got {len(res.content)} bytes")
                     print(f"Status code returned: {res.status_code}")
-                    s.add_attribute(f"service.status_code", res.status_code)
-                    s.add_attribute(f"service.response", res.text)
+                    s.set_attribute(f"service.status_code", res.status_code)
+                    s.set_attribute(f"service.response", res.text)
                     if res.status_code == 500:
                         s.add_event(f"Response text: {res.text}")
                         print(f"Response text: {res.text}")
