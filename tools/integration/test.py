@@ -100,8 +100,10 @@ def create_trace():
         
     return span_id
 
-
+@tracer.start_as_current_span("test_traces")
 def test_traces():
+    current_span = trace.get_current_span()
+    
     # send a trace
     span_id = create_trace()
     print(f"Span ID: {span_id}")
@@ -116,7 +118,8 @@ def test_traces():
 
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
-    print(f"Response: {response.json()}")
+    print(f"Snapshots response JSON: {response.json()}")
+    current_span.add_event(f"Response: {response.json()}")
     assert response.status_code == 200
 
     time.sleep(60)
@@ -133,7 +136,9 @@ def test_traces():
         response = requests.get(url, headers=_get_headers(), params=querystring)
 
     assert response.status_code == 200
+    current_span.add_event(f"Stored Traces response JSON: {response.json()}")
     results = response.json()
+    current_span.add_event(f"Stored Traces response status code: {response.status_code}")
     reporters = (
         results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
     )
