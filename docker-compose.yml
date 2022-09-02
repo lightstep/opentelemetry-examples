@@ -130,44 +130,8 @@ services:
     ###############################
     ####### Python examples #######
     ###############################
-    py-opentelemetry-auto-collector-client:
-       container_name: py-opentelemetry-auto-collector-client
-       image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-client
-       build:
-           context: ./python/opentelemetry/auto_instrumentation
-           dockerfile: Dockerfile.client
-       networks:
-           - demo
-       depends_on:
-           - py-opentelemetry-auto-collector-server
-           - otel-collector
-       env_file:
-           - .env
-       environment:
-           - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-           - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-           - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-client,service.version=1.2.9
-           - DESTINATION_URL=http://py-opentelemetry-auto-collector-server:8081/ping
-       stop_grace_period: 1s
-    py-opentelemetry-auto-collector-server:
-        container_name: py-opentelemetry-auto-collector-server
-        image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-server
-        build:
-            context: ./python/opentelemetry/auto_instrumentation
-            dockerfile: Dockerfile.server
-        networks:
-            - demo
-        depends_on:
-            - otel-collector
-        env_file:
-            - .env
-        environment:
-            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-server,service.version=0.2.8
-        stop_grace_period: 1s
-    # py-opentelemetry-auto-otlp-client:
-    #    container_name: py-opentelemetry-auto-otlp-client
+    # py-opentelemetry-auto-collector-client:
+    #    container_name: py-opentelemetry-auto-collector-client
     #    image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-client
     #    build:
     #        context: ./python/opentelemetry/auto_instrumentation
@@ -175,35 +139,71 @@ services:
     #    networks:
     #        - demo
     #    depends_on:
-    #        - py-opentelemetry-auto-otlp-server
+    #        - py-opentelemetry-auto-collector-server
+    #        - otel-collector
     #    env_file:
     #        - .env
     #    environment:
-    #        - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-client,service.version=10.10.10
-    #        - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
-    #        - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
-    #        - DESTINATION_URL=http://py-opentelemetry-auto-otlp-server:8081/ping
+    #        - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
+    #        - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
+    #        - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-client,service.version=1.2.9
+    #        - DESTINATION_URL=http://py-opentelemetry-auto-collector-server:8081/ping
     #    stop_grace_period: 1s
-    # py-opentelemetry-auto-otlp-server:
-    #     container_name: py-opentelemetry-auto-otlp-server
+    # py-opentelemetry-auto-collector-server:
+    #     container_name: py-opentelemetry-auto-collector-server
     #     image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-server
     #     build:
     #         context: ./python/opentelemetry/auto_instrumentation
     #         dockerfile: Dockerfile.server
     #     networks:
     #         - demo
-    #     # depends_on:
-    #     #     - redis
-    #     #     - postgres
-    #     #     - mysql
-    #     #     - mongo
+    #     depends_on:
+    #         - otel-collector
     #     env_file:
     #         - .env
     #     environment:
-    #         - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-server,service.version=10.10.9
-    #         - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
-    #         - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
+    #         - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4317
+    #         - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4317
+    #         - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-collector-server,service.version=0.2.8
     #     stop_grace_period: 1s
+    py-opentelemetry-auto-otlp-client:
+       container_name: py-opentelemetry-auto-otlp-client
+       image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-client
+       build:
+           context: ./python/opentelemetry/auto_instrumentation
+           dockerfile: Dockerfile.client
+       networks:
+           - demo
+       depends_on:
+           - py-opentelemetry-auto-otlp-server
+       env_file:
+           - .env
+       environment:
+           - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-client,service.version=10.10.10
+           - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
+           - DESTINATION_URL=http://py-opentelemetry-auto-otlp-server:8081/ping
+       stop_grace_period: 1s
+    py-opentelemetry-auto-otlp-server:
+        container_name: py-opentelemetry-auto-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-auto-server
+        build:
+            context: ./python/opentelemetry/auto_instrumentation
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        # depends_on:
+        #     - redis
+        #     - postgres
+        #     - mysql
+        #     - mongo
+        env_file:
+            - .env
+        environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-server,service.version=10.10.9
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
+        stop_grace_period: 1s
     # py-launcher-client:
     #    container_name: py-launcher-client
     #    image: ghcr.io/lightstep/opentelemetry-examples:py-launcher-client
@@ -474,8 +474,8 @@ services:
             # - go-opentelemetry-collector-server
             # - go-opentelemetry-otlp-server
             # - go-launcher-server
-            - py-opentelemetry-auto-collector-server
-            # - py-opentelemetry-auto-otlp-server
+            # - py-opentelemetry-auto-collector-server
+            - py-opentelemetry-auto-otlp-server
             # - py-launcher-server
             # - py-opentracing-server
             # - js-launcher-server
