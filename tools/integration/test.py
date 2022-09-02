@@ -87,7 +87,8 @@ def create_trace():
                     res = send_request(url)
                     print(f"Request to {url}, got {len(res.content)} bytes")
                     print(f"Status code returned: {res.status_code}")
-                    s.add_event(f"Status code returned: {res.status_code}")
+                    s.add_attribute(f"service.status_code", res.status_code)
+                    s.add_attribute(f"service.response", res.text)
                     if res.status_code == 500:
                         s.add_event(f"Response text: {res.text}")
                         print(f"Response text: {res.text}")
@@ -95,9 +96,7 @@ def create_trace():
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
                     s.set_status(Status(StatusCode.ERROR))
-                    
-        span.add_event(f"Span ID: {span_id}")
-        
+                            
     return span_id
 
 @tracer.start_as_current_span("test_traces")
