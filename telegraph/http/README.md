@@ -1,4 +1,5 @@
-# MQTT to Lightstep via Telegraf
+---
+# Monitoring HTTP Services in Lightstep with Telegraf
 
 ## Setup an HTTP Server to Test
 
@@ -41,5 +42,5 @@ You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lig
 
 ## View the Results in Lightstep
 
-For the example that we configured metrics should be appearing in your Lightstep project with the name `http_value`.
+For the example that we configured metrics should appear in your Lightstep project with the name `http_value`.
 
