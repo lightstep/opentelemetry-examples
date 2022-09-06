@@ -17,4 +17,4 @@ config/collector-config.yaml
 venv*/
 *.pyc
 __pycache__
-*.bak
+*.bak*

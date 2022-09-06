@@ -1,15 +1,15 @@
 clients:
 - py-opentelemetry-auto-collector-client
 - py-opentelemetry-auto-otlp-client
-# - py-launcher-client
-# - py-opentracing-client
+- py-launcher-client
+- py-opentracing-client
 endpoints:
 - http://py-opentelemetry-auto-collector-server:8081/ping
 - http://py-opentelemetry-auto-otlp-server:8081/ping
-# - http://py-launcher-server:8081/ping
-# - http://py-opentracing-server:5000/ping
+- http://py-launcher-server:8081/ping
+- http://py-opentracing-server:5000/ping
 services:
 - py-opentelemetry-auto-collector-server
 - py-opentelemetry-auto-otlp-server
-# - py-launcher-server
-# - py-opentracing-server
+- py-launcher-server
+- py-opentracing-server
