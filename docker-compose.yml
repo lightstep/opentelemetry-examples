@@ -289,11 +289,11 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
-        # depends_on:
-        #     - redis
-        #     - postgres
-        #     - mysql
-        #     - mongo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
