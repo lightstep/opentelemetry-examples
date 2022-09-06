@@ -292,173 +292,173 @@ services:
             - LS_SERVICE_NAME=py-opentracing-server
             - LS_SERVICE_VERSION=10.10.9
         stop_grace_period: 1s
-    # ###################################
-    # ####### Javascript examples #######
-    # ###################################
-    # js-launcher-server:
-    #     container_name: js-launcher-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-server
-    #     build: ./nodejs/launcher/server
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-    #         - LS_SERVICE_NAME=js-launcher-server
-    #     stop_grace_period: 1s
-    # js-launcher-client:
-    #    container_name: js-launcher-client
-    #    image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-client
-    #    build: ./nodejs/launcher/client
-    #    networks:
-    #        - demo
-    #    depends_on:
-    #        - js-launcher-server
-    #    env_file:
-    #        - .env
-    #    environment:
-    #        - LS_SERVICE_NAME=js-launcher-client
-    #        - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-    #        - DESTINATION_URL=http://js-launcher-server:8080/ping
-    #    stop_grace_period: 1s
-    # js-ot-shim-server:
-    #     container_name: js-ot-shim-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-server
-    #     build: ./nodejs/ot-shim/server
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-    #         - LS_SERVICE_NAME=js-ot-shim-server
-    #     stop_grace_period: 1s
-    # js-ot-shim-client:
-    #    container_name: js-ot-shim-client
-    #    image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-client
-    #    build: ./nodejs/ot-shim/client
-    #    networks:
-    #        - demo
-    #    depends_on:
-    #        - js-ot-shim-server
-    #    env_file:
-    #        - .env
-    #    environment:
-    #        - LS_SERVICE_NAME=js-ot-shim-client
-    #        - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
-    #        - DESTINATION_URL=http://js-ot-shim-server:8080/ping
-    #    stop_grace_period: 1s
-    # ##############################
-    # ####### Java examples ########
-    # ##############################
-    # java-specialagent-server:
-    #     container_name: java-specialagent-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-server
-    #     build: ./java/server
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - LS_SERVICE_NAME=java-specialagent-server
-    #         - LS_SERVICE_VERSION=4.3.2
-    #     stop_grace_period: 1s
-    # java-specialagent-client:
-    #    container_name: java-specialagent-client
-    #    image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-client
-    #    build: ./java/client
-    #    networks:
-    #        - demo
-    #    depends_on:
-    #        - java-specialagent-server
-    #    env_file:
-    #        - .env
-    #    environment:
-    #        - LS_SERVICE_NAME=java-specialagent-client
-    #        - LS_SERVICE_VERSION=3.2.1
-    #        - DESTINATION_URL=http://java-specialagent-server:8083/ping
-    #    stop_grace_period: 1s
-    # java-otlp-client:
-    #    container_name: java-otlp-client
-    #    image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-client
-    #    build:
-    #        context: ./java/otlp
-    #        dockerfile: Dockerfile.client
-    #    networks:
-    #        - demo
-    #    depends_on:
-    #        - java-otlp-server
-    #    env_file:
-    #        - .env
-    #    environment:
-    #        - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-client,service.version=11.11.10
-    #        - LS_SATELLITE_URL=ingest.lightstep.com:443
-    #        - DESTINATION_URL=http://java-otlp-server:8083/ping
-    #    stop_grace_period: 1s
-    # java-otlp-server:
-    #     container_name: java-otlp-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-server
-    #     build:
-    #         context: ./java/otlp
-    #         dockerfile: Dockerfile.server
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
-    #         - LS_SATELLITE_URL=ingest.lightstep.com:443
-    #     stop_grace_period: 1s
-    # java-launcher-client:
-    #    container_name: java-launcher-client
-    #    image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-client
-    #    build:
-    #        context: ./java/launcher
-    #        dockerfile: Dockerfile.client
-    #    networks:
-    #        - demo
-    #    depends_on:
-    #        - java-launcher-server
-    #    env_file:
-    #        - .env
-    #    environment:
-    #        - LS_SERVICE_NAME=java-launcher-client
-    #        - LS_SERVICE_VERSION=11.11.10
-    #        - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-    #        - DESTINATION_URL=http://java-launcher-server:8084/ping
-    #    stop_grace_period: 1s
-    # java-launcher-server:
-    #     container_name: java-launcher-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-server
-    #     build:
-    #         context: ./java/launcher
-    #         dockerfile: Dockerfile.server
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - LS_SERVICE_NAME=java-launcher-server
-    #         - LS_SERVICE_VERSION=11.11.11
-    #         - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-    #     stop_grace_period: 1s
-    # java-opentracing-server:
-    #     container_name: java-opentracing-server
-    #     image: ghcr.io/lightstep/opentelemetry-examples:java-opentracing-server
-    #     build:
-    #         context: ./java/microdonuts
-    #         dockerfile: Dockerfile
-    #     networks:
-    #         - demo
-    #     env_file:
-    #         - .env
-    #     environment:
-    #         - LS_SERVICE_NAME=java-opentracing-server
-    #         - OTEL_RESOURCE_ATTRIBUTES=service.version=19.19.19
-    #         - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
-    #         - DESTINATION_URL=http://java-opentracing-server:10001/order
-    #     stop_grace_period: 1s
+    ###################################
+    ####### Javascript examples #######
+    ###################################
+    js-launcher-server:
+        container_name: js-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-server
+        build: ./nodejs/launcher/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+            - LS_SERVICE_NAME=js-launcher-server
+        stop_grace_period: 1s
+    js-launcher-client:
+       container_name: js-launcher-client
+       image: ghcr.io/lightstep/opentelemetry-examples:js-launcher-client
+       build: ./nodejs/launcher/client
+       networks:
+           - demo
+       depends_on:
+           - js-launcher-server
+       env_file:
+           - .env
+       environment:
+           - LS_SERVICE_NAME=js-launcher-client
+           - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+           - DESTINATION_URL=http://js-launcher-server:8080/ping
+       stop_grace_period: 1s
+    js-ot-shim-server:
+        container_name: js-ot-shim-server
+        image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-server
+        build: ./nodejs/ot-shim/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+            - LS_SERVICE_NAME=js-ot-shim-server
+        stop_grace_period: 1s
+    js-ot-shim-client:
+       container_name: js-ot-shim-client
+       image: ghcr.io/lightstep/opentelemetry-examples:js-ot-shim-client
+       build: ./nodejs/ot-shim/client
+       networks:
+           - demo
+       depends_on:
+           - js-ot-shim-server
+       env_file:
+           - .env
+       environment:
+           - LS_SERVICE_NAME=js-ot-shim-client
+           - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=https://ingest.lightstep.com:443/api/v2/otel/trace
+           - DESTINATION_URL=http://js-ot-shim-server:8080/ping
+       stop_grace_period: 1s
+    ##############################
+    ####### Java examples ########
+    ##############################
+    java-specialagent-server:
+        container_name: java-specialagent-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-server
+        build: ./java/server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=java-specialagent-server
+            - LS_SERVICE_VERSION=4.3.2
+        stop_grace_period: 1s
+    java-specialagent-client:
+       container_name: java-specialagent-client
+       image: ghcr.io/lightstep/opentelemetry-examples:java-specialagent-client
+       build: ./java/client
+       networks:
+           - demo
+       depends_on:
+           - java-specialagent-server
+       env_file:
+           - .env
+       environment:
+           - LS_SERVICE_NAME=java-specialagent-client
+           - LS_SERVICE_VERSION=3.2.1
+           - DESTINATION_URL=http://java-specialagent-server:8083/ping
+       stop_grace_period: 1s
+    java-otlp-client:
+       container_name: java-otlp-client
+       image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-client
+       build:
+           context: ./java/otlp
+           dockerfile: Dockerfile.client
+       networks:
+           - demo
+       depends_on:
+           - java-otlp-server
+       env_file:
+           - .env
+       environment:
+           - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-client,service.version=11.11.10
+           - LS_SATELLITE_URL=ingest.lightstep.com:443
+           - DESTINATION_URL=http://java-otlp-server:8083/ping
+       stop_grace_period: 1s
+    java-otlp-server:
+        container_name: java-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-otlp-server
+        build:
+            context: ./java/otlp
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
+            - LS_SATELLITE_URL=ingest.lightstep.com:443
+        stop_grace_period: 1s
+    java-launcher-client:
+       container_name: java-launcher-client
+       image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-client
+       build:
+           context: ./java/launcher
+           dockerfile: Dockerfile.client
+       networks:
+           - demo
+       depends_on:
+           - java-launcher-server
+       env_file:
+           - .env
+       environment:
+           - LS_SERVICE_NAME=java-launcher-client
+           - LS_SERVICE_VERSION=11.11.10
+           - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+           - DESTINATION_URL=http://java-launcher-server:8084/ping
+       stop_grace_period: 1s
+    java-launcher-server:
+        container_name: java-launcher-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-launcher-server
+        build:
+            context: ./java/launcher
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=java-launcher-server
+            - LS_SERVICE_VERSION=11.11.11
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+        stop_grace_period: 1s
+    java-opentracing-server:
+        container_name: java-opentracing-server
+        image: ghcr.io/lightstep/opentelemetry-examples:java-opentracing-server
+        build:
+            context: ./java/microdonuts
+            dockerfile: Dockerfile
+        networks:
+            - demo
+        env_file:
+            - .env
+        environment:
+            - LS_SERVICE_NAME=java-opentracing-server
+            - OTEL_RESOURCE_ATTRIBUTES=service.version=19.19.19
+            - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=ingest.lightstep.com
+            - DESTINATION_URL=http://java-opentracing-server:10001/order
+        stop_grace_period: 1s
     ################################
     ####### Integration test #######
     ################################
@@ -478,12 +478,12 @@ services:
             - py-opentelemetry-auto-otlp-server
             - py-launcher-server
             - py-opentracing-server
-            # - js-launcher-server
-            # - js-ot-shim-server
-            # - java-specialagent-server
-            # - java-otlp-server
-            # - java-launcher-server
-            # - java-opentracing-server
+            - js-launcher-server
+            - js-ot-shim-server
+            - java-specialagent-server
+            - java-otlp-server
+            - java-launcher-server
+            - java-opentracing-server
         env_file:
             - .env
         environment:
