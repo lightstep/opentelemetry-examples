@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Added ".bak" per this StackExchange post: https://unix.stackexchange.com/a/92907
+
 cp ./config/example.env .env
 sed -i.bak "s#<ACCESS TOKEN>#${TOKEN}#" .env
 sed -i.bak "s#<ORG_NAME>#${ORG_NAME}#" .env

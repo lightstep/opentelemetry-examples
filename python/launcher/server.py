@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#   export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --service_name test-py-auto-launcher-server \
+#       python server.py
+
+
 import random
 import string
 import flask
@@ -50,9 +60,9 @@ def _random_string(length):
 @app.route("/ping")
 def ping():
     length = random.randint(1, 1024)
-    # redis_integration(length)
-    # pymongo_integration(length)
-    # sqlalchemy_integration(length)
+    redis_integration(length)
+    pymongo_integration(length)
+    sqlalchemy_integration(length)
     return _random_string(length)
 
 
@@ -88,5 +98,4 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
-#     app.run(host="0.0.0.0")
     app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)

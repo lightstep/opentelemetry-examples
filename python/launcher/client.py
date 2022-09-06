@@ -3,10 +3,11 @@
 # example code to test opentelemetry
 #
 # usage:
-#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-#   LS_SERVICE_NAME=demo-python \
-#   LS_SERVICE_VERSION=0.0.8 \
-#   opentelemetry-instrument python client.py
+#   export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --service_name test-py-auto-launcher-client \
+#       python client.py test
+
 
 import os
 import time
