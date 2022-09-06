@@ -7,7 +7,7 @@ package-lock.json
 .vscode/
 .idea/
 *.iml
-.env
+.env*
 target
 dependency-reduced-pom.xml
 *.jar

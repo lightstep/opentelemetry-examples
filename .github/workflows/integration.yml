@@ -43,7 +43,6 @@ jobs:
         ORG_NAME: ${{ secrets.ORG_NAME }}
         PROJECT_NAME: examples
         API_KEY: ${{ secrets.API_KEY }}
-        OTEL_EXPORTER_OTLP_HEADERS: "lightstep-access-token=${{ secrets.TOKEN }}"
       if: steps.changes.outputs.code-examples == 'true'
       run: ./tools/update-token.sh
 
