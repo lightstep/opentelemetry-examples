@@ -159,6 +159,10 @@ services:
             - demo
         depends_on:
             - otel-collector
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
@@ -179,6 +183,7 @@ services:
        env_file:
            - .env
        environment:
+           # NOTE: Using TOKEN environment variable from integration.yml
            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-client,service.version=10.10.10
            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
@@ -193,14 +198,15 @@ services:
             dockerfile: Dockerfile.server
         networks:
             - demo
-        # depends_on:
-        #     - redis
-        #     - postgres
-        #     - mysql
-        #     - mongo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
         env_file:
             - .env
         environment:
+            # NOTE: Using TOKEN environment variable from integration.yml
             - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-auto-otlp-server,service.version=10.10.9
             - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=ingest.lightstep.com:443
             - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443

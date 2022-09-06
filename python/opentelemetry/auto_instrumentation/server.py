@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#  OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --traces_exporter console,otlp_proto_grpc \
+#       --metrics_exporter console \
+#       --service_name test-py-auto-otlp-server \
+#       --exporter_otlp_traces_endpoint "ingest.lightstep.com:443" \
+#       python server.py
+#
+# See README.md for more details.
+
 import random
 import string
 import flask
@@ -50,9 +64,9 @@ def _random_string(length):
 @app.route("/ping")
 def ping():
     length = random.randint(1, 1024)
-    # redis_integration(length)
-    # pymongo_integration(length)
-    # sqlalchemy_integration(length)
+    redis_integration(length)
+    pymongo_integration(length)
+    sqlalchemy_integration(length)
     return _random_string(length)
 
 

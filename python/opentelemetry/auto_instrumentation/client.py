@@ -3,10 +3,16 @@
 # example code to test opentelemetry
 #
 # usage:
-#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-#   LS_SERVICE_NAME=demo-python \
-#   LS_SERVICE_VERSION=0.0.8 \
-#   opentelemetry-instrument python client.py
+#  OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#         --traces_exporter console,otlp \
+#       --metrics_exporter console,otlp \
+#       --service_name test-py-auto-client \
+#       --exporter_otlp_endpoint "ingest.lightstep.com:443" \
+#       python client.py test
+#
+# See README.md for more details.
+
 
 import os
 import time
