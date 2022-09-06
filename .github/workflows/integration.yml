@@ -43,6 +43,7 @@ jobs:
         ORG_NAME: ${{ secrets.ORG_NAME }}
         PROJECT_NAME: examples
         API_KEY: ${{ secrets.API_KEY }}
+        OTEL_EXPORTER_OTLP_HEADERS: "lightstep-access-token=${{ secrets.TOKEN }}"
       if: steps.changes.outputs.code-examples == 'true'
       run: ./tools/update-token.sh
 
@@ -54,10 +55,6 @@ jobs:
     #   if: steps.changes.outputs.code-examples == 'true'
     #   run: docker-compose build --parallel
 
-    # - name: Test??
-    #   if: steps.changes.outputs.code-examples == 'true'
-    #   run: docker-compose up py-opentelemetry-auto-collector-client
-      
     - name: Run integration test
       if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose up --exit-code-from integration-test integration-test

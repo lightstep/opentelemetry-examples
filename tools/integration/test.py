@@ -125,8 +125,9 @@ def test_traces():
     time.sleep(60)
 
     url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
-    querystring = {"span-id": format(span_id, "x")}
-    current_span.set_attribute("stored-traces.request", f"{url}?{querystring}")
+    formatted_spand_id = format(span_id, "x")
+    querystring = {"span-id": formatted_spand_id}
+    current_span.set_attribute("stored-traces.request", f"{url}?span-id={formatted_spand_id}")
 
     # search the snapshot for our trace
     response = requests.get(url, headers=_get_headers(), params=querystring)
