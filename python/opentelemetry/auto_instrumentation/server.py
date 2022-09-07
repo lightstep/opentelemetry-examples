@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#  OTEL_EXPORTER_OTLP_TRACES_HEADERS="lightstep-access-token=<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --traces_exporter console,otlp_proto_grpc \
+#       --metrics_exporter console \
+#       --service_name test-py-auto-otlp-server \
+#       --exporter_otlp_traces_endpoint "ingest.lightstep.com:443" \
+#       python server.py
+#
+# See README.md for more details.
+
 import random
 import string
 import flask
@@ -9,10 +23,12 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from common import get_tracer
+from opentelemetry import trace
 
+# from common import get_tracer
+tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-tracer = get_tracer()
+# tracer = get_tracer()
 
 app = flask.Flask(__name__)
 
@@ -86,4 +102,4 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)

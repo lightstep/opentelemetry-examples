@@ -4,19 +4,17 @@
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-#   LS_SERVICE_NAME=demo-python \
-#   LS_SERVICE_VERSION=0.0.8 \
-#   opentelemetry-instrument python client.py
+#   python client.py test \
 
 import os
 import time
+import requests
+
+from opentelemetry import propagators
 
 from common import get_tracer
 
 tracer = get_tracer()
-
-import requests
-
 
 def send_requests(url):
     with tracer.start_as_current_span("client operation"):
@@ -29,7 +27,7 @@ def send_requests(url):
 
 
 if __name__ == "__main__":
-    target = os.getenv("DESTINATION_URL", "http://localhost:8081/ping")
+    target = os.getenv("DESTINATION_URL", "http://localhost:8081/rolldice")
     while True:
         send_requests(target)
         time.sleep(5)
