@@ -3,15 +3,17 @@
 # example code to test opentelemetry
 #
 # usage:
-#   export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
-#   opentelemetry-instrument \
-#       --service_name test-py-auto-launcher-server \
-#       python server.py
+#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   python server.py \
 
-
+from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 import random
 import string
-import flask
+from flask import Flask, request
+from common import get_tracer
+import uuid
 
 import redis
 from pymongo import MongoClient
@@ -19,15 +21,16 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from opentelemetry import trace
 
-tracer = trace.get_tracer_provider().get_tracer(__name__)
+# Init tracer
+tracer = get_tracer()
 
-
-app = flask.Flask(__name__)
+# Init autoinstrumentation with Flask
+app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
 
 Base = declarative_base()
-
 
 class Person(Base):
     __tablename__ = "person"
@@ -58,9 +61,9 @@ def _random_string(length):
 @app.route("/ping")
 def ping():
     length = random.randint(1, 1024)
-    redis_integration(length)
-    pymongo_integration(length)
-    sqlalchemy_integration(length)
+    # redis_integration(length)
+    # pymongo_integration(length)
+    # sqlalchemy_integration(length)
     return _random_string(length)
 
 
@@ -93,6 +96,21 @@ def sqlalchemy_integration(length):
         # statements in raw SQL.
         Base.metadata.create_all(engine)
         return str(_random_string(length))
+
+@app.route("/rolldice")
+def roll_dice():
+    return str(do_roll())
+
+@tracer.start_as_current_span("do_roll")
+def do_roll():
+    res = random.randint(1, 6)
+    current_span = trace.get_current_span()
+    current_span.set_attribute("roll.value", res)
+    current_span.set_attribute("operation.name", "Saying hello!")
+    current_span.set_attribute("operation.other-stuff", [1, 2, 3])
+    current_span.add_event("Suuuuuppp")    
+    print(f"Returning {res}")
+    return res
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 FROM python:3-alpine3.15
 
+RUN apk add build-base
+
 RUN mkdir /app
 WORKDIR /app
 ADD requirements.txt .
