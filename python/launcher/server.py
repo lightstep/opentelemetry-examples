@@ -24,7 +24,6 @@ from opentelemetry import trace
 # from common import get_tracer
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-# tracer = get_tracer()
 
 app = flask.Flask(__name__)
 
