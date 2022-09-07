@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.59.0
+    networks:
+      - integrations
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+
+  generator_one:
+    container_name: generator_one
+    image: ghcr.io/lightstep/lightstep-partner-toolkit-collector:latest
+    networks:
+      - integrations
+    depends_on:
+      - otel-collector
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN_1}
+      # otel-collector in this compose file does not use TLS
+      OTEL_INSECURE: true
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: otel-collector:4317
+
+  generator_two:
+    container_name: generator_two
+    image: ghcr.io/lightstep/lightstep-partner-toolkit-collector:latest
+    networks:
+      - integrations
+    depends_on:
+      - otel-collector
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN_2}
+      # otel-collector in this compose file does not use TLS
+      OTEL_INSECURE: true
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: otel-collector:4317
+
+configs:
+  collector_conf:
+    file: ./config/collector.yml
+
+networks:
+  integrations:

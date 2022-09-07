@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    hostname: otel-collector
+    restart: always
+    command: ["--config=/conf/collector.yaml"]
+    ports:
+      - 8125:8125/udp
+    volumes:
+        - ./collector.yaml:/conf/collector.yaml:rw
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
