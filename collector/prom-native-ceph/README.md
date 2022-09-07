@@ -57,7 +57,7 @@ $ sudo ceph mgr module enable prometheus
 $ sudo ceph mgr module disable prometheus
 ```
 
-ENABLING PROMETHEUS OUTPUT
+Enabling Prometheus Output  
 
 The Prometheus manager module needs to be restarted for configuration changes to be applied.
 
