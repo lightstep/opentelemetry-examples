@@ -1,123 +1,86 @@
-version: '3.8'
+version: '3.5'
 
 services:
-  
-  mon1:
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
-    container_name: mon1
-    # network_mode: host
-    command: mon
-    environment:
-      - MON_IP=0.0.0.0
-      - CEPH_PUBLIC_NETWORK=0.0.0.0/0
-    privileged: true
-    restart: always
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-    networks:
-      - cluster-net
 
-  mgr:
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
-    container_name: mgr
-    # network_mode: host
-    command: mgr
-    privileged: true
-    restart: always
-    depends_on:
-      - mon1
+  etcd0:
+    container_name: etcd0
+    image: quay.io/coreos/etcd
+    environment:
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd0:2379
+
+  mon0:
+    container_name: mon0
+    image: flaviostutz/ceph-monitor
+    pid: host
+    environment:
+      - CREATE_CLUSTER=true
+      - ETCD_URL=http://etcd0:2379
+      - PEER_MONITOR_HOSTS=mon1
+
+  mon1:
+    container_name: mon1
+    image: flaviostutz/ceph-monitor
+    pid: host
+    environment:
+      - ETCD_URL=http://etcd0:2379
+      - PEER_MONITOR_HOSTS=mon0
+
+  mgr1:
+    container_name: mgr1
+    image: flaviostutz/ceph-manager
+    pid: host
     ports:
-      - 8443:8443
-      - 9283:9283
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph
-    networks:
-      - cluster-net
+      - 18443:8443 #dashboard https
+      - 18003:8003 #restful https
+      - 9283:9283 #prometheus
+    environment:
+      - LOG_LEVEL=0
+      - MONITOR_HOSTS=mon0
+      - ETCD_URL=http://etcd0:2379
+
+  mgr2:
+    container_name: mgr2
+    image: flaviostutz/ceph-manager
+    pid: host
+    ports:
+      - 28443:8443 #dashboard https
+      - 28003:8003 #restful https
+      - 29283:9283 #prometheus
+    environment:
+      - LOG_LEVEL=0
+      - MONITOR_HOSTS=mon0
+      - ETCD_URL=http://etcd0:2379
 
   osd1:
-    pid: host
-    image: ceph/daemon
     container_name: osd1
-    command: "osd_directory"
-    privileged: true
-    restart: always
-    depends_on:
-      - mon1
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-      - ./volumes_data/osds/osd1:/var/lib/ceph/osd
-    networks:
-      - cluster-net
+    image: flaviostutz/ceph-osd
+    pid: host
+    environment:
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
 
   osd2:
-    pid: host
-    privileged: true
-    restart: always
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
     container_name: osd2
-    command: "osd_directory"
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-      - ./volumes_data/osds/osd2:/var/lib/ceph/osd
-    depends_on:
-      - mon1
-    networks:
-      - cluster-net
+    image: flaviostutz/ceph-osd
+    pid: host
+    environment:
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
 
   osd3:
-    pid: host
-    privileged: true
-    restart: always
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
     container_name: osd3
-    command: "osd_directory"
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-      - ./volumes_data/osds/osd3:/var/lib/ceph/osd
-    depends_on:
-      - mon1
-    networks:
-      - cluster-net
-
-  rgw1:
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
-    container_name: osd
-    restart: always
-    command: "rgw"
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-    depends_on:
-      - osd1
-      - osd2
-      - osd3
-    networks:
-      - cluster-net
-    ports:
-      - 8080:7480
-
-  mds1:
-    image: ceph/daemon:v3.0.5-stable-3.0-luminous-centos-7
-    container_name: mds1
-    command: "mds"
-    hostname: "ceph-mds1-host"
-    restart: always
+    image: flaviostutz/ceph-osd
+    pid: host
     environment:
-      CEPHFS_CREATE: 1
-    volumes:
-      - ./volumes_data/ceph/ceph:/etc/ceph
-      - ./volumes_data/ceph/lib/:/var/lib/ceph/
-    depends_on:
-      - osd1
-      - osd2
-      - osd3
-    networks:
-      - cluster-net
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
 
   otel-collector:
     container_name: otel-collector
@@ -130,10 +93,4 @@ services:
     volumes:
       - ./collector.yml:/conf/collector.yml:rw
     depends_on:
-      - mon1
-
-networks:
-  cluster-net:
-    external:
-      name: ceph-cluster-net
-
+      - mgr1

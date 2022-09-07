@@ -1,259 +1,98 @@
-# Introduction
+# Ingest Ceph metrics using the OpenTelemetry Collector
 
-This docker-compose for deploy ceph version 13.2.1 & Container version v3.1.0-stable-3.1-mimic-centos-7
+## Overview
 
-## Setup
+ Ceph natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Ceph and the Collector to send metrics to Lightstep Observability.
 
-[more info](http://docs.ceph.com/docs/mimic/mgr/dashboard)
+## Prerequisites
 
-## Quick Start
+* Docker
+* Docker Compose
+* A Lightstep Observability [access token][ls-docs-access-token]
 
-1. configuration `.env`
-``` bash
-cp env-example .env && vim .env
+## How to run the example
+
+* Export your Lightstep access token
+  ```
+  export LS_ACCESS_TOKEN=<YOUR_TOKEN>
+  ```
+* Run the docker compose example
+  ```
+  docker compose up -d
+  ```
+* Enabling Prometheus
+  ```
+  docker exec mon1 ceph --cluster ceph mgr module enable prometheus
+  ```
+* Disabling Prometheus
+  ```
+  docker exec mon1 ceph --cluster ceph mgr module disable prometheus
+  ```
+* Check Ceph Health
+  ```
+  docker exec mon1 ceph --cluster ceph -s
+  ```
+* Stop the cluster
+  ```
+  docker-compose down
+  ```
+
+### Explore Metrics in Lightstep
+
+See the [Ceph Telemetry Docs][ceph-docs-prometheus] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
+
+### Explore the Ceph Example
+
+* Access Vault UI [http://localhost:8280](http://localhost:8280).
+
+
+## Configure Ceph
+
+- Prometheus Module provides a Prometheus exporter to pass on Ceph performance counters from the collection point in ceph-mgr. Ceph-mgr receives MMgrReport messages from all MgrClient processes (mons and OSDs, for instance) with performance counter schema data and actual counter data, and keeps a circular buffer of the last N samples. This module creates an HTTP endpoint (like all Prometheus exporters) and retrieves the latest sample of every counter when scraped.
+
+```sh
+$ sudo ceph mgr module enable prometheus
+```
+```sh
+$ sudo ceph mgr module disable prometheus
 ```
 
-2. create bridge network
-``` bash
-docker network create --driver bridge ceph-cluster-net
+ENABLING PROMETHEUS OUTPUT
+
+The Prometheus manager module needs to be restarted for configuration changes to be applied.
+
+- By default the module will accept HTTP requests on port 9283 on all IPv4 and IPv6 addresses on the host. The port and listen address are both configurable with ceph config set, with keys mgr/prometheus/server_addr and mgr/prometheus/server_port. 
+
+```sh
+$ sudo ceph config set mgr mgr/prometheus/server_addr 0.0.0.0
+```
+```sh
+$ sudo ceph config set mgr mgr/prometheus/server_port 9283
 ```
 
-3. up monitor and manager
-``` bash
-docker-compose up -d mon1 mgr
+## Configure the Collector
+
+Below is a snippet showing how to configure the Prometheus Receiver to scrape the Prometheus endpoint exposed by the Ceph Server.
+
+```yaml
+ prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'ceph-mgr'
+          scrape_interval: 15s
+          metrics_path: '/metrics'
+          static_configs:
+            - targets: ['mgr1:9283']
+
 ```
 
-4. chnage max object namespace len 
-``` bash
-vim ${VOLUMES_PATH}/ceph/ceph.conf
-```
-``` conf
-osd pool default min size = 2
-max open files = 655350
-cephx cluster require signatures = false
-cephx service require signatures = false
-
-osd max object name len = 256
-osd max object namespace len = 64
-```
-
-5. restart monitor and manager
-``` bash
-docker-compose restart mon1 mgr
-```
-
-6. up all Object Storage Daemon
-``` bash
-docker-compose up -d osd1 osd2 osd3
-```
-
-7. up RADOS Gateway
-``` bash
-docker-compose up -d rgw1
-```
-
-8. up Metadata Server
-``` bash
-docker-compose up -d mds1
-```
-
-9. enable `mgr` dashboard module
-``` bash
-docker-compose exec mon1 ceph mgr module enable dashboard
-```
-
-10. create dashboard signed cert 
-``` bash
-docker-compose exec mon1 ceph dashboard create-self-signed-cert
-```
-
-11.  restart `mgr` dashboard module
-``` bash
-docker-compose exec mon1 ceph mgr module disable dashboard
-``` 
-``` bash
-docker-compose exec mon1 ceph mgr module enable dashboard
-```
-
-12. bind dashport port and domain
-``` bash
-docker-compose exec mon1 ceph config set mgr mgr/dashboard/server_addr mgr
-```
-``` bash
-docker-compose exec mon1 ceph config set mgr mgr/dashboard/server_port 8443
-```
-
-13.  get all mgr register services
-``` bash
-docker-compose exec mon1 ceph mgr services
-```
-
-14. create dashboard account
-``` bash
-docker-compose exec mon1 ceph dashboard set-login-credentials <ACCOUNT> <PASSWORD>
-```
-
-15. create rados gateway user
-``` bash
-docker-compose exec mon1 radosgw-admin user create --uid=<UID> --display-name=<DISPLAYNAME> --system
-```
-
-16.  bind rados gatway user to dashboard
-``` bash
-docker-compose exec mon1 ceph dashboard set-rgw-api-access-key <ACCESS_KEY>
-```
-``` bash
-docker-compose exec mon1 ceph dashboard  set-rgw-api-secret-key <SECRET_KEY>
-```
-
-## Install
-
-### create bridge network
-
-``` bash
-docker network create --driver bridge ceph-cluster-net
-```
-
-### edit environment
-
-``` bash
-cp env-example .env
-```
-
-### set your environment in `.env`
-
-``` bash
-vim .env
-```
-
-### read `.env` file if using docker cmd
-
-``` bash
-source .env
-```
-
-### up monitor and manager
-
-`docker-compose`
-
-``` bash
-docker-compose up -d mon1 mgr
-```
-
-`docker`
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=mon1 -v ${VOLUMES_PATH}/ceph:/etc/ceph/ -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -e MON_IP=${MON1_IP} -e CEPH_PUBLIC_NETWORK=${MON1_CEPH_PUBLIC_NETWORK} ceph/daemon:${CEPH_CONTAINER_VERSION} mon
-```
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=mgr -v ${VOLUMES_PATH}/ceph:/etc/ceph -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph -p ${DASHBOARD_PORT}:${INTERNAL_DASHBOARD_PORT} ceph/daemon:${CEPH_CONTAINER_VERSION} mgr
-```
-
-### up all osds
-
-`docker-compose`
-
-``` bash
-docker-compose up -d osd1 osd2 osd3
-```
-
-`docker`
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=osd1 --privileged=true --pid=host -v ${VOLUMES_PATH}/ceph:/etc/ceph -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -v ${OSD_PATH}/osd1:/var/lib/ceph/osd ceph/daemon:${CEPH_CONTAINER_VERSION} osd_directory
-```
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=osd2 --privileged=true --pid=host -v ${VOLUMES_PATH}/ceph:/etc/ceph -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -v ${OSD_PATH}/osd2:/var/lib/ceph/osd ceph/daemon:${CEPH_CONTAINER_VERSION} osd_directory
-```
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=osd3 --privileged=true --pid=host -v ${VOLUMES_PATH}/ceph:/etc/ceph -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -v ${OSD_PATH}/osd3:/var/lib/ceph/osd ceph/daemon:${CEPH_CONTAINER_VERSION} osd_directory
-```
-
-### up radosgw
-
-`docker-compose`
-
-``` bash
-docker-compose up -d rgw1
-```
-
-`docker`
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=rgw1 -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -v ${VOLUMES_PATH}/ceph:/etc/ceph -p ${RGW_PORT}:8080 ceph/daemon:${CEPH_CONTAINER_VERSION} rgw
-```
-
-### up Metadata Server
-
-`docker-compose`
-
-``` bash
-docker-compose up -d mds1
-```
-
-`docker`
-
-``` bash
-docker run -d --net=ceph-cluster-net --name=mds1 -v ${VOLUMES_PATH}/lib/ceph/:/var/lib/ceph/ -v ${VOLUMES_PATH}/ceph:/etc/ceph -e CEPHFS_CREATE=1 ceph/daemon:${CEPH_CONTAINER_VERSION} mds
-```
-
-### Create Dashboard account
-
-`docker-compose`
-
-``` bash
-docker-compose exec mon1 ceph dashboard set-login-credentials <user_name> <password>
-```
-
-`docker`
-
-``` bash
-docker exec -ti mon1 ceph dashboard set-login-credentials <user_name> <password>
-```
-
-### Create RGW user
-
-`docker-compose`
-
-``` bash
-docker-compose exec mon1 radosgw-admin user create --uid="<user_id>" --display-name="<display_name>" --email="<email>"
-```
-
-`docker`
-
-``` bash
-docker exec -ti mon1 radosgw-admin user create --uid="<user_id>" --display-name="<display_name>" --email="<email>"
-```
-
-### show user info and set radosgw api keys
-
-`docker-compose`
-
-``` bash
-docker-compose exec mon1 radosgw-admin user info --uid=<user_id>
-```
-
-``` bash
-docker-compose exec mon1 ceph dashboard set-rgw-api-access-key <access_key>
-```
-
-``` bash
-docker-compose exec mon1 ceph dashboard set-rgw-api-secret-key <secret_key>
-```
-
-`docker`
-
-``` bash
-docker exec -ti mon1 radosgw-admin user info --uid=<user_id>
-```
-
-``` bash
-docker exec -ti mon1 ceph dashboard set-rgw-api-access-key <access_key>
-```
-
-``` bash
-docker exec -ti mon1 ceph dashboard set-rgw-api-secret-key <secret_key>
-```
+## Additional information
+
+- [OpenTelemetry Collector Prometheus Receiver][otel-prom-receiver]
+- [Ceph Telemetry Reference][ceph-docs-prometheus]
+
+[ls-docs-access-token]: https://docs.lightstep.com/docs/create-and-manage-access-tokens
+[ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
+[otel-prom-receiver]: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver
+[ceph-docs-prometheus]: https://docs.ceph.com/en/quincy/mgr/prometheus/
+[learn-consul-repo]: https://github.com/hashicorp/learn-consul-docker

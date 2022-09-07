@@ -2,11 +2,11 @@ receivers:
   prometheus:
     config:
       scrape_configs:
-        - job_name: 'ceph'
+        - job_name: 'ceph-mgr'
           scrape_interval: 15s
           metrics_path: '/metrics'
           static_configs:
-            - targets: ['rgw12:9283']
+            - targets: ['mgr1:9283']
 
 exporters:
   logging:
