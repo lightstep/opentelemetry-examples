@@ -21,7 +21,6 @@ from sqlalchemy.orm import relationship
 
 from opentelemetry import trace
 
-# from common import get_tracer
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 
