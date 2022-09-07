@@ -1,0 +1,10 @@
+# OTel-specific
+opentelemetry-distro
+opentelemetry-instrumentation-flask # Auto-instrumentation for Flask
+opentelemetry-exporter-otlp
+
+flask
+pymongo
+redis
+requests
+sqlalchemy

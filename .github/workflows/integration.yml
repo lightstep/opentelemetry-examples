@@ -55,5 +55,7 @@ jobs:
       run: docker-compose build --parallel
 
     - name: Run integration test
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
       if: steps.changes.outputs.code-examples == 'true'
       run: docker-compose up --exit-code-from integration-test integration-test
