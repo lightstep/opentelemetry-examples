@@ -43,7 +43,7 @@ export GRPC_TRACE=http,call_error,connectivity_state
 
 export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 
-# Run Python app with auto-instrumentation
+# Run Python app via Launcher
 opentelemetry-instrument \
     --service_name test-py-auto-launcher-server \
     python server.py
@@ -59,7 +59,7 @@ In a separate terminal window:
 source ./bin/activate
 export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 
-# Run Python app with auto-instrumentation
+# Run Python app via Launcher
 opentelemetry-instrument \
     --service_name test-py-auto-launcher-client \
     python client.py test

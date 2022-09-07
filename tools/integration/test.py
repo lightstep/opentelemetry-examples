@@ -138,8 +138,8 @@ def test_traces():
         response = requests.get(url, headers=_get_headers(), params=querystring)
 
     assert response.status_code == 200
-    current_span.set_attribute("stored-traces.response", response.json())
     results = response.json()
+    current_span.set_attribute("stored-traces.response", results)
     current_span.set_attribute("stored-traces.status_code", response.status_code)
     reporters = (
         results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
