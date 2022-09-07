@@ -31,9 +31,9 @@ services:
     image: flaviostutz/ceph-manager
     pid: host
     ports:
-      - 18443:8443 #dashboard https
-      - 18003:8003 #restful https
-      - 9283:9283 #prometheus
+      - 8443:8443
+      - 8003:8003
+      - 9283:9283
     environment:
       - LOG_LEVEL=0
       - MONITOR_HOSTS=mon0
@@ -44,9 +44,9 @@ services:
     image: flaviostutz/ceph-manager
     pid: host
     ports:
-      - 28443:8443 #dashboard https
-      - 28003:8003 #restful https
-      - 29283:9283 #prometheus
+      - 18443:8443
+      - 18003:8003
+      - 19283:9283
     environment:
       - LOG_LEVEL=0
       - MONITOR_HOSTS=mon0
@@ -89,7 +89,7 @@ services:
     ports:
       - 8888:8888
     environment:
-      LS_ACCESS_TOKEN: "ezKD2Lo3+5xVULCEAySlqnY1rTBefXN1Dj2CdGLfaAicYA3Fngu52zCIih93+73chQ81I2ax/vpGFJ2a+2+Nh0gWPHOsu0ypKRDNvNuN"
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
     volumes:
       - ./collector.yml:/conf/collector.yml:rw
     depends_on:
