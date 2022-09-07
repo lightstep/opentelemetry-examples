@@ -5,6 +5,7 @@ services:
   etcd0:
     container_name: etcd0
     image: quay.io/coreos/etcd
+    restart: always
     environment:
       - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd0:2379
@@ -12,6 +13,7 @@ services:
   mon0:
     container_name: mon0
     image: flaviostutz/ceph-monitor
+    restart: always
     pid: host
     environment:
       - CREATE_CLUSTER=true
@@ -21,6 +23,7 @@ services:
   mon1:
     container_name: mon1
     image: flaviostutz/ceph-monitor
+    restart: always
     pid: host
     environment:
       - ETCD_URL=http://etcd0:2379
@@ -38,6 +41,12 @@ services:
       - LOG_LEVEL=0
       - MONITOR_HOSTS=mon0
       - ETCD_URL=http://etcd0:2379
+    healthcheck:
+      test: ["CMD", "ceph", "-s"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     depends_on:
       - mon0
       - mon1
@@ -45,6 +54,7 @@ services:
   mgr2:
     container_name: mgr2
     image: flaviostutz/ceph-manager
+    restart: always
     pid: host
     ports:
       - 18443:8443
@@ -61,6 +71,7 @@ services:
   osd1:
     container_name: osd1
     image: flaviostutz/ceph-osd
+    restart: always
     pid: host
     environment:
       - MONITOR_HOSTS=mon0
@@ -74,6 +85,7 @@ services:
   osd2:
     container_name: osd2
     image: flaviostutz/ceph-osd
+    restart: always
     pid: host
     environment:
       - MONITOR_HOSTS=mon0
@@ -87,6 +99,7 @@ services:
   osd3:
     container_name: osd3
     image: flaviostutz/ceph-osd
+    restart: always
     pid: host
     environment:
       - MONITOR_HOSTS=mon0
@@ -101,6 +114,7 @@ services:
     container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:0.56.0
     command: [ "--config=/conf/collector.yml" ]
+    restart: always
     ports:
       - 8888:8888
     environment:
