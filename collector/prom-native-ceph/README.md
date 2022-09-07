@@ -34,7 +34,7 @@
   ```
 * Stop the cluster
   ```
-  docker-compose down
+  docker compose down
   ```
 
 ### Explore Metrics in Lightstep
@@ -57,7 +57,7 @@ $ sudo ceph mgr module enable prometheus
 $ sudo ceph mgr module disable prometheus
 ```
 
-Enabling Prometheus Output  
+## Enabling Prometheus Output  
 
 The Prometheus manager module needs to be restarted for configuration changes to be applied.
 
@@ -95,4 +95,3 @@ Below is a snippet showing how to configure the Prometheus Receiver to scrape th
 [ls-docs-dashboards]: https://docs.lightstep.com/docs/create-and-manage-dashboards
 [otel-prom-receiver]: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver
 [ceph-docs-prometheus]: https://docs.ceph.com/en/quincy/mgr/prometheus/
-[learn-consul-repo]: https://github.com/hashicorp/learn-consul-docker

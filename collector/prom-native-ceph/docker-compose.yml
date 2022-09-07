@@ -38,6 +38,9 @@ services:
       - LOG_LEVEL=0
       - MONITOR_HOSTS=mon0
       - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
 
   mgr2:
     container_name: mgr2
@@ -51,6 +54,9 @@ services:
       - LOG_LEVEL=0
       - MONITOR_HOSTS=mon0
       - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
 
   osd1:
     container_name: osd1
@@ -61,6 +67,9 @@ services:
       - OSD_EXT4_SUPPORT=true
       - OSD_JOURNAL_SIZE=512
       - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
 
   osd2:
     container_name: osd2
@@ -71,6 +80,9 @@ services:
       - OSD_EXT4_SUPPORT=true
       - OSD_JOURNAL_SIZE=512
       - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
 
   osd3:
     container_name: osd3
@@ -81,6 +93,9 @@ services:
       - OSD_EXT4_SUPPORT=true
       - OSD_JOURNAL_SIZE=512
       - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
 
   otel-collector:
     container_name: otel-collector
