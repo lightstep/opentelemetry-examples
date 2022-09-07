@@ -13,7 +13,6 @@ import os
 import time
 import requests
 
-# from common import get_tracer
 from opentelemetry import trace
 
 # tracer = get_tracer()
