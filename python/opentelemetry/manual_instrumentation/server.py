@@ -1,9 +1,19 @@
-from opentelemetry import trace, propagators
+#!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   python server.py \
+
+from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 import random
 import string
-import flask
+from flask import Flask, request
+from common import get_tracer
+import uuid
 
 import redis
 from pymongo import MongoClient
@@ -11,25 +21,16 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from common import get_tracer
-
 
 # Init tracer
 tracer = get_tracer()
 
-# carrier = {}
-
-# def header_from_carrier(carrier, key):
-#   header = carrier.get(key)
-#   return [header] if header else []
-
 # Init autoinstrumentation with Flask
-app = flask.Flask(__name__)
-# FlaskInstrumentor().instrument_app(app)
-# RequestsInstrumentor().instrument()
+app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
 
 Base = declarative_base()
-
 
 class Person(Base):
     __tablename__ = "person"
@@ -56,12 +57,9 @@ def _random_string(length):
     letters = string.ascii_lowercase
     return "".join(random.choice(letters) for i in range(int(length)))
 
-@tracer.start_as_current_span("/ping")
+
 @app.route("/ping")
 def ping():
-    carrier = {}
-    propagators.inject(type(carrier).__setitem__, carrier)
-    
     length = random.randint(1, 1024)
     # redis_integration(length)
     # pymongo_integration(length)
@@ -105,7 +103,7 @@ def roll_dice():
 
 @tracer.start_as_current_span("do_roll")
 def do_roll():
-    res = randint(1, 6)
+    res = random.randint(1, 6)
     current_span = trace.get_current_span()
     current_span.set_attribute("roll.value", res)
     current_span.set_attribute("operation.name", "Saying hello!")
@@ -117,5 +115,3 @@ def do_roll():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)
-
-
