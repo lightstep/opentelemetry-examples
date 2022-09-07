@@ -1,0 +1,17 @@
+apiVersion: v3
+name: lightstep-otel-collector
+description: A Helm chart for base OTEL k8s integrations
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+- name: opentelemetry-collector
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.23.0
+- name: opentelemetry-operator
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.10.0
+
+appVersion: "1.16.0"
