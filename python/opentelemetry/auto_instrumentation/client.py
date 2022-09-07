@@ -32,7 +32,6 @@ def send_requests(url):
             print(f"Request to {url}, got {len(res.content)} bytes")
         except Exception as e:
             print(f"Request to {url} failed {e}")
-            pass
 
 
 if __name__ == "__main__":
