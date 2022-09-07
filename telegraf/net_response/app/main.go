@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
-    "math/rand"
+	"math/rand"
 	"net"
 )
 
 func respond(conn *net.UDPConn, addr *net.UDPAddr) {
-    var err error
-    // 2/3 times responds "up" and rest "down"
-    if (rand.Intn(3) != 0) {
-	    _, err = conn.WriteToUDP([]byte("up"), addr)
-    } else {
-	    _, err = conn.WriteToUDP([]byte("down"), addr)
-    }
+	var err error
+	// 2/3 times responds "up" and rest "down"
+	if rand.Intn(3) != 0 {
+		_, err = conn.WriteToUDP([]byte("up"), addr)
+	} else {
+		_, err = conn.WriteToUDP([]byte("down"), addr)
+	}
 	if err != nil {
 		fmt.Printf("Couldn't send response %v", err)
 	}
@@ -34,7 +34,7 @@ func main() {
 	for {
 		_, remoteaddr, err := conn.ReadFromUDP(p)
 		if err != nil {
-            fmt.Printf("Could not read. remoteaddr: %v - %v", remoteaddr, err)
+			fmt.Printf("Could not read. remoteaddr: %v - %v", remoteaddr, err)
 			continue
 		}
 		go respond(conn, remoteaddr)
