@@ -1,0 +1,42 @@
+templates:
+  helm-variables-default-override-path: &helm-variables-default-override-path
+    values:
+    - 'otel-base-helm-values.yaml' # values for helm default override digestion - location of otel-base-helm-values.yaml is in this directory. it provides values for otel collector (i.e the collector configuration), and the otel collector operator
+  helm-releases-shared: &helm-releases-shared
+    missingFileHandler: Error
+    wait: true
+    atomic: true
+    cleanupOnFail: true
+
+# our environment here is not development, staging, or production but examples
+environments:
+  examples:
+
+# helmDefaults describes the default ./helmfile files to run with
+# the anchor, helm-releases-shared, could be recognized under helmDefaults as well
+helmDefaults:
+  historyMax: 0
+
+# the helm charts to download are indicated under repositories
+repositories:
+  - name: cert-manager
+    url: https://charts.jetstack.io
+
+# helm charts to deploy are indiciated under releases
+releases:
+  - name: cert-manager
+    chart: jetstack/cert-manager
+    namespace: security
+    hooks:
+    - events: ["presync"]
+      showlogs: true
+      command: "kubectl"
+      args: ["apply", "-f", "https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml"] # TODO currently this presync arg isn't working as intended.  cert-manager CRDs are applied within the Makefile
+    <<: *helm-releases-shared
+    <<: *helm-variables-default-override-path
+  - name: lightstep-otel-collector-base
+    chart: lightstep-otel-collector-base
+    namespace: istio-system
+    needs: [security/cert-manager]
+    <<: *helm-releases-shared
+    <<: *helm-variables-default-override-path
