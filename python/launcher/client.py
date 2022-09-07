@@ -15,7 +15,6 @@ import requests
 
 from opentelemetry import trace
 
-# tracer = get_tracer()
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 
