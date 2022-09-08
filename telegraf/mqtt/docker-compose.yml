@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  broker:
+    image: eclipse-mosquitto
+    user: mosquitto
+    volumes:
+      - ./mosquitto:/mosquitto
+
+  client:
+    image: eclipse-mosquitto
+    user: mosquitto
+    volumes:
+      - ./mosquitto:/mosquitto
+    depends_on:
+      - broker
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf
+    volumes:
+      - ./telegraf:/telegraf
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: telegraf_conf
+        target: /etc/telegraf/telegraf.conf
+    depends_on:
+      - broker 
+
+configs:
+  telegraf_conf:
+    file: ./telegraf/telegraf.conf
+
+networks:
+  integrations:
