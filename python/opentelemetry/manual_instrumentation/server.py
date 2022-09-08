@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 #
-# example code to test opentelemetry
+# example code to test opentelemetry python manual instrumentation
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
 #   python server.py \
+#
+# Context propagation reference here: https://github.com/open-telemetry/opentelemetry-python/blob/05fd6f3399b1a214c46e71367e124be5d504ad26/opentelemetry-api/src/opentelemetry/propagate/__init__.py#L43-L48
 
 from opentelemetry import trace
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
+# from opentelemetry.instrumentation.flask import FlaskInstrumentor
+# from opentelemetry.instrumentation.requests import RequestsInstrumentor
 import random
 import string
 from flask import Flask, request
@@ -29,8 +31,8 @@ tracer = get_tracer("test-py-manual-server-grpc")
 
 # Init autoinstrumentation with Flask
 app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app)
-RequestsInstrumentor().instrument()
+# FlaskInstrumentor().instrument_app(app)
+# RequestsInstrumentor().instrument()
 
 Base = declarative_base()
 
@@ -98,23 +100,32 @@ def sqlalchemy_integration(length):
         Base.metadata.create_all(engine)
         return str(_random_string(length))
 
-@app.route("/rolldice")
-def roll_dice():
-    return str(do_roll())
-
 def get_header_from_flask_request(request, key):
-    # print(f"Request headers {request.headers}")
     return request.headers.get_all(key)
 
-# @tracer.start_as_current_span("do_roll")
-def do_roll():
+@app.route("/rolldice")
+def roll_dice():
     traceparent = get_header_from_flask_request(request, "traceparent")
     carrier = {"traceparent": traceparent[0]}
     print(f"Carrier value: {carrier}")
     
     ctx = TraceContextTextMapPropagator().extract(carrier)
     
-    with tracer.start_as_current_span("do_roll", context=ctx) as current_span:
+    with tracer.start_as_current_span("/rolldice", context=ctx):
+    
+        return str(do_roll())
+
+
+# @tracer.start_as_current_span("do_roll")
+def do_roll():
+    # traceparent = get_header_from_flask_request(request, "traceparent")
+    # carrier = {"traceparent": traceparent[0]}
+    # print(f"Carrier value: {carrier}")
+    
+    # ctx = TraceContextTextMapPropagator().extract(carrier)
+    
+    # with tracer.start_as_current_span("do_roll", context=ctx) as current_span:
+    with tracer.start_as_current_span("do_roll") as current_span:
         
         res = random.randint(1, 6)
         current_span.set_attribute("roll.value", res)
