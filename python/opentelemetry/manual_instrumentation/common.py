@@ -1,4 +1,5 @@
 import os
+import string
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -8,19 +9,19 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 def get_otlp_exporter():
     ls_access_token = os.environ.get("LS_ACCESS_TOKEN")
-    print(f"Using access token: '{ls_access_token}'")
+    # print(f"Using access token: '{ls_access_token}'")
     return OTLPSpanExporter(
         endpoint="ingest.lightstep.com:443",
         headers=(("lightstep-access-token", ls_access_token),),
     )
 
 
-def get_tracer():
+def get_tracer(service_name: string):
     span_exporter = get_otlp_exporter()
     
     # Service name is required for most backends
     resource = Resource(attributes={
-        SERVICE_NAME: "test-py-manual-server-grpc"
+        SERVICE_NAME: service_name
     })
 
     provider = TracerProvider(resource=resource)

@@ -12,9 +12,9 @@ from opentelemetry.instrumentation.requests import RequestsInstrumentor
 import random
 import string
 from flask import Flask, request
-import requests
+
 from common import get_tracer
-import uuid
+
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 import redis
@@ -25,7 +25,7 @@ from sqlalchemy.orm import relationship
 
 
 # Init tracer
-tracer = get_tracer()
+tracer = get_tracer("test-py-manual-server-grpc")
 
 # Init autoinstrumentation with Flask
 app = Flask(__name__)
@@ -117,11 +117,6 @@ def do_roll():
     with tracer.start_as_current_span("do_roll", context=ctx) as current_span:
         
         res = random.randint(1, 6)
-        # current_span = trace.get_current_span()
-            
-        # request.headers["carrier"] = carrier
-        # print(f"Header value: {request.headers}")
-        # print(f"Carrier: {carrier}")
         current_span.set_attribute("roll.value", res)
         current_span.set_attribute("operation.name", "Saying hello!")
         current_span.set_attribute("operation.other-stuff", [1, 2, 3])

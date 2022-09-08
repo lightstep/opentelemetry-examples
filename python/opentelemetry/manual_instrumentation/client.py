@@ -15,7 +15,7 @@ from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapProp
 
 from common import get_tracer
 
-tracer = get_tracer()
+tracer = get_tracer("test-py-manual-client-grpc")
 
 def set_header_into_requests_request(request: requests,
                                         key: str, value: str):
@@ -31,10 +31,8 @@ def send_requests(url):
             TraceContextTextMapPropagator().inject(carrier)
             header = set_header_into_requests_request(requests.request, "traceparent", carrier["traceparent"])
             print(f"header {header}")
-            # print(f"Request = {requests.header}")
             res = requests.get(url, headers=header)
             print(f"Request to {url}, got {len(res.content)} bytes")
-            # print(f"*** Header: {res.headers}")
         except Exception as e:
             print(f"Request to {url} failed {e}")
             pass
