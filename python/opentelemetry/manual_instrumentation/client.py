@@ -18,17 +18,12 @@ from common import get_tracer
 # Init tracer
 tracer = get_tracer("test-py-manual-client-grpc")
  
-# def set_header_into_requests_request(key: str, value: str):
-#     return {key: value}
-
 def send_requests(url):
     with tracer.start_as_current_span("client operation"):
         try:
             carrier = {}
             TraceContextTextMapPropagator().inject(carrier)
             header = {"traceparent": carrier["traceparent"]}
-            # header = set_header_into_requests_request("traceparent", carrier["traceparent"])
-            print(f"header {header}")
             res = requests.get(url, headers=header)
             print(f"Request to {url}, got {len(res.content)} bytes")
         except Exception as e:

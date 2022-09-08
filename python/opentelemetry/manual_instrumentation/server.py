@@ -29,8 +29,9 @@ from sqlalchemy.orm import relationship
 # Init tracer
 tracer = get_tracer("test-py-manual-server-grpc")
 
-# Init autoinstrumentation with Flask
 app = Flask(__name__)
+
+# Init autoinstrumentation with Flask
 # FlaskInstrumentor().instrument_app(app)
 # RequestsInstrumentor().instrument()
 
