@@ -12,8 +12,10 @@ from opentelemetry.instrumentation.requests import RequestsInstrumentor
 import random
 import string
 from flask import Flask, request
+import requests
 from common import get_tracer
 import uuid
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 import redis
 from pymongo import MongoClient
@@ -56,7 +58,6 @@ def _random_string(length):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return "".join(random.choice(letters) for i in range(int(length)))
-
 
 @app.route("/ping")
 def ping():
@@ -101,16 +102,32 @@ def sqlalchemy_integration(length):
 def roll_dice():
     return str(do_roll())
 
-@tracer.start_as_current_span("do_roll")
+def get_header_from_flask_request(request, key):
+    # print(f"Request headers {request.headers}")
+    return request.headers.get_all(key)
+
+# @tracer.start_as_current_span("do_roll")
 def do_roll():
-    res = random.randint(1, 6)
-    current_span = trace.get_current_span()
-    current_span.set_attribute("roll.value", res)
-    current_span.set_attribute("operation.name", "Saying hello!")
-    current_span.set_attribute("operation.other-stuff", [1, 2, 3])
-    current_span.add_event("Suuuuuppp")    
-    print(f"Returning {res}")
-    return res
+    traceparent = get_header_from_flask_request(request, "traceparent")
+    carrier = {"traceparent": traceparent[0]}
+    print(f"Carrier value: {carrier}")
+    
+    ctx = TraceContextTextMapPropagator().extract(carrier)
+    
+    with tracer.start_as_current_span("do_roll", context=ctx) as current_span:
+        
+        res = random.randint(1, 6)
+        # current_span = trace.get_current_span()
+            
+        # request.headers["carrier"] = carrier
+        # print(f"Header value: {request.headers}")
+        # print(f"Carrier: {carrier}")
+        current_span.set_attribute("roll.value", res)
+        current_span.set_attribute("operation.name", "Saying hello!")
+        current_span.set_attribute("operation.other-stuff", [1, 2, 3])
+        current_span.add_event("Suuuuuppp")    
+        print(f"Returning {res}")
+        return res
 
 
 if __name__ == "__main__":
