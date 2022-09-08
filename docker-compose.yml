@@ -212,6 +212,40 @@ services:
             - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=ingest.lightstep.com:443
             - OTEL_EXPORTER_OTLP_HEADERS=lightstep-access-token=${TOKEN}
         stop_grace_period: 1s
+    py-opentelemetry-manual-otlp-client:
+       container_name: py-opentelemetry-manual-otlp-client
+       image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-manual-client
+       build:
+           context: ./python/opentelemetry/manual_instrumentation
+           dockerfile: Dockerfile.client
+       networks:
+           - demo
+       depends_on:
+           - py-opentelemetry-manual-otlp-server
+       env_file:
+           - .env
+       environment:
+           - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-client,service.version=10.10.10
+           - DESTINATION_URL=http://py-opentelemetry-manual-otlp-server:8081/ping
+       stop_grace_period: 1s
+    py-opentelemetry-manual-otlp-server:
+        container_name: py-opentelemetry-manual-otlp-server
+        image: ghcr.io/lightstep/opentelemetry-examples:py-opentelemetry-manual-server
+        build:
+            context: ./python/opentelemetry/manual_instrumentation
+            dockerfile: Dockerfile.server
+        networks:
+            - demo
+        depends_on:
+            - redis
+            - postgres
+            - mysql
+            - mongo
+        env_file:
+            - .env
+        environment:
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-server,service.version=10.10.9
+        stop_grace_period: 1s
     py-launcher-client:
        container_name: py-launcher-client
        image: ghcr.io/lightstep/opentelemetry-examples:py-launcher-client
@@ -484,6 +518,7 @@ services:
             - go-launcher-server
             - py-opentelemetry-auto-collector-server
             - py-opentelemetry-auto-otlp-server
+            - py-opentelemetry-manual-otlp-server
             - py-launcher-server
             - py-opentracing-server
             - js-launcher-server

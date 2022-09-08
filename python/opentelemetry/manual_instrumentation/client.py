@@ -4,6 +4,7 @@
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-client,service.version=10.10.10 \
 #   python client.py test \
 
 import os
@@ -16,7 +17,7 @@ from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapProp
 from common import get_tracer
 
 # Init tracer
-tracer = get_tracer("test-py-manual-client-grpc")
+tracer = get_tracer()
  
 def send_requests(url):
     with tracer.start_as_current_span("client operation"):

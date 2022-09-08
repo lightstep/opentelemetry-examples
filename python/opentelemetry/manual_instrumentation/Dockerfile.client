@@ -8,4 +8,4 @@ ADD requirements.txt .
 RUN pip install -r requirements.txt
 
 ADD *.py ./
-CMD ["opentelemetry-instrument", "/app/client.py", "test"]
+CMD ["/app/client.py", "test"]

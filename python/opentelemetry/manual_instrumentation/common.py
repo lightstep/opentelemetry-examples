@@ -9,22 +9,24 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 def get_otlp_exporter():
     ls_access_token = os.environ.get("LS_ACCESS_TOKEN")
-    # print(f"Using access token: '{ls_access_token}'")
     return OTLPSpanExporter(
         endpoint="ingest.lightstep.com:443",
         headers=(("lightstep-access-token", ls_access_token),),
     )
 
 
-def get_tracer(service_name: string):
+def get_tracer():
     span_exporter = get_otlp_exporter()
     
-    # Service name is required for most backends
-    resource = Resource(attributes={
-        SERVICE_NAME: service_name
-    })
-
-    provider = TracerProvider(resource=resource)
+    provider = TracerProvider()
+    if not os.environ.get("OTEL_RESOURCE_ATTRIBUTES"):        
+        # Service name is required for most backends
+        resource = Resource(attributes={
+            SERVICE_NAME: "test-py-manual-otlp"
+        })
+        provider = TracerProvider(resource=resource)
+        print("Using default service name")
+        
     processor = BatchSpanProcessor(span_exporter)
     provider.add_span_processor(processor)
     trace.set_tracer_provider(provider)    

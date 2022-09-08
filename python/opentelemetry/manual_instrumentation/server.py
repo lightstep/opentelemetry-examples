@@ -4,6 +4,7 @@
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-server,service.version=10.10.9
 #   python server.py \
 #
 # Context propagation reference here: https://github.com/open-telemetry/opentelemetry-python/blob/05fd6f3399b1a214c46e71367e124be5d504ad26/opentelemetry-api/src/opentelemetry/propagate/__init__.py#L43-L48
@@ -11,6 +12,7 @@
 from opentelemetry import trace
 # from opentelemetry.instrumentation.flask import FlaskInstrumentor
 # from opentelemetry.instrumentation.requests import RequestsInstrumentor
+import os
 import random
 import string
 from flask import Flask, request
@@ -27,7 +29,7 @@ from sqlalchemy.orm import relationship
 
 
 # Init tracer
-tracer = get_tracer("test-py-manual-server-grpc")
+tracer = get_tracer()
 
 app = Flask(__name__)
 
@@ -76,8 +78,8 @@ def ping():
     
         length = random.randint(1, 1024)
         redis_integration(length)
-        # pymongo_integration(length)
-        # sqlalchemy_integration(length)
+        pymongo_integration(length)
+        sqlalchemy_integration(length)
         return _random_string(length)
 
 @tracer.start_as_current_span("redis_integration")
