@@ -36,6 +36,9 @@ app = Flask(__name__)
 
 Base = declarative_base()
 
+def get_header_from_flask_request(request, key):
+    return request.headers.get_all(key)
+
 class Person(Base):
     __tablename__ = "person"
     # Here we define columns for the table person
@@ -63,13 +66,20 @@ def _random_string(length):
 
 @app.route("/ping")
 def ping():
-    length = random.randint(1, 1024)
-    # redis_integration(length)
-    # pymongo_integration(length)
-    # sqlalchemy_integration(length)
-    return _random_string(length)
 
+    traceparent = get_header_from_flask_request(request, "traceparent")
+    carrier = {"traceparent": traceparent[0]}    
+    ctx = TraceContextTextMapPropagator().extract(carrier)
+    
+    with tracer.start_as_current_span("/ping", context=ctx):
+    
+        length = random.randint(1, 1024)
+        redis_integration(length)
+        # pymongo_integration(length)
+        # sqlalchemy_integration(length)
+        return _random_string(length)
 
+@tracer.start_as_current_span("redis_integration")
 @app.route("/redis/<length>")
 def redis_integration(length):
     with tracer.start_as_current_span("server redis operation"):
@@ -77,7 +87,7 @@ def redis_integration(length):
         r.mset({"length": _random_string(length)})
         return str(r.get("length"))
 
-
+@tracer.start_as_current_span("pymongo_integration")
 @app.route("/pymongo/<length>")
 def pymongo_integration(length):
     with tracer.start_as_current_span("server pymongo operation"):
@@ -88,6 +98,7 @@ def pymongo_integration(length):
         return _random_string(length)
 
 
+@tracer.start_as_current_span("sqlalchemy_integration")
 @app.route("/sqlalchemy/<length>")
 def sqlalchemy_integration(length):
     with tracer.start_as_current_span("server sqlalchemy operation"):
@@ -100,15 +111,10 @@ def sqlalchemy_integration(length):
         Base.metadata.create_all(engine)
         return str(_random_string(length))
 
-def get_header_from_flask_request(request, key):
-    return request.headers.get_all(key)
-
 @app.route("/rolldice")
 def roll_dice():
     traceparent = get_header_from_flask_request(request, "traceparent")
-    carrier = {"traceparent": traceparent[0]}
-    print(f"Carrier value: {carrier}")
-    
+    carrier = {"traceparent": traceparent[0]}    
     ctx = TraceContextTextMapPropagator().extract(carrier)
     
     with tracer.start_as_current_span("/rolldice", context=ctx):
@@ -116,24 +122,17 @@ def roll_dice():
         return str(do_roll())
 
 
-# @tracer.start_as_current_span("do_roll")
+@tracer.start_as_current_span("do_roll")
 def do_roll():
-    # traceparent = get_header_from_flask_request(request, "traceparent")
-    # carrier = {"traceparent": traceparent[0]}
-    # print(f"Carrier value: {carrier}")
-    
-    # ctx = TraceContextTextMapPropagator().extract(carrier)
-    
-    # with tracer.start_as_current_span("do_roll", context=ctx) as current_span:
-    with tracer.start_as_current_span("do_roll") as current_span:
-        
-        res = random.randint(1, 6)
-        current_span.set_attribute("roll.value", res)
-        current_span.set_attribute("operation.name", "Saying hello!")
-        current_span.set_attribute("operation.other-stuff", [1, 2, 3])
-        current_span.add_event("Suuuuuppp")    
-        print(f"Returning {res}")
-        return res
+   
+    res = random.randint(1, 6)
+    current_span = trace.get_current_span()
+    current_span.set_attribute("roll.value", res)
+    current_span.set_attribute("operation.name", "Saying hello!")
+    current_span.set_attribute("operation.other-stuff", [1, 2, 3])
+    current_span.add_event("Suuuuuppp")    
+    print(f"Returning {res}")
+    return res
 
 
 if __name__ == "__main__":

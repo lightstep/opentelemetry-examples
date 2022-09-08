@@ -15,21 +15,19 @@ from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapProp
 
 from common import get_tracer
 
+# Init tracer
 tracer = get_tracer("test-py-manual-client-grpc")
-
-def set_header_into_requests_request(request: requests,
-                                        key: str, value: str):
-    
-    # request.header[key] = value
-    # print("Blah")
-    return {key: value}
+ 
+# def set_header_into_requests_request(key: str, value: str):
+#     return {key: value}
 
 def send_requests(url):
     with tracer.start_as_current_span("client operation"):
         try:
             carrier = {}
             TraceContextTextMapPropagator().inject(carrier)
-            header = set_header_into_requests_request(requests.request, "traceparent", carrier["traceparent"])
+            header = {"traceparent": carrier["traceparent"]}
+            # header = set_header_into_requests_request("traceparent", carrier["traceparent"])
             print(f"header {header}")
             res = requests.get(url, headers=header)
             print(f"Request to {url}, got {len(res.content)} bytes")
@@ -39,7 +37,7 @@ def send_requests(url):
 
 
 if __name__ == "__main__":
-    target = os.getenv("DESTINATION_URL", "http://localhost:8081/rolldice")
+    target = os.getenv("DESTINATION_URL", "http://localhost:8081/ping")
     while True:
         send_requests(target)
         time.sleep(5)
