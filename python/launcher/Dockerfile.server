@@ -1,11 +1,15 @@
 FROM python:3-alpine3.15
 
+RUN apk add build-base
+
 RUN mkdir /app
 WORKDIR /app
 ADD requirements.txt .
 RUN pip install -r requirements.txt
 
-# RUN opentelemetry-bootstrap -a install
+RUN opentelemetry-bootstrap -a install
 
 ADD server.py /app/server.py
+
+EXPOSE 8081
 CMD ["opentelemetry-instrument", "/app/server.py"]

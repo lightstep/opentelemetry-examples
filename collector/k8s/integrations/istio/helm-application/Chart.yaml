@@ -1,0 +1,9 @@
+apiVersion: v2
+name: open-telemetry-examples/machines
+description: A Helm chart for machines app
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
