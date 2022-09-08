@@ -1,0 +1,125 @@
+version: '3.5'
+
+services:
+
+  etcd0:
+    container_name: etcd0
+    image: quay.io/coreos/etcd
+    restart: always
+    environment:
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd0:2379
+
+  mon0:
+    container_name: mon0
+    image: flaviostutz/ceph-monitor
+    restart: always
+    pid: host
+    environment:
+      - CREATE_CLUSTER=true
+      - ETCD_URL=http://etcd0:2379
+      - PEER_MONITOR_HOSTS=mon1
+
+  mon1:
+    container_name: mon1
+    image: flaviostutz/ceph-monitor
+    restart: always
+    pid: host
+    environment:
+      - ETCD_URL=http://etcd0:2379
+      - PEER_MONITOR_HOSTS=mon0
+
+  mgr1:
+    container_name: mgr1
+    image: flaviostutz/ceph-manager
+    pid: host
+    ports:
+      - 8443:8443
+      - 8003:8003
+      - 9283:9283
+    environment:
+      - LOG_LEVEL=0
+      - MONITOR_HOSTS=mon0
+      - ETCD_URL=http://etcd0:2379
+    healthcheck:
+      test: ["CMD", "ceph", "-s"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - mon0
+      - mon1
+
+  mgr2:
+    container_name: mgr2
+    image: flaviostutz/ceph-manager
+    restart: always
+    pid: host
+    ports:
+      - 18443:8443
+      - 18003:8003
+      - 19283:9283
+    environment:
+      - LOG_LEVEL=0
+      - MONITOR_HOSTS=mon0
+      - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
+
+  osd1:
+    container_name: osd1
+    image: flaviostutz/ceph-osd
+    restart: always
+    pid: host
+    environment:
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
+
+  osd2:
+    container_name: osd2
+    image: flaviostutz/ceph-osd
+    restart: always
+    pid: host
+    environment:
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
+
+  osd3:
+    container_name: osd3
+    image: flaviostutz/ceph-osd
+    restart: always
+    pid: host
+    environment:
+      - MONITOR_HOSTS=mon0
+      - OSD_EXT4_SUPPORT=true
+      - OSD_JOURNAL_SIZE=512
+      - ETCD_URL=http://etcd0:2379
+    depends_on:
+      - mon0
+      - mon1
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
+    restart: always
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - mgr1

@@ -1,0 +1,30 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'ceph-mgr'
+          scrape_interval: 15s
+          metrics_path: '/metrics'
+          static_configs:
+            - targets: ['mgr1:9283']
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  telemetry:
+    logs:
+      level: DEBUG
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp]
