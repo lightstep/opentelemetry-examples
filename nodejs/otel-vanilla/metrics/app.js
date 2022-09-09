@@ -13,7 +13,7 @@ const {
 
 const token = process.env.LS_ACCESS_TOKEN;
 const exportUrl =
-  process.env.LS_METRICS_URL ||
+  process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT ||
   'https://ingest.lightstep.com/metrics/otlp/v0.9';
 const serviceName = process.env.LS_SERVICE_NAME || 'otel-js-demo';
 
