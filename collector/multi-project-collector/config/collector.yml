@@ -1,0 +1,47 @@
+extensions:
+  headers_setter:
+    headers:
+      - key: lightstep-access-token
+        from_context: lightstep-access-token
+
+receivers:
+  otlp:
+    protocols:
+      # default 0.0.0.0:4317 for grpc protocol
+      grpc:
+        endpoint: 0.0.0.0:4317
+        # persist request metadata/headers in client.Info.Metadata 
+        include_metadata: true
+
+processors:
+  # cannot use batch processor: https://github.com/open-telemetry/opentelemetry-collector/issues/4544
+  # possible workaround for using batch? https://github.com/open-telemetry/opentelemetry-collector/issues/5733#issuecomment-1204648704
+  attributes:
+    actions:
+      - key: lightstep.access_token
+        from_context: lightstep-access-token
+        action: upsert
+
+exporters:
+  logging:
+    loglevel: debug
+  # configuring otlp to Lightstep
+  otlp/lightstep:
+    endpoint: ingest.lightstep.com:443
+    # yes, confusing but sets the headers
+    auth:
+      authenticator: headers_setter  
+    tls:
+      insecure: false
+
+service:
+  extensions: [ headers_setter ]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [attributes]
+      exporters: [otlp/lightstep]
+    traces:
+      receivers: [otlp]
+      processors: [attributes]
+      exporters: [otlp/lightstep]

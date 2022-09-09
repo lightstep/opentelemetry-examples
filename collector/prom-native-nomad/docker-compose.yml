@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  nomad-server:
+    image: djenriquez/nomad
+    container_name: nomad-server
+    command: agent -dev
+    ports:
+      - 4646:4646
+    privileged: true
+    volumes:
+      - ./nomad/config/local.json:/etc/nomad/local.json:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /tmp:/tmp
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.56.0
+    command: [ "--config=/conf/collector.yml" ]
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - nomad-server
