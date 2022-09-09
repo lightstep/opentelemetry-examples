@@ -10,9 +10,6 @@
 # Context propagation reference here: https://github.com/open-telemetry/opentelemetry-python/blob/05fd6f3399b1a214c46e71367e124be5d504ad26/opentelemetry-api/src/opentelemetry/propagate/__init__.py#L43-L48
 
 from opentelemetry import trace
-# from opentelemetry.instrumentation.flask import FlaskInstrumentor
-# from opentelemetry.instrumentation.requests import RequestsInstrumentor
-import os
 import random
 import string
 from flask import Flask, request
@@ -32,10 +29,6 @@ from sqlalchemy.orm import relationship
 tracer = get_tracer()
 
 app = Flask(__name__)
-
-# Init autoinstrumentation with Flask
-# FlaskInstrumentor().instrument_app(app)
-# RequestsInstrumentor().instrument()
 
 Base = declarative_base()
 
@@ -113,30 +106,6 @@ def sqlalchemy_integration(length):
         # statements in raw SQL.
         Base.metadata.create_all(engine)
         return str(_random_string(length))
-
-@app.route("/rolldice")
-def roll_dice():
-    traceparent = get_header_from_flask_request(request, "traceparent")
-    carrier = {"traceparent": traceparent[0]}    
-    ctx = TraceContextTextMapPropagator().extract(carrier)
-    
-    with tracer.start_as_current_span("/rolldice", context=ctx):
-    
-        return str(do_roll())
-
-
-@tracer.start_as_current_span("do_roll")
-def do_roll():
-   
-    res = random.randint(1, 6)
-    current_span = trace.get_current_span()
-    current_span.set_attribute("roll.value", res)
-    current_span.set_attribute("operation.name", "Saying hello!")
-    current_span.set_attribute("operation.other-stuff", [1, 2, 3])
-    current_span.add_event("Suuuuuppp")    
-    print(f"Returning {res}")
-    return res
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)
