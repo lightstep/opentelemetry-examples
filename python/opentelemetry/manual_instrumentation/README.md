@@ -30,5 +30,12 @@ Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](ht
 In a separate terminal window:
 
 ```bash
-curl http://localhost:8082/rolldice
+export GRPC_VERBOSITY=debug
+export GRPC_TRACE=http,call_error,connectivity_state
+
+export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+
+python client.py test
 ```
+
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).

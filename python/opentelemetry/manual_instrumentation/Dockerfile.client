@@ -1,0 +1,11 @@
+FROM python:3-alpine3.15
+
+RUN apk add build-base
+
+RUN mkdir /app
+WORKDIR /app
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+
+ADD *.py ./
+CMD ["/app/client.py", "test"]
