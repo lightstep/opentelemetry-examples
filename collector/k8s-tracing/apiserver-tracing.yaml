@@ -1,0 +1,4 @@
+apiVersion: apiserver.config.k8s.io/v1alpha1
+kind: TracingConfiguration
+endpoint: 192.168.1.253:4317
+samplingRatePerMillion: 1000000
