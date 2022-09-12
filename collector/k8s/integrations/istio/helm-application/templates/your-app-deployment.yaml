@@ -1,0 +1,46 @@
+{{- range $machine := .Values.machines }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $machine.name }}
+  namespace: machines
+  labels:
+    app: {{ $machine.name }}
+    app.kubernetes.io/managed-by: "Helm"
+    version: {{ $.Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ $machine.name }}
+      run: {{ $machine.name }}
+      version: {{ $.Chart.Version }}
+      observability: "true"
+  template:
+    metadata:
+      labels:
+        app: {{ $machine.name }}
+        run: {{ $machine.name }}
+        version: {{ $.Chart.Version }}
+        observability: "true"
+    spec:
+      # serviceAccountName: machines
+      containers:
+      - name: {{ $machine.name }}
+        image: machine:latest
+        env:
+        - name: NAME
+          value: {{ $machine.name }}
+        - name: PEER_URL
+          value: {{ $machine.peerURL }}
+        - name: LISTEN_URL
+          value: {{ $machine.listenURL }}
+        - name: SEED
+          value: {{ $machine.seed | quote }}
+        ports:
+        - containerPort: {{ $machine.listenPort }}
+          name: tcp-listen
+        - containerPort: {{ $machine.advertisePort }}
+          name: tcp-advertise
+        imagePullPolicy: Never
+{{- end }}

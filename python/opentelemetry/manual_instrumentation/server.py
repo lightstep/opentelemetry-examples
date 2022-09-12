@@ -1,7 +1,22 @@
 #!/usr/bin/env python
+#
+# example code to test opentelemetry python manual instrumentation
+#
+# usage:
+#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
+#   OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-server,service.version=10.10.9
+#   python server.py \
+#
+# Context propagation reference here: https://github.com/open-telemetry/opentelemetry-python/blob/05fd6f3399b1a214c46e71367e124be5d504ad26/opentelemetry-api/src/opentelemetry/propagate/__init__.py#L43-L48
+
+from opentelemetry import trace
 import random
 import string
-import flask
+from flask import Flask, request
+
+from common import get_tracer
+
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 import redis
 from pymongo import MongoClient
@@ -9,15 +24,16 @@ from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from common import get_tracer
 
-
+# Init tracer
 tracer = get_tracer()
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 Base = declarative_base()
 
+def get_header_from_flask_request(request, key):
+    return request.headers.get_all(key)
 
 class Person(Base):
     __tablename__ = "person"
@@ -44,16 +60,22 @@ def _random_string(length):
     letters = string.ascii_lowercase
     return "".join(random.choice(letters) for i in range(int(length)))
 
-
 @app.route("/ping")
 def ping():
-    length = random.randint(1, 1024)
-    redis_integration(length)
-    pymongo_integration(length)
-    sqlalchemy_integration(length)
-    return _random_string(length)
 
+    traceparent = get_header_from_flask_request(request, "traceparent")
+    carrier = {"traceparent": traceparent[0]}    
+    ctx = TraceContextTextMapPropagator().extract(carrier)
+    
+    with tracer.start_as_current_span("/ping", context=ctx):
+    
+        length = random.randint(1, 1024)
+        redis_integration(length)
+        pymongo_integration(length)
+        sqlalchemy_integration(length)
+        return _random_string(length)
 
+@tracer.start_as_current_span("redis_integration")
 @app.route("/redis/<length>")
 def redis_integration(length):
     with tracer.start_as_current_span("server redis operation"):
@@ -61,7 +83,7 @@ def redis_integration(length):
         r.mset({"length": _random_string(length)})
         return str(r.get("length"))
 
-
+@tracer.start_as_current_span("pymongo_integration")
 @app.route("/pymongo/<length>")
 def pymongo_integration(length):
     with tracer.start_as_current_span("server pymongo operation"):
@@ -72,6 +94,7 @@ def pymongo_integration(length):
         return _random_string(length)
 
 
+@tracer.start_as_current_span("sqlalchemy_integration")
 @app.route("/sqlalchemy/<length>")
 def sqlalchemy_integration(length):
     with tracer.start_as_current_span("server sqlalchemy operation"):
@@ -84,6 +107,5 @@ def sqlalchemy_integration(length):
         Base.metadata.create_all(engine)
         return str(_random_string(length))
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)
