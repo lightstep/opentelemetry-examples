@@ -10,8 +10,11 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
 public class ExampleServer {
 
+  @WithSpan
   public static void main(String[] args) throws Exception {
     OpenTelemetryConfiguration.newBuilder().install();
 
@@ -37,6 +40,7 @@ public class ExampleServer {
     server.join();
   }
 
+  @WithSpan
   private static void doWork() {
     try {
       TimeUnit.SECONDS.sleep(1);

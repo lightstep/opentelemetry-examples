@@ -1,0 +1,56 @@
+plugins {
+    id "com.diffplug.spotless"
+    id "com.github.johnrengelman.shadow" apply false
+}
+
+ext {
+  // these lines are managed by .github/scripts/update-sdk-version.sh
+  otelVersion = "1.18.0"
+  otelAlphaVersion = "1.18.0-alpha"
+
+  grpcVersion = '1.47.0'
+  protobufVersion = '3.21.2'
+  protocVersion = protobufVersion
+}
+
+println("Building against OpenTelemetry version: $otelVersion")
+
+subprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
+    apply plugin: 'com.diffplug.spotless'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group = "io.opentelemetry"
+    version = "0.1.0-SNAPSHOT"
+
+    repositories {
+        mavenCentral()
+        maven {
+            // Add snapshot repository
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+
+    compileJava {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
+
+    dependencies {
+        implementation platform("io.opentelemetry:opentelemetry-bom:${otelVersion}")
+        implementation platform("io.opentelemetry:opentelemetry-bom-alpha:${otelAlphaVersion}")
+        implementation platform("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:${otelVersion}")
+        implementation platform("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:${otelAlphaVersion}")
+        implementation platform("io.grpc:grpc-bom:${grpcVersion}")
+    }
+
+    spotless {
+        java {
+            targetExclude '**/generated/**'
+            googleJavaFormat()
+        }
+    }
+}

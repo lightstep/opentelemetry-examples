@@ -22,28 +22,28 @@ public class Client {
 
   public static void main(String[] args) {
 
-    final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
-    final String lsToken = System.getenv("LS_ACCESS_TOKEN");
+    // final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
+    // final String lsToken = System.getenv("LS_ACCESS_TOKEN");
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
       targetURL = "http://127.0.0.1:8083/ping";
     }
 
-    final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
-        .setTimeout(60_000, TimeUnit.MILLISECONDS)
-        .addHeader(ACCESS_TOKEN_HEADER, lsToken)
-        .setEndpoint(satelliteURL).build();
+    // final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
+    //     .setTimeout(60_000, TimeUnit.MILLISECONDS)
+    //     .addHeader(ACCESS_TOKEN_HEADER, lsToken)
+    //     .setEndpoint(satelliteURL).build();
 
-    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
-        .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
-        .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
-        .build();
+    // SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+    //     .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
+    //     .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
+    //     .build();
 
-    OpenTelemetrySdk.builder()
-        .setTracerProvider(sdkTracerProvider)
-        .setPropagators(
-            ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
-        .buildAndRegisterGlobal();
+    // OpenTelemetrySdk.builder()
+    //     .setTracerProvider(sdkTracerProvider)
+    //     .setPropagators(
+    //         ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
+    //     .buildAndRegisterGlobal();
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 

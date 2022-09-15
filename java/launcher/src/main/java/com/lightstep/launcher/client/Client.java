@@ -10,8 +10,11 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 public class Client {
+
+  @WithSpan
   public static void main(String[] args) {
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
@@ -32,6 +35,7 @@ public class Client {
     }
   }
 
+  @WithSpan
   private static void doWork(Tracer tracer, String targetURL) {
     Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
