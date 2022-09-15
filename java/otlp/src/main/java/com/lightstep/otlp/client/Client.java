@@ -7,7 +7,6 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-// import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -24,35 +23,12 @@ import io.opentelemetry.context.propagation.TextMapPropagator;
 public class Client {
   private static final String ACCESS_TOKEN_HEADER = "lightstep-access-token";
 
-  // private static final TextMapPropagator textMapPropagator =
-  // GlobalOpenTelemetry.getPropagators().getTextMapPropagator();
-
-  // private static final TextMapSetter<HttpURLConnection> setter = URLConnection::setRequestProperty;
-
   public static void main(String[] args) {
 
-    // final String satelliteURL = "https://" + System.getenv("LS_SATELLITE_URL");
-    // final String lsToken = System.getenv("LS_ACCESS_TOKEN");
     String targetURL = System.getenv("DESTINATION_URL");
     if (targetURL == null || targetURL.length() == 0) {
       targetURL = "http://127.0.0.1:8083/ping";
     }
-
-    // final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
-    //     .setTimeout(60_000, TimeUnit.MILLISECONDS)
-    //     .addHeader(ACCESS_TOKEN_HEADER, lsToken)
-    //     .setEndpoint(satelliteURL).build();
-
-    // SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
-    //     .addSpanProcessor(BatchSpanProcessor.builder(exporter).build())
-    //     .setResource(OpenTelemetrySdkAutoConfiguration.getResource())
-    //     .build();
-
-    // OpenTelemetrySdk.builder()
-    //     .setTracerProvider(sdkTracerProvider)
-    //     .setPropagators(
-    //         ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
-    //     .buildAndRegisterGlobal();
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
@@ -75,9 +51,9 @@ public class Client {
 
     // Inject the current Span into the Request.
     try (Scope scope = span.makeCurrent()) {
-      GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
-          .inject(Context.current(), reqBuilder,
-              Request.Builder::addHeader);
+      // GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
+      //     .inject(Context.current(), reqBuilder,
+      //         Request.Builder::addHeader);
 
       Request req = reqBuilder
       .url(targetURL)
