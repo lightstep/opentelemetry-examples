@@ -47,10 +47,11 @@ public class Client {
     //         ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
     //     .buildAndRegisterGlobal();
 
-    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
+    // Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
     while (true) {
-      doWork(tracer, targetURL);
+      doWork(targetURL);
+      // doWork(tracer, targetURL);
       try {
         Thread.sleep(1000);
       } catch (InterruptedException ignore) {
@@ -59,7 +60,8 @@ public class Client {
   }
 
   @WithSpan
-  private static void doWork(Tracer tracer, String targetURL) {
+  private static void doWork(String targetURL) {
+  // private static void doWork(Tracer tracer, String targetURL) {
     Span span = Span.current();
     // Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
