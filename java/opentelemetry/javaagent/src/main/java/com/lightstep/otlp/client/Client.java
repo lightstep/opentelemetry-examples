@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
 
 public class Client {
   private static final String ACCESS_TOKEN_HEADER = "lightstep-access-token";
@@ -56,8 +58,10 @@ public class Client {
     }
   }
 
+  @WithSpan
   private static void doWork(Tracer tracer, String targetURL) {
-    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    Span span = Span.current();
+    // Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
 
@@ -65,11 +69,11 @@ public class Client {
     Request.Builder reqBuilder = new Request.Builder();
 
     // Inject the current Span into the Request.
-    try (Scope scope = span.makeCurrent()) {
-      GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
-          .inject(io.opentelemetry.context.Context.current(), reqBuilder,
-              Request.Builder::addHeader);
-    }
+    // try (Scope scope = span.makeCurrent()) {
+    //   GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
+    //       .inject(io.opentelemetry.context.Context.current(), reqBuilder,
+    //           Request.Builder::addHeader);
+    // }
 
     Request req = reqBuilder
         .url(targetURL)
@@ -84,6 +88,6 @@ public class Client {
           targetURL, e));
     }
     span.addEvent("Event 1");
-    span.end();
+    // span.end();
   }
 }
