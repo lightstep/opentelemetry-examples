@@ -14,13 +14,17 @@ import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 public class ExampleServer {
 
+  private static final Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
+
+
   @WithSpan
   public static void main(String[] args) throws Exception {
-    OpenTelemetryConfiguration.newBuilder().install();
+    // OpenTelemetryConfiguration.newBuilder().install();
 
-    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
+    // Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
-    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    // Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    Span span = Span.current();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
     // execute my use case - here we simulate a wait

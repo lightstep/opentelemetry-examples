@@ -14,6 +14,8 @@ import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 public class Client {
 
+  private static final Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
+
   @WithSpan
   public static void main(String[] args) {
     String targetURL = System.getenv("DESTINATION_URL");
@@ -21,9 +23,7 @@ public class Client {
       targetURL = "http://127.0.0.1:8084/ping";
     }
 
-    OpenTelemetryConfiguration.newBuilder().install();
-
-    Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
+    // OpenTelemetryConfiguration.newBuilder().install();
 
     while (true) {
       doWork(tracer, targetURL);
@@ -37,7 +37,8 @@ public class Client {
 
   @WithSpan
   private static void doWork(Tracer tracer, String targetURL) {
-    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    // Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    Span span = Span.current();
     span.setAttribute("Attribute 1", "Value 1");
     span.addEvent("Event 0");
 
