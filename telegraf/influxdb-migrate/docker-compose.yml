@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  telegraf:
+    image: telegraf
+    volumes:
+      - ./data:/data
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: telegraf_conf
+        target: /etc/telegraf/telegraf.conf
+    depends_on:
+      - otel-collector
+    networks:
+      - integrations
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.59.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+configs:
+  telegraf_conf:
+    file: ./telegraf.conf
+  collector_conf:
+    file: ./collector.yml
+
+networks:
+  integrations:

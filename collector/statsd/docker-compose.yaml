@@ -10,3 +10,5 @@ services:
       - 8125:8125/udp
     volumes:
         - ./collector.yaml:/conf/collector.yaml:rw
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}

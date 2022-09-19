@@ -1,0 +1,12 @@
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: machine-2-logging
+  namespace: machines
+spec:
+  selector:
+    matchLabels:
+      app: machine-2
+  accessLogging:
+    - providers:
+      - name: otel

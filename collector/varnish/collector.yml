@@ -1,0 +1,32 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: otel-varnish
+          static_configs:
+            - targets: [varnish:9131]
+  nginx/appsrv:
+    endpoint: 'http://nginx_appsrv:1080/status'
+    collection_interval: 10s
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics/varnish:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp/public]
+    metrics/appsrv:
+      receivers: [nginx/appsrv]
+      processors: [batch]
+      exporters: [logging, otlp/public]

@@ -4,24 +4,28 @@
 #
 # usage:
 #   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-#   LS_SERVICE_NAME=demo-python \
-#   LS_SERVICE_VERSION=0.0.8 \
-#   opentelemetry-instrument python client.py
+#   OTEL_RESOURCE_ATTRIBUTES=service.name=py-opentelemetry-manual-otlp-client,service.version=10.10.10 \
+#   python client.py test \
 
 import os
 import time
+import requests
+
+from opentelemetry import propagators
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 from common import get_tracer
 
+# Init tracer
 tracer = get_tracer()
-
-import requests
-
-
+ 
 def send_requests(url):
     with tracer.start_as_current_span("client operation"):
         try:
-            res = requests.get(url)
+            carrier = {}
+            TraceContextTextMapPropagator().inject(carrier)
+            header = {"traceparent": carrier["traceparent"]}
+            res = requests.get(url, headers=header)
             print(f"Request to {url}, got {len(res.content)} bytes")
         except Exception as e:
             print(f"Request to {url} failed {e}")

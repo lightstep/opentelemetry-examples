@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 #
-# example code to test launcher
+# example code to test opentelemetry
 #
 # usage:
-#   LS_ACCESS_TOKEN=${SECRET_TOKEN} \
-#   LS_SERVICE_NAME=demo-python \
-#   LS_SERVICE_VERSION=0.0.8 \
-#   opentelemetry-instrument python client.py
+#   export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --service_name test-py-auto-launcher-client \
+#       python client.py test
+
 
 import os
 import time
+import requests
 
 from opentelemetry import trace
 
-import requests
-
-tracer = trace.get_tracer(__name__)
+tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 
 def send_requests(url):

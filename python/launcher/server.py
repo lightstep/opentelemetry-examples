@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+#
+# example code to test opentelemetry
+#
+# usage:
+#   export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
+#   opentelemetry-instrument \
+#       --service_name test-py-auto-launcher-server \
+#       python server.py
+
+
 import random
 import string
 import flask
@@ -11,8 +21,8 @@ from sqlalchemy.orm import relationship
 
 from opentelemetry import trace
 
+tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-tracer = trace.get_tracer(__name__)
 
 app = flask.Flask(__name__)
 
@@ -86,4 +96,4 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)

@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.59.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+# deploys a standalone for the proxy and adds instances
+  varnish:
+    container_name: varnish
+    build: ./
+    configs:
+      - source: varnish_conf
+        target: /etc/varnish/default.vcl
+    volumes:
+      - ./docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
+    ports:
+      - "8080:80"
+      - "9131:9131"
+    networks:
+      - integrations
+
+  nginx_appsrv:
+    image: nginx:1.19
+    configs:
+      - source: appsrv_conf
+        target: /etc/nginx/conf.d/nginx.conf
+        uid: '101'
+        gid: '101'
+        mode: 0440
+    ports:
+      - "1080"
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  varnish_conf:
+    file: ./varnish.vcl
+  appsrv_conf:
+    file: ./nginx-appsrv.conf
+
+networks:
+  integrations:

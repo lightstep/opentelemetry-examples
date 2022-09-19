@@ -86,19 +86,26 @@ def create_trace():
                 try:
                     res = send_request(url)
                     print(f"Request to {url}, got {len(res.content)} bytes")
+                    print(f"Status code returned: {res.status_code}")
+                    s.set_attribute(f"service.status_code", res.status_code)
+                    s.set_attribute(f"service.response", res.text)
                     if res.status_code == 500:
-                        print(f"{res.text}")
+                        s.add_event(f"Response text: {res.text}")
+                        print(f"Response text: {res.text}")
                 except Exception as e:
                     print(f"Request to {url} failed {e}")
                     s.record_exception(e)
                     s.set_status(Status(StatusCode.ERROR))
-        
+                            
     return span_id
 
-
+@tracer.start_as_current_span("test_traces")
 def test_traces():
+    current_span = trace.get_current_span()
+    
     # send a trace
     span_id = create_trace()
+    print(f"Span ID: {span_id}")
     assert span_id is not None
 
     # give time for services to report traces
@@ -110,12 +117,17 @@ def test_traces():
 
     # create a snapshot to make the trace we generated available
     response = requests.post(url, headers=_get_headers(), json=payload)
+    print(f"Snapshots response JSON: {response.json()}")
+    current_span.set_attribute("snapshots.response", response.json())
+    current_span.set_attribute(f"snapshots.status_code", response.status_code)
     assert response.status_code == 200
 
     time.sleep(60)
 
     url = "{}/{}/projects/{}/stored-traces".format(API_URL, TEST_ORG, PROJECT)
-    querystring = {"span-id": format(span_id, "x")}
+    formatted_spand_id = format(span_id, "x")
+    querystring = {"span-id": formatted_spand_id}
+    current_span.set_attribute("stored-traces.request", f"{url}?span-id={formatted_spand_id}")
 
     # search the snapshot for our trace
     response = requests.get(url, headers=_get_headers(), params=querystring)
@@ -127,6 +139,8 @@ def test_traces():
 
     assert response.status_code == 200
     results = response.json()
+    current_span.set_attribute("stored-traces.response", results)
+    current_span.set_attribute("stored-traces.status_code", response.status_code)
     reporters = (
         results.get("data", [{}])[0].get("relationships", {}).get("reporters", {})
     )

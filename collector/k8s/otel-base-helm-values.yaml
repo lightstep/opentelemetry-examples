@@ -1,0 +1,28 @@
+# otel-base-helm-values.yaml represents values to be over
+release-name: "examples"
+
+#   https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector
+opentelemetry-collector:
+  mode: "deployment"
+
+  containerLogs:
+    enabled: true
+
+      # place your collector configuration here [i.e https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/examples/demo/otel-collector-config.yaml]
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+    exporters:
+    service:
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+
+secrets:
+  lightStepPlatformAccessToken: ${LIGHTSTEP_ACCESS_TOKEN}

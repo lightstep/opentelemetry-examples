@@ -1,0 +1,23 @@
+# your-app-service.yaml describes a service template for your istio observed application.
+# note that the name of the ports below must subscribe to a syntax of <protocol>-<suffix>
+
+{{- range $machine := .Values.machines }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $machine.name }}
+  namespace: machines
+spec:
+  selector:
+    run: {{ $machine.name }}
+  ports:
+  - name: tcp-advertise # name here must subscribe to suffix <protocol>-<suffix>
+    protocol: TCP
+    port: {{ $machine.advertisePort }}
+    targetPort: tcp-advertise
+  - name: tcp-listen
+    protocol: TCP
+    port: {{ $machine.listenPort }}
+    targetPort: tcp-listen
+{{ end -}}
