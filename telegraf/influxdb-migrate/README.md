@@ -24,7 +24,7 @@ wget -q -O - https://raw.githubusercontent.com/influxdata/influxdb2-sample-data/
 
 ### Configure Telegraf: Consume Influx Line Protocol
 
-In the Telegraf configuration you need to configure `directory_monitor` plugin. There are multiple input plugins that process files. I'm using this input plugin as opposed to others that work for the filesystem, because this will only process the file once.
+In the Telegraf configuration you need to configure the `directory_monitor` plugin. There are multiple input plugins that process files. I'm using this input plugin as opposed to others that work for the filesystem, because this will only process the file once.
 
 ```
 [[inputs.directory_monitor]]
