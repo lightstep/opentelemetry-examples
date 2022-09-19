@@ -15,5 +15,9 @@ FROM ibmjava:8-jre
 COPY --from=build /usr/src/app/opentelemetry-javaagent.jar /app/
 COPY --from=build /usr/src/app/target/lightstep-launcher-client.jar /app/
 
-ENTRYPOINT java -jar /app/lightstep-launcher-client.jar \
-        com.lightstep.launcher.client.Client
+ENTRYPOINT java -javaagent:/app/opentelemetry-javaagent.jar \
+    -Dotel.traces.exporter=otlp \
+    -Dotel.metrics.exporter=otlp \
+    -Dotel.exporter.otlp.traces.protocol=grpc \
+    -jar target/lightstep-otlp-client.jar \
+    com.lightstep.otlp.client.Client

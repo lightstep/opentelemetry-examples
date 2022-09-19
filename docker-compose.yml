@@ -435,7 +435,9 @@ services:
            - .env
        environment:
            - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-client,service.version=11.11.10
-           - LS_SATELLITE_URL=ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://ingest.lightstep.com:443
+           - OTEL_EXPORTER_OTLP_HEADERS=lightstep-access-token=${TOKEN}
            - DESTINATION_URL=http://java-otlp-server:8083/ping
        stop_grace_period: 1s
     java-otlp-server:
@@ -450,7 +452,9 @@ services:
             - .env
         environment:
             - OTEL_RESOURCE_ATTRIBUTES=service.name=java-otlp-server,service.version=11.11.11
-            - LS_SATELLITE_URL=ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://ingest.lightstep.com:443
+            - OTEL_EXPORTER_OTLP_HEADERS=lightstep-access-token=${TOKEN}            
         stop_grace_period: 1s
     java-launcher-client:
        container_name: java-launcher-client
