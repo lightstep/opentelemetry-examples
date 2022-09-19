@@ -14,32 +14,54 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.Context;
 
 public class ExampleServer {
   
   private static final Tracer tracer = GlobalOpenTelemetry.getTracer("LightstepExample");
 
+  @WithSpan
   public static void main(String[] args) throws Exception {
   
-    Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
-    span.setAttribute("Attribute 1", "Value 1");
-    span.addEvent("Event 0");
+    // Span span = tracer.spanBuilder("start example").setSpanKind(SpanKind.CLIENT).startSpan();
+    Span mainSpan = Span.current();
+    mainSpan.setAttribute("Attribute 1", "Value 1");
+    mainSpan.addEvent("Started main server span");
   
-    // execute my use case - here we simulate a wait
-    doWork();
-    span.addEvent("Event 1");
-    span.end();
+    Span serveSpan = tracer.spanBuilder("serve")
+                        .setParent(Context.current().with(mainSpan))
+                        .startSpan();
 
-    ContextHandlerCollection handlers = new ContextHandlerCollection();
-    handlers.setHandlers(new Handler[]{
-        new ApiContextHandler(),
-    });
-    Server server = new Server(8083);
-    server.setHandler(handlers);
+      // execute my use case - here we simulate a wait
+      doWork();
 
-    server.start();
-    server.dumpStdErr();
-    server.join();
+
+    try (Scope scope = serveSpan.makeCurrent()) {                        
+      Span span = Span.current();
+
+      span.addEvent("Did some stuff, yo!");
+      // span.end();
+
+      ContextHandlerCollection handlers = new ContextHandlerCollection();
+      handlers.setHandlers(new Handler[]{
+          new ApiContextHandler(),
+      });
+      Server server = new Server(8083);
+      server.setHandler(handlers);
+
+      server.start();
+      server.dumpStdErr();
+      server.join();
+
+    } finally {
+      serveSpan.end();  
+    }
+
+    mainSpan.addEvent("Finished main server span");
+    mainSpan.end();  
+
   }
 
   private static void doWork() {
