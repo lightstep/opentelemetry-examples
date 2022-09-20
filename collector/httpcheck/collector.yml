@@ -1,0 +1,22 @@
+exporters:
+    logging:
+        loglevel: debug
+    otlp/lightstep:
+      endpoint: ingest.lightstep.com:443
+      headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+
+receivers:
+  httpcheck/webserver:
+    endpoint: http://webserver
+    collection_interval: 5s
+
+service:
+  pipelines:
+    metrics:
+      receivers: [httpcheck/webserver]
+      processors: [batch]
+      exporters: [logging, otlp/lightstep]
