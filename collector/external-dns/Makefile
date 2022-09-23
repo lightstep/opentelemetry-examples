@@ -32,5 +32,4 @@ install-ingress:
 	kubectl apply -f ingress.yaml
 
 install-collector:
-	sed -e "s~LS_ACCESS_TOKEN~${LS_ACCESS_TOKEN}~" values-collector.tpl > values-collector.yaml
-	helm install my-collector open-telemetry/opentelemetry-collector -f values-collector.yaml
+	./install_collector.sh
