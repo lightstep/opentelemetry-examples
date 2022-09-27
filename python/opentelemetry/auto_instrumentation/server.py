@@ -13,6 +13,9 @@
 #
 # See README.md for more details.
 
+from typing import Iterable
+import time
+
 import random
 import string
 import flask
@@ -25,6 +28,27 @@ from sqlalchemy.orm import relationship
 
 from opentelemetry import trace
 
+# Metrics stuff
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
+    OTLPMetricExporter,
+)
+from opentelemetry.metrics import (
+    CallbackOptions,
+    Observation,
+    get_meter_provider,
+    set_meter_provider,
+)
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+
+exporter = OTLPMetricExporter(insecure=True)
+# reader = PeriodicExportingMetricReader(exporter)
+# provider = MeterProvider(metric_readers=[reader])
+# set_meter_provider(provider)
+
+meter = get_meter_provider().get_meter(__name__)
+
+
 # from common import get_tracer
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
@@ -34,6 +58,68 @@ app = flask.Flask(__name__)
 
 Base = declarative_base()
 
+### ------- Metrics stuff
+def observable_counter_func(options: CallbackOptions) -> Iterable[Observation]:
+    yield Observation(1, {})
+
+
+def observable_up_down_counter_func(
+    options: CallbackOptions,
+) -> Iterable[Observation]:
+    yield Observation(-10, {})
+
+
+def observable_gauge_func(options: CallbackOptions) -> Iterable[Observation]:
+    yield Observation(9, {})
+
+
+counter = meter.create_counter(
+    name="requests_counter",
+    description="number of requests",
+    unit="1"
+)
+# counter.add(1)
+
+# Async Counter
+observable_counter = meter.create_observable_counter(
+    "observable_counter",
+    [observable_counter_func],
+)
+
+# UpDownCounter
+updown_counter = meter.create_up_down_counter("updown_counter")
+updown_counter.add(1)
+updown_counter.add(-5)
+
+# Async UpDownCounter
+observable_updown_counter = meter.create_observable_up_down_counter(
+    "observable_updown_counter", [observable_up_down_counter_func]
+)
+
+# Histogram
+histogram = meter.create_histogram(
+    name="request_size_bytes",
+    description="size of requests",
+    unit="byte"
+)    
+# histogram = meter.create_histogram("histogram")
+# histogram.record(99.9)
+
+# Async Gauge
+gauge = meter.create_observable_gauge("gauge", [observable_gauge_func])
+
+staging_attributes = {"environment": "staging"}
+
+
+def set_metrics(length):
+
+    print("Setting metrics")
+    
+    counter.add(random.randint(0, 25), staging_attributes)
+    histogram.record(length, staging_attributes)
+    updown_counter.add(random.randint(-5, 25), staging_attributes)
+
+### ------- END Metrics stuff
 
 class Person(Base):
     __tablename__ = "person"
@@ -64,9 +150,10 @@ def _random_string(length):
 @app.route("/ping")
 def ping():
     length = random.randint(1, 1024)
-    redis_integration(length)
-    pymongo_integration(length)
-    sqlalchemy_integration(length)
+    set_metrics(length)
+    # redis_integration(length)
+    # pymongo_integration(length)
+    # sqlalchemy_integration(length)
     return _random_string(length)
 
 
@@ -102,4 +189,7 @@ def sqlalchemy_integration(length):
 
 
 if __name__ == "__main__":
+    # set_metrics()
+    # Counter
+    
     app.run(host="0.0.0.0", port=8081, debug=True, use_reloader=False)

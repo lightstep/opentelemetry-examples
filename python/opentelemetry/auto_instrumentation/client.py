@@ -30,7 +30,7 @@ def send_requests(url):
         try:
             res = requests.get(url)
             print(f"Request to {url}, got {len(res.content)} bytes")
-            print(f"Response returned: {res.json()}")
+            # print(f"Response returned: {res.json()}")
         except Exception as e:
             print(f"Request to {url} failed {e}")
 
