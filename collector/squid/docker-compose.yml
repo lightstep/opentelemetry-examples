@@ -14,8 +14,9 @@ services:
 
   squid:
     image: ubuntu/squid:5.2-22.04_edge
-    volumes:
-      - ./squid.conf:/etc/squid/squid.conf
+    configs:
+      - source: squid_conf
+        target: /etc/squid/squid.conf
     ports:
       - "3128:3128"
     networks:
@@ -32,6 +33,8 @@ services:
 configs:
   collector_conf:
     file: ./collector.yml
+  squid_conf:
+    file: ./squid.conf
 
 networks:
   integrations:

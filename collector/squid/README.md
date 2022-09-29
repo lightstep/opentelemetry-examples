@@ -23,7 +23,6 @@ Squid integration requires using 3rd party tool [prometheus squid exporter](http
 The example collector's configuration, used for this project shows using processors to add metrics with Lightstep Observability:
 
 ``` yaml
-# add the receiver configuration for your integration
 receivers:
   prometheus:
     config:
