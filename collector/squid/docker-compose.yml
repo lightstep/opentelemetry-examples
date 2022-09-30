@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.60.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+  squid:
+    image: ubuntu/squid:5.2-22.04_edge
+    configs:
+      - source: squid_conf
+        target: /etc/squid/squid.conf
+    ports:
+      - "3128:3128"
+    networks:
+      - integrations
+
+  squid-exporter:
+    image: boynux/squid-exporter:v1.10.3
+    ports:
+      - "9301:9301"
+    command: ["-squid-hostname", "squid", "-squid-port", "3128", "-listen", ":9301"]
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  squid_conf:
+    file: ./squid.conf
+
+networks:
+  integrations:
