@@ -1,0 +1,29 @@
+exporters:
+    logging:
+        loglevel: debug
+    otlp/lightstep:
+      endpoint: ingest.lightstep.com:443
+      headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+
+receivers:
+  sshcheck/sshserver:
+    endpoint: sshserver:2222 
+    username: otelu
+    password: otelp
+    collection_interval: 25s
+    metrics:
+      sshcheck.sftp_success:
+        enabled: true
+      sshcheck.sftp_duration:
+        enabled: true
+
+service:
+  pipelines:
+    metrics:
+      receivers: [sshcheck/sshserver]
+      processors: [batch]
+      exporters: [logging, otlp/lightstep]
