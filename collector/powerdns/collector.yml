@@ -1,0 +1,25 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: otel-powerdns
+          static_configs:
+            - targets: [powerdns:8082]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics/powerdns:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp/public]
