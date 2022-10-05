@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.60.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+  coredns:
+    image: coredns/coredns:1.10.0
+    configs:
+      - source: corefile_conf
+        target: /etc/corefile.conf
+    command: ["-conf", "/etc/corefile.conf"]
+    ports:
+      - "9153:9153"
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  corefile_conf:
+    file: ./corefile.conf
+
+networks:
+  integrations:
