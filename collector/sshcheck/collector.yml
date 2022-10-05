@@ -14,7 +14,8 @@ receivers:
     endpoint: sshserver:2222 
     username: otelu
     password: otelp
-    collection_interval: 25s
+    collection_interval: 10s
+    ignore_host_key: true
     metrics:
       sshcheck.sftp_success:
         enabled: true
