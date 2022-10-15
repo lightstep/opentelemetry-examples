@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  demosvc:
+    image: golang:alpine
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: "go run main.go"
+    networks:
+      - integrations
+  otel-collector:
+    build:
+      context: .
+      args:
+        - REPO=nslaughter/opentelemetry-collector-contrib
+        - BRANCH=netcheckreceiver
+    command: ["./otelcontribcol", "--config=/conf/collector.yml"]
+    environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+        - integrations
+    volumes:
+        - ./collector.yml:/conf/collector.yml:r
+
+networks:
+    integrations:
+
