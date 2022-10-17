@@ -1,0 +1,24 @@
+
+receivers:
+  otlp:
+    protocols:
+      # default 0.0.0.0:4317
+      grpc:
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+  # Export to Lightstep Public Satellites
+  otlp/lightstep:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, otlp/lightstep]
