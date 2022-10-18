@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2022
+
+RUN powershell iwr -outf C:\exporter.exe https://github.com/prometheus-community/windows_exporter/releases/download/v0.20.0/windows_exporter-0.20.0-amd64.exe
+
+ENTRYPOINT ["C:\\exporter.exe", "--collectors.enabled=iis"]

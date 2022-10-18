@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/windows/server:ltsc2022
+
+ADD ./collector.yml /collector.yml
+
+RUN powershell iwr -outf C:\collector.tar.gz https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.62.1/otelcol_0.62.1_windows_amd64.tar.gz
+
+RUN tar xvfz C:\collector.tar.gz
+
+ENV NO_WINDOWS_SERVICE=1
+
+ENTRYPOINT ["C:\\otelcol.exe", "--config=/collector.yml"]
