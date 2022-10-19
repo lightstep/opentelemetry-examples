@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_collector
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    networks:
+      - integrations
+
+  iis:
+    build:
+      dockerfile: ./Dockerfile_iis
+    ports:
+      - "9182:9182"
+    networks:
+      - integrations
+
+networks:
+  integrations:
