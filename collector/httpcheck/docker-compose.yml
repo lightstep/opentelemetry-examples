@@ -10,7 +10,7 @@ services:
         stop_grace_period: 1s
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector-contrib:0.61.0
+        image: otel/opentelemetry-collector-contrib:0.63.1
         command: ["--config=/conf/collector.yml"]
         environment:
             LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
