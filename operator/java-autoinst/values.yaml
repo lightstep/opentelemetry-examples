@@ -1,0 +1,54 @@
+replicaCount: 3
+
+image:
+  repository: josephrodriguez/springboot-starterkit
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "springboot-starterkit-svc"
+
+serviceAccount:
+  create: true
+  name: "springboot"
+
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-java: "true"
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: springboot.starterkit.local
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: springboot-starterkit-svc
+          servicePort: 80
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
