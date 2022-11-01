@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.61.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+  powerdns:
+    image: powerdns/pdns-recursor-47:4.7.3
+    configs:
+      - source: powerdns_recursor_conf
+        target: /etc/powerdns/recursor.conf
+    ports:
+      - "8082:8082"
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  powerdns_recursor_conf:
+    file: ./recursor.conf
+
+networks:
+  integrations:
