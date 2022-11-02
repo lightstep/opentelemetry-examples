@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.60.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+  php-fpm:
+    image: php:8.1.11-fpm
+    configs:
+      - source: www_conf
+        target: /usr/local/etc/php-fpm.d/www.conf
+    networks:
+      - integrations
+
+  php-fpm-exporter:
+    image: hipages/php-fpm_exporter:2.2.0
+    command: ["--phpfpm.scrape-uri", "tcp://php-fpm:9000/status"]
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+  www_conf:
+    file: ./www.conf
+
+networks:
+  integrations:

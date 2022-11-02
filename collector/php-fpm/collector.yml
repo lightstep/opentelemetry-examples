@@ -1,0 +1,25 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: otel-php-fpm
+          static_configs:
+            - targets: [php-fpm-exporter:9253]
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics/php-fpm:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp/public]
