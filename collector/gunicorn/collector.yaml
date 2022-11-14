@@ -6,9 +6,9 @@
       enable_metric_type: true
       is_monotonic_counter: false
       timer_histogram_mapping:
-        - statsd_type: "timing"
         - statsd_type: "histogram"
           observer_type: "summary"
+        - statsd_type: "timing"
 
   exporters:
     logging:
@@ -22,3 +22,6 @@
       metrics:
         receivers: [statsd, statsd/2]
         exporters: [logging, otlp]
+    telemetry:
+      logs:
+        level: debug

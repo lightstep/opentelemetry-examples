@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.64.0
+    image: otel/opentelemetry-collector-contrib:0.56.0
     hostname: otel-collector
     restart: always
     command: [ "--config=/conf/collector.yaml" ]
