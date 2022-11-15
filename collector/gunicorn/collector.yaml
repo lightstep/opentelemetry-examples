@@ -1,6 +1,5 @@
   receivers:
     statsd:
-    statsd/2:
       endpoint: "otel-collector:8125"
       aggregation_interval: 70s
       enable_metric_type: true
@@ -20,7 +19,7 @@
   service:
     pipelines:
       metrics:
-        receivers: [statsd, statsd/2]
+        receivers: [statsd]
         exporters: [logging, otlp]
     telemetry:
       logs:
