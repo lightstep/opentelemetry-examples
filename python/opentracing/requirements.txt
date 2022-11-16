@@ -9,3 +9,4 @@ opentelemetry-launcher==1.8.0
 opentelemetry-opentracing-shim
 opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-flask
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
