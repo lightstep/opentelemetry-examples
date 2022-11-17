@@ -45,25 +45,11 @@ helm install \
 export LS_TOKEN=<your-access-token>
 kubectl create secret generic otel-collector-secret -n default --from-literal=LS_TOKEN=$LS_TOKEN
 
-helm install otelcollector lightstep/otelcollector --namespace default
-
-kubectl apply -f - <<EOF
-apiVersion: opentelemetry.io/v1alpha1
-kind: Instrumentation
-metadata:
-  name: my-instrumentation
-spec:
-  exporter:
-    endpoint: http://otelcollector-deployment-collector:4317
-  propagators:
-    - tracecontext
-    - baggage
-    - b3
-EOF
-```
+# Also sends k8s metrics to Lightstep
+helm install kube-otel-stack --namespace default --set autoinstrumentation.enabled=true --set tracesCollector.enabled=true
 
 ### Run Java Demo App with Annotation
+helm install springboot-starterkit-svc springboot/springboot-starterkit-svc -f values.yaml
 
 ```
-helm install springboot-starterkit-svc springboot/springboot-starterkit-svc -f values.yaml
-```
+
