@@ -1,5 +1,5 @@
 receivers:
-  pgbouncer:
+  postgresql:
     endpoint: pgbouncer:5432
     username: dbuser
     password: hbZkzny5xrvVH
