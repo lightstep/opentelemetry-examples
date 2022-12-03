@@ -1,0 +1,34 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'minio-job'
+          scrape_interval: 5s
+          # MinIO deployments started with MINIO_PROMETHEUS_AUTH_TYPE set to "public" can omit the bearer_token field.
+          #bearer_token: TOKEN
+          metrics_path: '/minio/v2/metrics/cluster'
+          params:
+            format: [ 'prometheus' ]
+          scheme: 'http'
+          tls_config:
+            insecure_skip_verify: true
+          static_configs:
+            # Define list of your servers here
+            - targets: [ 'minio:9000' ]
+
+exporters:
+  logging:
+    logLevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        - lightstep-access-token: ${LS_ACCESS_TOKEN}
+
+service:
+  pipelines:
+    metrics:
+      receivers: [ prometheus ]
+      exporters: [ logging, otlp ]
+  telemetry:
+    logs:
+      level: debug
