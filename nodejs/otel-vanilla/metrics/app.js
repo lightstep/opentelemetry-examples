@@ -2,7 +2,7 @@ const opentelemetry = require('@opentelemetry/api');
 const {
   MeterProvider,
   PeriodicExportingMetricReader,
-} = require('@opentelemetry/sdk-metrics-base');
+} = require('@opentelemetry/sdk-metrics');
 const {
   OTLPMetricExporter,
 } = require('@opentelemetry/exporter-metrics-otlp-proto');

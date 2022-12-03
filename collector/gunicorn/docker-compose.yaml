@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.64.0
+    hostname: otel-collector
+    restart: always
+    command: [ "--config=/conf/collector.yaml" ]
+    ports:
+      - "8125:8125/udp"
+    volumes:
+      - ./collector.yaml:/conf/collector.yaml:rw
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+  web:
+    build: ./web
+    command: gunicorn --bind 0.0.0.0:5000 main:app --statsd-host otel-collector:8125
+    ports:
+      - "5000:5000"
+    depends_on:
+      - otel-collector
