@@ -15,11 +15,7 @@
     "@opentelemetry/shim-opentracing": "^0.11.0",
     "@opentelemetry/tracing": "^0.11.0",
     "axios": "^0.21.2",
-<<<<<<< HEAD
     "lightstep-opentelemetry-launcher-node": "^0.11.0",
-=======
-    "lightstep-opentelemetry-launcher-node": "^0.16.0",
->>>>>>> 44a4256 (fix: nodejs/ot-shim/client/package.json to reduce vulnerabilities (#205))
     "opentracing": "^0.14.4"
   }
 }
