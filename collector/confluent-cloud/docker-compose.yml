@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.67.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+      CLUSTER_BOOTSTRAP_SERVER: ${CLUSTER_BOOTSTRAP_SERVER}
+      CLUSTER_API_KEY: ${CLUSTER_API_KEY}
+      CLUSTER_API_SECRET: ${CLUSTER_API_SECRET}
+      CONFLUENT_API_ID: ${CONFLUENT_API_ID}
+      CONFLUENT_API_SECRET: ${CONFLUENT_API_SECRET}
+      CLUSTER_ID: ${CLUSTER_ID}
+
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+
+networks:
+  integrations:
