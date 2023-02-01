@@ -18,5 +18,12 @@ services:
             - integrations
         volumes:
             - ./collector.yml:/conf/collector.yml:rw
+    load-generator:
+        build: .
+        command: /app/wait-for-it.sh redis:6379 -- ./load-generator
+        depends_on:
+            - redis
+        networks:
+            - integrations
 networks:
     integrations:
