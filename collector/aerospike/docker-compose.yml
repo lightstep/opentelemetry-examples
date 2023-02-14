@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  aerospike:
+    image: aerospike/aerospike-server:latest
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+      - "3003:3003"
+      - "8888:8888"
+      - "9990:9990"
+    volumes:
+      - ./aerospike.conf:/etc/aerospike/aerospike.conf
+    networks:
+      - integrations
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ./otel-collector.yaml:/etc/otel-collector/config.yaml
+    networks:
+      - integrations
+
+  loadgen:
+    image: aerospike/aerospike-tools:latest
+    command: loadgen -h aerospike -p 3000 -n test -k 10000000 -S 1 -o S:100 -latency
+    networks:
+      - integrations
+networks:
+  integrations:

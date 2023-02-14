@@ -1,0 +1,42 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'aerospike-prom'
+          scrape_interval: 10s
+          params:
+            format: ['prometheus']
+          tls_config:
+            insecure_skip_verify: true
+          static_configs:
+            - targets: ['aerospike:8888']
+
+              #    aerospike:
+              #      endpoint: "aerospike:3000"
+              #      tlsname: ""
+              #      collect_cluster_metrics: true
+              #      collection_interval: 30s
+
+  processors:
+    batch:
+    metricstransform:
+      include: ^(.*)$$
+      match_type: regexp
+      action: update
+      new_name: aerospike.$${1}
+
+exporters:
+    logging:
+        loglevel: debug
+
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [aerospike, prometheus]
+      processors: [batch, metricstransform]
+      exporters: [logging, otlp]
