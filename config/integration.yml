@@ -12,7 +12,6 @@ clients:
 - js-ot-shim-client
 - java-specialagent-client
 - java-otlp-client
-- java-launcher-client
 endpoints:
 - http://go-opentracing-server:8081/ping
 - http://go-opentelemetry-collector-server:8081/ping
@@ -27,7 +26,6 @@ endpoints:
 - http://js-ot-shim-server:8080/ping
 - http://java-specialagent-server:8083/ping
 - http://java-otlp-server:8083/ping
-- http://java-launcher-server:8084/ping
 - http://java-opentracing-server:10001/order
 services:
 - go-opentracing-server
@@ -43,5 +41,4 @@ services:
 - js-ot-shim-server
 - java-specialagent-server
 - java-otlp-server
-- java-launcher-server
 - java-opentracing-server
