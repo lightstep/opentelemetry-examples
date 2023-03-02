@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.64.0
+    hostname: otel-collector
+    restart: always
+    command: [ "--config=/conf/collector.yaml" ]
+    volumes:
+      - ./collector.yaml:/conf/collector.yaml:rw
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+
+  job-cluster:
+    build: .
+    container_name: job-cluster
+    ports:
+      - "8081:8081"
+      - "9249:9249"
+    volumes:
+      - state:/state
+    command: standalone-job --job-classname com.github.mbode.flink_prometheus_example.PrometheusExampleJob --job-id 00000000000000000000000000000000
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: job-cluster
+        state.checkpoints.dir: file:///state
+  taskmanager1:
+    build: .
+    container_name: taskmanager1
+    ports:
+      - "9250:9249"
+    volumes:
+      - state:/state
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: job-cluster
+        state.checkpoints.dir: file:///state
+  taskmanager2:
+    build: .
+    container_name: taskmanager2
+    ports:
+      - "9251:9249"
+    volumes:
+      - state:/state
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: job-cluster
+        state.checkpoints.dir: file:///state
+
+volumes:
+  state:
