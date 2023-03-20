@@ -3,6 +3,22 @@ receivers:
     include:
       - /var/log/nginx/proxy-access.log
     start_at: beginning
+    operators:
+      - type: regex_parser
+        on_error: drop
+        #127.0.0.1 - - [04/Jul/2021:21:03:19 +0800] "GET /favicon-32x32.png HTTP/1.1" 200 628 "http://api.local/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
+        regex: '^(?P<ip>[^\s]+) - (?P<remote_user>[^\s]+) \[(?P<time_local>[^\]]+)\] \"(?P<request>[^\"]+)\" (?P<status>\d+) (?P<body_bytes_sent>\d+) \"(?P<http_referer>[^\"]+)\" \"(?P<http_user_agent>[^\"]+)\"$'
+        timestamp:
+          parse_from: attributes.time_local
+          layout_type: gotime
+          layout: "02/Jan/2006:15:04:05 -0700"
+        severity:
+          parse_from: "attributes.status"
+          mapping:
+            info: 2xx
+            info2: 3xx
+            warn: 4xx
+            error: 5xx
   nginx/proxy:
     endpoint: http://nginx_proxy:8080/status
     collection_interval: 10s
@@ -30,7 +46,11 @@ processors:
   batch:
 connectors:
   count:
-
+    logs:
+      nginx.requests.ok:
+        description: Successful requests
+        conditions:
+          - severity_number == 9
 
 service:
   pipelines:
@@ -40,13 +60,14 @@ service:
         - filelog
       exporters:
         - count
+        - logging
     # Count incoming telemetry types, then log and send to public
     metrics/count:
-      receivers:
-        - count
-      exporters:
-        - logging
-        - otlp/public
+       receivers:
+         - count
+       exporters:
+         - logging
+         - otlp/public
     metrics/proxy:
       receivers:
         - nginx/proxy
