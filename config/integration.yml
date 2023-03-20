@@ -8,11 +8,8 @@ clients:
 - py-opentelemetry-manual-otlp-client
 - py-launcher-client
 - py-opentracing-client
-- js-launcher-client
-- js-ot-shim-client
 - java-specialagent-client
 - java-otlp-client
-- java-launcher-client
 endpoints:
 - http://go-opentracing-server:8081/ping
 - http://go-opentelemetry-collector-server:8081/ping
@@ -23,11 +20,8 @@ endpoints:
 - http://py-opentelemetry-manual-otlp-server:8081/ping
 - http://py-launcher-server:8081/ping
 - http://py-opentracing-server:5000/ping
-- http://js-launcher-server:8080/ping
-- http://js-ot-shim-server:8080/ping
 - http://java-specialagent-server:8083/ping
 - http://java-otlp-server:8083/ping
-- http://java-launcher-server:8084/ping
 - http://java-opentracing-server:10001/order
 services:
 - go-opentracing-server
@@ -39,9 +33,6 @@ services:
 - py-opentelemetry-manual-otlp-server
 - py-launcher-server
 - py-opentracing-server
-- js-launcher-server
-- js-ot-shim-server
 - java-specialagent-server
 - java-otlp-server
-- java-launcher-server
 - java-opentracing-server
