@@ -1,4 +1,4 @@
-# Python OTel Launcher README
+# Python Auto-instrumentation
 
 ## Setup
 
