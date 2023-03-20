@@ -1,39 +1,65 @@
 receivers:
+  filelog:
+    include:
+      - /var/log/nginx/proxy-access.log
+    start_at: beginning
   nginx/proxy:
-    endpoint: 'http://nginx_proxy:8080/status'
+    endpoint: http://nginx_proxy:8080/status
     collection_interval: 10s
   nginx/appsrv:
-    endpoint: 'http://nginx_appsrv:1080/status'
+    endpoint: http://nginx_appsrv:1080/status
     collection_interval: 10s
-
 exporters:
   logging:
     loglevel: debug
   otlp/public:
     endpoint: ingest.lightstep.com:443
     headers:
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
-
+      lightstep-access-token: ${LS_ACCESS_TOKEN}
 processors:
   resource/proxy:
     attributes:
-    - key: instance.type
-      value: "proxy"
-      action: insert
+      - key: instance.type
+        value: proxy
+        action: insert
   resource/appsrv:
     attributes:
-    - key: instance.type
-      value: "appsrv"
-      action: insert
+      - key: instance.type
+        value: appsrv
+        action: insert
   batch:
+connectors:
+  count:
+
 
 service:
   pipelines:
+    # Log to metrics pipeline using connector
+    logs/proxy:
+      receivers:
+        - filelog
+      exporters:
+        - count
+    # Count incoming telemetry types, then log and send to public
+    metrics/count:
+      receivers:
+        - count
+      exporters:
+        - logging
+        - otlp/public
     metrics/proxy:
-      receivers: [nginx/proxy]
-      processors: [resource/proxy]
-      exporters: [logging, otlp/public]
+      receivers:
+        - nginx/proxy
+      processors:
+        - resource/proxy
+      exporters:
+        - logging
+        - otlp/public
     metrics/appsrv:
-      receivers: [nginx/appsrv]
-      processors: [resource/appsrv]
-      exporters: [logging, otlp/public]
+      receivers:
+        - nginx/appsrv
+      processors:
+        - resource/appsrv
+      exporters:
+        - logging
+        - otlp/public
