@@ -5,14 +5,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 )
 
 func main() {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
-		Password: "",
-		DB:       0,
+		Addr: "redis:6379",
 	})
 
 	pong, err := client.Ping().Result()
@@ -23,15 +21,22 @@ func main() {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-
-	keys := []string{"key1", "key2", "key3", "key4", "key5"}
+	fmt.Println("Starting load generator...")
+	fmt.Println("Setting and getting random keys with 95% hit ratio after warmup.")
+	fmt.Println("Press Ctrl-C to stop.")
 	for {
-		key := keys[rand.Intn(len(keys))]
+		keyToSet := fmt.Sprintf("key%d", rand.Intn(100))
+		keyToGet := fmt.Sprintf("key%d", 5+rand.Intn(100))
 		value := rand.Intn(1000000)
-		err := client.Set(key, value, 0).Err()
+		err := client.Set(keyToSet, value, 0).Err()
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("Error setting key: ", err)
 		}
+		val, err := client.Get(keyToGet).Result()
+		if err != nil {
+			fmt.Println("Error getting key: ", err)
+		}
+		fmt.Println("got key: ", keyToGet, " value: ", val)
 		time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
 	}
 }
