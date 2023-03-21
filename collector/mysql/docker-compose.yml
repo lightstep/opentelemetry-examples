@@ -2,16 +2,21 @@ version: "3.7"
 services:
   mysql:
       container_name: mysql
-      image: mysql:5.7
+      image: mysql:8.0.32
       restart: always
       environment:
           MYSQL_USER: testuser
           MYSQL_PASSWORD: testpassword
+          MYSQL_ROOT_PASSWORD: testpassword
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: opentelemetry-tests
       networks:
           - integrations
       stop_grace_period: 1s
+      volumes:
+          - mysql-data:/var/lib/mysql
+          - ./scripts/setup.sh:/docker-entrypoint-initdb.d/setup.sh:ro
+
   otel-collector:
       container_name: otel-collector
       image: otel/opentelemetry-collector-contrib:0.50.0
@@ -22,5 +27,9 @@ services:
           - integrations
       volumes:
           - ./collector.yml:/conf/collector.yml:rw
+
 networks:
     integrations:
+
+volumes:
+    mysql-data:
