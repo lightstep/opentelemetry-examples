@@ -1,0 +1,23 @@
+receivers:
+  rabbitmq:
+    collection_interval: 10s
+    endpoint: http://rabbitmq_leader:15672
+    username: otelu
+    password: otelp
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    logLevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+service:
+  pipelines:
+    metrics:
+      receivers: [rabbitmq]
+      processors: [batch]
+      exporters: [logging, otlp]

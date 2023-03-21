@@ -1,74 +1,66 @@
-version: "3.2"
+version: '3.9'
+
 services:
-  rabbitmq-leader:
-    image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq-leader'
-    hostname: leader
+  rabbitmq_leader:
+    image: rabbitmq:3.9-management
     ports:
         - 5672:5672
         - 15692:15692
-    volumes:
-      - ./rabbitmq-leader.conf:/etc/rabbitmq.conf
-    networks:
-        - localhost
-    environment: # https://www.rabbitmq.com/configure.html#customise-environment
-        - RABBITMQ_NODENAME=leader
-        - RABBITMQ_NODE_TYPE=stats
-        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
-        - RABBITMQ_ULIMIT_NOFILES=65536
-        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
-        - RABBITMQ_ERLANG_COOKIE=12ADJA3
+        - 15672:15672
     healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      test: ["CMD", "rabbitmqctl", "status"]
       interval: 10s
       timeout: 10s
-      retries: 5
-  rabbitmq-node-2:
-    image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq-2'
-    hostname:  node2
-    ports:
-        - 5672
-        - 15672
-        - 15692
-    volumes:
-      - ./rabbitmq-node-2.conf:/etc/rabbitmq.conf
-    networks:
-        - localhost
+      retries: 6
     environment: # https://www.rabbitmq.com/configure.html#customise-environment
-        - RABBITMQ_NODENAME=node2
-        - RABBITMQ_NODE_TYPE=stats
-        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
-        - RABBITMQ_ULIMIT_NOFILES=65536
-        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
-        - RABBITMQ_ERLANG_COOKIE=12ADJA3
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-  rabbitmq-node-3:
-    image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq-3'
-    hostname:  node3
-    ports:
-        - 5672
-        - 15672
-    volumes:
-      - ./rabbitmq-node-3.conf:/etc/rabbitmq.conf
+        - RABBITMQ_ERLANG_COOKIE=my-secret-cookie
+        - RABBITMQ_NODENAME=rabbitmq_leader
+        - RABBITMQ_DEFAULT_USER=otelu
+        - RABBITMQ_DEFAULT_PASS=otelp
     networks:
-        - localhost
-    environment: # https://www.rabbitmq.com/configure.html#customise-environment
-        - RABBITMQ_NODENAME=node3
-        - RABBITMQ_NODE_TYPE=stats
-        - RABBITMQ_DISK_FREE_RELATIVE_LIMIT=0
-        - RABBITMQ_ULIMIT_NOFILES=65536
-        - RABBITMQ_CONFIG_FILES=/etc/rabbitmq.conf
-        - RABBITMQ_ERLANG_COOKIE=12ADJA3
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+        - integrations
+
+  rabbitmq_child1:
+    image: rabbitmq:3.9-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=my-secret-cookie
+      - RABBITMQ_NODENAME=rabbitmq_child1
+      - RABBITMQ_DEFAULT_USER=otelu
+      - RABBITMQ_DEFAULT_PASS=otelp
+    networks:
+        - integrations
+
+  rabbitmq_child2:
+    image: rabbitmq:3.9-management
+    depends_on:
+      rabbitmq_leader:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=my-secret-cookie
+      - RABBITMQ_NODENAME=rabbitmq_child2
+      - RABBITMQ_DEFAULT_USER=otelu
+      - RABBITMQ_DEFAULT_PASS=otelp
+    networks:
+        - integrations
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:latest
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    depends_on:
+      rabbitmq_leader:
+        condition: service_healthy
+    networks:
+        - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+
 networks:
-  localhost:
+  integrations:
