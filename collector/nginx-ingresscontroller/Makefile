@@ -33,7 +33,7 @@ _wait-for-nginx-operator :
 
 _wait-for-collector-operator :
 	@echo ** Waiting for OTEL Operator. **
-	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) opentelemetry-operator-controller-manager --for condition=Available=True --timeout=180s
+	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) $(OTEL_RELEASE)-opentelemetry-operator --for condition=Available=True --timeout=180s
 	@echo ** Otel Operator running is. **
 
 deploy-nginx :
