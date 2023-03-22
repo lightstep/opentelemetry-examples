@@ -4,8 +4,6 @@ This repository contains example code and resources for configuring a variety of
 
 ```
 go
-├── launcher - these applications are using the opentelemetry launcher, a config layer built
-               on top of opentelemetry
 ├── opentelemetry - these applications are configured and instrumented using opentelemetry
                     directly
 └── opentracing - these applications are using the OpenTracing bridge available in
@@ -36,13 +34,10 @@ The following client/server applications use different mechanism for sending dat
 | ---------------- | ------------------------------------------------------------ |
 | go-opentracing   | client/server example instrumented via lightstep-tracer-go   |
 | go-opentelemetry | client/server example instrumented via OpenTelemetry and the OTLP exporter |
-| go-launcher      | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
 | py-collector     | client/server example instrumented via OpenTelemetry and the OTLP exporter combined with the OpenTelemetry Collector |
 | py-opentelemetry | client/server example instrumented via OpenTelemetry and the OTLP exporter |
-| py-launcher      | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
 | java             | client/server example instrumented via special agent         |
 | java-otlp        | client/server example instrumented via OpenTelemetry and the OTLP exporter |
-| java-launcher    | client/server example instrumented via OpenTelemetry and the Launcher for configuration |
 | js-ot-shim       | client/server example instrumented via OpenTelemetry and JS Launcher with OpenTracing |
 
 ### OpenTelemetry Collector Integrations
