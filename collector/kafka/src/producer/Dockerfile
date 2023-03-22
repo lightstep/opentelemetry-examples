@@ -8,10 +8,11 @@ WORKDIR /app
 COPY . .
 
 # Download the Go module dependencies
- RUN go mod download
+RUN go mod init opentelementry-examples-kafka
+RUN go mod tidy
 
 # Build the Go application
-RUN go build -o producer_consumer .
+RUN go build -o producer .
 
 # Start the producer when the container starts
-CMD ["./producer_consumer"]
+CMD ["./producer"]

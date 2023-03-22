@@ -11,6 +11,8 @@ import (
 )
 
 const (
+	topic         = "test-topic"
+	kafkaAddr     = "kafka:9092"
 	minMessageLen = 10
 	maxMessageLen = 100
 )

@@ -25,7 +25,16 @@ services:
       - integrations
 
   producer:
-    build: ./src
+    build: ./src/producer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKERS: kafka:9092
+    networks:
+      - integrations
+
+  consumer:
+    build: ./src/consumer
     depends_on:
       - kafka
     environment:

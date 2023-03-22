@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/segmentio/kafka-go"
 )
 
 const (
 	topic     = "test-topic"
 	kafkaAddr = "kafka:9092"
-	partition = 0
+	partition = 2
+	groupID   = "my-group"
 )
 
 // StartConsumer starts consuming messages from the Kafka topic.
@@ -40,6 +40,7 @@ func newKafkaConsumer() *kafka.Reader {
 		Brokers:   []string{kafkaAddr},
 		Topic:     topic,
 		Partition: partition,
+		GroupID:   groupID,
 		MinBytes:  10e3, // 10KB
 		MaxBytes:  10e6, // 10MB
 	})
