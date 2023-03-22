@@ -1,22 +1,37 @@
-version: "3.7"
+version: "3.9"
 services:
     redis:
-        container_name: redis
-        image: redis:7.0-alpine
-        networks:
-            - integrations
-        ports:
-            - 0.0.0.0:6379:6379
-        stop_grace_period: 1s
+      container_name: redis
+      image: redis:latest
+      healthcheck:
+        test: ["CMD-SHELL", "redis-cli ping"]
+        interval: 5s
+        timeout: 3s
+        retries: 3
+      ports:
+        - 6379:6379
+      stop_grace_period: 1s
+      networks:
+        - integrations
     otel-collector:
         container_name: otel-collector
-        image: otel/opentelemetry-collector-contrib:0.50.0
+        image: otel/opentelemetry-collector-contrib:latest
         command: ["--config=/conf/collector.yml"]
         environment:
-            LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
-        networks:
-            - integrations
+            - LS_ACCESS_TOKEN
         volumes:
             - ./collector.yml:/conf/collector.yml:rw
+        depends_on:
+          redis:
+            condition: service_healthy
+        networks:
+            - integrations
+    load-generator:
+        build: .
+        depends_on:
+          redis:
+            condition: service_healthy
+        networks:
+            - integrations
 networks:
     integrations:
