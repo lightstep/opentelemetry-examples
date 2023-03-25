@@ -17,7 +17,7 @@ exporters:
   otlp/ls:
     endpoint: ingest.lightstep.com:443
     headers: 
-      "lightstep-access-token": QtjOLTe2JL6s41Ai/IJyU5b4Ays/6wLFwIOPEP8QH6NaqJkikNapuqfBN/ezWVIIXPf15w0ynZRQc675jRoqgO2U1WqOOlEHeM04R6jU
+      "lightstep-access-token": devToken
 
 processors:
   batch:
