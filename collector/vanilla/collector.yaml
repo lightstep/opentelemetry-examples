@@ -21,4 +21,9 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [logging, otlp/ls]
+    
+    metrics:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [otlp/ls]
 
