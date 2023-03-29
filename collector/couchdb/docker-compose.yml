@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  couchdb:
+    container_name: couchdb
+    image: "couchdb:${APP_VERSION:-latest}"
+    ports:
+      - "${METRICS_PORT:-5984}:5984"
+      - "${APP_PORT:-5986}:5986"
+    environment:
+      COUCHDB_USER: otelu
+      COUCHDB_PASSWORD: otelp
+    networks:
+      - integrations
+  otel-collector:
+    image: "otel/opentelemetry-collector-contrib:${COLLECTOR_VERSION:-latest"
+    command: ["--config=/conf/collector.yml"]
+    environment:
+      - LS_ACCESS_TOKEN
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - couchdb
+    networks:
+      - integrations
+
+networks:
+  integrations:
