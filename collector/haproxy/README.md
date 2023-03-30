@@ -5,7 +5,7 @@ HAProxy emits metrics via a Prometheus compatible endpoint and [OpenTelemetry Co
 ## Requirements
 
 * HAProxy v2.0+
-* OpenTelemetry Collector Contrib v0.51.0+
+* OpenTelemetry Collector Contrib v0.75.0+
 
 ## Prerequisites
 

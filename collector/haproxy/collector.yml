@@ -1,25 +1,21 @@
 receivers:
-  prometheus:
-      config:
-        scrape_configs:
-          - job_name: 'haproxy'
-            scrape_interval: 10s
-            static_configs:
-              - targets: ['haproxy:8404']
+  haproxy:
+    endpoint: http://haproxy:8404/stats
+
 exporters:
-    logging:
-        loglevel: debug
-    otlp:
-      endpoint: ingest.lightstep.com:443
-      headers:
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
-    batch:
+  batch:
 
 service:
-    pipelines:
-      metrics:
-        receivers: [prometheus]
-        processors: [batch]
-        exporters: [logging, otlp]
+  pipelines:
+    metrics:
+      receivers: [ haproxy ]
+      processors: [ batch ]
+      exporters: [ logging, otlp ]

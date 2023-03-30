@@ -11,10 +11,11 @@ services:
       replicas: 3
 
   haproxy:
+    container_name: haproxy
     image: haproxy:latest
     ports:
-      - 8080:80
-      - 8404:8404
+      - "8080:80"
+      - "8404:8404"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     networks:
@@ -24,10 +25,8 @@ services:
 
   otel-collector:
     container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib:0.51.0
+    image: otel/opentelemetry-collector-contrib-dev:7f4e051bd7976a7b1108d5ed9f2e319523a53743
     command: ["--config=/conf/collector.yml"]
-    ports:
-      - 8888:8888
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     volumes:
