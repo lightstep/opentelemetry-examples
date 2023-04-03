@@ -20,4 +20,4 @@
       metrics:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlp/ls]
+          exporters: [logging,otlp/ls]
