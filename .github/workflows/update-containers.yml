@@ -19,7 +19,6 @@ jobs:
           'py-opentelemetry-manual-otlp-client', 'py-opentelemetry-manual-otlp-server',
           'demo-client-otlp',
           'py-opentracing-client', 'py-opentracing-server',
-          'js-ot-shim-server', 'js-ot-shim-client',
           'java-specialagent-server', 'java-specialagent-client',
           'java-otlp-client', 'java-otlp-server',
           'java-opentracing-server', 'integration-test'
