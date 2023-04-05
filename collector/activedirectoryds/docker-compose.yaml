@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  ad-dc:
+    image: mcr.microsoft.com/windows/servercore:ltsc2019
+    hostname: ad-dc
+    networks:
+      - adnet
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
+    ports:
+      - "53:53"
+      - "389:389"
+      - "636:636"
+      - "3268:3268"
+      - "3269:3269"
+    environment:
+      SA_PASSWORD: Pa$$w0rd
+      ACCEPT_EULA: Y
+    command: powershell.exe -Command Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+  ad-tools:
+    image: mcr.microsoft.com/windows/servercore:ltsc2019
+    hostname: ad-tools
+    networks:
+      - adnet
+    environment:
+      DOMAIN: example.com
+      USERNAME: adminuser
+      PASSWORD: Pa$$w0rd
+
+    command: powershell.exe -Command Import-Module ActiveDirectory; Import-Module ServerManager; Add-WindowsFeature RSAT-AD-PowerShell; Write-Host 'AD administrative tools container is running...'; while($true){ Start-Sleep 60 }
+
+networks:
+  adnet:
