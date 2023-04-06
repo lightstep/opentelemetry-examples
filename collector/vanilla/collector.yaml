@@ -1,23 +1,26 @@
-  receivers:
-    otlp:
-      protocols:
-        grpc:
-        http:
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
 
-  exporters:
-    logging:
-    otlp/ls:
-      endpoint: ingest.lightstep.com:443
-      headers: 
-        "lightstep-access-token": "${LIGHTSTEP_ACCESS_TOKEN}"
+processors:
+  batch:
+  
+exporters:
+  logging:
+  otlp/ls:
+    endpoint: ingest.lightstep.com:443
+    headers: 
+      "lightstep-access-token": "${LIGHTSTEP_ACCESS_TOKEN}"
 
-  service:
-    pipelines:
-      traces:
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, otlp/ls]
+    metrics:
         receivers: [otlp]
         processors: [batch]
-        exporters: [logging, otlp/ls]
-      metrics:
-          receivers: [otlp]
-          processors: [batch]
-          exporters: [logging,otlp/ls]
+        exporters: [logging,otlp/ls]
