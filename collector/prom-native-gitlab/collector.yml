@@ -1,0 +1,28 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'gitlab'
+          scrape_interval: 10s
+          metrics_path: "/"
+          scheme: http
+          static_configs:
+            - targets: ['gitlab:9090']
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "pmDXJnFEXpKrkneULbf9DJgQc5B4VS3xsm/aFnqqlH55N7HdCg2JEAGfkE5z2WmY3NwKc6f/sVFR1eTy0WrQB7hoKK9BqQaskmPgPPc"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, otlp]

@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9090:9090"
+    volumes:
+      - ./srv/gitlab/config:/etc/gitlab
+      - ./srv/gitlab/logs:/var/log/gitlab
+      - ./srv/gitlab/data:/var/opt/gitlab
+    networks:
+          - integrations
+  otel-collector:
+      container_name: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.74.0
+      command: ["--config=/conf/collector.yml"]
+      environment:
+        LS_ACCESS_TOKEN: pmDXJnFEXpKrkneULbf9DJgQc5B4VS3xsm/aFnqqlH55N7HdCg2JEAGfkE5z2WmY3NwKc6f/sVFR1eTy0WrQB7hoKK9BqQaskmPgPPc
+      networks:
+          - integrations
+      volumes:
+          - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
