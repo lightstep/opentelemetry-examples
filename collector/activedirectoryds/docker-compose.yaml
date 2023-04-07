@@ -2,7 +2,7 @@ version: '3'
 
 services:
   ad-dc:
-    image: mcr.microsoft.com/windows/servercore:ltsc2019
+    image: mcr.microsoft.com/windows/server:ltsc2022
     hostname: ad-dc
     networks:
       - adnet
@@ -21,7 +21,7 @@ services:
     command: powershell.exe -Command Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 
   ad-tools:
-    image: mcr.microsoft.com/windows/servercore:ltsc2019
+    image: mcr.microsoft.com/windows/server:ltsc2022
     hostname: ad-tools
     networks:
       - adnet
