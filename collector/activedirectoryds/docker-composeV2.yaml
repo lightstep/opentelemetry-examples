@@ -33,10 +33,21 @@ services:
       - "49152-65535:49152-65535/udp"
     restart: always
     networks:
-      - ad-network
+      - integrations
+
+  otel-collector:
+      container_name: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.74.0
+      command: ["--config=/conf/collector.yml"]
+      environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+      networks:
+          - integrations
+      volumes:
+          - ./collector.yml:/conf/collector.yml:rw
 
 volumes:
   ad-data:
 
 networks:
-  ad-network:
+  integrations:
