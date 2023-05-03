@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=hbZkzny5xrvVH
+      - POSTGRES_USER=dbuser
+      - POSTGRES_DB=test
+    ports:
+      - "5438:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./sql/example_create_tables.sql:/docker-entrypoint-initdb.d/example_create_tables.sql
+      # copy the sql script to fill tables
+      - ./sql/fake_data_fill_tables.sql:/docker-entrypoint-initdb.d/fake_data_fill_tables.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgbouncer:
+    image: edoburu/pgbouncer
+    environment:
+      - DB_USER=dbuser
+      - DB_PASSWORD=hbZkzny5xrvVH
+      - DB_HOST=postgres
+      - DB_NAME=test
+      - POOL_MODE=transaction
+      - ADMIN_USERS=postgres,dbuser
+    ports:
+      - "5432:5432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.64.0
+    command: [ "--config=/conf/collector.yml" ]
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    networks:
+      - integrations
+volumes:
+  pg_data:
+
+networks:
+  integrations:

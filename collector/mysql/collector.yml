@@ -3,7 +3,10 @@ receivers:
       username: testuser
       password: testpassword
       endpoint: mysql:3306
-  
+      metrics:
+        mysql.query.slow.count:
+          enabled: true
+
 exporters:
     logging:
         loglevel: debug
