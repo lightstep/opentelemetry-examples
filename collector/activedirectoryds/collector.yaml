@@ -1,0 +1,25 @@
+receivers:
+  active_directory_ds:
+    collection_interval: 10s
+    metrics:
+      # Disable the active_directory.ds.replication.network.io metric from being emitted
+      active_directory.ds.replication.network.io: false
+
+exporters:
+    logging:
+        loglevel: debug
+
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [active_directory_ds]
+        processors: [batch]
+        exporters: [logging, otlp] 

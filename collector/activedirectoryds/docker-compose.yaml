@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  ad-dc:
+    image: mcr.microsoft.com/windows/server:ltsc2022
+    hostname: ad-dc
+    networks:
+      - integrations
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
+    ports:
+      - "53:53"
+      - "389:389"
+      - "636:636"
+      - "3268:3268"
+      - "3269:3269"
+    environment:
+      SA_PASSWORD: Pa$$w0rd
+      ACCEPT_EULA: Y
+    command: powershell.exe -Command Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+  ad-tools:
+    image: mcr.microsoft.com/windows/server:ltsc2022
+    hostname: ad-tools
+    networks:
+      - integrations
+    environment:
+      DOMAIN: example.com
+      USERNAME: adminuser
+      PASSWORD: Pa$$w0rd
+
+    command: powershell.exe -Command Import-Module ActiveDirectory; Import-Module ServerManager; Add-WindowsFeature RSAT-AD-PowerShell; Write-Host 'AD administrative tools container is running...'; while($true){ Start-Sleep 60 }
+
+  otel-collector:
+      container_name: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.74.0
+      command: ["--config=/conf/collector.yml"]
+      environment:
+        LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+      networks:
+          - integrations
+      volumes:
+          - ./collector.yml:/conf/collector.yml:rw
+networks:
+  integrations:

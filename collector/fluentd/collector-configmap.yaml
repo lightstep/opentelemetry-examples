@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: collector
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: collector-config
+  namespace: collector
+data:
+  collector.yml: |-
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: otel-fluentd
+              static_configs:
+                - targets: ["${FLUENTD_HOST}:24224"]
+    exporters:
+      logging:
+        loglevel: debug
+      otlp/public:
+        endpoint: ingest.lightstep.com:443
+        headers:
+            "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+    processors:
+      batch:
+    service:
+      pipelines:
+        metrics/fluentd:
+          receivers: [prometheus]
+          processors: [batch]
+          exporters: [logging, otlp/public]
