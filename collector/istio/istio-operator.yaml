@@ -1,0 +1,14 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istiocontrolplane
+spec:
+  profile: default
+  components:
+    prometheus:
+      enabled: true
+  values:
+    global:
+      proxy:
+        autoInject: "enabled"
