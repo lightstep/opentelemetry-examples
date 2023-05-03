@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  labels:
+    app: otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      serviceAccountName: otel-collector
+      containers:
+      - name: otel-collector
+        image: otel/opentelemetry-collector-contrib:latest
+        args:
+        - "--config=/conf/otel-collector-config.yaml"
+        ports:
+        - containerPort: 55681
+        env:
+        - name: LS_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: lightstep-access-token
+              key: access_token
+        volumeMounts:
+        - name: otel-collector-config-vol
+          mountPath: /conf
+      volumes:
+      - configMap:
+          name: otel-collector-conf
+        name: otel-collector-config-vol
