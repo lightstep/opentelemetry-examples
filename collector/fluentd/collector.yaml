@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: collector
+  namespace: collector
+  labels:
+    k8s-app: collector
+spec:
+  selector:
+    matchLabels:
+      k8s-app: collector
+  template:
+    metadata:
+      labels:
+        k8s-app: collector
+    spec:
+      containers:
+      - name: collector
+        imagePullPolicy: "IfNotPresent"
+        image: otel/opentelemetry-collector-contrib:0.75.0
+        env:
+        - name: LS_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: ls
+              key: access_token
+        - name: FLUENTD_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        args: ["--config=/conf/collector.yml"]
+        volumeMounts:
+        - name: collector-config
+          mountPath: /conf/
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: collector-config
+        configMap:
+          name: collector-config
