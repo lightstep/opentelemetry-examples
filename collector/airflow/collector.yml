@@ -1,0 +1,28 @@
+receivers:
+  statsd:
+    endpoint: "otel-collector:8125"
+    aggregation_interval: 60s
+    is_monotonic_counter: true
+    timer_histogram_mapping:
+      - statsd_type: "histogram"
+        observer_type: "summary"
+      - statsd_type: "timing"
+        observer_type: "summary"
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/public:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [statsd]
+      processors: [batch]
+      exporters: [logging, otlp/public]
