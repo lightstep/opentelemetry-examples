@@ -1,0 +1,89 @@
+version: '3'
+x-airflow-common:
+  &airflow-common
+  image: apache/airflow:2.5.0
+  environment:
+    - AIRFLOW__METRICS__STATSD_ON=True
+    - AIRFLOW__METRICS__STATSD_HOST=otel-collector
+    - AIRFLOW__METRICS__STATSD_PORT=8125
+    - AIRFLOW__METRICS__STATSD_PREFIX=airflow
+    - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://airflow:airflow@postgres/airflow
+  networks:
+    - integrations
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+networks:
+  integrations:
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+
+volumes:
+  postgres-db-volume:
+
+services:
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.75.0
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    ports:
+      - "8125:8125"
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+  postgres:
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - integrations
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: airflow webserver
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - airflow-init
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: airflow scheduler
+    depends_on:
+      - postgres
+      - airflow-init
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - airflow db init &&
+          airflow users create
+          --role Admin
+          --username admin
+          --password password
+          --email airflow@airflow.com
+          --firstname first
+          --lastname last
+    restart: on-failure
+    depends_on:
+      - postgres
