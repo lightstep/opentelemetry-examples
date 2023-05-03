@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: go-istio-demo
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-istio-demo
+  namespace: go-istio-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-istio-demo
+  template:
+    metadata:
+      labels:
+        app: go-istio-demo
+    spec:
+      containers:
+      - name: app
+        image: go-istio-demo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-istio-demo
+  namespace: go-istio-demo
+spec:
+  selector:
+    app: go-istio-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
