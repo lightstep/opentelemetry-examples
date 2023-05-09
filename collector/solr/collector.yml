@@ -3,7 +3,7 @@ receivers:
       jar_path: /opt/opentelemetry-jmx-metrics.jar
       endpoint: solr:18983
       target_system: jvm,solr
-      collection_interval: 1s
+      collection_interval: 5s
 
 exporters:
     logging:
@@ -12,7 +12,7 @@ exporters:
     otlp:
       endpoint: ingest.lightstep.com:443
       headers: 
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+        - "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 processors:
     batch:
