@@ -15,7 +15,7 @@ services:
 
   otel-collector:
     container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib:0.56.0
+    image: otel/opentelemetry-collector-contrib:0.75.0
     command: [ "--config=/conf/collector.yml" ]
     ports:
       - 8888:8888
