@@ -1,0 +1,182 @@
+Name,Description ,Unit,DataType,Attributes
+varnish_mgt_child_died,Child process died (signal),,Sum,
+varnish_main_pools,Number of thread pools,,Gauge,
+varnish_main_ws_session_overflow,workspace_session overflows,,Sum,
+varnish_main_losthdr,HTTP header overflows,,Sum,
+varnish_backend_beresp_hdrbytes,Response header bytes,,Sum,STRING(default);STRING(unknown)
+varnish_main_exp_received,Number of objects received by expiry thread,,Sum,
+varnish_mempool_allocs,Allocations,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_bans_persisted_bytes,Bytes used by the persisted ban lists,,Gauge,
+varnish_lock_created,Created locks,,Sum,STRING(ban);STRING(busyobj);STRING(cli);STRING(conn_pool);STRING(director);STRING(exp);STRING(hcb);STRING(lru);STRING(mempool);STRING(objhdr);STRING(perpool);STRING(pipestat);STRING(probe);STRING(sess);STRING(sma);STRING(vbe);STRING(vcapace);STRING(vcl);STRING(vxid);STRING(waiter);STRING(wq);STRING(wstat)
+varnish_main_threads,Total number of threads,,Gauge,
+varnish_version,Varnish version information,,Gauge,STRING(7);STRING(1);STRING(2);STRING(b399e1fcc7467b8c255630fa3b3fd6311e59e4df);STRING(7.1.2)
+varnish_sma_c_freed,Bytes freed,,Sum,STRING(s0);STRING(transient)
+varnish_main_req_dropped,Requests dropped,,Sum,
+varnish_main_n_objecthead,objecthead structs made,,Gauge,
+varnish_backend_helddown,Connection opens not attempted,,Sum,STRING(default);STRING(unknown)
+varnish_main_bans_dups,Bans superseded by other bans,,Sum,
+varnish_main_bans_deleted,Bans deleted,,Sum,
+varnish_main_n_vampireobject,unresurrected objects,,Gauge,
+varnish_main_s_resp_hdrbytes,Response header bytes,,Sum,
+varnish_backend_fail_eacces,Connections failed with EACCES or EPERM,,Sum,STRING(default);STRING(unknown)
+nginx.connections_accepted,The total number of accepted client connections,connections,Sum,
+varnish_main_client_resp_500,Delivery failed due to insufficient workspace.,,Sum,
+varnish_main_exp_mailed,Number of objects mailed to expiry thread,,Sum,
+varnish_mempool_surplus,Too many for pool,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_vmods,Loaded VMODs,,Gauge,
+varnish_main_backend_fail,Backend conn. failures,,Sum,
+varnish_main_sessions,Number of sessions,,Sum,STRING(closed);STRING(closed_err);STRING(conn);STRING(dropped);STRING(fail);STRING(fail_ebadf);STRING(fail_econnaborted);STRING(fail_eintr);STRING(fail_emfile);STRING(fail_enomem);STRING(fail_other);STRING(herd);STRING(queued);STRING(readahead)
+varnish_main_thread_queue_len,Length of session queue,,Gauge,
+nginx.requests,Total number of requests made to the server since it started,requests,Sum,
+varnish_main_n_gunzip,Gunzip operations,,Sum,
+scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+varnish_main_backend_recycle,Backend conn. recycles,,Sum,
+varnish_main_n_object,object structs made,,Gauge,
+varnish_backend_pipe_out,Piped bytes to backend,,Sum,STRING(default);STRING(unknown)
+varnish_main_bans_obj_killed,Objects killed by bans (lookup),,Sum,
+varnish_main_s_pipe_out,Piped bytes to client,,Sum,
+varnish_backend_fail,Connections failed,,Sum,STRING(default);STRING(unknown)
+varnish_main_cache_hit,Cache hits,,Sum,
+varnish_main_busy_wakeup,Number of requests woken after sleep on busy objhdr,,Sum,
+nginx.connections_handled,"The total number of handled connections. Generally, the parameter value is the same as nginx.connections_accepted unless some resource limits have been reached (for example, the worker_connections limit).",connections,Sum,
+varnish_main_fetch,Number of fetches,,Sum,STRING(1xx);STRING(204);STRING(304);STRING(bad);STRING(chunked);STRING(eof);STRING(failed);STRING(head);STRING(length);STRING(no_thread);STRING(none)
+varnish_main_s_resp_bodybytes,Response body bytes,,Sum,
+varnish_main_ws_backend_overflow,workspace_backend overflows,,Sum,
+varnish_main_sc_rx_timeout,Session Err RX_TIMEOUT,,Sum,
+varnish_main_n_vcl,Number of loaded VCLs in total,,Gauge,
+varnish_backend_fail_other,Connections failed for other reason,,Sum,STRING(default);STRING(unknown)
+varnish_backend_bereq_bodybytes,Request body bytes,,Sum,STRING(default);STRING(unknown)
+varnish_lock_operations,Lock Operations,,Sum,STRING(ban);STRING(busyobj);STRING(cli);STRING(conn_pool);STRING(director);STRING(exp);STRING(hcb);STRING(lru);STRING(mempool);STRING(objhdr);STRING(perpool);STRING(pipestat);STRING(probe);STRING(sess);STRING(sma);STRING(vbe);STRING(vcapace);STRING(vcl);STRING(vxid);STRING(waiter);STRING(wq);STRING(wstat)
+varnish_main_sc_rx_junk,Session Err RX_JUNK,,Sum,
+varnish_backend_pipe_in,Piped bytes from backend,,Sum,STRING(default);STRING(unknown)
+varnish_main_hcb_insert,HCB Inserts,,Sum,
+varnish_main_sc_rx_bad,Session Err RX_BAD,,Sum,
+varnish_main_sc_req_http10,Session Err REQ_HTTP10,,Sum,
+varnish_mgt_child_panic,Child process panic,,Sum,
+varnish_main_n_objectcore,objectcore structs made,,Gauge,
+varnish_main_shm_records,SHM records,,Sum,
+varnish_main_bans_lurker_obj_killed,Objects killed by bans (lurker),,Sum,
+varnish_backend_req,Backend requests sent,,Sum,STRING(default);STRING(unknown)
+varnish_main_beresp_uncacheable,Uncacheable backend responses,,Sum,
+varnish_main_threads_failed,Thread creation failed,,Sum,
+varnish_main_threads_limited,Threads hit max,,Sum,
+varnish_mempool_live,In use,,Gauge,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_s_pipe_in,Piped bytes from client,,Sum,
+varnish_backend_beresp_bodybytes,Response body bytes,,Sum,STRING(default);STRING(unknown)
+varnish_main_n_lru_limited,Reached nuke_limit,,Sum,
+varnish_main_pipe_limited,Pipes hit pipe_sess_max,,Sum,
+varnish_main_shm_writes,SHM writes,,Sum,
+varnish_backend_happy,Happy health probes,,Gauge,STRING(default);STRING(unknown)
+varnish_backend_bereq_hdrbytes,Request header bytes,,Sum,STRING(default);STRING(unknown)
+varnish_main_bans_added,Bans added,,Sum,
+varnish_main_n_lru_moved,Number of LRU moved objects,,Sum,
+varnish_main_n_lru_nuked,Number of LRU nuked objects,,Sum,
+varnish_main_bans_tested,Bans tested against objects (lookup),,Sum,
+varnish_mempool_randry,Pool ran dry,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_sma_g_space,Bytes available,,Gauge,STRING(s0);STRING(transient)
+varnish_main_hcb_nolock,HCB Lookups without lock,,Sum,
+varnish_main_s_pipe_hdrbytes,Pipe request header bytes,,Sum,
+varnish_main_bans_lurker_obj_killed_cutoff,Objects killed by bans for cutoff (lurker),,Sum,
+varnish_main_cache_miss,Cache misses,,Sum,
+varnish_main_hcb_lock,HCB Lookups with lock,,Sum,
+varnish_main_sc_rx_body,Session Err RX_BODY,,Sum,
+varnish_main_n_gzip,Gzip operations,,Sum,
+varnish_main_uptime,Child process uptime,,Sum,
+varnish_main_bans_lurker_tests_tested,Ban tests tested against objects (lurker),,Sum,
+varnish_sma_c_fail,Allocator failures,,Sum,STRING(s0);STRING(transient)
+varnish_main_client_req_417,"Client requests received, subject to 417 errors",,Sum,
+scrape_series_added,The approximate number of new series in this scrape,,Gauge,
+varnish_mempool_recycle,Recycled from pool,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_client_req,Good client requests received,,Sum,
+varnish_sma_g_alloc,Allocations outstanding,,Gauge,STRING(s0);STRING(transient)
+varnish_backend_conn,Concurrent connections used,,Gauge,STRING(default);STRING(unknown)
+varnish_main_bans_lurker_tested,Bans tested against objects (lurker),,Sum,
+varnish_main_esi_errors,ESI parse errors (unlock),,Sum,
+varnish_main_sc_resp_close,Session OK  RESP_CLOSE,,Sum,
+varnish_main_s_synth,Total synthetic responses made,,Sum,
+varnish_backend_fail_econnrefused,Connections failed with ECONNREFUSED,,Sum,STRING(default);STRING(unknown)
+varnish_main_bans_obj,Number of bans using obj.*,,Gauge,
+varnish_lock_destroyed,Destroyed locks,,Sum,STRING(ban);STRING(busyobj);STRING(cli);STRING(conn_pool);STRING(director);STRING(exp);STRING(hcb);STRING(lru);STRING(mempool);STRING(objhdr);STRING(perpool);STRING(pipestat);STRING(probe);STRING(sess);STRING(sma);STRING(vbe);STRING(vcapace);STRING(vcl);STRING(vxid);STRING(waiter);STRING(wq);STRING(wstat)
+varnish_backend_unhealthy,Fetches not attempted due to backend being unhealthy,,Sum,STRING(default);STRING(unknown)
+varnish_main_esi_warnings,ESI parse warnings (unlock),,Sum,
+varnish_mgt_child_dump,Child process core dumped,,Sum,
+varnish_main_shm_cont,SHM MTX contention,,Sum,
+varnish_main_vcl_fail,VCL failures,,Sum,
+varnish_main_bans_completed,Number of bans marked 'completed',,Gauge,
+varnish_main_s_req_hdrbytes,Request header bytes,,Sum,
+varnish_main_sc_tx_pipe,Session OK  TX_PIPE,,Sum,
+varnish_main_threads_destroyed,Threads destroyed,,Sum,
+varnish_main_n_purges,Number of purge operations executed,,Sum,
+varnish_main_n_expired,Number of expired objects,,Sum,
+scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
+varnish_main_cache_hit_grace,Cache grace hits,,Sum,
+varnish_main_cache_hitmiss,Cache hits for miss.,,Sum,
+varnish_main_backend_req,Backend requests made,,Sum,
+nginx.connections_current,The current number of nginx connections by state,connections,Gauge,STRING(active);STRING(reading);STRING(writing);STRING(waiting)
+varnish_main_bans_tests_tested,Ban tests tested against objects (lookup),,Sum,
+varnish_up,Was the last scrape of varnish successful.,,Gauge,
+varnish_mempool_pool,In Pool,,Gauge,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_n_obj_purged,Number of purged objects,,Sum,
+varnish_main_bans,Count of bans,,Gauge,
+varnish_main_shm_flushes,SHM flushes due to overflow,,Sum,
+varnish_main_sc_tx_eof,Session OK  TX_EOF,,Sum,
+varnish_main_sc_rx_close_idle,Session Err RX_CLOSE_IDLE,,Sum,
+varnish_main_sc_range_short,Session Err RANGE_SHORT,,Sum,
+varnish_main_shm_cycles,SHM cycles through buffer,,Sum,
+varnish_main_sc_pipe_overflow,Session Err PIPE_OVERFLOW,,Sum,
+varnish_main_client_req_400,"Client requests received, subject to 400 errors",,Sum,
+varnish_mgt_child_stop,Child process unexpected exit,,Sum,
+varnish_main_bans_persisted_fragmentation,Extra bytes in persisted ban lists due to fragmentation,,Gauge,
+varnish_mgt_uptime,Management process uptime,,Sum,
+varnish_backend_busy,Fetches not attempted due to backend being busy,,Sum,STRING(default);STRING(unknown)
+varnish_main_sc_rem_close,Session OK  REM_CLOSE,,Sum,
+varnish_mempool_timeout,Timed out from pool,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_n_backend,Number of backends,,Gauge,
+varnish_main_backend_unhealthy,Backend conn. not attempted,,Sum,
+varnish_main_backend_conn,Backend conn. success,,Sum,
+varnish_main_n_test_gunzip,Test gunzip operations,,Sum,
+varnish_lck_dbg_try_fail,Contended trylock operations,,Sum,STRING(ban);STRING(busyobj);STRING(cli);STRING(conn_pool);STRING(director);STRING(exp);STRING(hcb);STRING(lru);STRING(mempool);STRING(objhdr);STRING(perpool);STRING(pipestat);STRING(probe);STRING(sess);STRING(sma);STRING(vbe);STRING(vcapace);STRING(vcl);STRING(vxid);STRING(waiter);STRING(wq);STRING(wstat)
+varnish_main_s_pipe,Total pipe sessions seen,,Sum,
+varnish_backend_fail_eaddrnotavail,Connections failed with EADDRNOTAVAIL,,Sum,STRING(default);STRING(unknown)
+varnish_main_sc_req_close,Session OK  REQ_CLOSE,,Sum,
+varnish_mempool_sz_actual,Size allocated,,Gauge,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_s_bgfetch,Total backend background fetches initiated,,Sum,
+varnish_backend_up,Backend up as per the latest health probe,,Gauge,STRING(default);STRING(unknown)
+varnish_main_busy_killed,Number of requests killed after sleep on busy objhdr,,Sum,
+varnish_mempool_sz_wanted,Size requested,,Gauge,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_esi_req,ESI subrequests,,Sum,
+varnish_main_sc_req_http20,Session Err REQ_HTTP20,,Sum,
+varnish_sma_c_bytes,Bytes allocated,,Sum,STRING(s0);STRING(transient)
+varnish_main_s_req_bodybytes,Request body bytes,,Sum,
+varnish_lck_dbg_busy,Contended lock operations,,Sum,STRING(ban);STRING(busyobj);STRING(cli);STRING(conn_pool);STRING(director);STRING(exp);STRING(hcb);STRING(lru);STRING(mempool);STRING(objhdr);STRING(perpool);STRING(pipestat);STRING(probe);STRING(sess);STRING(sma);STRING(vbe);STRING(vcapace);STRING(vcl);STRING(vxid);STRING(waiter);STRING(wq);STRING(wstat)
+varnish_mempool_frees,Frees,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+up,The scraping was successful,,Gauge,
+varnish_main_ws_client_overflow,workspace_client overflows,,Sum,
+varnish_backend_pipe_hdrbytes,Pipe request header bytes,,Sum,STRING(default);STRING(unknown)
+varnish_main_s_pass,Total pass-ed requests seen,,Sum,
+varnish_main_cache_hitpass,Cache hits for pass.,,Sum,
+varnish_main_threads_created,Threads created,,Sum,
+varnish_main_backend_reuse,Backend conn. reuses,,Sum,
+varnish_main_busy_sleep,Number of requests sent to sleep on busy objhdr,,Sum,
+varnish_main_sc_rx_overflow,Session Err RX_OVERFLOW,,Sum,
+varnish_main_backend_busy,Backend conn. too many,,Sum,
+varnish_main_sc_overload,Session Err OVERLOAD,,Sum,
+varnish_sma_c_req,Allocator requests,,Sum,STRING(s0);STRING(transient)
+scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
+varnish_mempool_toosmall,Too small to recycle,,Sum,STRING(busyobj);STRING(req0);STRING(req1);STRING(sess0);STRING(sess1)
+varnish_main_summs,stat summ operations,,Sum,
+varnish_main_sc_tx_error,Session Err TX_ERROR,,Sum,
+varnish_backend_fail_enetunreach,Connections failed with ENETUNREACH,,Sum,STRING(default);STRING(unknown)
+varnish_backend_fail_etimedout,Connections failed ETIMEDOUT,,Sum,STRING(default);STRING(unknown)
+varnish_sma_g_bytes,Bytes outstanding,,Gauge,STRING(s0);STRING(transient)
+varnish_main_backend_retry,Backend conn. retry,,Sum,
+varnish_main_sc_vcl_failure,Session Err VCL_FAILURE,,Sum,
+varnish_main_ws_thread_overflow,workspace_thread overflows,,Sum,
+varnish_main_n_pipe,Number of ongoing pipe sessions,,Gauge,
+varnish_mgt_child_start,Child process started,,Sum,
+varnish_main_bans_lurker_contention,Lurker gave way for lookup,,Sum,
+varnish_mgt_child_exit,Child process normal exit,,Sum,
+varnish_main_n_vcl_discard,Number of discarded VCLs,,Gauge,
+varnish_main_n_vcl_avail,Number of VCLs available,,Gauge,
+varnish_main_beresp_shortlived,Shortlived objects,,Sum,
+varnish_main_bans_req,Number of bans using req.*,,Gauge,

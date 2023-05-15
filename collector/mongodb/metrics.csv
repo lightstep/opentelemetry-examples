@@ -1,0 +1,12 @@
+Name,Description ,Unit,DataType,Attributes
+mongodb.global_lock.time,The time the global lock has been held.,ms,Sum,
+mongodb.operation.count,The number of operations executed.,{operations},Sum,STRING(getmore);STRING(command);STRING(insert);STRING(query);STRING(update);STRING(delete);STRING(admin)
+mongodb.index.count,The number of indexes.,{indexes},Sum,STRING(otel)
+mongodb.memory.usage,The amount of memory used.,By,Sum,STRING(otel);STRING(resident);STRING(otel);STRING(virtual)
+mongodb.object.count,The number of objects.,{objects},Sum,STRING(otel)
+mongodb.cache.operations,The number of cache operations of the instance.,{operations},Sum,STRING(miss);STRING(hit)
+mongodb.collection.count,The number of collections.,{collections},Sum,STRING(otel)
+mongodb.connection.count,The number of connections.,{connections},Sum,STRING(otel);STRING(active);STRING(otel);STRING(available);STRING(otel);STRING(current)
+mongodb.data.size,The size of the collection. Data compression does not affect this value.,By,Sum,STRING(otel)
+mongodb.index.size,"Sum of the space allocated to all indexes in the database, including free index space.",By,Sum,STRING(otel)
+mongodb.storage.size,The total amount of storage allocated to this collection.,By,Sum,STRING(local);STRING(otel)

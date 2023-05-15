@@ -1,0 +1,30 @@
+Name,Description ,Unit,DataType,Attributes
+redis.clients.max_input_buffer,Biggest input buffer among current client connections,,Gauge,
+redis.keys.expired,Total number of key expiration events,,Sum,
+redis.memory.rss,Number of bytes that Redis allocated as seen by the operating system,By,Gauge,
+redis.net.output,The total number of bytes written to the network,By,Sum,
+redis.slaves.connected,Number of connected replicas,,Sum,
+redis.clients.max_output_buffer,Longest output list among current client connections,,Gauge,
+redis.commands.processed,Total number of commands processed by the server,,Sum,
+redis.latest_fork,Duration of the latest fork operation in microseconds,us,Gauge,
+redis.rdb.changes_since_last_save,Number of changes since the last dump,,Sum,
+redis.connections.received,Total number of connections accepted by the server,,Sum,
+redis.memory.fragmentation_ratio,Ratio between used_memory_rss and used_memory,,Gauge,
+redis.memory.peak,Peak memory consumed by Redis (in bytes),By,Gauge,
+redis.connections.rejected,Number of connections rejected because of maxclients limit,,Sum,
+redis.db.expires,Number of keyspace keys with an expiration,,Gauge,Str(0)
+redis.keyspace.hits,Number of successful lookup of keys in the main dictionary,,Sum,
+redis.commands,Number of commands processed per second,{ops}/s,Gauge,
+redis.keys.evicted,Number of evicted keys due to maxmemory limit,,Sum,
+redis.clients.blocked,Number of clients pending on a blocking call,,Sum,
+redis.net.input,The total number of bytes read from the network,By,Sum,
+redis.cpu.time,System CPU consumed by the Redis server in seconds since server start,s,Sum,Str(sys);Str(user);Str(user_main_thread);Str(user_children);Str(sys_children);Str(sys_main_thread)
+redis.memory.used,Total number of bytes allocated by Redis using its allocator,By,Gauge,
+redis.replication.backlog_first_byte_offset,The master offset of the replication backlog buffer,,Gauge,
+redis.uptime,Number of seconds since Redis server start,s,Sum,
+redis.clients.connected,Number of client connections (excluding connections from replicas),,Sum,
+redis.db.avg_ttl,Average keyspace keys TTL,ms,Gauge,Str(0)
+redis.db.keys,Number of keyspace keys,,Gauge,Str(0)
+redis.keyspace.misses,Number of failed lookup of keys in the main dictionary,,Sum,
+redis.memory.lua,Number of bytes used by the Lua engine,By,Gauge,
+redis.replication.offset,The server's current replication offset,,Gauge,
