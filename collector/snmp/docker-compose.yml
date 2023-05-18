@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.66.0
+    image: otel/opentelemetry-collector-contrib:0.77.0
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
