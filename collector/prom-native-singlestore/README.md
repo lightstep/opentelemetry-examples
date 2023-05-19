@@ -12,6 +12,10 @@ SingleStore is a distributed SQL database that provides a Prometheus endpoint fo
 
 ## How to run the example
 
+* Obtain a `LICENSE_KEY` by [singlestore](https://www.singlestore.com) and export it
+  ```
+  export LICENSE_KEY=<YOUR_LICENSE>
+  ```
 * Export your Lightstep access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
