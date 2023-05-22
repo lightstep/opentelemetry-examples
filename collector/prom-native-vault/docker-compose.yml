@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3.9"
 services:
   otel-collector:
     container_name: otel-collector
