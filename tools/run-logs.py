@@ -29,27 +29,42 @@ def get_logs(service_name: str):
 
 # run_docker_compose()
 def run_example(app: str):
-    if not ping_docker():
-        print(f"can't find docker")
-        return
 
-    try:
-        os.chdir(f"/Users/nathan.slaughter/workspace/lightstep/opentelemetry-examples/collector/{app}")
-        docker_compose_up()
-    except Exception as e:
-        print(f"failed to start example: {e}")
-        return # short circuit
+    app_dir = "{}/../collector/{}".format(os.path.dirname(os.path.realpath(__file__)), app)
 
-    # let the service run so we capture metrics
-    time.sleep(60)
+    if os.path.exists(f"{app_dir}/docker-compose.yml"):
+        if not ping_docker():
+            print(f"can't find docker")
+            return
 
-    try:
-        get_logs("otel-collector")
-    except Exception as e:
-        print("failed to get logs")
-    finally:
-        docker_compose_down()
+        try:
+            os.chdir(app_dir)
+            docker_compose_up()
+        except Exception as e:
+            print(f"failed to start example: {e}")
+            return # short circuit
 
+        # let the service run so we capture metrics
+        time.sleep(60)
+
+        try:
+            get_logs("otel-collector")
+        except Exception as e:
+            print("failed to get logs")
+        finally:
+            docker_compose_down()
+    elif os.path.exists(f"{app_dir}/Makefile"):
+        # requires Makefile for examples with "run", "get-logs" and "stop" targets
+        try:
+            subprocess.run(["make", "run", "-C", app_dir])
+            time.sleep(60)
+            logs = subprocess.check_output(["make", "get-logs", "-C", app_dir])
+            with open("{}/logs.txt".format(app_dir), "wb") as log_file:
+                log_file.write(logs)
+        except Exception as e:
+            print("failed to start example or get logs")
+        finally:
+            subprocess.run(["make", "stop", "-C", app_dir])
 
 # Fire(run_example)
 
