@@ -31,7 +31,6 @@ func parseLogsFile(inputFile string) ([]Record, error) {
 	 records := make([]Record, 0)
 	 record := Record{}
 	 isAttribute := false
-	 // records := make(map[string]struct{}, 0)
 	 for scanner.Scan() {
 		 line := strings.TrimSpace(scanner.Text())
 		 if strings.Contains(line, "->") {
@@ -61,6 +60,7 @@ func parseLogsFile(inputFile string) ([]Record, error) {
 			isAttribute = true
 		} else if strings.Contains(line, "Metric #") {
 			if record.Name != "" {
+				records = append(records, record)
 				record = Record{}
 			}
 			isAttribute = false
@@ -70,7 +70,6 @@ func parseLogsFile(inputFile string) ([]Record, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("error reading input file: %w", err)
 	}
-	// slices.SortFunc(records), func(a, b Record) { return a.Name < b.Name })
 
 	return records, nil
 }
@@ -85,23 +84,30 @@ func writeCSV(outputFile string, records []Record) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	if err := writer.Write([]string{"Name", "Description ", "Unit", "DataType", "Attributes"}); err != nil {
+	if err := writer.Write([]string{"Name", "Description", "Unit", "DataType", "Attributes"}); err != nil {
 		return err
 	}
 
+	dedupeCheck := make(map[string]struct{})
 	for _, record := range records {
+		// dedupe on .Name
+		if _, ok := dedupeCheck[record.Name]; ok {
+			continue
+		}
 		if err := writer.Write([]string{record.Name, record.Description, record.Unit, record.DataType, strings.Join(record.Attributes, ";")}); err != nil {
 			return err
 		}
+		dedupeCheck[record.Name] = struct{}{}
 	}
 
 	return nil
 }
 
 func orderMetricsForDisplay(records []Record) []Record {
-	// make a map keyed on the 6 char prefixes of metric names 
+	// group records by name prefix
 	prefixMap := make(map[string][]Record)
 	for _, v := range records {
+
 		if len(v.Name) > 5 {
 			prefixMap[v.Name[:6]] = append(prefixMap[v.Name[:6]], v)
 		} else {
@@ -117,6 +123,9 @@ func orderMetricsForDisplay(records []Record) []Record {
 			if len(v) > largest {
 				largest = len(v)
 			}
+		}
+		if largest < 1 {
+			break
 		}
 
 		for k, v := range prefixMap {
