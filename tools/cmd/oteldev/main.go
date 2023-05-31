@@ -8,6 +8,8 @@ import(
 	"os"
 	"path/filepath"
 	"strings"
+
+	// "golang.org/x/exp/slices"
 )
 
 type Record struct {
@@ -18,7 +20,7 @@ type Record struct {
 	Attributes []string
 }
 
-func parseLogsFile(inputFile string) (map[string]Record, error) {
+func parseLogsFile(inputFile string) ([]Record, error) {
 	 in, err := os.Open(inputFile)
 	 if err != nil {
 		 return nil, fmt.Errorf("failed to open input file: %w", err)
@@ -26,9 +28,10 @@ func parseLogsFile(inputFile string) (map[string]Record, error) {
 	 defer in.Close()
 
 	 scanner := bufio.NewScanner(in)
-	 records := make(map[string]Record)
+	 records := make([]Record, 0)
 	 record := Record{}
 	 isAttribute := false
+	 // records := make(map[string]struct{}, 0)
 	 for scanner.Scan() {
 		 line := strings.TrimSpace(scanner.Text())
 		 if strings.Contains(line, "->") {
@@ -58,7 +61,6 @@ func parseLogsFile(inputFile string) (map[string]Record, error) {
 			isAttribute = true
 		} else if strings.Contains(line, "Metric #") {
 			if record.Name != "" {
-				records[record.Name] = record
 				record = Record{}
 			}
 			isAttribute = false
@@ -68,11 +70,12 @@ func parseLogsFile(inputFile string) (map[string]Record, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("error reading input file: %w", err)
 	}
+	// slices.SortFunc(records), func(a, b Record) { return a.Name < b.Name })
 
 	return records, nil
 }
 
-func writeCSV(outputFile string, records map[string]Record) error {
+func writeCSV(outputFile string, records []Record) error {
 	file, err := os.Create(outputFile)
 	if err != nil {
 		return err
@@ -95,6 +98,37 @@ func writeCSV(outputFile string, records map[string]Record) error {
 	return nil
 }
 
+func orderMetricsForDisplay(records []Record) []Record {
+	// make a map keyed on the 6 char prefixes of metric names 
+	prefixMap := make(map[string][]Record)
+	for _, v := range records {
+		if len(v.Name) > 5 {
+			prefixMap[v.Name[:6]] = append(prefixMap[v.Name[:6]], v)
+		} else {
+			prefixMap[v.Name] = append(prefixMap[v.Name], v)
+		}
+	}
+
+	// output the records in order (1) 6 char prefix of .Name and (2) order in logs
+	var groupedRecords []Record
+	for len(prefixMap) > 0 {
+		var largest int
+		for _, v := range prefixMap {
+			if len(v) > largest {
+				largest = len(v)
+			}
+		}
+
+		for k, v := range prefixMap {
+			if len(v) == largest {
+				groupedRecords = append(groupedRecords, v...)
+				delete(prefixMap, k)
+			}
+		}
+	}
+	return groupedRecords
+}
+
 func processDirectories(rootDir string) error {
 	entries, err := ioutil.ReadDir(rootDir)
 	if err != nil {
@@ -113,8 +147,9 @@ func processDirectories(rootDir string) error {
 					return fmt.Errorf("failed to process file: '%s': %w", logFilePath, err)
 				}
 
-				// if err := ioutil.WriteFile(outputFilePath, outputData, 0644); err != nil {
-				if err := writeCSV(outputFilePath, records); err != nil {
+				orderedRecords := orderMetricsForDisplay(records)
+
+				if err := writeCSV(outputFilePath, orderedRecords); err != nil {
 					return fmt.Errorf("failed to write output file '%s': %w", outputFilePath, err)
 				}
 			}
@@ -133,25 +168,5 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
-	/*
-	records, err := parseLogsFile("collector/activemq/logs.txt")
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	if err := writeCSV("collector/activemq/metrics.csv", records); err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	fmt.Println("Successfully parsed logs for metrics.")
-	*/
 }
-
-
-
-
-
-
 
