@@ -1,28 +1,28 @@
-Name,Description ,Unit,DataType,Attributes
-activemq.producer.count,The number of producers currently attached to the broker.,producers,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-jvm.memory.pool.max,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
-jvm.memory.heap.used,current heap usage,by,Gauge,
-jvm.gc.collections.elapsed,the approximate accumulated collection elapsed time in milliseconds,ms,Sum,STRING(PS Scavenge);STRING(PS MarkSweep)
-activemq.message.enqueued,The total number of messages received by the broker.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-activemq.consumer.count,The number of consumers currently reading from the broker.,consumers,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-activemq.connection.count,The total number of current connections.,connections,Sum,
-activemq.message.expired,The total number of messages not delivered because they expired.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-jvm.memory.nonheap.committed,current non-heap usage,by,Gauge,
-jvm.classes.loaded,number of loaded classes,1,Gauge,
-activemq.memory.usage,The percentage of configured memory used.,%,Gauge,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker);service.name: STRING(unknown_service:java);STRING(java);STRING(opentelemetry);STRING(1.14.0)
-jvm.memory.nonheap.init,current non-heap usage,by,Gauge,
-activemq.message.wait_time.avg,The average time a message was held on a destination.,ms,Gauge,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-activemq.disk.temp_usage,The percentage of configured disk used for non-persistent messages.,%,Gauge,
-activemq.message.current,The current number of messages waiting to be consumed.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-jvm.memory.pool.init,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
-jvm.memory.pool.committed,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
-jvm.gc.collections.count,total number of collections that have occurred,1,Sum,STRING(PS Scavenge);STRING(PS MarkSweep)
-jvm.memory.heap.max,current heap usage,by,Gauge,
-jvm.memory.heap.init,current heap usage,by,Gauge,
-activemq.message.dequeued,The total number of messages delivered to consumers.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
-jvm.memory.nonheap.max,current non-heap usage,by,Gauge,
-jvm.memory.heap.committed,current heap usage,by,Gauge,
+Name,Description,Unit,DataType,Attributes
 jvm.memory.pool.used,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
-jvm.threads.count,number of threads,1,Gauge,
-activemq.disk.store_usage,The percentage of configured disk used for persistent messages.,%,Gauge,
+jvm.memory.pool.max,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
+jvm.memory.nonheap.init,current non-heap usage,by,Gauge,
+jvm.memory.heap.used,current heap usage,by,Gauge,
+jvm.memory.pool.init,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
+jvm.memory.heap.init,current heap usage,by,Gauge,
+jvm.memory.pool.committed,current memory pool usage,by,Gauge,STRING(PS Old Gen);STRING(Code Cache);STRING(PS Survivor Space);STRING(Metaspace);STRING(Compressed Class Space);STRING(PS Eden Space)
 jvm.memory.nonheap.used,current non-heap usage,by,Gauge,
+jvm.memory.nonheap.max,current non-heap usage,by,Gauge,
+jvm.memory.heap.max,current heap usage,by,Gauge,
+jvm.memory.heap.committed,current heap usage,by,Gauge,
+jvm.memory.nonheap.committed,current non-heap usage,by,Gauge,
+activemq.disk.temp_usage,The percentage of configured disk used for non-persistent messages.,%,Gauge,
+activemq.producer.count,The number of producers currently attached to the broker.,producers,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.message.enqueued,The total number of messages received by the broker.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.message.current,The current number of messages waiting to be consumed.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.connection.count,The total number of current connections.,connections,Sum,
+activemq.message.dequeued,The total number of messages delivered to consumers.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.disk.store_usage,The percentage of configured disk used for persistent messages.,%,Gauge,
+activemq.message.expired,The total number of messages not delivered because they expired.,messages,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.consumer.count,The number of consumers currently reading from the broker.,consumers,Sum,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.message.wait_time.avg,The average time a message was held on a destination.,ms,Gauge,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker)
+activemq.memory.usage,The percentage of configured memory used.,%,Gauge,STRING(localhost);STRING(ActiveMQ.Advisory.MasterBroker);service.name: STRING(unknown_service:java);STRING(java);STRING(opentelemetry);STRING(1.14.0)
+jvm.gc.collections.elapsed,the approximate accumulated collection elapsed time in milliseconds,ms,Sum,STRING(PS Scavenge);STRING(PS MarkSweep)
+jvm.gc.collections.count,total number of collections that have occurred,1,Sum,STRING(PS Scavenge);STRING(PS MarkSweep)
+jvm.threads.count,number of threads,1,Gauge,
+jvm.classes.loaded,number of loaded classes,1,Gauge,

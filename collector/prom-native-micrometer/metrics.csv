@@ -1,58 +1,58 @@
-Name,Description ,Unit,DataType,Attributes
-system_load_average_1m,The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time,,Gauge,
-tomcat_sessions_created_sessions_total,,,Sum,
-system_cpu_usage,"The ""recent cpu usage"" for the whole system",,Gauge,
-jvm_buffer_memory_used_bytes,An estimate of the memory that the Java virtual machine is using for this buffer pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
-hikaricp_connections_idle,Idle connections,,Gauge,STRING(HikariPool-1)
+Name,Description,Unit,DataType,Attributes
 hikaricp_connections_pending,Pending threads,,Gauge,STRING(HikariPool-1)
-jvm_classes_loaded_classes,The number of classes that are currently loaded in the Java virtual machine,,Gauge,
+hikaricp_connections_active,Active connections,,Gauge,STRING(HikariPool-1)
+hikaricp_connections_min,Min connections,,Gauge,STRING(HikariPool-1)
+hikaricp_connections_acquire_seconds_max,Connection acquire time,,Gauge,STRING(HikariPool-1)
 hikaricp_connections_usage_seconds_max,Connection usage time,,Gauge,STRING(HikariPool-1)
 hikaricp_connections_usage_seconds,Connection usage time,,Summary,STRING(HikariPool-1)
-process_files_max_files,The maximum file descriptor count,,Gauge,
-jvm_buffer_count_buffers,An estimate of the number of buffers in the pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
-process_uptime_seconds,The uptime of the Java virtual machine,,Gauge,
-tomcat_sessions_rejected_sessions_total,,,Sum,
-scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
-jdbc_connections_min,,,Gauge,STRING(dataSource)
-jvm_memory_committed_bytes,The amount of memory in bytes that is committed for the Java virtual machine to use,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
-up,The scraping was successful,,Gauge,
 hikaricp_connections_creation_seconds,Connection creation time,,Summary,STRING(HikariPool-1)
-hikaricp_connections_max,Max connections,,Gauge,STRING(HikariPool-1)
-jvm_threads_live_threads,The current number of live threads including both daemon and non-daemon threads,,Gauge,
-jvm_gc_memory_promoted_bytes_total,Count of positive increases in the size of the old generation memory pool before GC to after GC,,Sum,
-scrape_samples_scraped,The number of samples the target exposed,,Gauge,
-jvm_threads_peak_threads,The peak live thread count since the Java virtual machine started or peak was reset,,Gauge,
-jvm_threads_daemon_threads,The current number of live daemon threads,,Gauge,
-jvm_gc_pause_seconds,Time spent in GC pause,,Summary,STRING(end of minor GC);STRING(Metadata GC Threshold);STRING(end of minor GC);STRING(G1 Evacuation Pause)
-tomcat_sessions_expired_sessions_total,,,Sum,
-tomcat_sessions_active_current_sessions,,,Gauge,
-jvm_memory_max_bytes,The maximum amount of memory in bytes that can be used for memory management,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
-process_cpu_usage,"The ""recent cpu usage"" for the Java Virtual Machine process",,Gauge,
-jvm_buffer_total_capacity_bytes,An estimate of the total capacity of the buffers in this pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
-tomcat_sessions_alive_max_seconds,,,Gauge,
-http_server_requests_seconds_max,,,Gauge,STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/prometheus);STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/health)
-jdbc_connections_idle,,,Gauge,STRING(dataSource)
-jvm_gc_live_data_size_bytes,Size of old generation memory pool after a full GC,,Gauge,
-jdbc_connections_active,,,Gauge,STRING(dataSource)
-hikaricp_connections_active,Active connections,,Gauge,STRING(HikariPool-1)
 hikaricp_connections_acquire_seconds,Connection acquire time,,Summary,STRING(HikariPool-1)
 hikaricp_connections_timeout_total,Connection timeout total count,,Sum,STRING(HikariPool-1)
-hikaricp_connections_acquire_seconds_max,Connection acquire time,,Gauge,STRING(HikariPool-1)
-jvm_gc_pause_seconds_max,Time spent in GC pause,,Gauge,STRING(end of minor GC);STRING(Metadata GC Threshold);STRING(end of minor GC);STRING(G1 Evacuation Pause)
-jdbc_connections_max,,,Gauge,STRING(dataSource)
-scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
-logback_events_total,Number of error level events that made it to the logs,,Sum,STRING(warn);STRING(debug);STRING(error);STRING(trace);STRING(info)
-jvm_threads_states_threads,The current number of threads having NEW state,,Gauge,STRING(runnable);STRING(blocked);STRING(waiting);STRING(timed-waiting);STRING(new);STRING(terminated)
-jvm_gc_memory_allocated_bytes_total,Incremented for an increase in the size of the young generation memory pool after one GC to before the next,,Sum,
-hikaricp_connections_creation_seconds_max,Connection creation time,,Gauge,STRING(HikariPool-1)
-scrape_series_added,The approximate number of new series in this scrape,,Gauge,
-system_cpu_count,The number of processors available to the Java virtual machine,,Gauge,
-jvm_memory_used_bytes,The amount of used memory,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
-http_server_requests_seconds,,,Summary,STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/prometheus);STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/health)
-process_files_open_files,The open file descriptor count,,Gauge,
-jvm_classes_unloaded_classes_total,The total number of classes unloaded since the Java virtual machine has started execution,,Sum,
-jvm_gc_max_data_size_bytes,Max size of old generation memory pool,,Gauge,
 hikaricp_connections,Total connections,,Gauge,STRING(HikariPool-1)
-hikaricp_connections_min,Min connections,,Gauge,STRING(HikariPool-1)
+hikaricp_connections_max,Max connections,,Gauge,STRING(HikariPool-1)
+hikaricp_connections_creation_seconds_max,Connection creation time,,Gauge,STRING(HikariPool-1)
+hikaricp_connections_idle,Idle connections,,Gauge,STRING(HikariPool-1)
+tomcat_sessions_expired_sessions_total,,,Sum,
+tomcat_sessions_created_sessions_total,,,Sum,
+tomcat_sessions_alive_max_seconds,,,Gauge,
 tomcat_sessions_active_max_sessions,,,Gauge,
+tomcat_sessions_active_current_sessions,,,Gauge,
+tomcat_sessions_rejected_sessions_total,,,Sum,
+jvm_gc_pause_seconds_max,Time spent in GC pause,,Gauge,STRING(end of minor GC);STRING(Metadata GC Threshold);STRING(end of minor GC);STRING(G1 Evacuation Pause)
+jvm_gc_max_data_size_bytes,Max size of old generation memory pool,,Gauge,
+jvm_gc_memory_allocated_bytes_total,Incremented for an increase in the size of the young generation memory pool after one GC to before the next,,Sum,
+jvm_gc_pause_seconds,Time spent in GC pause,,Summary,STRING(end of minor GC);STRING(Metadata GC Threshold);STRING(end of minor GC);STRING(G1 Evacuation Pause)
+jvm_gc_memory_promoted_bytes_total,Count of positive increases in the size of the old generation memory pool before GC to after GC,,Sum,
+jvm_gc_live_data_size_bytes,Size of old generation memory pool after a full GC,,Gauge,
+process_files_open_files,The open file descriptor count,,Gauge,
+process_files_max_files,The maximum file descriptor count,,Gauge,
+process_cpu_usage,"The ""recent cpu usage"" for the Java Virtual Machine process",,Gauge,
 process_start_time_seconds,Start time of the process since unix epoch.,,Gauge,
+process_uptime_seconds,The uptime of the Java virtual machine,,Gauge,
+scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
+scrape_series_added,The approximate number of new series in this scrape,,Gauge,
+scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
+jdbc_connections_active,,,Gauge,STRING(dataSource)
+jdbc_connections_min,,,Gauge,STRING(dataSource)
+jdbc_connections_max,,,Gauge,STRING(dataSource)
+jdbc_connections_idle,,,Gauge,STRING(dataSource)
+jvm_threads_peak_threads,The peak live thread count since the Java virtual machine started or peak was reset,,Gauge,
+jvm_threads_states_threads,The current number of threads having NEW state,,Gauge,STRING(runnable);STRING(blocked);STRING(waiting);STRING(timed-waiting);STRING(new);STRING(terminated)
+jvm_threads_daemon_threads,The current number of live daemon threads,,Gauge,
+jvm_threads_live_threads,The current number of live threads including both daemon and non-daemon threads,,Gauge,
+jvm_buffer_total_capacity_bytes,An estimate of the total capacity of the buffers in this pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
+jvm_buffer_memory_used_bytes,An estimate of the memory that the Java virtual machine is using for this buffer pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
+jvm_buffer_count_buffers,An estimate of the number of buffers in the pool,,Gauge,STRING(mapped - 'non-volatile memory');STRING(mapped);STRING(direct)
+system_cpu_usage,"The ""recent cpu usage"" for the whole system",,Gauge,
+system_load_average_1m,The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time,,Gauge,
+system_cpu_count,The number of processors available to the Java virtual machine,,Gauge,
+jvm_memory_max_bytes,The maximum amount of memory in bytes that can be used for memory management,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
+jvm_memory_committed_bytes,The amount of memory in bytes that is committed for the Java virtual machine to use,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
+jvm_memory_used_bytes,The amount of used memory,,Gauge,STRING(nonheap);STRING(CodeHeap 'profiled nmethods');STRING(heap);STRING(G1 Survivor Space);STRING(heap);STRING(G1 Old Gen);STRING(nonheap);STRING(Metaspace);STRING(nonheap);STRING(CodeHeap 'non-nmethods');STRING(heap);STRING(G1 Eden Space);STRING(nonheap);STRING(Compressed Class Space);STRING(nonheap);STRING(CodeHeap 'non-profiled nmethods')
+jvm_classes_loaded_classes,The number of classes that are currently loaded in the Java virtual machine,,Gauge,
+jvm_classes_unloaded_classes_total,The total number of classes unloaded since the Java virtual machine has started execution,,Sum,
+http_server_requests_seconds_max,,,Gauge,STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/health)
+http_server_requests_seconds,,,Summary,STRING(None);STRING(GET);STRING(SUCCESS);STRING(200);STRING(/actuator/health)
+up,The scraping was successful,,Gauge,
+logback_events_total,Number of error level events that made it to the logs,,Sum,STRING(warn);STRING(debug);STRING(error);STRING(trace);STRING(info)

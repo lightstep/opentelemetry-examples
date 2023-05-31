@@ -1,6 +1,6 @@
-Name,Description ,Unit,DataType,Attributes
+Name,Description,Unit,DataType,Attributes
 scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
 scrape_series_added,The approximate number of new series in this scrape,,Gauge,
-up,The scraping was successful,,Gauge,
 scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
 scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+up,The scraping was successful,,Gauge,
