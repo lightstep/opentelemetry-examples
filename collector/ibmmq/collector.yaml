@@ -11,11 +11,12 @@ receivers:
             - targets: ["ibmmq-leader:9157"]
 exporters:
   logging:
-    logLevel: debug
+    loglevel: debug
   otlp:
-    endpoint: ingest.lightstep.com:443
+    endpoint: ingest.staging.lightstep.com:443
     headers:
-      - lightstep-access-token: ${LS_ACCESS_TOKEN}
+      - lightstep-access-token: "${LS_ACCESS_TOKEN}"
+
 service:
   pipelines:
     metrics:

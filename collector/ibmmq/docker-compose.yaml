@@ -19,14 +19,14 @@ services:
   otel-collector:
       container_name: otel-collect
       hostname: otel-collector
-      image: otel/opentelemetry-collector-contrib:0.50.0
-      command: ["--config=/conf/config-prometheus.yaml"]
+      image: otel/opentelemetry-collector-contrib:0.77.0
+      command: ["--config=/conf/collector.yaml"]
       environment:
         LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
       networks:
           - integrations
       volumes:
-          - ./config-prometheus.yaml:/conf/config-prometheus.yaml:rw
+          - ./collector.yaml:/conf/collector.yaml:rw
 networks:
   integrations:
     driver: bridge
