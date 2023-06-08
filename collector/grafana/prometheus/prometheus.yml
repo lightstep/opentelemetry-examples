@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'local'
+
+
+scrape_configs:
+
+  - job_name: 'grafana_metrics'
+    scrape_interval: 15s
+    static_configs:
+      - targets: [ 'grafana:3000' ]
