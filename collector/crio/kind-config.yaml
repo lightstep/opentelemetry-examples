@@ -1,0 +1,12 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: crio-demo
+nodes:
+  - role: control-plane
+    image: kindest/node:crio
+  - role: worker
+    image: kindest/node:crio
+  - role: worker
+    image: kindest/node:crio
+  - role: worker
+    image: kindest/node:crio
