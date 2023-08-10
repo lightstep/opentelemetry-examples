@@ -2,17 +2,17 @@
 
 ## Overview
 
- Minio natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Minio and the Collector to send metrics to Lightstep Observability.
+ Minio natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Minio and the Collector to send metrics to Cloud Observability Observability.
 
 ## Prerequisites
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability Observability [access token][ls-docs-access-token]
 
 ## How to run the example
 
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -22,7 +22,7 @@
   ```
 * Access to minio console from the following link: http://localhost:9001/login
 
-* Explore Metrics in Lightstep
+* Explore Metrics in Cloud Observability
 
 * Stop the cluster
   ```

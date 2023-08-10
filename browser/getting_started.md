@@ -3,7 +3,7 @@ This Quick Start shows you how to use [OpenTelemetry](https://opentelemetry.io) 
 - Configure a tracer
 - Generate trace data
 - Propagate context over HTTP
-- Export the trace data to the console and to the Lightstep
+- Export the trace data to the console and to the Cloud Observability
 - Enable auto instrumentation for document load
 - Enable auto instrumentation for button any XMLHttpRequest
 
@@ -64,7 +64,7 @@ tracerProvider.register();
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Lightstep Web Example</title>
+    <title>Cloud Observability Web Example</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="tracer.js"></script>
@@ -211,14 +211,14 @@ tracerProvider.addSpanProcessor(
     new CollectorTraceExporter({
       url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
       headers: {
-        'Lightstep-Access-Token': 'YOUR_TOKEN'
+        'Cloud Observability-Access-Token': 'YOUR_TOKEN'
       }
     })
   )
 );
 ```
 
-3. After re-running the example, you should see traces in Lightstep.
+3. After re-running the example, you should see traces in Cloud Observability.
    ![Screenshot of the running example](images/trace1-1.png)
    ![Screenshot of the running example](images/trace1-2.png)
 
@@ -253,7 +253,7 @@ tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter(
 tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
   url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
   headers: {
-    'Lightstep-Access-Token': 'YOUR_TOKEN'
+    'Cloud Observability-Access-Token': 'YOUR_TOKEN'
   }
 })));
 
@@ -280,7 +280,7 @@ tracerProvider.register({
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Lightstep Web Example - document load auto-instrumentation</title>
+    <title>Cloud Observability Web Example - document load auto-instrumentation</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="document-load.js"></script>
@@ -298,7 +298,7 @@ tracerProvider.register({
     npm start
 ```
 
-5. Open your browser at and go to 'http://localhost:8091/document-load.html'. You should see something similar in Lightstep
+5. Open your browser at and go to 'http://localhost:8091/document-load.html'. You should see something similar in Cloud Observability
 
 ![Screenshot of the running example](images/document-load-1-1.png)
 ![Screenshot of the running example](images/document-load-1-2.png)
@@ -344,7 +344,7 @@ tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter(
 tracerProvider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter({
   url: 'https://ingest.lightstep.com:443/api/v2/otel/trace',
   headers: {
-    'Lightstep-Access-Token': 'YOUR_TOKEN',
+    'Cloud Observability-Access-Token': 'YOUR_TOKEN',
   },
 })));
 
@@ -398,7 +398,7 @@ window.addEventListener('load', () => {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Lightstep Web Example - user interaction</title>
+    <title>Cloud Observability Web Example - user interaction</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="user-interaction.js"></script>
@@ -418,7 +418,7 @@ window.addEventListener('load', () => {
     npm start
 ```
 
-5. Open your browser and go to 'http://localhost:8091/user-interaction.html'. You should see something similar in Lightstep
+5. Open your browser and go to 'http://localhost:8091/user-interaction.html'. You should see something similar in Cloud Observability
 
 ![Screenshot of the running example](images/user-interaction-1-1.png)
 ![Screenshot of the running example](images/user-interaction-1-2.png)

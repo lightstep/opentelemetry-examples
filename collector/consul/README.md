@@ -2,7 +2,7 @@
 
 ## Overview
 
- Consul natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Consul and the Collector to send metrics to Lightstep Observability.
+ Consul natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Consul and the Collector to send metrics to Cloud Observability Observability.
 
  This example is based on the [service mesh][consul-service-mesh-example-repo] example from the [learn Consul repository][learn-consul-repo]. See the [repository][consul-service-mesh-example-repo], or this [Consul service mesh tutorial][consul-service-mesh-example-docs] for more about the underlying Consul setup in the example.
 
@@ -10,11 +10,11 @@
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability Observability [access token][ls-docs-access-token]
 
 ## How to run the example
 
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -33,9 +33,9 @@
   docker-compose down --rmi all`
   ```
 
-### Explore Metrics in Lightstep
+### Explore Metrics in Cloud Observability
 
-See the [Consul Telemetry Docs][consul-docs-telemetry] for comprehensive documentation on metrics emitted. Note that the the metrics collected via prometheus will be renamed to conform to prometheus conventions; dots will be replaced with underscores (e.g. consul.kvs.apply will be renamed to consul_kvs_apply). Consul metrics will be prefixed with "consul_" and you can build dashboards with them in Lightstep Observability. See the [dashboard documentation][ls-docs-dashboards] for more details.
+See the [Consul Telemetry Docs][consul-docs-telemetry] for comprehensive documentation on metrics emitted. Note that the the metrics collected via prometheus will be renamed to conform to prometheus conventions; dots will be replaced with underscores (e.g. consul.kvs.apply will be renamed to consul_kvs_apply). Consul metrics will be prefixed with "consul_" and you can build dashboards with them in Cloud Observability Observability. See the [dashboard documentation][ls-docs-dashboards] for more details.
 
 ### Explore the Consul Example
 

@@ -1,6 +1,6 @@
 # Run synthethic checks OTel Collector's HTTP Check receiver
 
-The OpenTelemetry Collector [HTTP Check receiver](httpcheckreceiver) connects to a configured endpoint via HTTP to validate that the endpoint is responding with a status code 200. The examples in this repo show how to configure an HTTP endpoint and the Collector to send metrics to Lightstep Observability.
+The OpenTelemetry Collector [HTTP Check receiver](httpcheckreceiver) connects to a configured endpoint via HTTP to validate that the endpoint is responding with a status code 200. The examples in this repo show how to configure an HTTP endpoint and the Collector to send metrics to Cloud Observability Observability.
 
 ## Requirements
 
@@ -9,7 +9,7 @@ The OpenTelemetry Collector [HTTP Check receiver](httpcheckreceiver) connects to
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token][ls-docs-access-token] for the project to report metrics to.
+You must have a Cloud Observability Observability [access token][ls-docs-access-token] for the project to report metrics to.
 
 ## Running the Example
 

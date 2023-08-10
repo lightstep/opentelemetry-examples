@@ -1,6 +1,6 @@
 # OpenTelemetry Metrics Example (Vanilla Setup)
 
-This example shows how to configure OpenTelemetry JS to export metrics to Lightstep without any additional (non-OTel) dependencies.
+This example shows how to configure OpenTelemetry JS to export metrics to Cloud Observability without any additional (non-OTel) dependencies.
 
 ## Installation
 

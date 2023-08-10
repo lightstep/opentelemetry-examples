@@ -3,12 +3,12 @@
 
 The OTel Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
+Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Cloud Observability Observability, and there may be bugs or unexpected issues in using these contributed receivers with Cloud Observability Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## Prerequisites for local installation
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 #### kind
 
@@ -64,7 +64,7 @@ Detailed description of available Kubernetes metrics: [Kubelet metrics](https://
 
 Collector Prometheus receiver has to be pointed to the Kubernetes Prometheus metrics endpoints.
 
-The following example configuration collects metrics from Kong and send them to Lightstep Observability:
+The following example configuration collects metrics from Kong and send them to Cloud Observability Observability:
 
 ```yaml
 receivers:

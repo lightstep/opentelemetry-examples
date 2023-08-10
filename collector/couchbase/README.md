@@ -8,7 +8,7 @@ This example illustrates how you can ingest Couchbase metrics using the OTEL col
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics.
+You must have a Cloud Observability Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics.
 
 ## Running the Example
 

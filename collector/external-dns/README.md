@@ -3,7 +3,7 @@
 
 The OTel Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
+Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Cloud Observability Observability, and there may be bugs or unexpected issues in using these contributed receivers with Cloud Observability Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## External DNS supports
@@ -12,7 +12,7 @@ ExternalDNS allows to configure external services, like [AWS Route53](https://gi
 
 ## Prerequisites for local installation with CoreDNS
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 #### minikube
 
@@ -75,7 +75,7 @@ Detailed description of available [External DNS metrics](https://github.com/kube
 
 Collector Prometheus receiver has to be pointer to External DNS metrics endpoint, which is exposed by default at :7979 port.
 
-The example configuration to add metrics with Lightstep Observability, add the following to your collector's configuration file:
+The example configuration to add metrics with Cloud Observability Observability, add the following to your collector's configuration file:
 
 ``` yaml
 # add the receiver configuration for your integration

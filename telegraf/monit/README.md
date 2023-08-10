@@ -1,4 +1,4 @@
-# Monit Metrics to Lightstep via Telegraf
+# Monit Metrics to Cloud Observability via Telegraf
 
 ## Setup Monit
 
@@ -25,7 +25,7 @@ In this example we'll configure the collector as if monit is listening on the de
 
 ### Configure Telegraf: Output OTLP
 
-You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lightstep with configuration similar to this.
+You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Cloud Observability with configuration similar to this.
 
 ```
 [[outputs.opentelemetry]]
@@ -36,7 +36,7 @@ You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lig
     lightstep-access-token = "$LS_ACCESS_TOKEN"
 ```
 
-## View the Results in Lightstep
+## View the Results in Cloud Observability
 
-For the example that we configured metrics should be appearing in your Lightstep project with the name `net_response_response_time` and `net_response_result_code`.
+For the example that we configured metrics should be appearing in your Cloud Observability project with the name `net_response_response_time` and `net_response_result_code`.
 

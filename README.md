@@ -1,4 +1,4 @@
-# Lightstep OpenTelemetry Examples
+# Cloud Observability OpenTelemetry Examples
 
 This repository contains example code and resources for configuring a variety of languages with OpenTelemetry. The directory structure for each language looks like this:
 
@@ -12,7 +12,7 @@ go
 
 ### Running examples
 
-All the applications in this repository can be launched using docker-compose. In order to send data to Lightstep, you can update the configuration using the steps below before starting docker-compose:
+All the applications in this repository can be launched using docker-compose. In order to send data to Cloud Observability, you can update the configuration using the steps below before starting docker-compose:
 
 ```bash
 git clone https://github.com/lightstep/opentelemetry-examples && cd opentelemetry-examples
@@ -28,7 +28,7 @@ sed -i '' 's/<ACCESS TOKEN>/YOUR TOKEN HERE/' ./config/collector-config.yaml
 docker-compose up
 ```
 
-The following client/server applications use different mechanism for sending data to Lightstep. The following examples are configured in the `docker-compose.yml` file:
+The following client/server applications use different mechanism for sending data to Cloud Observability. The following examples are configured in the `docker-compose.yml` file:
 
 | name             | description                                                  |
 | ---------------- | ------------------------------------------------------------ |
@@ -48,7 +48,7 @@ Additionally, the repo contains example for producing telemetry via various Open
 
     `cd ./collector/mysql`
 
-2. Export your Lightstep Access Token
+2. Export your Cloud Observability Access Token
 
     `export LS_ACCESS_TOKEN=<your token>`.
 
@@ -56,8 +56,8 @@ Additionally, the repo contains example for producing telemetry via various Open
 
     `docker compose up`
 
-4. Access the Lightstep dashboard for the integration.
+4. Access the Cloud Observability dashboard for the integration.
 
 ------
 
-*Made with* ![:heart:](https://a.slack-edge.com/production-standard-emoji-assets/10.2/apple-medium/2764-fe0f.png) *@ [Lightstep](http://lightstep.com/)*
+*Made with* ![:heart:](https://a.slack-edge.com/production-standard-emoji-assets/10.2/apple-medium/2764-fe0f.png) *@ [Cloud Observability](http://lightstep.com/)*

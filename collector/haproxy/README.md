@@ -1,6 +1,6 @@
 # Ingest HAProxy metrics using OTel Collector's Prometheus receiver
 
-HAProxy emits metrics via a Prometheus compatible endpoint and [OpenTelemetry Collector Contrib][otel-collector-contrib] has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape those metrics. The examples in this repo show how to configure HAProxy and the Collector to send metrics to Lightstep Observability.
+HAProxy emits metrics via a Prometheus compatible endpoint and [OpenTelemetry Collector Contrib][otel-collector-contrib] has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape those metrics. The examples in this repo show how to configure HAProxy and the Collector to send metrics to Cloud Observability Observability.
 
 ## Requirements
 
@@ -9,7 +9,7 @@ HAProxy emits metrics via a Prometheus compatible endpoint and [OpenTelemetry Co
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token][ls-docs-access-token] for the project to report metrics to.
+You must have a Cloud Observability Observability [access token][ls-docs-access-token] for the project to report metrics to.
 
 ## Running the Example
 
@@ -39,7 +39,7 @@ docker-compose --profile loadgen up
 
 ### Charting the data
 
-You can see the metrics emitted by HAProxy by inspecting its Prometheus end point at: http://localhost:8404/metrics and [build dashboards][ls-docs-dashboards] using these metrics in Lightstep.
+You can see the metrics emitted by HAProxy by inspecting its Prometheus end point at: http://localhost:8404/metrics and [build dashboards][ls-docs-dashboards] using these metrics in Cloud Observability.
 
 ## Configuration
 

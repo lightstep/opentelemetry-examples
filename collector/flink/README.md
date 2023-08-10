@@ -10,11 +10,11 @@ In order to expose Prometheus endpoint, you have to modify flink configuration a
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability Observability [access token][ls-docs-access-token]
 
 ## How to run the example
 
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -23,7 +23,7 @@ In order to expose Prometheus endpoint, you have to modify flink configuration a
   docker-compose up -d
   ```
 
-* Explore Metrics in Lightstep
+* Explore Metrics in Cloud Observability
 
 * Stop the cluster
   ```

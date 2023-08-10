@@ -3,7 +3,7 @@
 
 The OTEL Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
+Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Cloud Observability Observability, and there may be bugs or unexpected issues in using these contributed receivers with Cloud Observability Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## Requirements
@@ -12,7 +12,7 @@ Please note that not all metrics receivers available for the OpenTelemetry Colle
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
@@ -22,7 +22,7 @@ You can run this example with `docker-compose up` in this directory.
 
 Installation of the OpenTelemetry Collector varies, please refer to the [collector documentation](https://opentelemetry.io/docs/collector/) for more information.
 
-The example configuration, used for this project shows using processors to add metrics with Lightstep Observability, add the following to your collector's configuration file:
+The example configuration, used for this project shows using processors to add metrics with Cloud Observability Observability, add the following to your collector's configuration file:
 
 ``` yaml
 # add the receiver configuration for your integration

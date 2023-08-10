@@ -1,10 +1,10 @@
 # OpenTelemetry Collector Integration for Memcached Example
 
-This directory contains a docker-compose based example demonstrating the usage of the OpenTelemetry Collector Memcached Reciever and Lightstep.
+This directory contains a docker-compose based example demonstrating the usage of the OpenTelemetry Collector Memcached Reciever and Cloud Observability.
 
 ## Run the example
 
-1. Export your [Lightstep access token][ls-docs-access-token]:
+1. Export your [Cloud Observability access token][ls-docs-access-token]:
 
     `export LIGHTSTEP_ACCESS_TOKEN=<YOUR_TOKEN>`
 
@@ -12,7 +12,7 @@ This directory contains a docker-compose based example demonstrating the usage o
 
     `docker compose up`
 
-3. [Create a dashboard][ls-docs-dashboards] to view the data at Lightstep Observability.
+3. [Create a dashboard][ls-docs-dashboards] to view the data at Cloud Observability Observability.
 
 
 ## Configuration

@@ -1,18 +1,18 @@
-# Importing InfluxDB LP Format to Lightstep with Telegraf
+# Importing InfluxDB LP Format to Cloud Observability with Telegraf
 
 In this example you do the following:
 * export sample data in Influx Line Protocol
 * configure Telegraf to ingest data in a particular directory
 * configure Telegraf to send data to the OTel Collector
 * configure metric processing in the Collector to match your conventions 
-* configure the Collector to send metrics to Lightstep Observability
+* configure the Collector to send metrics to Cloud Observability Observability
 * OPTIONAL: edit the sample data timestamp so it shows up in the latest views
 
 ## Export data
 
 The official docs for the [influx_inspect export](https://docs.influxdata.com/influxdb/v1.8/tools/influx_inspect/#export) command explain how to extract your data from InfluxDB. 
 
-For testing the migration to Lightstep I obtained Influx line protocol formatted data from the [InfluxDB sample data repo](https://github.com/influxdata/influxdb2-sample-data). 
+For testing the migration to Cloud Observability I obtained Influx line protocol formatted data from the [InfluxDB sample data repo](https://github.com/influxdata/influxdb2-sample-data). 
 
 In this walkthrough I'll use the [air-sensor-data](https://github.com/influxdata/influxdb2-sample-data/tree/master/air-sensor-data), that I fetched like this:
 
@@ -35,7 +35,7 @@ In the Telegraf configuration you need to configure the `directory_monitor` plug
 
 ### Configure Telegraf: Output OTLP
 
-You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lightstep with configuration similar to this.
+You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Cloud Observability with configuration similar to this.
 
 ```
 [[outputs.opentelemetry]]
@@ -48,9 +48,9 @@ You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lig
 
 ## Edit the Sample Data
 
-This step is solely to ensure our dataset easier to see in Lightstep. Unlike the other steps, we won't do anything similar in our real workflows.
+This step is solely to ensure our dataset easier to see in Cloud Observability. Unlike the other steps, we won't do anything similar in our real workflows.
 
-The sample data is likely to be older than anything that will show up in your Lightstep account. I used the six most significant digits of [Unix Timestamp](https://www.unixtimestamp.com/) and replaced the first 6 digits I found in timestamps of the sample data. For example, it's September 1, 2022 and the first 6 digits of the current Unix timestamp are 166204. The timestamps in the sample data are 166198, so I replaced 166198 with 166204. It's only worth the trouble if you need to see how the data appears in Lightstep Observability in recent history.
+The sample data is likely to be older than anything that will show up in your Cloud Observability account. I used the six most significant digits of [Unix Timestamp](https://www.unixtimestamp.com/) and replaced the first 6 digits I found in timestamps of the sample data. For example, it's September 1, 2022 and the first 6 digits of the current Unix timestamp are 166204. The timestamps in the sample data are 166198, so I replaced 166198 with 166204. It's only worth the trouble if you need to see how the data appears in Cloud Observability Observability in recent history.
 
 ## Process the Data to OTLP Conventions 
 
@@ -70,7 +70,7 @@ Or with Docker use `docker run` as follows:
 docker run --rm -v $(pwd)/telegraf:/telegraf -e LS_ACCESS_TOKEN={$LS_ACCESS_TOKEN} telegraf --config /telegraf/telegraf.conf 
 ```
 
-## View the Results in Lightstep
+## View the Results in Cloud Observability
 
-After running Telegraf in this example we find in the Lightstep app the following metrics `airSensors_co`, `airSensors_humidity`, `airSensors_temperature`.
+After running Telegraf in this example we find in the Cloud Observability app the following metrics `airSensors_co`, `airSensors_humidity`, `airSensors_temperature`.
 

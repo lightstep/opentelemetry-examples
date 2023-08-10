@@ -11,7 +11,7 @@ This example illustrates how you can ingest Docker metrics using the [OTEL colle
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project you want to report metrics. This example is configured to recognize this in the environment variable `LS_ACCESS_TOKEN`.
+You must have a Cloud Observability Observability [access token](/docs/create-and-manage-access-tokens) for the project you want to report metrics. This example is configured to recognize this in the environment variable `LS_ACCESS_TOKEN`.
 
 ## Configuration Requirements
 

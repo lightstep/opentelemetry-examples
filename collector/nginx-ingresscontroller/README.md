@@ -5,7 +5,7 @@ This example demonstrates monitoring the NGINX Ingress Controller via the Promet
 
 ### Prerequisites
 
-To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration. 
+To run the example you'll need to put your Cloud Observability Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Cloud Observability access token where indicated. You can run `make copy-otel-secret-patch` which is just a rule to execute `cp collector/secret.yaml collector/.patch.token.yaml`. There's already a `kustomization.yaml` file that references this configuration. 
 
 
 ## Steps
@@ -123,11 +123,11 @@ This example provides a method for injecting the access token secret by `kustomi
 kubectl apply -k collector/
 ```
 
-This command uses the kustomize flag (`-k`) to override the access token with the real value. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But the example would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above, assuming you you have another mechanism to get the access token variable into the environment.
+This command uses the kustomize flag (`-k`) to override the access token with the real value. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Cloud Observability access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But the example would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above, assuming you you have another mechanism to get the access token variable into the environment.
 
 6. Make sure everything installed in a good state 
 
-At this point we expect to see the metrics sent to our account in Lightstep.
+At this point we expect to see the metrics sent to our account in Cloud Observability.
 
 We should also be able to see that our deployments are in good health with a command like `kubectl get all -n my-example`.
 
@@ -148,5 +148,5 @@ Then you can proceed to delete any individual resources that may be in the defau
 
 ## Additional Resources
 
-* NGINX demonstrates collecting Ingress Controller metrics with the OTEL Collector and sending to Lightstep in their reference architecture. See more at the [NGINX blog](https://www.nginx.com/blog/integrating-opentelemetry-modern-apps-reference-architecture-progress-report/#metrics-collection).
+* NGINX demonstrates collecting Ingress Controller metrics with the OTEL Collector and sending to Cloud Observability in their reference architecture. See more at the [NGINX blog](https://www.nginx.com/blog/integrating-opentelemetry-modern-apps-reference-architecture-progress-report/#metrics-collection).
 * For additional detail on collecting metrics with the OTEL Collector documentation please see ["Replace Prometheus with an OpenTelemetry Collector"](https://docs.lightstep.com/docs/replace-prometheus-with-an-otel-collector-on-kubernetes).
