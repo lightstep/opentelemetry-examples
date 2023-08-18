@@ -1,0 +1,22 @@
+Name,Description,Unit,DataType,Attributes
+mysql.buffer_pool.data_pages,The number of data pages in the InnoDB buffer pool.,1,Sum,Str(dirty);Str(clean)
+mysql.buffer_pool.operations,The number of operations on the InnoDB buffer pool.,1,Sum,Str(reads);Str(read_ahead_rnd);Str(read_ahead_evicted);Str(read_ahead);Str(write_requests);Str(wait_free);Str(read_requests)
+mysql.buffer_pool.page_flushes,The number of requests to flush pages from the InnoDB buffer pool.,1,Sum,
+mysql.buffer_pool.pages,The number of pages in the InnoDB buffer pool.,1,Sum,Str(free);Str(data);Str(misc)
+mysql.buffer_pool.usage,The number of bytes in the InnoDB buffer pool.,By,Sum,Str(dirty);Str(clean)
+mysql.double_writes,The number of writes to the InnoDB doublewrite buffer.,1,Sum,Str(pages_written);Str(writes)
+mysql.handlers,The number of requests to various MySQL handlers.,1,Sum,Str(read_first);Str(read_next);Str(prepare);Str(savepoint);Str(rollback);Str(read_key);Str(write);Str(read_rnd_next);Str(read_rnd);Str(mrr_init);Str(discover);Str(commit);Str(read_last);Str(savepoint_rollback);Str(read_prev);Str(update);Str(external_lock);Str(delete)
+mysql.locked_connects,The number of attempts to connect to locked user accounts.,1,Sum,
+mysql.locks,The number of MySQL locks.,1,Sum,Str(immediate);Str(waited)
+mysql.log_operations,The number of InnoDB log operations.,1,Sum,Str(writes);Str(waits);Str(write_requests)
+mysql.mysqlx_connections,The number of mysqlx connections.,1,Sum,Str(closed);Str(accepted);Str(rejected)
+mysql.opened_resources,The number of opened resources.,1,Sum,Str(table_definition);Str(table);Str(file)
+mysql.operations,The number of InnoDB operations.,1,Sum,Str(reads);Str(fsyncs);Str(writes)
+mysql.page_operations,The number of InnoDB page operations.,1,Sum,Str(created);Str(read);Str(written)
+mysql.prepared_statements,The number of times each type of prepared statement command has been issued.,1,Sum,Str(execute);Str(close);Str(reset);Str(send_long_data);Str(fetch);Str(prepare)
+mysql.query.slow.count,The number of slow queries.,1,Sum,
+mysql.row_locks,The number of InnoDB row locks.,1,Sum,Str(time);Str(waits)
+mysql.row_operations,The number of InnoDB row operations.,1,Sum,Str(deleted);Str(updated);Str(read);Str(inserted)
+mysql.sorts,The number of MySQL sorts.,1,Sum,Str(rows);Str(merge_passes);Str(range);Str(scan)
+mysql.threads,The state of MySQL threads.,1,Sum,Str(running);Str(cached);Str(created);Str(connected)
+mysql.tmp_resources,The number of created temporary resources.,1,Sum,Str(tables);Str(disk_tables);Str(files);mysql.instance.endpoint: Str(mysql:3306)

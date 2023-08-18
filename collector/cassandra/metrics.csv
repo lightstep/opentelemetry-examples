@@ -1,0 +1,33 @@
+Name,Description,Unit,DataType,Attributes
+cassandra.compaction.tasks.completed,Number of completed compactions since server [re]start,1,Sum,
+cassandra.storage.load.count,Size of the on disk data size this node manages,by,Sum,
+cassandra.compaction.tasks.pending,Estimated number of compactions remaining to perform,1,Gauge,
+cassandra.storage.total_hints.in_progress.count,Number of hints attempting to be sent currently,1,Sum,
+cassandra.storage.total_hints.count,Number of hint messages written to this node since [re]start,1,Sum,
+cassandra.client.request.read.latency.99p,Standard read request latency - 99th percentile,us,Gauge,
+cassandra.client.request.read.latency.50p,Standard read request latency - 50th percentile,us,Gauge,
+cassandra.client.request.write.latency.max,Maximum regular write request latency,us,Gauge,
+cassandra.client.request.write.latency.99p,Regular write request latency - 99th percentile,us,Gauge,
+cassandra.client.request.count,Number of requests by operation,1,Sum,STRING(RangeSlice);STRING(Read);STRING(Write)
+cassandra.client.request.range_slice.latency.99p,Token range read request latency - 99th percentile,us,Gauge,
+cassandra.client.request.range_slice.latency.max,Maximum token range read request latency,us,Gauge,
+cassandra.client.request.error.count,Number of request errors by operation,1,Sum,STRING(RangeSlice);STRING(Failure);STRING(Write);STRING(Unavailable);STRING(RangeSlice);STRING(Timeout);STRING(Read);STRING(Unavailable);STRING(Write);STRING(Timeout);STRING(RangeSlice);STRING(Unavailable);STRING(Read);STRING(Failure);STRING(Write);STRING(Failure);STRING(Read);STRING(Timeout)
+cassandra.client.request.range_slice.latency.50p,Token range read request latency - 50th percentile,us,Gauge,
+cassandra.client.request.write.latency.50p,Regular write request latency - 50th percentile,us,Gauge,
+cassandra.client.request.read.latency.max,Maximum standard read request latency,us,Gauge,
+jvm.memory.nonheap.max,current non-heap usage,by,Gauge,
+jvm.memory.heap.committed,current heap usage,by,Gauge,
+jvm.memory.pool.used,current memory pool usage,by,Gauge,STRING(CodeHeap 'non-nmethods');STRING(CodeHeap 'profiled nmethods');STRING(Compressed Class Space);STRING(Par Eden Space);STRING(Par Survivor Space);STRING(CodeHeap 'non-profiled nmethods');STRING(Metaspace);STRING(CMS Old Gen)
+jvm.memory.pool.max,current memory pool usage,by,Gauge,STRING(CodeHeap 'non-nmethods');STRING(CodeHeap 'profiled nmethods');STRING(Compressed Class Space);STRING(Par Eden Space);STRING(Par Survivor Space);STRING(CodeHeap 'non-profiled nmethods');STRING(Metaspace);STRING(CMS Old Gen)
+jvm.memory.heap.max,current heap usage,by,Gauge,
+jvm.memory.pool.init,current memory pool usage,by,Gauge,STRING(CodeHeap 'non-nmethods');STRING(CodeHeap 'profiled nmethods');STRING(Compressed Class Space);STRING(Par Eden Space);STRING(Par Survivor Space);STRING(CodeHeap 'non-profiled nmethods');STRING(Metaspace);STRING(CMS Old Gen)
+jvm.memory.pool.committed,current memory pool usage,by,Gauge,STRING(CodeHeap 'non-nmethods');STRING(CodeHeap 'profiled nmethods');STRING(Compressed Class Space);STRING(Par Eden Space);STRING(Par Survivor Space);STRING(CodeHeap 'non-profiled nmethods');STRING(Metaspace);STRING(CMS Old Gen)
+jvm.memory.nonheap.committed,current non-heap usage,by,Gauge,
+jvm.memory.heap.init,current heap usage,by,Gauge,
+jvm.memory.nonheap.used,current non-heap usage,by,Gauge,
+jvm.memory.nonheap.init,current non-heap usage,by,Gauge,
+jvm.memory.heap.used,current heap usage,by,Gauge,
+jvm.gc.collections.count,total number of collections that have occurred,1,Sum,STRING(ConcurrentMarkSweep);STRING(ParNew)
+jvm.gc.collections.elapsed,the approximate accumulated collection elapsed time in milliseconds,ms,Sum,STRING(ConcurrentMarkSweep);STRING(ParNew)
+jvm.classes.loaded,number of loaded classes,1,Gauge,
+jvm.threads.count,number of threads,1,Gauge,

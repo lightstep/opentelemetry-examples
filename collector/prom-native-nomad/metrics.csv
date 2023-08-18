@@ -1,0 +1,119 @@
+Name,Description,Unit,DataType,Attributes
+nomad_client_host_cpu_idle,nomad_client_host_cpu_idle,,Gauge,STRING(cpu0);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu1);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu2);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu3);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu4);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu5);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu6);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu7);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_cpu_user,nomad_client_host_cpu_user,,Gauge,STRING(cpu0);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu1);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu2);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu3);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu4);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu5);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu6);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu7);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_disk_inodes_percent,nomad_client_host_disk_inodes_percent,,Gauge,STRING(dc1);STRING(/dev/vda1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_rpc_query,nomad_nomad_rpc_query,,Sum,
+nomad_client_uptime,nomad_client_uptime,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_broker_total_ready,nomad_nomad_broker_total_ready,,Gauge,
+nomad_client_host_cpu_total,nomad_client_host_cpu_total,,Gauge,STRING(cpu0);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu1);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu2);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu3);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu4);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu5);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu6);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu7);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_unallocated_disk,nomad_client_unallocated_disk,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_blocked_evals_total_escaped,nomad_nomad_blocked_evals_total_escaped,,Gauge,
+nomad_nomad_blocked_evals_total_quota_limit,nomad_nomad_blocked_evals_total_quota_limit,,Gauge,
+nomad_raft_leader_dispatchLog,nomad_raft_leader_dispatchLog,,Summary,
+nomad_client_allocated_memory,nomad_client_allocated_memory,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_allocations_pending,nomad_client_allocations_pending,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_plan_queue_depth,nomad_nomad_plan_queue_depth,,Gauge,
+nomad_nomad_client_get_client_allocs,nomad_nomad_client_get_client_allocs,,Summary,
+nomad_nomad_fsm_autopilot,nomad_nomad_fsm_autopilot,,Summary,
+nomad_nomad_fsm_node_status_update,nomad_nomad_fsm_node_status_update,,Summary,
+nomad_nomad_rpc_request,nomad_nomad_rpc_request,,Sum,
+nomad_nomad_worker_dequeue_eval,nomad_nomad_worker_dequeue_eval,,Summary,
+nomad_raft_commitTime,nomad_raft_commitTime,,Summary,
+nomad_client_allocated_cpu,nomad_client_allocated_cpu,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_leader_reconcileMember,nomad_nomad_leader_reconcileMember,,Summary,
+nomad_runtime_total_gc_pause_ns,nomad_runtime_total_gc_pause_ns,,Gauge,
+nomad_client_allocations_migrating,nomad_client_allocations_migrating,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_memory_free,nomad_client_host_memory_free,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_eval_dequeue,nomad_nomad_eval_dequeue,,Summary,
+nomad_nomad_broker_total_blocked,nomad_nomad_broker_total_blocked,,Gauge,
+nomad_nomad_client_update_status,nomad_nomad_client_update_status,,Summary,
+nomad_nomad_heartbeat_active,nomad_nomad_heartbeat_active,,Gauge,
+nomad_raft_state_leader,nomad_raft_state_leader,,Sum,
+nomad_client_unallocated_cpu,nomad_client_unallocated_cpu,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_consul_script_checks,nomad_client_consul_script_checks,,Gauge,
+nomad_nomad_leader_establish_leadership,nomad_nomad_leader_establish_leadership,,Summary,
+nomad_client_allocations_terminal,nomad_client_allocations_terminal,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_disk_size,nomad_client_host_disk_size,,Gauge,STRING(dc1);STRING(/dev/vda1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_memberlist_gossip,nomad_memberlist_gossip,,Summary,
+nomad_memberlist_msg_alive,nomad_memberlist_msg_alive,,Sum,
+nomad_client_host_disk_used,nomad_client_host_disk_used,,Gauge,STRING(dc1);STRING(/dev/vda1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_blocked_evals_total_blocked,nomad_nomad_blocked_evals_total_blocked,,Gauge,
+nomad_client_host_memory_used,nomad_client_host_memory_used,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_fsm_register_node,nomad_nomad_fsm_register_node,,Summary,
+nomad_runtime_sys_bytes,nomad_runtime_sys_bytes,,Gauge,
+nomad_client_allocated_disk,nomad_client_allocated_disk,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_leader_reconcile,nomad_nomad_leader_reconcile,,Summary,
+nomad_raft_fsm_apply,nomad_raft_fsm_apply,,Summary,
+nomad_raft_state_candidate,nomad_raft_state_candidate,,Sum,
+nomad_nomad_broker_total_waiting,nomad_nomad_broker_total_waiting,,Gauge,
+nomad_runtime_gc_pause_ns,nomad_runtime_gc_pause_ns,,Summary,
+nomad_client_host_disk_available,nomad_client_host_disk_available,,Gauge,STRING(dc1);STRING(/dev/vda1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_disk_used_percent,nomad_client_host_disk_used_percent,,Gauge,STRING(dc1);STRING(/dev/vda1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_memory_available,nomad_client_host_memory_available,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_broker_total_unacked,nomad_nomad_broker_total_unacked,,Gauge,
+nomad_nomad_vault_distributed_tokens_revoking,nomad_nomad_vault_distributed_tokens_revoking,,Gauge,
+nomad_runtime_malloc_count,nomad_runtime_malloc_count,,Gauge,
+nomad_client_allocated_iops,nomad_client_allocated_iops,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_nomad_client_register,nomad_nomad_client_register,,Summary,
+nomad_raft_state_follower,nomad_raft_state_follower,,Sum,
+nomad_client_allocations_blocked,nomad_client_allocations_blocked,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_unallocated_memory,nomad_client_unallocated_memory,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_raft_transition_heartbeat_timeout,nomad_raft_transition_heartbeat_timeout,,Sum,
+nomad_runtime_heap_objects,nomad_runtime_heap_objects,,Gauge,
+nomad_serf_member_join,nomad_serf_member_join,,Sum,
+nomad_client_consul_services,nomad_client_consul_services,,Gauge,
+nomad_raft_apply,nomad_raft_apply,,Sum,
+nomad_raft_barrier,nomad_raft_barrier,,Sum,
+nomad_client_allocations_running,nomad_client_allocations_running,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_cpu_system,nomad_client_host_cpu_system,,Gauge,STRING(cpu0);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu1);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu2);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu3);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu4);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu5);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu6);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(cpu7);STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_host_memory_total,nomad_client_host_memory_total,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118)
+nomad_client_consul_checks,nomad_client_consul_checks,,Gauge,
+nomad_nomad_rpc_accept_conn,nomad_nomad_rpc_accept_conn,,Sum,
+nomad_runtime_alloc_bytes,nomad_runtime_alloc_bytes,,Gauge,
+nomad_runtime_free_count,nomad_runtime_free_count,,Gauge,
+nomad_runtime_total_gc_runs,nomad_runtime_total_gc_runs,,Gauge,
+nomad_nomad_leader_barrier,nomad_nomad_leader_barrier,,Summary,
+nomad_runtime_num_goroutines,nomad_runtime_num_goroutines,,Gauge,
+nomad_client_unallocated_iops,nomad_client_unallocated_iops,,Gauge,STRING(dc1);STRING(087ba738-d429-9506-2ada-ef62ef6a8118);STRING(nomad-server);STRING(nomad-server);service.instance.id: STRING(nomad-server:4646);STRING(4646);STRING(http)
+nomad_serf_queue_Query,nomad_serf_queue_Query,,Summary,
+nomad_serf_queue_Event,nomad_serf_queue_Event,,Summary,
+nomad_serf_queue_Intent,nomad_serf_queue_Intent,,Summary,
+go_memstats_other_sys_bytes,Number of bytes used for other system allocations.,,Gauge,
+go_memstats_gc_cpu_fraction,The fraction of this program's available CPU time used by the GC since the program started.,,Gauge,
+go_memstats_sys_bytes,Number of bytes obtained from system.,,Gauge,
+go_memstats_heap_inuse_bytes,Number of heap bytes that are in use.,,Gauge,
+go_memstats_heap_sys_bytes,Number of heap bytes obtained from system.,,Gauge,
+go_memstats_frees_total,Total number of frees.,,Sum,
+go_memstats_heap_idle_bytes,Number of heap bytes waiting to be used.,,Gauge,
+go_memstats_heap_objects,Number of allocated objects.,,Gauge,
+go_memstats_alloc_bytes_total,"Total number of bytes allocated, even if freed.",,Sum,
+go_memstats_alloc_bytes,Number of bytes allocated and still in use.,,Gauge,
+go_memstats_last_gc_time_seconds,Number of seconds since 1970 of last garbage collection.,,Gauge,
+go_memstats_next_gc_bytes,Number of heap bytes when next garbage collection will take place.,,Gauge,
+go_memstats_mcache_inuse_bytes,Number of bytes in use by mcache structures.,,Gauge,
+go_memstats_gc_sys_bytes,Number of bytes used for garbage collection system metadata.,,Gauge,
+go_memstats_mspan_sys_bytes,Number of bytes used for mspan structures obtained from system.,,Gauge,
+go_memstats_mallocs_total,Total number of mallocs.,,Sum,
+go_memstats_mspan_inuse_bytes,Number of bytes in use by mspan structures.,,Gauge,
+go_memstats_stack_inuse_bytes,Number of bytes in use by the stack allocator.,,Gauge,
+go_memstats_lookups_total,Total number of pointer lookups.,,Sum,
+go_memstats_heap_released_bytes,Number of heap bytes released to OS.,,Gauge,
+go_memstats_stack_sys_bytes,Number of bytes obtained from system for stack allocator.,,Gauge,
+go_memstats_buck_hash_sys_bytes,Number of bytes used by the profiling bucket hash table.,,Gauge,
+go_memstats_mcache_sys_bytes,Number of bytes used for mcache structures obtained from system.,,Gauge,
+go_memstats_heap_alloc_bytes,Number of heap bytes allocated and still in use.,,Gauge,
+process_open_fds,Number of open file descriptors.,,Gauge,
+process_resident_memory_bytes,Resident memory size in bytes.,,Gauge,
+process_max_fds,Maximum number of open file descriptors.,,Gauge,
+process_virtual_memory_bytes,Virtual memory size in bytes.,,Gauge,
+process_start_time_seconds,Start time of the process since unix epoch in seconds.,,Gauge,
+process_cpu_seconds_total,Total user and system CPU time spent in seconds.,,Sum,
+scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
+scrape_series_added,The approximate number of new series in this scrape,,Gauge,
+scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
+scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+go_goroutines,Number of goroutines that currently exist.,,Gauge,
+go_gc_duration_seconds,A summary of the GC invocation durations.,,Summary,
+up,The scraping was successful,,Gauge,
+go_threads,Number of OS threads created.,,Gauge,
+go_info,Information about the Go environment.,,Gauge,STRING(go1.10.2)

@@ -1,0 +1,7 @@
+Name,Description,Unit,DataType,Attributes
+apache.current_connections,The number of active connections currently attached to the HTTP server.,connections,Sum,STRING(apache)
+apache.requests,The number of requests serviced by the HTTP server per second.,1,Sum,STRING(apache)
+apache.scoreboard,The number of connections in each state.,scoreboard,Sum,STRING(apache);STRING(logging);STRING(apache);STRING(idle_cleanup);STRING(apache);STRING(open);STRING(apache);STRING(waiting);STRING(apache);STRING(starting);STRING(apache);STRING(sending);STRING(apache);STRING(keepalive);STRING(apache);STRING(dnslookup);STRING(apache);STRING(reading);STRING(apache);STRING(closing);STRING(apache);STRING(finishing)
+apache.traffic,Total HTTP server traffic.,By,Sum,STRING(apache)
+apache.uptime,The amount of time that the server has been running in seconds.,s,Sum,STRING(apache)
+apache.workers,The number of workers currently attached to the HTTP server.,connections,Sum,STRING(apache);STRING(busy);STRING(apache);STRING(idle)

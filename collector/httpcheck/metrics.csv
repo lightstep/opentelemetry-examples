@@ -1,0 +1,3 @@
+Name,Description,Unit,DataType,Attributes
+httpcheck.duration,Measures the duration of the HTTP check.,ms,Gauge,http.url: Str(http://webserver)
+httpcheck.status,"1 if the check resulted in status_code matching the status_class, otherwise 0.",1,Sum,Str(GET);Str(1xx);Int(200);http.url: Str(http://webserver);Str(GET);Str(2xx);Int(200);http.url: Str(http://webserver);Str(GET);Str(3xx);Int(200);http.url: Str(http://webserver);Str(GET);Str(4xx);Int(200);http.url: Str(http://webserver);Str(GET);Str(5xx);Int(200);http.url: Str(http://webserver)

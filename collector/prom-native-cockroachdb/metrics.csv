@@ -1,0 +1,1095 @@
+Name,Description,Unit,DataType,Attributes
+distsender_rpc_err_errordetailtype_0_,Number of ErrorDetailType(0) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_errordetailtype_33_,Number of ErrorDetailType(33) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_errordetailtype_24_,Number of ErrorDetailType(24) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_errordetailtype_19_,Number of ErrorDetailType(19) errors received replica-bound RPCs,,Sum,
+distsender_batches_async_throttled,Number of partial batches not sent asynchronously due to throttling,,Sum,
+distsender_rpc_transferlease_sent,Number of TransferLease requests processed.,,Sum,
+distsender_rpc_barrier_sent,Number of Barrier requests processed.,,Sum,
+distsender_rpc_revertrange_sent,Number of RevertRange requests processed.,,Sum,
+distsender_rpc_err_transactionretrywithprotorefresherrtype,Number of TransactionRetryWithProtoRefreshErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_txnalreadyencounterederrtype,Number of TxnAlreadyEncounteredErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_transactionabortederrtype,Number of TransactionAbortedErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_errordetailtype_20_,Number of ErrorDetailType(20) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_internalerrtype,Number of InternalErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_heartbeattxn_sent,Number of HeartbeatTxn requests processed.,,Sum,
+distsender_rpc_err_raftgroupdeletederrtype,Number of RaftGroupDeletedErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_communicationerrtype,Number of CommunicationErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_notleaseholdererrtype,Number of NotLeaseHolderErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_checkconsistency_sent,Number of CheckConsistency requests processed.,,Sum,
+distsender_rpc_recovertxn_sent,Number of RecoverTxn requests processed.,,Sum,
+distsender_rpc_sent_nextreplicaerror,Number of replica-addressed RPCs sent due to per-replica errors,,Sum,
+distsender_rangelookups,Number of range lookups,,Sum,
+distsender_rpc_sent_local,Number of replica-addressed RPCs sent through the local-server optimization,,Sum,
+distsender_rpc_merge_sent,Number of Merge requests processed.,,Sum,
+distsender_rpc_err_transactionstatuserrtype,Number of TransactionStatusErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_export_sent,Number of Export requests processed.,,Sum,
+distsender_rpc_clearrange_sent,Number of ClearRange requests processed.,,Sum,
+distsender_rangefeed_restart_stuck,Number of times a rangefeed was restarted due to not receiving timely updates (kv.rangefeed.range_stuck_threshold cluster setting),,Sum,
+distsender_rpc_err_leaserejectederrtype,Number of LeaseRejectedErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_rangefeedretryerrtype,Number of RangeFeedRetryErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_refresh_sent,Number of Refresh requests processed.,,Sum,
+distsender_rpc_err_transactionpusherrtype,Number of TransactionPushErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_errordetailtype_29_,Number of ErrorDetailType(29) errors received replica-bound RPCs,,Sum,
+distsender_rpc_adminunsplit_sent,Number of AdminUnsplit requests processed.,,Sum,
+distsender_rpc_migrate_sent,Number of Migrate requests processed.,,Sum,
+distsender_rpc_gc_sent,Number of GC requests processed.,,Sum,
+distsender_rpc_err_errordetailtype_21_,Number of ErrorDetailType(21) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_conditionfailederrtype,Number of ConditionFailedErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_querylocks_sent,Number of QueryLocks requests processed.,,Sum,
+distsender_errors_inleasetransferbackoffs,Number of times backed off due to NotLeaseHolderErrors during lease transfer,,Sum,
+distsender_rpc_pushtxn_sent,Number of PushTxn requests processed.,,Sum,
+distsender_rpc_endtxn_sent,Number of EndTxn requests processed.,,Sum,
+distsender_rpc_adminmerge_sent,Number of AdminMerge requests processed.,,Sum,
+distsender_rpc_err_mvcchistorymutationerrtype,Number of MVCCHistoryMutationErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_replicatooolderrtype,Number of ReplicaTooOldErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_rangenotfounderrtype,Number of RangeNotFoundErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_adminrelocaterange_sent,Number of AdminRelocateRange requests processed.,,Sum,
+distsender_rpc_probe_sent,Number of Probe requests processed.,,Sum,
+distsender_rpc_leaseinfo_sent,Number of LeaseInfo requests processed.,,Sum,
+distsender_batches,Number of batches processed,,Sum,
+distsender_rpc_err_indeterminatecommiterrtype,Number of IndeterminateCommitErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_get_sent,Number of Get requests processed.,,Sum,
+distsender_rpc_err_nodeunavailableerrtype,Number of NodeUnavailableErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_rangekeymismatcherrtype,Number of RangeKeyMismatchErrType errors received replica-bound RPCs,,Sum,
+distsender_batches_partial,Number of partial batches processed after being divided on range boundaries,,Sum,
+distsender_rpc_recomputestats_sent,Number of RecomputeStats requests processed.,,Sum,
+distsender_rpc_err_mergeinprogresserrtype,Number of MergeInProgressErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_requestlease_sent,Number of RequestLease requests processed.,,Sum,
+distsender_rpc_err_errordetailtype_30_,Number of ErrorDetailType(30) errors received replica-bound RPCs,,Sum,
+distsender_rpc_adminscatter_sent,Number of AdminScatter requests processed.,,Sum,
+distsender_rpc_adminverifyprotectedtimestamp_sent,Number of AdminVerifyProtectedTimestamp requests processed.,,Sum,
+distsender_rpc_delete_sent,Number of Delete requests processed.,,Sum,
+distsender_rpc_initput_sent,Number of InitPut requests processed.,,Sum,
+distsender_rpc_resolveintent_sent,Number of ResolveIntent requests processed.,,Sum,
+distsender_rpc_isspanempty_sent,Number of IsSpanEmpty requests processed.,,Sum,
+distsender_rangefeed_catchup_ranges,Number of ranges in catchup mode,,Gauge,
+distsender_rpc_err_optimisticevalconflictserrtype,Number of OptimisticEvalConflictsErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_readwithinuncertaintyintervalerrtype,Number of ReadWithinUncertaintyIntervalErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_adminchangereplicas_sent,Number of AdminChangeReplicas requests processed.,,Sum,
+distsender_errors_notleaseholder,Number of NotLeaseHolderErrors encountered from replica-addressed RPCs,,Sum,
+distsender_rpc_subsume_sent,Number of Subsume requests processed.,,Sum,
+distsender_rpc_err_errordetailtype_15_,Number of ErrorDetailType(15) errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_ambiguousresulterrtype,Number of AmbiguousResultErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_oprequirestxnerrtype,Number of OpRequiresTxnErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_adminsplit_sent,Number of AdminSplit requests processed.,,Sum,
+distsender_rpc_err_unsupportedrequesterrtype,Number of UnsupportedRequestErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_increment_sent,Number of Increment requests processed.,,Sum,
+distsender_rpc_put_sent,Number of Put requests processed.,,Sum,
+distsender_rpc_truncatelog_sent,Number of TruncateLog requests processed.,,Sum,
+distsender_rpc_err_storenotfounderrtype,Number of StoreNotFoundErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_deleterange_sent,Number of DeleteRange requests processed.,,Sum,
+distsender_rangefeed_error_catchup_ranges,Number of ranges in catchup mode which experienced an error,,Sum,
+distsender_rpc_refreshrange_sent,Number of RefreshRange requests processed.,,Sum,
+distsender_rpc_err_intentmissingerrtype,Number of IntentMissingErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_sent,Number of replica-addressed RPCs sent,,Sum,
+distsender_rpc_err_writetooolderrtype,Number of WriteTooOldErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_queryresolvedtimestamp_sent,Number of QueryResolvedTimestamp requests processed.,,Sum,
+distsender_rpc_scaninterleavedintents_sent,Number of ScanInterleavedIntents requests processed.,,Sum,
+distsender_rpc_err_mintimestampboundunsatisfiableerrtype,Number of MinTimestampBoundUnsatisfiableErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_writebatch_sent,Number of WriteBatch requests processed.,,Sum,
+distsender_rpc_resolveintentrange_sent,Number of ResolveIntentRange requests processed.,,Sum,
+distsender_rpc_err_refreshfailederrtype,Number of RefreshFailedErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_conditionalput_sent,Number of ConditionalPut requests processed.,,Sum,
+distsender_rpc_admintransferlease_sent,Number of AdminTransferLease requests processed.,,Sum,
+distsender_rpc_err_errordetailtype_23_,Number of ErrorDetailType(23) errors received replica-bound RPCs,,Sum,
+distsender_batches_async_sent,Number of partial batches sent asynchronously,,Sum,
+distsender_rpc_scan_sent,Number of Scan requests processed.,,Sum,
+distsender_rpc_addsstable_sent,Number of AddSSTable requests processed.,,Sum,
+distsender_rpc_querytxn_sent,Number of QueryTxn requests processed.,,Sum,
+distsender_rpc_err_transactionretryerrtype,Number of TransactionRetryErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_reversescan_sent,Number of ReverseScan requests processed.,,Sum,
+distsender_rpc_rangestats_sent,Number of RangeStats requests processed.,,Sum,
+distsender_rpc_queryintent_sent,Number of QueryIntent requests processed.,,Sum,
+distsender_rpc_err_integeroverflowerrtype,Number of IntegerOverflowErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_batchtimestampbeforegcerrtype,Number of BatchTimestampBeforeGCErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_replicacorruptionerrtype,Number of ReplicaCorruptionErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_err_invalidleaseerrtype,Number of InvalidLeaseErrType errors received replica-bound RPCs,,Sum,
+distsender_rpc_computechecksum_sent,Number of ComputeChecksum requests processed.,,Sum,
+distsender_rangefeed_total_ranges,Number of ranges executing rangefeed,,Gauge,
+distsender_rpc_err_writeintenterrtype,Number of WriteIntentErrType errors received replica-bound RPCs,,Sum,
+queue_raftlog_process_success,Number of replicas successfully processed by the Raft log queue,,Sum,STRING(3)
+queue_replicate_pending,Number of pending replicas in the replicate queue,,Gauge,STRING(3)
+queue_replicate_removedeadreplica_error,Number of failed dead replica replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_gc_info_numrangekeysaffected,Number of range keys GC'able,,Sum,STRING(3)
+queue_replicate_removedeadnonvoterreplica,Number of dead non-voter replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_replicate_removedecommissioningreplica_error,Number of failed decommissioning replica replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_gc_info_clearrangefailed,Number of failed ClearRange operation during GC,,Sum,STRING(3)
+queue_split_purgatory,"Number of replicas in the split queue's purgatory, waiting to become splittable",,Gauge,STRING(3)
+queue_replicate_process_success,Number of replicas successfully processed by the replicate queue,,Sum,STRING(3)
+queue_gc_info_resolvesuccess,Number of successful intent resolutions,,Sum,STRING(3)
+queue_replicate_removenonvoterreplica,Number of non-voter replica removals attempted by the replicate queue (typically in response to a rebalancer-initiated addition),,Sum,STRING(3)
+queue_gc_process_success,Number of replicas successfully processed by the MVCC GC queue,,Sum,STRING(3)
+queue_gc_info_enqueuehighpriority,Number of replicas enqueued for GC with high priority,,Sum,STRING(3)
+queue_replicate_removedeadvoterreplica,Number of dead voter replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_replicagc_removereplica,Number of replica removals attempted by the replica GC queue,,Sum,STRING(3)
+queue_split_process_success,Number of replicas successfully processed by the split queue,,Sum,STRING(3)
+queue_split_process_failure,Number of replicas which failed processing in the split queue,,Sum,STRING(3)
+queue_replicate_addnonvoterreplica,Number of non-voter replica additions attempted by the replicate queue,,Sum,STRING(3)
+queue_merge_processingnanos,Nanoseconds spent processing replicas in the merge queue,,Sum,STRING(3)
+queue_raftsnapshot_pending,Number of pending replicas in the Raft repair queue,,Gauge,STRING(3)
+queue_replicate_removereplica_success,Number of successful replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_consistency_process_failure,Number of replicas which failed processing in the consistency checker queue,,Sum,STRING(3)
+queue_raftsnapshot_process_success,Number of replicas successfully processed by the Raft repair queue,,Sum,STRING(3)
+queue_replicate_replacedeadreplica_success,Number of successful dead replica replica replacements processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_addvoterreplica,Number of voter replica additions attempted by the replicate queue,,Sum,STRING(3)
+queue_replicate_removedecommissioningreplica,Number of decommissioning replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_tsmaintenance_process_failure,Number of replicas which failed processing in the time series maintenance queue,,Sum,STRING(3)
+queue_tsmaintenance_process_success,Number of replicas successfully processed by the time series maintenance queue,,Sum,STRING(3)
+queue_consistency_process_success,Number of replicas successfully processed by the consistency checker queue,,Sum,STRING(3)
+queue_replicate_replacedecommissioningreplica_success,Number of successful decommissioning replica replica replacements processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_replacedeadreplica_error,Number of failed dead replica replica replacements processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_removereplica,Number of replica removals attempted by the replicate queue (typically in response to a rebalancer-initiated addition),,Sum,STRING(3)
+queue_tsmaintenance_pending,Number of pending replicas in the time series maintenance queue,,Gauge,STRING(3)
+queue_replicate_purgatory,"Number of replicas in the replicate queue's purgatory, awaiting allocation options",,Gauge,STRING(3)
+queue_gc_info_pushtxn,Number of attempted pushes,,Sum,STRING(3)
+queue_gc_info_intentsconsidered,Number of 'old' intents,,Sum,STRING(3)
+queue_replicate_processingnanos,Nanoseconds spent processing replicas in the replicate queue,,Sum,STRING(3)
+queue_raftsnapshot_processingnanos,Nanoseconds spent processing replicas in the Raft repair queue,,Sum,STRING(3)
+queue_replicate_removereplica_error,Number of failed replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_gc_info_transactionspangcaborted,Number of GC'able entries corresponding to aborted txns,,Sum,STRING(3)
+queue_raftlog_pending,Number of pending replicas in the Raft log queue,,Gauge,STRING(3)
+queue_replicate_addreplica,Number of replica additions attempted by the replicate queue,,Sum,STRING(3)
+queue_consistency_processingnanos,Nanoseconds spent processing replicas in the consistency checker queue,,Sum,STRING(3)
+queue_replicate_addreplica_error,Number of failed replica additions processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_removedeadreplica_success,Number of successful dead replica replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_gc_info_clearrangesuccess,Number of successful ClearRange operation during GC,,Sum,STRING(3)
+queue_replicate_rebalancenonvoterreplica,Number of non-voter replica rebalancer-initiated additions attempted by the replicate queue,,Sum,STRING(3)
+queue_gc_info_abortspanconsidered,Number of AbortSpan entries old enough to be considered for removal,,Sum,STRING(3)
+queue_replicate_process_failure,Number of replicas which failed processing in the replicate queue,,Sum,STRING(3)
+queue_replicate_replacedecommissioningreplica_error,Number of failed decommissioning replica replica replacements processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_rebalancevoterreplica,Number of voter replica rebalancer-initiated additions attempted by the replicate queue,,Sum,STRING(3)
+queue_gc_info_abortspanscanned,Number of transactions present in the AbortSpan scanned from the engine,,Sum,STRING(3)
+queue_gc_info_abortspangcnum,Number of AbortSpan entries fit for removal,,Sum,STRING(3)
+queue_split_pending,Number of pending replicas in the split queue,,Gauge,STRING(3)
+queue_merge_purgatory,"Number of replicas in the merge queue's purgatory, waiting to become mergeable",,Gauge,STRING(3)
+queue_replicate_addreplica_success,Number of successful replica additions processed by the replicate queue,,Sum,STRING(3)
+queue_replicate_removedecommissioningnonvoterreplica,Number of decommissioning non-voter replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_replicagc_process_success,Number of replicas successfully processed by the replica GC queue,,Sum,STRING(3)
+queue_replicate_voterdemotions,Number of voters demoted to non-voters by the replicate queue,,Sum,STRING(3)
+queue_gc_info_numkeysaffected,Number of keys with GC'able data,,Sum,STRING(3)
+queue_replicagc_pending,Number of pending replicas in the replica GC queue,,Gauge,STRING(3)
+queue_replicate_removedeadreplica,Number of dead replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_replicate_removedecommissioningreplica_success,Number of successful decommissioning replica replica removals processed by the replicate queue,,Sum,STRING(3)
+queue_merge_process_success,Number of replicas successfully processed by the merge queue,,Sum,STRING(3)
+queue_merge_process_failure,Number of replicas which failed processing in the merge queue,,Sum,STRING(3)
+queue_replicate_transferlease,Number of range lease transfers attempted by the replicate queue,,Sum,STRING(3)
+queue_split_processingnanos,Nanoseconds spent processing replicas in the split queue,,Sum,STRING(3)
+queue_gc_info_transactionresolvefailed,Number of intent cleanup failures for local transactions during GC,,Sum,STRING(3)
+queue_consistency_pending,Number of pending replicas in the consistency checker queue,,Gauge,STRING(3)
+queue_raftsnapshot_process_failure,Number of replicas which failed processing in the Raft repair queue,,Sum,STRING(3)
+queue_gc_info_intenttxns,Number of associated distinct transactions,,Sum,STRING(3)
+queue_gc_processingnanos,Nanoseconds spent processing replicas in the MVCC GC queue,,Sum,STRING(3)
+queue_replicate_nonvoterpromotions,Number of non-voters promoted to voters by the replicate queue,,Sum,STRING(3)
+queue_gc_info_resolvefailed,Number of cleanup intent failures during GC,,Sum,STRING(3)
+queue_raftlog_process_failure,Number of replicas which failed processing in the Raft log queue,,Sum,STRING(3)
+queue_replicate_removedecommissioningvoterreplica,Number of decommissioning voter replica removals attempted by the replicate queue (typically in response to a node outage),,Sum,STRING(3)
+queue_gc_info_transactionspangcpending,Number of GC'able entries corresponding to pending txns,,Sum,STRING(3)
+queue_raftlog_processingnanos,Nanoseconds spent processing replicas in the Raft log queue,,Sum,STRING(3)
+queue_gc_pending,Number of pending replicas in the MVCC GC queue,,Gauge,STRING(3)
+queue_gc_info_resolvetotal,Number of attempted intent resolutions,,Sum,STRING(3)
+queue_replicagc_processingnanos,Nanoseconds spent processing replicas in the replica GC queue,,Sum,STRING(3)
+queue_gc_info_transactionspangcstaging,Number of GC'able entries corresponding to staging txns,,Sum,STRING(3)
+queue_merge_pending,Number of pending replicas in the merge queue,,Gauge,STRING(3)
+queue_replicate_removevoterreplica,Number of voter replica removals attempted by the replicate queue (typically in response to a rebalancer-initiated addition),,Sum,STRING(3)
+queue_replicate_rebalancereplica,Number of replica rebalancer-initiated additions attempted by the replicate queue,,Sum,STRING(3)
+queue_gc_info_transactionspanscanned,Number of entries in transaction spans scanned from the engine,,Sum,STRING(3)
+queue_gc_process_failure,Number of replicas which failed processing in the MVCC GC queue,,Sum,STRING(3)
+queue_tsmaintenance_processingnanos,Nanoseconds spent processing replicas in the time series maintenance queue,,Sum,STRING(3)
+queue_replicate_removelearnerreplica,Number of learner replica removals attempted by the replicate queue (typically due to internal race conditions),,Sum,STRING(3)
+queue_gc_info_transactionspangccommitted,Number of GC'able entries corresponding to committed txns,,Sum,STRING(3)
+queue_replicagc_process_failure,Number of replicas which failed processing in the replica GC queue,,Sum,STRING(3)
+admission_granter_used_soft_slots_kv,Used soft slots,,Gauge,
+admission_wait_sum_sql_sql_response,Total wait time in micros,,Sum,
+admission_wait_sum_sql_kv_response,Total wait time in micros,,Sum,
+admission_requested_sql_kv_response,Number of requests,,Sum,
+admission_requested_elastic_cpu,Number of requests,,Sum,
+admission_admitted_sql_sql_response,Number of requests admitted,,Sum,
+admission_elastic_cpu_returned_nanos,Total CPU nanoseconds returned by elastic work,,Sum,
+admission_wait_sum_kv,Total wait time in micros,,Sum,
+admission_granter_io_tokens_exhausted_duration_kv,"Total duration when IO tokens were exhausted, in micros",,Sum,
+admission_wait_queue_length_elastic_cpu,Length of wait queue,,Gauge,
+admission_admitted_sql_kv_response,Number of requests admitted,,Sum,
+admission_elastic_cpu_utilization_limit,Utilization limit set for the elastic CPU work,,Gauge,
+admission_requested_kv_stores,Number of requests,,Sum,
+admission_wait_sum_sql_leaf_start,Total wait time in micros,,Sum,
+admission_wait_durations_sql_root_start,Wait time durations for requests that waited,,Histogram,
+admission_granter_used_slots_sql_leaf_start,Used slots,,Gauge,
+admission_wait_durations_sql_sql_response,Wait time durations for requests that waited,,Histogram,
+admission_wait_queue_length_sql_leaf_start,Length of wait queue,,Gauge,
+admission_wait_durations_kv_stores,Wait time durations for requests that waited,,Histogram,
+admission_admitted_elastic_cpu,Number of requests admitted,,Sum,
+admission_granter_used_slots_sql_root_start,Used slots,,Gauge,
+admission_requested_kv,Number of requests,,Sum,
+admission_errored_kv_stores,Number of requests not admitted due to error,,Sum,
+admission_wait_queue_length_sql_root_start,Length of wait queue,,Gauge,
+admission_requested_sql_leaf_start,Number of requests,,Sum,
+admission_admitted_kv,Number of requests admitted,,Sum,
+admission_wait_durations_elastic_cpu,Wait time durations for requests that waited,,Histogram,
+admission_wait_queue_length_kv_stores,Length of wait queue,,Gauge,
+admission_wait_sum_elastic_cpu,Total wait time in micros,,Sum,
+admission_admitted_sql_root_start,Number of requests admitted,,Sum,
+admission_elastic_cpu_max_available_nanos,Maximum available CPU nanoseconds per second ignoring utilization limit,,Sum,
+admission_granter_slot_adjuster_decrements_kv,Number of decrements of the total KV slots,,Sum,
+admission_granter_slots_exhausted_duration_kv,"Total duration when KV slots were exhausted, in micros",,Sum,
+admission_scheduler_latency_listener_p99_nanos,The scheduling latency at p99 as observed by the scheduler latency listener,,Gauge,
+admission_granter_cpu_load_short_period_duration_kv,"Total duration when CPULoad was being called with a short period, in micros",,Sum,
+admission_wait_sum_kv_stores,Total wait time in micros,,Sum,
+admission_requested_sql_root_start,Number of requests,,Sum,
+admission_requested_sql_sql_response,Number of requests,,Sum,
+admission_raft_paused_replicas,Number of followers (i.e. Replicas) to which replication is currently paused to help them recover from I/O overload.,,Gauge,STRING(3)
+admission_admitted_kv_stores,Number of requests admitted,,Sum,
+admission_errored_sql_root_start,Number of requests not admitted due to error,,Sum,
+admission_granter_total_moderate_slots_kv,Total moderate load slots for low priority work,,Gauge,
+admission_errored_elastic_cpu,Number of requests not admitted due to error,,Sum,
+admission_wait_sum_sql_root_start,Total wait time in micros,,Sum,
+admission_wait_durations_sql_leaf_start,Wait time durations for requests that waited,,Histogram,
+admission_errored_sql_sql_response,Number of requests not admitted due to error,,Sum,
+admission_elastic_cpu_acquired_nanos,Total CPU nanoseconds acquired by elastic work,,Sum,
+admission_errored_kv,Number of requests not admitted due to error,,Sum,
+admission_errored_sql_leaf_start,Number of requests not admitted due to error,,Sum,
+admission_wait_queue_length_sql_sql_response,Length of wait queue,,Gauge,
+admission_granter_total_slots_kv,Total slots for kv work,,Gauge,
+admission_wait_queue_length_kv,Length of wait queue,,Gauge,
+admission_granter_used_slots_kv,Used slots,,Gauge,
+admission_raft_paused_replicas_dropped_msgs,Number of messages dropped instead of being sent to paused replicas.,,Sum,STRING(3)
+admission_elastic_cpu_utilization,CPU utilization by elastic work,,Gauge,
+admission_wait_durations_kv,Wait time durations for requests that waited,,Histogram,
+admission_admitted_sql_leaf_start,Number of requests admitted,,Sum,
+admission_io_overload,1-normalized float indicating whether IO admission control considers the store as overloaded with respect to compaction out of L0 (considers sub-level and file counts).,,Gauge,STRING(3)
+admission_errored_sql_kv_response,Number of requests not admitted due to error,,Sum,
+admission_granter_slot_adjuster_increments_kv,Number of increments of the total KV slots,,Sum,
+admission_granter_cpu_load_long_period_duration_kv,"Total duration when CPULoad was being called with a long period, in micros",,Sum,
+admission_wait_queue_length_sql_kv_response,Length of wait queue,,Gauge,
+admission_wait_durations_sql_kv_response,Wait time durations for requests that waited,,Histogram,
+rpc_method_migrate_recv,Number of Migrate requests processed,,Sum,
+rpc_method_barrier_recv,Number of Barrier requests processed,,Sum,
+rpc_method_pushtxn_recv,Number of PushTxn requests processed,,Sum,
+rpc_method_adminsplit_recv,Number of AdminSplit requests processed,,Sum,
+rpc_method_resolveintentrange_recv,Number of ResolveIntentRange requests processed,,Sum,
+rpc_method_scan_recv,Number of Scan requests processed,,Sum,
+rpc_method_admintransferlease_recv,Number of AdminTransferLease requests processed,,Sum,
+rpc_method_addsstable_recv,Number of AddSSTable requests processed,,Sum,
+rpc_method_computechecksum_recv,Number of ComputeChecksum requests processed,,Sum,
+rpc_method_adminrelocaterange_recv,Number of AdminRelocateRange requests processed,,Sum,
+rpc_method_isspanempty_recv,Number of IsSpanEmpty requests processed,,Sum,
+rpc_method_leaseinfo_recv,Number of LeaseInfo requests processed,,Sum,
+rpc_method_recomputestats_recv,Number of RecomputeStats requests processed,,Sum,
+rpc_method_probe_recv,Number of Probe requests processed,,Sum,
+rpc_method_adminscatter_recv,Number of AdminScatter requests processed,,Sum,
+rpc_method_adminverifyprotectedtimestamp_recv,Number of AdminVerifyProtectedTimestamp requests processed,,Sum,
+rpc_method_transferlease_recv,Number of TransferLease requests processed,,Sum,
+rpc_method_adminmerge_recv,Number of AdminMerge requests processed,,Sum,
+rpc_method_conditionalput_recv,Number of ConditionalPut requests processed,,Sum,
+rpc_method_deleterange_recv,Number of DeleteRange requests processed,,Sum,
+rpc_method_heartbeattxn_recv,Number of HeartbeatTxn requests processed,,Sum,
+rpc_method_gc_recv,Number of GC requests processed,,Sum,
+rpc_method_subsume_recv,Number of Subsume requests processed,,Sum,
+rpc_method_adminchangereplicas_recv,Number of AdminChangeReplicas requests processed,,Sum,
+rpc_method_checkconsistency_recv,Number of CheckConsistency requests processed,,Sum,
+rpc_method_refreshrange_recv,Number of RefreshRange requests processed,,Sum,
+rpc_method_increment_recv,Number of Increment requests processed,,Sum,
+rpc_method_rangestats_recv,Number of RangeStats requests processed,,Sum,
+rpc_method_reversescan_recv,Number of ReverseScan requests processed,,Sum,
+rpc_method_merge_recv,Number of Merge requests processed,,Sum,
+rpc_method_scaninterleavedintents_recv,Number of ScanInterleavedIntents requests processed,,Sum,
+rpc_method_delete_recv,Number of Delete requests processed,,Sum,
+rpc_method_export_recv,Number of Export requests processed,,Sum,
+rpc_method_endtxn_recv,Number of EndTxn requests processed,,Sum,
+rpc_method_resolveintent_recv,Number of ResolveIntent requests processed,,Sum,
+rpc_method_revertrange_recv,Number of RevertRange requests processed,,Sum,
+rpc_method_querytxn_recv,Number of QueryTxn requests processed,,Sum,
+rpc_method_recovertxn_recv,Number of RecoverTxn requests processed,,Sum,
+rpc_method_truncatelog_recv,Number of TruncateLog requests processed,,Sum,
+rpc_method_adminunsplit_recv,Number of AdminUnsplit requests processed,,Sum,
+rpc_method_put_recv,Number of Put requests processed,,Sum,
+rpc_method_get_recv,Number of Get requests processed,,Sum,
+rpc_method_queryintent_recv,Number of QueryIntent requests processed,,Sum,
+rpc_method_queryresolvedtimestamp_recv,Number of QueryResolvedTimestamp requests processed,,Sum,
+rpc_method_querylocks_recv,Number of QueryLocks requests processed,,Sum,
+rpc_method_requestlease_recv,Number of RequestLease requests processed,,Sum,
+rpc_method_refresh_recv,Number of Refresh requests processed,,Sum,
+rpc_method_clearrange_recv,Number of ClearRange requests processed,,Sum,
+rpc_method_initput_recv,Number of InitPut requests processed,,Sum,
+rpc_method_writebatch_recv,Number of WriteBatch requests processed,,Sum,
+changefeed_emitted_bytes,Bytes emitted by all feeds,,Sum,
+changefeed_buffer_entries_released,"Total entries processed, emitted and acknowledged by the sinks",,Sum,
+changefeed_buffer_entries_mem_released,Total amount of memory released by the entries after they have been emitted,,Sum,
+changefeed_flushes,Total flushes across all feeds,,Sum,
+changefeed_failures,Total number of changefeed jobs which have failed,,Sum,
+changefeed_schema_registry_registrations,Number of registration attempts with the schema registry,,Sum,
+changefeed_size_based_flushes,Total size based flushes across all feeds,,Sum,
+changefeed_buffer_pushback_nanos,Total time spent waiting while the buffer was full,,Sum,
+changefeed_forwarded_resolved_messages,Resolved timestamps forwarded from the change aggregator to the change frontier,,Sum,
+changefeed_running,"Number of currently running changefeeds, including sinkless",,Gauge,
+changefeed_backfill_pending_ranges,Number of ranges in an ongoing backfill that are yet to be fully emitted,,Gauge,
+changefeed_replan_count,Number of replans triggered across all feeds,,Sum,
+changefeed_checkpoint_hist_nanos,Time spent checkpointing changefeed progress,,Histogram,
+changefeed_buffer_entries_out,Total entries leaving the buffer between raft and changefeed sinks,,Sum,
+changefeed_bytes_messages_pushback_nanos,Total time spent throttled for bytes quota,,Sum,
+changefeed_error_retries,Total retryable errors encountered by all changefeeds,,Sum,
+changefeed_buffer_entries_in,Total entries entering the buffer between raft and changefeed sinks,,Sum,
+changefeed_sink_batch_hist_nanos,Time spent batched in the sink buffer before being flushed and acknowledged,,Histogram,
+changefeed_table_metadata_nanos,Time blocked while verifying table metadata histories,,Sum,
+changefeed_commit_latency,"Description: Event commit latency: a difference between event MVCC timestamp and the time it was acknowledged by the downstream sink.  If the sink batches events,  then the difference between the oldest event in the batch and acknowledgement is recorded; Excludes latency during backfill",,Histogram,
+changefeed_nprocs_in_flight_count,Number of buffered events in the parallel consumer,,Gauge,
+changefeed_backfill_count,Number of changefeeds currently executing backfill,,Gauge,
+changefeed_message_size_hist,Message size histogram,,Histogram,
+changefeed_flush_hist_nanos,Time spent flushing messages across all changefeeds,,Histogram,
+changefeed_queue_time_nanos,Time KV event spent waiting to be processed,,Sum,
+changefeed_buffer_entries_mem_acquired,Total amount of memory acquired for entries as they enter the system,,Sum,
+changefeed_admit_latency,"Description: Event admission latency: a difference between event MVCC timestamp and the time it was admitted into changefeed pipeline; Note: this metric includes the time spent waiting until event can be processed due to backpressure or time spent resolving schema descriptors. Also note, this metric excludes latency during backfill",,Histogram,
+changefeed_schema_registry_retry_count,Number of retries encountered when sending requests to the schema registry,,Sum,
+changefeed_messages_messages_pushback_nanos,Total time spent throttled for messages quota,,Sum,
+changefeed_nprocs_flush_nanos,Total time spent idle waiting for the parallel consumer to flush,,Sum,
+changefeed_internal_retry_message_count,Number of messages for which an attempt to retry them within an aggregator node was made,,Gauge,
+changefeed_frontier_updates,Number of change frontier updates across all feeds,,Sum,
+changefeed_batch_reduction_count,Number of times a changefeed aggregator node attempted to reduce the size of message batches it emitted to the sink,,Gauge,
+changefeed_max_behind_nanos,Largest commit-to-emit duration of any running feed,,Gauge,
+changefeed_emitted_messages,Messages emitted by all feeds,,Sum,
+changefeed_nprocs_consume_event_nanos,Total time spent waiting to add an event to the parallel consumer,,Sum,
+changefeed_flushed_bytes,Bytes emitted by all feeds; maybe different from changefeed.emitted_bytes when compression is enabled,,Sum,
+changefeed_flush_messages_pushback_nanos,Total time spent throttled for flush quota,,Sum,
+jobs_auto_create_stats_resume_retry_error,Number of auto_create_stats jobs which failed with a retriable error,,Sum,
+jobs_auto_create_stats_fail_or_cancel_retry_error,Number of auto_create_stats jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_auto_sql_stats_compaction_fail_or_cancel_retry_error,Number of auto_sql_stats_compaction jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_auto_schema_telemetry_resume_completed,Number of auto_schema_telemetry jobs which successfully resumed to completion,,Sum,
+jobs_auto_sql_stats_compaction_fail_or_cancel_failed,Number of auto_sql_stats_compaction jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_auto_sql_stats_compaction_resume_retry_error,Number of auto_sql_stats_compaction jobs which failed with a retriable error,,Sum,
+jobs_auto_create_stats_currently_running,Number of auto_create_stats jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_auto_sql_stats_compaction_currently_running,Number of auto_sql_stats_compaction jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_auto_create_stats_currently_idle,Number of auto_create_stats jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_adopt_iterations,number of job-adopt iterations performed by the registry,,Sum,
+jobs_auto_span_config_reconciliation_resume_completed,Number of auto_span_config_reconciliation jobs which successfully resumed to completion,,Sum,
+jobs_auto_sql_stats_compaction_fail_or_cancel_completed,Number of auto_sql_stats_compaction jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_auto_create_stats_resume_failed,Number of auto_create_stats jobs which failed with a non-retriable error,,Sum,
+jobs_auto_create_stats_fail_or_cancel_failed,Number of auto_create_stats jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_auto_span_config_reconciliation_resume_retry_error,Number of auto_span_config_reconciliation jobs which failed with a retriable error,,Sum,
+jobs_auto_create_stats_resume_completed,Number of auto_create_stats jobs which successfully resumed to completion,,Sum,
+jobs_auto_sql_stats_compaction_currently_idle,Number of auto_sql_stats_compaction jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_auto_schema_telemetry_resume_retry_error,Number of auto_schema_telemetry jobs which failed with a retriable error,,Sum,
+jobs_auto_schema_telemetry_currently_running,Number of auto_schema_telemetry jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_auto_span_config_reconciliation_fail_or_cancel_failed,Number of auto_span_config_reconciliation jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_auto_schema_telemetry_fail_or_cancel_retry_error,Number of auto_schema_telemetry jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_auto_span_config_reconciliation_resume_failed,Number of auto_span_config_reconciliation jobs which failed with a non-retriable error,,Sum,
+jobs_auto_schema_telemetry_fail_or_cancel_failed,Number of auto_schema_telemetry jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_auto_span_config_reconciliation_fail_or_cancel_completed,Number of auto_span_config_reconciliation jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_auto_schema_telemetry_resume_failed,Number of auto_schema_telemetry jobs which failed with a non-retriable error,,Sum,
+jobs_auto_span_config_reconciliation_fail_or_cancel_retry_error,Number of auto_span_config_reconciliation jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_auto_span_config_reconciliation_currently_idle,Number of auto_span_config_reconciliation jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_auto_schema_telemetry_currently_idle,Number of auto_schema_telemetry jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_auto_schema_telemetry_fail_or_cancel_completed,Number of auto_schema_telemetry jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_auto_create_stats_fail_or_cancel_completed,Number of auto_create_stats jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_auto_span_config_reconciliation_currently_running,Number of auto_span_config_reconciliation jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_auto_sql_stats_compaction_resume_completed,Number of auto_sql_stats_compaction jobs which successfully resumed to completion,,Sum,
+jobs_auto_sql_stats_compaction_resume_failed,Number of auto_sql_stats_compaction jobs which failed with a non-retriable error,,Sum,
+jobs_schema_change_resume_completed,Number of schema_change jobs which successfully resumed to completion,,Sum,
+jobs_stream_replication_currently_running,Number of stream_replication jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_schema_change_gc_resume_retry_error,Number of schema_change_gc jobs which failed with a retriable error,,Sum,
+jobs_schema_change_gc_resume_completed,Number of schema_change_gc jobs which successfully resumed to completion,,Sum,
+jobs_stream_replication_fail_or_cancel_failed,Number of stream_replication jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_schema_change_gc_fail_or_cancel_failed,Number of schema_change_gc jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_schema_change_gc_fail_or_cancel_completed,Number of schema_change_gc jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_schema_change_gc_currently_idle,Number of schema_change_gc jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_schema_change_fail_or_cancel_failed,Number of schema_change jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_stream_replication_fail_or_cancel_retry_error,Number of stream_replication jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_stream_ingestion_fail_or_cancel_retry_error,Number of stream_ingestion jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_stream_replication_resume_failed,Number of stream_replication jobs which failed with a non-retriable error,,Sum,
+jobs_stream_replication_resume_retry_error,Number of stream_replication jobs which failed with a retriable error,,Sum,
+jobs_schema_change_fail_or_cancel_completed,Number of schema_change jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_schema_change_gc_currently_running,Number of schema_change_gc jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_stream_ingestion_resume_completed,Number of stream_ingestion jobs which successfully resumed to completion,,Sum,
+jobs_stream_ingestion_resume_failed,Number of stream_ingestion jobs which failed with a non-retriable error,,Sum,
+jobs_schema_change_gc_fail_or_cancel_retry_error,Number of schema_change_gc jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_schema_change_currently_running,Number of schema_change jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_schema_change_currently_idle,Number of schema_change jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_schema_change_resume_retry_error,Number of schema_change jobs which failed with a retriable error,,Sum,
+jobs_schema_change_gc_resume_failed,Number of schema_change_gc jobs which failed with a non-retriable error,,Sum,
+jobs_stream_ingestion_currently_idle,Number of stream_ingestion jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_stream_replication_resume_completed,Number of stream_replication jobs which successfully resumed to completion,,Sum,
+jobs_stream_ingestion_fail_or_cancel_failed,Number of stream_ingestion jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_stream_ingestion_fail_or_cancel_completed,Number of stream_ingestion jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_stream_ingestion_resume_retry_error,Number of stream_ingestion jobs which failed with a retriable error,,Sum,
+jobs_schema_change_fail_or_cancel_retry_error,Number of schema_change jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_schema_change_resume_failed,Number of schema_change jobs which failed with a non-retriable error,,Sum,
+jobs_stream_ingestion_currently_running,Number of stream_ingestion jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_stream_replication_currently_idle,Number of stream_replication jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_stream_replication_fail_or_cancel_completed,Number of stream_replication jobs which successfully completed their failure or cancelation process,,Sum,
+storage_write_stalls,Number of instances of intentional write stalls to backpressure incoming writes,,Gauge,STRING(3)
+storage_l0_bytes_ingested,Number of bytes ingested directly into Level 0,,Gauge,STRING(3)
+storage_l2_level_size,Size of the SSTables in level 2,,Gauge,STRING(3)
+storage_l0_bytes_flushed,Number of bytes flushed (from memtables) into Level 0,,Gauge,STRING(3)
+storage_l1_level_score,Compaction score of level 1,,Gauge,STRING(3)
+storage_l6_level_score,Compaction score of level 6,,Gauge,STRING(3)
+storage_l3_bytes_ingested,Number of bytes ingested directly into Level 3,,Gauge,STRING(3)
+storage_l1_level_size,Size of the SSTables in level 1,,Gauge,STRING(3)
+storage_l5_level_size,Size of the SSTables in level 5,,Gauge,STRING(3)
+storage_l0_sublevels,Number of Level 0 sublevels,,Gauge,STRING(3)
+storage_l6_bytes_ingested,Number of bytes ingested directly into Level 6,,Gauge,STRING(3)
+storage_disk_slow,Number of instances of disk operations taking longer than 10s,,Gauge,STRING(3)
+storage_l0_level_size,Size of the SSTables in level 0,,Gauge,STRING(3)
+storage_l4_level_score,Compaction score of level 4,,Gauge,STRING(3)
+storage_l1_bytes_ingested,Number of bytes ingested directly into Level 1,,Gauge,STRING(3)
+storage_l3_level_size,Size of the SSTables in level 3,,Gauge,STRING(3)
+storage_l4_level_size,Size of the SSTables in level 4,,Gauge,STRING(3)
+storage_disk_stalled,Number of instances of disk operations taking longer than 30s,,Gauge,STRING(3)
+storage_l2_bytes_ingested,Number of bytes ingested directly into Level 2,,Gauge,STRING(3)
+storage_l0_num_files,Number of SSTables in Level 0,,Gauge,STRING(3)
+storage_l0_level_score,Compaction score of level 0,,Gauge,STRING(3)
+storage_l6_level_size,Size of the SSTables in level 6,,Gauge,STRING(3)
+storage_l5_level_score,Compaction score of level 5,,Gauge,STRING(3)
+storage_l2_level_score,Compaction score of level 2,,Gauge,STRING(3)
+storage_write_stall_nanos,Total write stall duration in nanos,,Gauge,STRING(3)
+storage_keys_range_key_set_count,Approximate count of RangeKeySet internal keys across the storage engine.,,Gauge,STRING(3)
+storage_marked_for_compaction_files,Count of SSTables marked for compaction,,Gauge,STRING(3)
+storage_l4_bytes_ingested,Number of bytes ingested directly into Level 4,,Gauge,STRING(3)
+storage_l3_level_score,Compaction score of level 3,,Gauge,STRING(3)
+storage_l5_bytes_ingested,Number of bytes ingested directly into Level 5,,Gauge,STRING(3)
+jobs_row_level_ttl_fail_or_cancel_completed,Number of row_level_ttl jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_restore_fail_or_cancel_completed,Number of restore jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_row_level_ttl_rows_selected,Number of rows selected for deletion by the row level TTL job.,,Sum,
+jobs_row_level_ttl_delete_duration,Duration for delete requests during row level TTL.,,Histogram,
+jobs_resumed_claimed_jobs,number of claimed-jobs resumed in job-adopt iterations,,Sum,
+jobs_restore_resume_retry_error,Number of restore jobs which failed with a retriable error,,Sum,
+jobs_restore_resume_failed,Number of restore jobs which failed with a non-retriable error,,Sum,
+jobs_restore_resume_completed,Number of restore jobs which successfully resumed to completion,,Sum,
+jobs_restore_fail_or_cancel_retry_error,Number of restore jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_restore_currently_idle,Number of restore jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_row_level_ttl_select_duration,Duration for select requests during row level TTL.,,Histogram,
+jobs_row_level_ttl_total_expired_rows,Approximate number of rows that have expired the TTL on the TTL table.,,Gauge,
+jobs_row_level_ttl_currently_running,Number of row_level_ttl jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_restore_currently_running,Number of restore jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_row_level_ttl_resume_failed,Number of row_level_ttl jobs which failed with a non-retriable error,,Sum,
+jobs_row_level_ttl_currently_idle,Number of row_level_ttl jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_row_level_ttl_resume_completed,Number of row_level_ttl jobs which successfully resumed to completion,,Sum,
+jobs_restore_fail_or_cancel_failed,Number of restore jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_running_non_idle,number of running jobs that are not idle,,Gauge,
+jobs_row_level_ttl_span_total_duration,Duration for processing a span during row level TTL.,,Histogram,
+jobs_row_level_ttl_resume_retry_error,Number of row_level_ttl jobs which failed with a retriable error,,Sum,
+jobs_row_level_ttl_fail_or_cancel_retry_error,Number of row_level_ttl jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_row_level_ttl_fail_or_cancel_failed,Number of row_level_ttl jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_row_level_ttl_total_rows,Approximate number of rows on the TTL table.,,Gauge,
+jobs_row_level_ttl_rows_deleted,Number of rows deleted by the row level TTL job.,,Sum,
+jobs_row_level_ttl_num_active_spans,Number of active spans the TTL job is deleting from.,,Gauge,
+range_snapshots_recv_in_progress,Number of non-empty snapshots being received,,Gauge,STRING(3)
+range_splits,Number of range splits,,Sum,STRING(3)
+range_snapshots_rebalancing_sent_bytes,Number of rebalancing snapshot bytes sent,,Sum,STRING(3)
+range_snapshots_send_in_progress,Number of non-empty snapshots being sent,,Gauge,STRING(3)
+range_snapshots_generated,Number of generated snapshots,,Sum,STRING(3)
+range_snapshots_applied_voter,Number of snapshots applied by voter replicas,,Sum,STRING(3)
+range_snapshots_unknown_rcvd_bytes,Number of unknown snapshot bytes received,,Sum,STRING(3)
+range_recoveries,Count of offline loss of quorum recovery operations performed on ranges.,,Sum,STRING(3)
+range_removes,Number of range removals,,Sum,STRING(3)
+range_snapshots_recovery_rcvd_bytes,Number of recovery snapshot bytes received,,Sum,STRING(3)
+range_snapshots_rcvd_bytes,Number of snapshot bytes received,,Sum,STRING(3)
+range_snapshots_send_queue,Number of snapshots queued to send,,Gauge,STRING(3)
+range_snapshots_recv_total_in_progress,Number of total snapshots being received,,Gauge,STRING(3)
+range_snapshots_recovery_sent_bytes,Number of recovery snapshot bytes sent,,Sum,STRING(3)
+range_adds,Number of range additions,,Sum,STRING(3)
+range_snapshots_rebalancing_rcvd_bytes,Number of rebalancing snapshot bytes received,,Sum,STRING(3)
+range_snapshots_applied_initial,Number of snapshots applied for initial upreplication,,Sum,STRING(3)
+range_raftleadertransfers,Number of raft leader transfers,,Sum,STRING(3)
+range_merges,Number of range merges,,Sum,STRING(3)
+range_snapshots_applied_non_voter,Number of snapshots applied by non-voter replicas,,Sum,STRING(3)
+range_snapshots_unknown_sent_bytes,Number of unknown snapshot bytes sent,,Sum,STRING(3)
+range_snapshots_recv_queue,Number of snapshots queued to receive,,Gauge,STRING(3)
+range_snapshots_send_total_in_progress,Number of total snapshots being sent,,Gauge,STRING(3)
+range_snapshots_sent_bytes,Number of snapshot bytes sent,,Sum,STRING(3)
+sql_txn_begin_started_count,Number of SQL transaction BEGIN statements started,,Sum,
+sql_txn_rollback_count_internal,Number of SQL transaction ROLLBACK statements successfully executed (internal queries),,Sum,
+sql_txn_rollback_count,Number of SQL transaction ROLLBACK statements successfully executed,,Sum,
+sql_txn_latency_internal,Latency of SQL transactions (internal queries),,Histogram,
+sql_txn_commit_started_count_internal,Number of SQL transaction COMMIT statements started (internal queries),,Sum,
+sql_txn_contended_count,Number of SQL transactions experienced contention,,Sum,
+sql_txn_abort_count,Number of SQL transaction abort errors,,Sum,
+sql_txn_commit_started_count,Number of SQL transaction COMMIT statements started,,Sum,
+sql_txns_open_internal,Number of currently open user SQL transactions (internal queries),,Gauge,
+sql_txn_rollback_started_count,Number of SQL transaction ROLLBACK statements started,,Sum,
+sql_txn_begin_count_internal,Number of SQL transaction BEGIN statements successfully executed (internal queries),,Sum,
+sql_txns_open,Number of currently open user SQL transactions,,Gauge,
+sql_txn_begin_started_count_internal,Number of SQL transaction BEGIN statements started (internal queries),,Sum,
+sql_txn_commit_count,Number of SQL transaction COMMIT statements successfully executed,,Sum,
+sql_txn_latency,Latency of SQL transactions,,Histogram,
+sql_txn_contended_count_internal,Number of SQL transactions experienced contention (internal queries),,Sum,
+sql_txn_abort_count_internal,Number of SQL transaction abort errors (internal queries),,Sum,
+sql_txn_commit_count_internal,Number of SQL transaction COMMIT statements successfully executed (internal queries),,Sum,
+sql_txn_rollback_started_count_internal,Number of SQL transaction ROLLBACK statements started (internal queries),,Sum,
+sql_txn_begin_count,Number of SQL transaction BEGIN statements successfully executed,,Sum,
+sql_disk_distsql_spilled_bytes_read,Number of bytes read from temporary disk storage as a result of spilling,,Sum,
+sql_disk_distsql_spilled_bytes_written,Number of bytes written to temporary disk storage as a result of spilling,,Sum,
+sql_distsql_flows_scheduled,Number of distributed SQL flows scheduled,,Sum,
+sql_distsql_flows_active,Number of distributed SQL flows currently active,,Gauge,
+sql_distsql_flows_queue_wait,Duration of time flows spend waiting in the queue,,Histogram,
+sql_distsql_queries_total,Number of SQL queries executed,,Sum,
+sql_disk_distsql_max,Disk usage per sql statement for distsql,,Histogram,
+sql_distsql_select_count_internal,Number of DistSQL SELECT statements (internal queries),,Sum,
+sql_distsql_service_latency_internal,Latency of DistSQL request execution (internal queries),,Histogram,
+sql_disk_distsql_current,Current sql statement disk usage for distsql,,Gauge,
+sql_distsql_queries_spilled,Number of queries that have spilled to disk,,Sum,
+sql_distsql_exec_latency,Latency of DistSQL statement execution,,Histogram,
+sql_distsql_queries_active,Number of SQL queries currently active,,Gauge,
+sql_distsql_select_count,Number of DistSQL SELECT statements,,Sum,
+sql_distsql_service_latency,Latency of DistSQL request execution,,Histogram,
+sql_distsql_contended_queries_count,Number of SQL queries that experienced contention,,Sum,
+sql_distsql_vec_openfds,Current number of open file descriptors used by vectorized external storage,,Gauge,
+sql_distsql_flows_total,Number of distributed SQL flows executed,,Sum,
+sql_distsql_exec_latency_internal,Latency of DistSQL statement execution (internal queries),,Histogram,
+sql_distsql_flows_queued,Number of distributed SQL flows currently queued,,Gauge,
+schedules_scheduled_schema_telemetry_executor_failed,Number of scheduled-schema-telemetry-executor jobs failed,,Sum,
+schedules_scheduled_schema_telemetry_executor_started,Number of scheduled-schema-telemetry-executor jobs started,,Sum,
+schedules_BACKUP_last_completed_time,The unix timestamp of the most recently completed backup by a schedule specified as maintaining this metric,,Gauge,
+schedules_scheduled_sql_stats_compaction_executor_failed,Number of scheduled-sql-stats-compaction-executor jobs failed,,Sum,
+schedules_scheduled_sql_stats_compaction_executor_started,Number of scheduled-sql-stats-compaction-executor jobs started,,Sum,
+schedules_scheduled_row_level_ttl_executor_started,Number of scheduled-row-level-ttl-executor jobs started,,Sum,
+schedules_round_reschedule_skip,The number of schedules rescheduled due to SKIP policy,,Gauge,
+schedules_BACKUP_failed,Number of BACKUP jobs failed,,Sum,
+schedules_round_jobs_started,The number of jobs started,,Gauge,
+schedules_error,Number of schedules which did not execute successfully,,Gauge,
+schedules_BACKUP_succeeded,Number of BACKUP jobs succeeded,,Sum,
+schedules_round_reschedule_wait,The number of schedules rescheduled due to WAIT policy,,Gauge,
+schedules_malformed,Number of malformed schedules,,Gauge,
+schedules_scheduled_row_level_ttl_executor_failed,Number of scheduled-row-level-ttl-executor jobs failed,,Sum,
+schedules_scheduled_sql_stats_compaction_executor_succeeded,Number of scheduled-sql-stats-compaction-executor jobs succeeded,,Sum,
+schedules_BACKUP_started,Number of BACKUP jobs started,,Sum,
+schedules_scheduled_schema_telemetry_executor_succeeded,Number of scheduled-schema-telemetry-executor jobs succeeded,,Sum,
+schedules_scheduled_row_level_ttl_executor_succeeded,Number of scheduled-row-level-ttl-executor jobs succeeded,,Sum,
+rocksdb_compacted_bytes_read,Bytes read during compaction,,Gauge,STRING(3)
+rocksdb_memtable_total_size,Current size of memtable in bytes,,Gauge,STRING(3)
+rocksdb_encryption_algorithm,"Algorithm in use for encryption-at-rest, see ccl/storageccl/engineccl/enginepbccl/key_registry.proto",,Gauge,STRING(3)
+rocksdb_block_cache_pinned_usage,Bytes pinned by the block cache,,Gauge,STRING(3)
+rocksdb_num_sstables,Number of storage engine SSTables,,Gauge,STRING(3)
+rocksdb_block_cache_usage,Bytes used by the block cache,,Gauge,STRING(3)
+rocksdb_flushed_bytes,Bytes written during flush,,Gauge,STRING(3)
+rocksdb_read_amplification,Number of disk reads per query,,Gauge,STRING(3)
+rocksdb_bloom_filter_prefix_useful,Number of times the bloom filter helped avoid iterator creation,,Gauge,STRING(3)
+rocksdb_flushes,Number of table flushes,,Gauge,STRING(3)
+rocksdb_compacted_bytes_written,Bytes written during compaction,,Gauge,STRING(3)
+rocksdb_ingested_bytes,Bytes ingested,,Gauge,STRING(3)
+rocksdb_bloom_filter_prefix_checked,Number of times the bloom filter was checked,,Gauge,STRING(3)
+rocksdb_table_readers_mem_estimate,Memory used by index and filter blocks,,Gauge,STRING(3)
+rocksdb_block_cache_misses,Count of block cache misses,,Gauge,STRING(3)
+rocksdb_compactions,Number of table compactions,,Gauge,STRING(3)
+rocksdb_estimated_pending_compaction,Estimated pending compaction bytes,,Gauge,STRING(3)
+rocksdb_block_cache_hits,Count of block cache hits,,Gauge,STRING(3)
+sql_mem_internal_txn_current,Current sql transaction memory usage for internal,,Gauge,
+sql_mem_internal_session_current,Current sql session memory usage for internal,,Gauge,
+sql_mem_bulk_current,Current sql statement memory usage for bulk operations,,Gauge,
+sql_mem_bulk_max,Memory usage per sql statement for bulk operations,,Histogram,
+sql_mem_internal_session_prepared_max,Memory usage by prepared statements per sql session for internal,,Histogram,
+sql_mem_sql_txn_current,Current sql transaction memory usage for sql,,Gauge,
+sql_mem_root_max,Memory usage per sql statement for root,,Histogram,
+sql_mem_sql_session_prepared_current,Current sql session memory usage by prepared statements for sql,,Gauge,
+sql_mem_sql_session_current,Current sql session memory usage for sql,,Gauge,
+sql_mem_distsql_current,Current sql statement memory usage for distsql,,Gauge,
+sql_mem_sql_txn_max,Memory usage per sql transaction for sql,,Histogram,
+sql_mem_internal_txn_max,Memory usage per sql transaction for internal,,Histogram,
+sql_mem_internal_session_prepared_current,Current sql session memory usage by prepared statements for internal,,Gauge,
+sql_mem_internal_session_max,Memory usage per sql session for internal,,Histogram,
+sql_mem_sql_session_prepared_max,Memory usage by prepared statements per sql session for sql,,Histogram,
+sql_mem_distsql_max,Memory usage per sql statement for distsql,,Histogram,
+sql_mem_sql_session_max,Memory usage per sql session for sql,,Histogram,
+sql_mem_root_current,Current sql statement memory usage for root,,Gauge,
+jobs_create_stats_fail_or_cancel_completed,Number of create_stats jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_changefeed_resume_completed,Number of changefeed jobs which successfully resumed to completion,,Sum,
+jobs_create_stats_fail_or_cancel_retry_error,Number of create_stats jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_changefeed_fail_or_cancel_retry_error,Number of changefeed jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_create_stats_resume_retry_error,Number of create_stats jobs which failed with a retriable error,,Sum,
+jobs_changefeed_fail_or_cancel_completed,Number of changefeed jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_create_stats_resume_completed,Number of create_stats jobs which successfully resumed to completion,,Sum,
+jobs_changefeed_resume_retry_error,Number of changefeed jobs which failed with a retriable error,,Sum,
+jobs_create_stats_currently_idle,Number of create_stats jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_create_stats_resume_failed,Number of create_stats jobs which failed with a non-retriable error,,Sum,
+jobs_create_stats_currently_running,Number of create_stats jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_changefeed_resume_failed,Number of changefeed jobs which failed with a non-retriable error,,Sum,
+jobs_claimed_jobs,number of jobs claimed in job-adopt iterations,,Sum,
+jobs_create_stats_fail_or_cancel_failed,Number of create_stats jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_changefeed_currently_idle,Number of changefeed jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_changefeed_currently_running,Number of changefeed jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_changefeed_fail_or_cancel_failed,Number of changefeed jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+sql_contention_resolver_failed_resolutions,Number of failed transaction ID resolution attempts,,Sum,
+sql_contention_txn_id_cache_miss,Number of cache misses,,Sum,
+sql_copy_count,Number of COPY SQL statements successfully executed,,Sum,
+sql_copy_count_internal,Number of COPY SQL statements successfully executed (internal queries),,Sum,
+sql_copy_nonatomic_started_count_internal,Number of non-atomic COPY SQL statements started (internal queries),,Sum,
+sql_copy_started_count,Number of COPY SQL statements started,,Sum,
+sql_contention_resolver_retries,Number of times transaction id resolution has been retried,,Sum,
+sql_copy_nonatomic_started_count,Number of non-atomic COPY SQL statements started,,Sum,
+sql_conns,Number of open SQL connections,,Gauge,
+sql_contention_resolver_queue_size,Length of queued unresolved contention events,,Gauge,
+sql_conn_latency,Latency to establish and authenticate a SQL connection,,Histogram,
+sql_copy_started_count_internal,Number of COPY SQL statements started (internal queries),,Sum,
+sql_copy_nonatomic_count,Number of non-atomic COPY SQL statements successfully executed,,Sum,
+sql_conn_failures,Number of sql conection failures,,Sum,
+sql_contention_txn_id_cache_read,Number of cache read,,Sum,
+sql_copy_nonatomic_count_internal,Number of non-atomic COPY SQL statements successfully executed (internal queries),,Sum,
+raft_rcvd_voteresp,Number of MsgVoteResp messages received by this store,,Sum,STRING(3)
+raft_rcvd_heartbeatresp,"Number of (coalesced, if enabled) MsgHeartbeatResp messages received by this store",,Sum,STRING(3)
+raft_rcvd_timeoutnow,Number of MsgTimeoutNow messages received by this store,,Sum,STRING(3)
+raft_rcvd_queued_bytes,Number of bytes in messages currently waiting for raft processing,,Gauge,STRING(3)
+raft_rcvd_transferleader,Number of MsgTransferLeader messages received by this store,,Sum,STRING(3)
+raft_rcvd_heartbeat,"Number of (coalesced, if enabled) MsgHeartbeat messages received by this store",,Sum,STRING(3)
+raft_rcvd_app,Number of MsgApp messages received by this store,,Sum,STRING(3)
+raft_rcvd_prevoteresp,Number of MsgPreVoteResp messages received by this store,,Sum,STRING(3)
+raft_rcvd_prop,Number of MsgProp messages received by this store,,Sum,STRING(3)
+raft_rcvd_vote,Number of MsgVote messages received by this store,,Sum,STRING(3)
+raft_rcvd_stepped_bytes,Number of bytes in messages processed by Raft.,,Sum,STRING(3)
+raft_rcvd_dropped_bytes,Bytes of dropped incoming Raft messages,,Sum,STRING(3)
+raft_rcvd_appresp,Number of MsgAppResp messages received by this store,,Sum,STRING(3)
+raft_rcvd_prevote,Number of MsgPreVote messages received by this store,,Sum,STRING(3)
+raft_rcvd_dropped,Number of incoming Raft messages dropped (due to queue length or size),,Sum,STRING(3)
+raft_rcvd_snap,Number of MsgSnap messages received by this store,,Sum,STRING(3)
+txn_refresh_auto_retries,Number of request retries after successful refreshes,,Sum,
+txn_restarts_writetooold,Number of restarts due to a concurrent writer committing first,,Sum,
+txn_refresh_fail,Number of failed transaction refreshes,,Sum,
+txn_restarts_asyncwritefailure,Number of restarts due to async consensus writes that failed to leave intents,,Sum,
+txn_restarts_readwithinuncertainty,Number of restarts due to reading a new value within the uncertainty interval,,Sum,
+txn_refresh_success,"Number of successful transaction refreshes. A refresh may be preemptive or reactive. A reactive refresh is performed after a request throws an error because a refresh is needed for it to succeed. In these cases, the request will be re-issued as an auto-retry (see txn.refresh.auto_retries) after the refresh succeeds.",,Sum,
+txn_restarts_serializable,Number of restarts due to a forwarded commit timestamp and isolation=SERIALIZABLE,,Sum,
+txn_restarts_txnaborted,Number of restarts due to an abort by a concurrent transaction (usually due to deadlock),,Sum,
+txn_refresh_fail_with_condensed_spans,"Number of failed refreshes for transactions whose read tracking lost fidelity because of condensing. Such a failure could be a false conflict. Failures counted here are also counted in txn.refresh.fail, and the respective transactions are also counted in txn.refresh.memory_limit_exceeded.",,Sum,
+txn_restarts_commitdeadlineexceeded,Number of restarts due to a transaction exceeding its deadline,,Sum,
+txn_restarts,Number of restarted KV transactions,,Histogram,
+txn_restarts_txnpush,Number of restarts due to a transaction push failure,,Sum,
+txn_restarts_unknown,Number of restarts due to a unknown reasons,,Sum,
+txn_refresh_memory_limit_exceeded,"Number of transaction which exceed the refresh span bytes limit, causing their read spans to be condensed",,Sum,
+txn_restarts_writetoooldmulti,Number of restarts due to multiple concurrent writers committing first,,Sum,
+sql_guardrails_transaction_rows_written_err_count_internal,Number of transactions errored because of transaction_rows_written_err guardrail (internal queries),,Sum,
+sql_guardrails_transaction_rows_read_err_count_internal,Number of transactions errored because of transaction_rows_read_err guardrail (internal queries),,Sum,
+sql_guardrails_transaction_rows_read_log_count,Number of transactions logged because of transaction_rows_read_log guardrail,,Sum,
+sql_guardrails_max_row_size_log_count_internal,Number of rows observed violating sql.guardrails.max_row_size_log (internal queries),,Sum,
+sql_guardrails_transaction_rows_written_log_count_internal,Number of transactions logged because of transaction_rows_written_log guardrail (internal queries),,Sum,
+sql_guardrails_full_scan_rejected_count_internal,Number of full table or index scans that have been rejected because of `disallow_full_table_scans` guardrail (internal queries),,Sum,
+sql_guardrails_transaction_rows_read_log_count_internal,Number of transactions logged because of transaction_rows_read_log guardrail (internal queries),,Sum,
+sql_guardrails_transaction_rows_read_err_count,Number of transactions errored because of transaction_rows_read_err guardrail,,Sum,
+sql_guardrails_max_row_size_err_count_internal,Number of rows observed violating sql.guardrails.max_row_size_err (internal queries),,Sum,
+sql_guardrails_full_scan_rejected_count,Number of full table or index scans that have been rejected because of `disallow_full_table_scans` guardrail,,Sum,
+sql_guardrails_max_row_size_log_count,Number of rows observed violating sql.guardrails.max_row_size_log,,Sum,
+sql_guardrails_transaction_rows_written_err_count,Number of transactions errored because of transaction_rows_written_err guardrail,,Sum,
+sql_guardrails_max_row_size_err_count,Number of rows observed violating sql.guardrails.max_row_size_err,,Sum,
+sql_guardrails_transaction_rows_written_log_count,Number of transactions logged because of transaction_rows_written_log guardrail,,Sum,
+sys_host_net_recv_bytes,Bytes received on all network interfaces since this process started,,Gauge,
+sys_host_disk_iopsinprogress,IO operations currently in progress on this host,,Gauge,
+sys_host_disk_read_time,Time spent reading from all disks since this process started,,Gauge,
+sys_host_net_send_packets,Packets sent on all network interfaces since this process started,,Gauge,
+sys_host_disk_weightedio_time,Weighted time spent reading from or writing to to all disks since this process started,,Gauge,
+sys_host_disk_write_count,Disk write operations across all disks since this process started,,Gauge,
+sys_host_net_recv_packets,Packets received on all network interfaces since this process started,,Gauge,
+sys_host_disk_write_bytes,Bytes written to all disks since this process started,,Gauge,
+sys_host_disk_read_bytes,Bytes read from all disks since this process started,,Gauge,
+sys_host_disk_write_time,Time spent writing to all disks since this process started,,Gauge,
+sys_host_disk_read_count,Disk read operations across all disks since this process started,,Gauge,
+sys_host_net_send_bytes,Bytes sent on all network interfaces since this process started,,Gauge,
+sys_host_disk_io_time,Time spent reading from or writing to all disks since this process started,,Gauge,
+kv_protectedts_reconciliation_records_removed,number of records removed during reconciliation runs on this node,,Sum,
+kv_prober_read_failures,"Number of attempts made to read probe KV that failed, whether due to error or timeout",,Sum,
+kv_protectedts_reconciliation_errors,number of errors encountered during reconciliation runs on this node,,Sum,
+kv_prober_read_latency,Latency of successful KV read probes,,Histogram,
+kv_prober_write_quarantine_oldest_duration,The duration that the oldest range in the write quarantine pool has remained,,Gauge,
+kv_protectedts_reconciliation_records_processed,number of records processed without error during reconciliation on this node,,Sum,
+kv_prober_read_attempts,"Number of attempts made to read probe KV, regardless of outcome",,Sum,
+kv_prober_planning_failures,"Number of attempts at planning out probes that failed; in order to probe KV we need to plan out which ranges to probe; if planning fails, then kvprober is not able to send probes to all ranges; consider alerting on this metric as a result",,Sum,
+kv_prober_write_failures,"Number of attempts made to write probe KV that failed, whether due to error or timeout",,Sum,
+kv_prober_write_attempts,"Number of attempts made to write probe KV, regardless of outcome",,Sum,
+kv_prober_write_latency,Latency of successful KV write probes,,Histogram,
+kv_protectedts_reconciliation_num_runs,number of successful reconciliation runs on this node,,Sum,
+kv_prober_planning_attempts,Number of attempts at planning out probes made; in order to probe KV we need to plan out which ranges to probe;,,Sum,
+streaming_running,Number of currently running replication streams,,Gauge,
+streaming_flush_hist_nanos,Time spent flushing messages across all replication streams,,Histogram,
+streaming_admit_latency,Description: Event admission latency: a difference between event MVCC timestamp and the time it was admitted into ingestion processor,,Histogram,
+streaming_flushes,Total flushes across all ingestion jobs,,Sum,
+streaming_resolved_events_ingested,Resolved events ingested by all ingestion jobs,,Sum,
+streaming_data_checkpoint_span_count,The number of resolved spans in the last checkpoint forwarded by an ingestion data processor,,Gauge,
+streaming_frontier_checkpoint_span_count,The number of resolved spans last persisted to the ingestion job's checkpoint record,,Gauge,
+streaming_events_ingested,Events ingested by all ingestion jobs,,Sum,
+streaming_latest_data_checkpoint_span,The latest timestamp of the last checkpoint forwarded by an ingestion data processor,,Gauge,
+streaming_commit_latency,"Description: Event commit latency: a difference between event MVCC timestamp and the time it was flushed into disk. If we batch events, then the difference between the oldest event in the batch and flush is recorded",,Histogram,
+streaming_earliest_data_checkpoint_span,The earliest timestamp of the last checkpoint forwarded by an ingestion data processor,,Gauge,
+streaming_job_progress_updates,Total number of updates to the ingestion job progress,,Sum,
+streaming_ingested_bytes,Bytes ingested by all ingestion jobs,,Sum,
+sql_restart_savepoint_rollback_count_internal,Number of `ROLLBACK TO SAVEPOINT cockroach_restart` statements successfully executed (internal queries),,Sum,
+sql_restart_savepoint_release_count,Number of `RELEASE SAVEPOINT cockroach_restart` statements successfully executed,,Sum,
+sql_restart_savepoint_release_count_internal,Number of `RELEASE SAVEPOINT cockroach_restart` statements successfully executed (internal queries),,Sum,
+sql_restart_savepoint_release_started_count_internal,Number of `RELEASE SAVEPOINT cockroach_restart` statements started (internal queries),,Sum,
+sql_restart_savepoint_started_count,Number of `SAVEPOINT cockroach_restart` statements started,,Sum,
+sql_restart_savepoint_rollback_started_count_internal,Number of `ROLLBACK TO SAVEPOINT cockroach_restart` statements started (internal queries),,Sum,
+sql_restart_savepoint_rollback_count,Number of `ROLLBACK TO SAVEPOINT cockroach_restart` statements successfully executed,,Sum,
+sql_restart_savepoint_count_internal,Number of `SAVEPOINT cockroach_restart` statements successfully executed (internal queries),,Sum,
+sql_restart_savepoint_release_started_count,Number of `RELEASE SAVEPOINT cockroach_restart` statements started,,Sum,
+sql_restart_savepoint_count,Number of `SAVEPOINT cockroach_restart` statements successfully executed,,Sum,
+sql_restart_savepoint_rollback_started_count,Number of `ROLLBACK TO SAVEPOINT cockroach_restart` statements started,,Sum,
+sql_restart_savepoint_started_count_internal,Number of `SAVEPOINT cockroach_restart` statements started (internal queries),,Sum,
+sql_stats_reported_mem_current,Current memory usage for reported fingerprint storage,,Gauge,
+sql_statements_active_internal,Number of currently active user SQL statements (internal queries),,Gauge,
+sql_stats_mem_max,Memory usage for fingerprint storage,,Histogram,
+sql_stats_flush_count,Number of times SQL Stats are flushed to persistent storage,,Sum,
+sql_stats_txn_stats_collection_duration,Time took in nanoseconds to collect transaction stats,,Histogram,
+sql_statements_active,Number of currently active user SQL statements,,Gauge,
+sql_stats_discarded_current,Number of fingerprint statistics being discarded,,Sum,
+sql_stats_cleanup_rows_removed,Number of stale statistics rows that are removed,,Sum,
+sql_stats_flush_duration,Time took to in nanoseconds to complete SQL Stats flush,,Histogram,
+sql_stats_reported_mem_max,Memory usage for reported fingerprint storage,,Histogram,
+sql_stats_mem_current,Current memory usage for fingerprint storage,,Gauge,
+sql_stats_flush_error,Number of errors encountered when flushing SQL Stats,,Sum,
+tenant_consumption_read_bytes,Total number of bytes read from KV,,Gauge,
+tenant_consumption_write_requests,Total number of KV write requests,,Gauge,
+tenant_consumption_kv_request_units,RU consumption attributable to KV,,Gauge,
+tenant_consumption_pgwire_egress_bytes,Total number of bytes transferred from a SQL pod to the client,,Gauge,
+tenant_consumption_external_io_ingress_bytes,Total number of bytes read from external services such as cloud storage providers,,Gauge,
+tenant_consumption_external_io_egress_bytes,Total number of bytes written to external services such as cloud storage providers,,Gauge,
+tenant_consumption_write_batches,Total number of KV write batches,,Gauge,
+tenant_consumption_write_bytes,Total number of bytes written to KV,,Gauge,
+tenant_consumption_sql_pods_cpu_seconds,Total amount of CPU used by SQL pods,,Gauge,
+tenant_consumption_request_units,Total RU consumption,,Gauge,
+tenant_consumption_read_requests,Total number of KV read requests,,Gauge,
+tenant_consumption_read_batches,Total number of KV read batches,,Gauge,
+sql_savepoint_rollback_started_count,Number of `ROLLBACK TO SAVEPOINT` statements started,,Sum,
+sql_savepoint_release_started_count_internal,Number of `RELEASE SAVEPOINT` statements started (internal queries),,Sum,
+sql_savepoint_count,Number of SQL SAVEPOINT statements successfully executed,,Sum,
+sql_savepoint_rollback_count_internal,Number of `ROLLBACK TO SAVEPOINT` statements successfully executed (internal queries),,Sum,
+sql_savepoint_rollback_started_count_internal,Number of `ROLLBACK TO SAVEPOINT` statements started (internal queries),,Sum,
+sql_savepoint_release_count,Number of `RELEASE SAVEPOINT` statements successfully executed,,Sum,
+sql_savepoint_release_started_count,Number of `RELEASE SAVEPOINT` statements started,,Sum,
+sql_savepoint_rollback_count,Number of `ROLLBACK TO SAVEPOINT` statements successfully executed,,Sum,
+sql_savepoint_count_internal,Number of SQL SAVEPOINT statements successfully executed (internal queries),,Sum,
+sql_savepoint_started_count,Number of SQL SAVEPOINT statements started,,Sum,
+sql_savepoint_release_count_internal,Number of `RELEASE SAVEPOINT` statements successfully executed (internal queries),,Sum,
+sql_savepoint_started_count_internal,Number of SQL SAVEPOINT statements started (internal queries),,Sum,
+kv_allocator_load_based_lease_transfers_cannot_find_better_candidate,The number times the allocator determined that the lease was on the best possible replica,,Sum,STRING(3)
+kv_allocator_load_based_lease_transfers_should_transfer,The number times the allocator determined that the lease should be transferred to another replica for better load distribution,,Sum,STRING(3)
+kv_allocator_load_based_replica_rebalancing_missing_stats_for_existing_store,The number times the allocator was missing the qps stats for the existing store,,Sum,STRING(3)
+kv_allocator_load_based_replica_rebalancing_cannot_find_better_candidate,The number times the allocator determined that the range was on the best possible stores,,Sum,STRING(3)
+kv_allocator_load_based_lease_transfers_missing_stats_for_existing_stores,The number times the allocator was missing qps stats for the leaseholder,,Sum,STRING(3)
+kv_allocator_load_based_replica_rebalancing_existing_not_overfull,The number times the allocator determined that none of the range's replicas were on overfull stores,,Sum,STRING(3)
+kv_allocator_load_based_replica_rebalancing_delta_not_significant,The number times the allocator determined that the delta between an existing store and the best replacement candidate was not high enough,,Sum,STRING(3)
+kv_allocator_load_based_lease_transfers_delta_not_significant,The number times the allocator determined that the delta between the existing store and the best candidate was not significant,,Sum,STRING(3)
+kv_allocator_load_based_replica_rebalancing_should_transfer,The number times the allocator determined that the replica should be rebalanced to another store for better load distribution,,Sum,STRING(3)
+kv_allocator_load_based_lease_transfers_existing_not_overfull,The number times the allocator determined that the lease was not on an overfull store,,Sum,STRING(3)
+intentresolver_async_throttled,Number of intent resolution attempts not run asynchronously due to throttling,,Sum,STRING(3)
+intents_abort_attempts,Count of (point or range) non-poisoning intent abort evaluation attempts,,Sum,STRING(3)
+intentage,Cumulative age of intents,,Gauge,STRING(3)
+intentresolver_finalized_txns_failed,Number of finalized transaction cleanup failures. Transaction cleanup refers to the process of resolving all of a transactions intents and then garbage collecting its transaction record.,,Sum,STRING(3)
+intentbytes,Number of bytes in intent KV pairs,,Gauge,STRING(3)
+intentcount,Count of intent keys,,Gauge,STRING(3)
+intents_poison_attempts,Count of (point or range) poisoning intent abort evaluation attempts,,Sum,STRING(3)
+intentresolver_intents_failed,"Number of intent resolution failures. The unit of measurement is a single intent, so if a batch of intent resolution requests fails, the metric will be incremented for each request in the batch.",,Sum,STRING(3)
+intents_resolve_attempts,Count of (point or range) intent commit evaluation attempts,,Sum,STRING(3)
+raft_timeoutcampaign,Number of Raft replicas campaigning after missed heartbeats from leader,,Sum,STRING(3)
+raft_transport_sent,Number of Raft messages sent by the Raft Transport,,Sum,
+raft_transport_send_queue_bytes,The total byte size of pending outgoing messages in the queue.,,Gauge,
+raft_transport_sends_dropped,Number of Raft message sends dropped by the Raft Transport,,Sum,
+raft_transport_reverse_sent,Messages sent in the reverse direction of a stream.,,Sum,
+raft_ticks,Number of Raft ticks queued,,Sum,STRING(3)
+raft_transport_reverse_rcvd,Messages received from the reverse direction of a stream.,,Sum,
+raft_transport_rcvd,Number of Raft messages received by the Raft Transport,,Sum,
+raft_transport_send_queue_size,Number of pending outgoing messages in the Raft Transport queue.,,Gauge,
+replicas_uninitialized,"Number of uninitialized replicas, this does not include uninitialized replicas that can lie dormant in a persistent state.",,Gauge,STRING(3)
+replicas,Number of replicas,,Gauge,STRING(3)
+replicas_leaders_not_leaseholders,Number of replicas that are Raft leaders whose range lease is held by another store,,Gauge,STRING(3)
+replicas_leaseholders,Number of lease holders,,Gauge,STRING(3)
+replicas_leaders,Number of raft leaders,,Gauge,STRING(3)
+replicas_leaders_invalid_lease,Number of replicas that are Raft leaders whose lease is invalid,,Gauge,STRING(3)
+replicas_reserved,Number of replicas reserved for snapshots,,Gauge,STRING(3)
+replicas_quiescent,Number of quiesced replicas,,Gauge,STRING(3)
+kv_concurrency_lock_wait_queue_waiters,Number of requests actively waiting in a lock wait-queue,,Gauge,STRING(3)
+kv_concurrency_max_lock_hold_duration_nanos,Maximum length of time any lock in a lock table is held. Does not include replicated locks (intents) that are not held in memory,,Gauge,STRING(3)
+kv_concurrency_avg_lock_hold_duration_nanos,Average lock hold duration across locks currently held in lock tables. Does not include replicated locks (intents) that are not held in memory,,Gauge,STRING(3)
+kv_concurrency_max_lock_wait_queue_waiters_for_lock,Maximum number of requests actively waiting in any single lock wait-queue,,Gauge,STRING(3)
+kv_concurrency_locks_with_wait_queues,Number of active locks held in lock tables with active wait-queues,,Gauge,STRING(3)
+kv_concurrency_avg_lock_wait_duration_nanos,Average lock wait duration across requests currently waiting in lock wait-queues,,Gauge,STRING(3)
+kv_concurrency_locks,Number of active locks held in lock tables. Does not include replicated locks (intents) that are not held in memory,,Gauge,STRING(3)
+kv_concurrency_max_lock_wait_duration_nanos,Maximum lock wait duration across requests currently waiting in lock wait-queues,,Gauge,STRING(3)
+kv_tenant_rate_limit_num_tenants,Number of tenants currently being tracked,,Gauge,STRING(3)
+kv_tenant_rate_limit_write_requests_admitted,Number of write requests admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_read_batches_admitted,Number of read batches admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_read_bytes_admitted,Number of read bytes admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_read_requests_admitted,Number of read requests admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_write_batches_admitted,Number of write batches admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_write_bytes_admitted,Number of write bytes admitted by the rate limiter,,Sum,STRING(3)
+kv_tenant_rate_limit_current_blocked,Number of requests currently blocked by the rate limiter,,Gauge,STRING(3)
+jobs_new_schema_change_resume_failed,Number of new_schema_change jobs which failed with a non-retriable error,,Sum,
+jobs_new_schema_change_currently_running,Number of new_schema_change jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_new_schema_change_resume_retry_error,Number of new_schema_change jobs which failed with a retriable error,,Sum,
+jobs_new_schema_change_resume_completed,Number of new_schema_change jobs which successfully resumed to completion,,Sum,
+jobs_new_schema_change_fail_or_cancel_failed,Number of new_schema_change jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_new_schema_change_fail_or_cancel_completed,Number of new_schema_change jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_new_schema_change_currently_idle,Number of new_schema_change jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_new_schema_change_fail_or_cancel_retry_error,Number of new_schema_change jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_import_fail_or_cancel_completed,Number of import jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_import_resume_failed,Number of import jobs which failed with a non-retriable error,,Sum,
+jobs_import_currently_running,Number of import jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_import_resume_retry_error,Number of import jobs which failed with a retriable error,,Sum,
+jobs_import_fail_or_cancel_retry_error,Number of import jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_import_currently_idle,Number of import jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_import_resume_completed,Number of import jobs which successfully resumed to completion,,Sum,
+jobs_import_fail_or_cancel_failed,Number of import jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_migration_resume_retry_error,Number of migration jobs which failed with a retriable error,,Sum,
+jobs_migration_resume_completed,Number of migration jobs which successfully resumed to completion,,Sum,
+jobs_migration_currently_idle,Number of migration jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_migration_resume_failed,Number of migration jobs which failed with a non-retriable error,,Sum,
+jobs_migration_currently_running,Number of migration jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_migration_fail_or_cancel_completed,Number of migration jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_migration_fail_or_cancel_retry_error,Number of migration jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_migration_fail_or_cancel_failed,Number of migration jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_backup_resume_retry_error,Number of backup jobs which failed with a retriable error,,Sum,
+jobs_backup_currently_running,Number of backup jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_backup_resume_failed,Number of backup jobs which failed with a non-retriable error,,Sum,
+jobs_backup_currently_idle,Number of backup jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_backup_fail_or_cancel_failed,Number of backup jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+jobs_backup_fail_or_cancel_completed,Number of backup jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_backup_fail_or_cancel_retry_error,Number of backup jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_backup_resume_completed,Number of backup jobs which successfully resumed to completion,,Sum,
+jobs_typedesc_schema_change_fail_or_cancel_completed,Number of typedesc_schema_change jobs which successfully completed their failure or cancelation process,,Sum,
+jobs_typedesc_schema_change_currently_idle,Number of typedesc_schema_change jobs currently considered Idle and can be freely shut down,,Gauge,
+jobs_typedesc_schema_change_currently_running,Number of typedesc_schema_change jobs currently running in Resume or OnFailOrCancel state,,Gauge,
+jobs_typedesc_schema_change_resume_failed,Number of typedesc_schema_change jobs which failed with a non-retriable error,,Sum,
+jobs_typedesc_schema_change_fail_or_cancel_retry_error,Number of typedesc_schema_change jobs which failed with a retriable error on their failure or cancelation process,,Sum,
+jobs_typedesc_schema_change_resume_completed,Number of typedesc_schema_change jobs which successfully resumed to completion,,Sum,
+jobs_typedesc_schema_change_resume_retry_error,Number of typedesc_schema_change jobs which failed with a retriable error,,Sum,
+jobs_typedesc_schema_change_fail_or_cancel_failed,Number of typedesc_schema_change jobs which failed with a non-retriable error on their failure or cancelation process,,Sum,
+rebalancing_lease_transfers,Number of lease transfers motivated by store-level load imbalances,,Sum,STRING(3)
+rebalancing_writebytespersecond,Average number of bytes read recently per second.,,Gauge,STRING(3)
+rebalancing_readbytespersecond,Average number of bytes written recently per second.,,Gauge,STRING(3)
+rebalancing_writespersecond,"Number of keys written (i.e. applied by raft) per second to the store, averaged over a large time period as used in rebalancing decisions",,Gauge,STRING(3)
+rebalancing_requestspersecond,Average number of requests received recently per second.,,Gauge,STRING(3)
+rebalancing_readspersecond,Average number of keys read recently per second.,,Gauge,STRING(3)
+rebalancing_range_rebalances,Number of range rebalance operations motivated by store-level load imbalances,,Sum,STRING(3)
+rebalancing_queriespersecond,"Number of kv-level requests received per second by the store, averaged over a large time period as used in rebalancing decisions",,Gauge,STRING(3)
+txn_commits,Number of committed KV transactions (including 1PC),,Sum,
+txn_condensed_intent_spans,KV transactions that have exceeded their intent tracking memory budget (kv.transaction.max_intents_bytes). See also txn.condensed_intent_spans_gauge for a gauge of such transactions currently running.,,Sum,
+txn_condensed_intent_spans_rejected,KV transactions that have been aborted because they exceeded their intent tracking memory budget (kv.transaction.max_intents_bytes). Rejection is caused by kv.transaction.reject_over_max_intents_budget.,,Sum,
+txn_condensed_intent_spans_gauge,KV transactions currently running that have exceeded their intent tracking memory budget (kv.transaction.max_intents_bytes). See also txn.condensed_intent_spans for a perpetual counter/rate.,,Gauge,
+txn_commit_waits,Number of KV transactions that had to commit-wait on commit in order to ensure linearizability. This generally happens to transactions writing to global ranges.,,Sum,
+txn_commit_waits_before_commit_trigger,Number of KV transactions that had to commit-wait on the server before committing because they had a commit trigger,,Sum,STRING(3)
+txn_commits1PC,Number of KV transaction one-phase commit attempts,,Sum,
+leases_requests_latency,"Lease request latency (all types and outcomes, coalesced)",,Histogram,STRING(3)
+leases_transfers_success,Number of successful lease transfers,,Sum,STRING(3)
+leases_success,Number of successful lease requests,,Sum,STRING(3)
+leases_error,Number of failed lease requests,,Sum,STRING(3)
+leases_epoch,Number of replica leaseholders using epoch-based leases,,Gauge,STRING(3)
+leases_transfers_error,Number of failed lease transfers,,Sum,STRING(3)
+leases_expiration,Number of replica leaseholders using expiration-based leases,,Gauge,STRING(3)
+sql_insert_count_internal,Number of SQL INSERT statements successfully executed (internal queries),,Sum,
+sql_insights_anomaly_detection_evictions,Evictions of fingerprint latency summaries due to memory pressure,,Sum,
+sql_insights_anomaly_detection_memory,Current memory used to support anomaly detection,,Gauge,
+sql_insert_started_count,Number of SQL INSERT statements started,,Sum,
+sql_insert_started_count_internal,Number of SQL INSERT statements started (internal queries),,Sum,
+sql_insert_count,Number of SQL INSERT statements successfully executed,,Sum,
+sql_insights_anomaly_detection_fingerprints,Current number of statement fingerprints being monitored for anomaly detection,,Gauge,
+gossip_bytes_sent,Number of sent gossip bytes,,Sum,
+gossip_connections_outgoing,Number of active outgoing gossip connections,,Gauge,
+gossip_bytes_received,Number of received gossip bytes,,Sum,
+gossip_infos_received,Number of received gossip Info objects,,Sum,
+gossip_connections_refused,Number of refused incoming gossip connections,,Sum,
+gossip_infos_sent,Number of sent gossip Info objects,,Sum,
+gossip_connections_incoming,Number of active incoming gossip connections,,Gauge,
+txnwaitqueue_pushee_waiting,Number of pushees on the txn wait queue,,Gauge,STRING(3)
+txnwaitqueue_pusher_wait_time,Histogram of durations spent in queue by pushers,,Histogram,STRING(3)
+txnwaitqueue_pusher_slow,The total number of cases where a pusher waited more than the excessive wait threshold,,Gauge,STRING(3)
+txnwaitqueue_deadlocks_total,Number of deadlocks detected by the txn wait queue,,Sum,STRING(3)
+txnwaitqueue_pusher_waiting,Number of pushers on the txn wait queue,,Gauge,STRING(3)
+txnwaitqueue_query_waiting,Number of transaction status queries waiting for an updated transaction record,,Gauge,STRING(3)
+txnwaitqueue_query_wait_time,Histogram of durations spent in queue by queries,,Histogram,STRING(3)
+sys_cpu_sys_percent,Current system cpu percentage,,Gauge,
+sys_cpu_user_ns,Total user cpu time,,Gauge,
+sys_cpu_user_percent,Current user cpu percentage,,Gauge,
+sys_cpu_sys_ns,Total system cpu time,,Gauge,
+sys_cpu_combined_percent_normalized,"Current user+system cpu percentage, normalized 0-1 by number of cores",,Gauge,
+sys_cpu_now_ns,"Number of nanoseconds elapsed since January 1, 1970 UTC",,Gauge,
+sqlliveness_write_successes,Number of update or insert calls successfully performed,,Sum,
+sqlliveness_sessions_deletion_runs,Number of calls to delete sessions which have been performed,,Sum,
+sqlliveness_is_alive_cache_hits,Number of calls to IsAlive that return from the cache,,Sum,
+sqlliveness_write_failures,Number of update or insert calls which have failed,,Sum,
+sqlliveness_sessions_deleted,Number of expired sessions which have been deleted,,Sum,
+sqlliveness_is_alive_cache_misses,Number of calls to IsAlive that do not return from the cache,,Sum,
+sql_optimizer_plan_cache_misses,Number of non-prepared statements for which a cached plan was not used,,Sum,
+sql_optimizer_plan_cache_hits_internal,Number of non-prepared statements for which a cached plan was used (internal queries),,Sum,
+sql_optimizer_fallback_count,Number of statements which the cost-based optimizer was unable to plan,,Sum,
+sql_optimizer_plan_cache_misses_internal,Number of non-prepared statements for which a cached plan was not used (internal queries),,Sum,
+sql_optimizer_plan_cache_hits,Number of non-prepared statements for which a cached plan was used,,Sum,
+sql_optimizer_fallback_count_internal,Number of statements which the cost-based optimizer was unable to plan (internal queries),,Sum,
+txn_server_side_retry_read_evaluation_failure,Number of read batches that were not successfully refreshed server side,,Sum,STRING(3)
+txn_server_side_retry_read_evaluation_success,Number of read batches that were successfully refreshed server side,,Sum,STRING(3)
+txn_server_side_retry_uncertainty_interval_error_failure,Number of batches that ran into uncertainty interval errors that were not successfully refreshed server side,,Sum,STRING(3)
+txn_server_side_retry_write_evaluation_failure,Number of write batches that were not successfully refreshed server side,,Sum,STRING(3)
+txn_server_side_retry_uncertainty_interval_error_success,Number of batches that ran into uncertainty interval errors that were successfully refreshed server side,,Sum,STRING(3)
+txn_server_side_retry_write_evaluation_success,Number of write batches that were successfully refreshed server side,,Sum,STRING(3)
+sql_hydrated_udf_cache_misses,counter on the number of cache misses,,Sum,
+sql_hydrated_schema_cache_hits,counter on the number of cache hits,,Sum,
+sql_hydrated_table_cache_misses,counter on the number of cache misses,,Sum,
+sql_hydrated_udf_cache_hits,counter on the number of cache hits,,Sum,
+sql_hydrated_schema_cache_misses,counter on the number of cache misses,,Sum,
+sql_hydrated_table_cache_hits,counter on the number of cache hits,,Sum,
+raft_process_workingnanos,Nanoseconds spent in store.processRaft() working.,,Sum,STRING(3)
+raft_process_logcommit_latency,Latency histogram for committing Raft log entries to stable storage,,Histogram,STRING(3)
+raft_process_applycommitted_latency,Latency histogram for applying all committed Raft commands in a Raft ready.,,Histogram,STRING(3)
+raft_process_commandcommit_latency,Latency histogram for applying a batch of Raft commands to the state machine.,,Histogram,STRING(3)
+raft_process_handleready_latency,Latency histogram for handling a Raft ready.,,Histogram,STRING(3)
+raft_process_tickingnanos,Nanoseconds spent in store.processRaft() processing replica.Tick(),,Sum,STRING(3)
+txnrecovery_attempts_pending,Number of transaction recovery attempts currently in-flight,,Gauge,STRING(3)
+txnrecovery_failures,Number of transaction recovery attempts that failed,,Sum,STRING(3)
+txnrecovery_successes_committed,Number of transaction recovery attempts that committed a transaction,,Sum,STRING(3)
+txnrecovery_successes_pending,Number of transaction recovery attempts that left a transaction pending,,Sum,STRING(3)
+txnrecovery_successes_aborted,Number of transaction recovery attempts that aborted a transaction,,Sum,STRING(3)
+txnrecovery_attempts_total,Number of transaction recovery attempts executed,,Sum,STRING(3)
+liveness_livenodes,Number of live nodes in the cluster (will be 0 if this node is not itself live),,Gauge,
+liveness_heartbeatfailures,Number of failed node liveness heartbeats from this node,,Sum,
+liveness_epochincrements,Number of times this node has incremented its liveness epoch,,Sum,
+liveness_heartbeatsinflight,Number of in-flight liveness heartbeats from this node,,Gauge,
+liveness_heartbeatsuccesses,Number of successful node liveness heartbeats from this node,,Sum,
+liveness_heartbeatlatency,Node liveness heartbeat latency,,Histogram,
+sql_select_started_count,Number of SQL SELECT statements started,,Sum,
+sql_service_latency,Latency of SQL request execution,,Histogram,
+sql_service_latency_internal,Latency of SQL request execution (internal queries),,Histogram,
+sql_select_count,Number of SQL SELECT statements successfully executed,,Sum,
+sql_select_started_count_internal,Number of SQL SELECT statements started (internal queries),,Sum,
+sql_select_count_internal,Number of SQL SELECT statements successfully executed (internal queries),,Sum,
+addsstable_delay_enginebackpressure,Amount by which evaluation of AddSSTable requests was delayed by storage-engine backpressure,,Sum,STRING(3)
+addsstable_delay_total,Amount by which evaluation of AddSSTable requests was delayed,,Sum,STRING(3)
+addsstable_applications,Number of SSTable ingestions applied (i.e. applied by Replicas),,Sum,STRING(3)
+addsstable_copies,number of SSTable ingestions that required copying files during application,,Sum,STRING(3)
+addsstable_proposals,Number of SSTable ingestions proposed (i.e. sent to Raft by lease holders),,Sum,STRING(3)
+addsstable_aswrites,Number of SSTables ingested as normal writes.,,Sum,STRING(3)
+rpc_heartbeats_failed,Gauge of current connections in the failed state,,Gauge,
+rpc_heartbeats_loops_started,Counter of the number of connection heartbeat loops which have been started,,Sum,
+rpc_heartbeats_initializing,Gauge of current connections in the initializing state,,Gauge,
+rpc_heartbeats_loops_exited,Counter of the number of connection heartbeat loops which have exited with an error,,Sum,
+rpc_heartbeats_nominal,Gauge of current connections in the nominal state,,Gauge,
+kv_rangefeed_mem_system,Memory usage by rangefeeds on system ranges,,Gauge,
+kv_rangefeed_budget_allocation_failed,Number of times RangeFeed failed because memory budget was exceeded,,Sum,STRING(3)
+kv_rangefeed_budget_allocation_blocked,Number of times RangeFeed waited for budget availability,,Sum,STRING(3)
+kv_rangefeed_mem_shared,Memory usage by rangefeeds,,Gauge,
+kv_rangefeed_catchup_scan_nanos,Time spent in RangeFeed catchup scan,,Sum,STRING(3)
+requests_slow_distsender,Number of replica-bound RPCs currently stuck or retrying for a long time.,,Gauge,
+requests_slow_lease,Number of requests that have been stuck for a long time acquiring a lease.,,Gauge,STRING(3)
+requests_slow_raft,Number of requests that have been stuck for a long time in the replication layer.,,Gauge,STRING(3)
+requests_slow_latch,Number of requests that have been stuck for a long time acquiring latches.,,Gauge,STRING(3)
+requests_backpressure_split,Number of backpressured writes waiting on a Range split.,,Gauge,STRING(3)
+sql_ddl_started_count_internal,Number of SQL DDL statements started (internal queries),,Sum,
+sql_ddl_started_count,Number of SQL DDL statements started,,Sum,
+sql_ddl_count,Number of SQL DDL statements successfully executed,,Sum,
+sql_ddl_count_internal,Number of SQL DDL statements successfully executed (internal queries),,Sum,
+sql_update_started_count_internal,Number of SQL UPDATE statements started (internal queries),,Sum,
+sql_update_count_internal,Number of SQL UPDATE statements successfully executed (internal queries),,Sum,
+sql_update_count,Number of SQL UPDATE statements successfully executed,,Sum,
+sql_update_started_count,Number of SQL UPDATE statements started,,Sum,
+scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
+scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
+scrape_series_added,The approximate number of new series in this scrape,,Gauge,
+raft_entrycache_size,Number of Raft entries in the Raft entry cache,,Gauge,STRING(3)
+raft_entrycache_hits,Number of successful cache lookups in the Raft entry cache,,Sum,STRING(3)
+raft_entrycache_bytes,Aggregate size of all Raft entries in the Raft entry cache,,Gauge,STRING(3)
+raft_entrycache_accesses,Number of cache lookups in the Raft entry cache,,Sum,STRING(3)
+ranges_unavailable,Number of ranges with fewer live replicas than needed for quorum,,Gauge,STRING(3)
+ranges_underreplicated,Number of ranges with fewer live replicas than the replication target,,Gauge,STRING(3)
+ranges,Number of ranges,,Gauge,STRING(3)
+ranges_overreplicated,Number of ranges with more live replicas than the replication target,,Gauge,STRING(3)
+capacity_available,Available storage capacity,,Gauge,STRING(3)
+capacity_used,Used storage capacity,,Gauge,STRING(3)
+capacity,Total storage capacity,,Gauge,STRING(3)
+capacity_reserved,Capacity reserved for snapshots,,Gauge,STRING(3)
+sql_delete_started_count,Number of SQL DELETE statements started,,Sum,
+sql_delete_count_internal,Number of SQL DELETE statements successfully executed (internal queries),,Sum,
+sql_delete_count,Number of SQL DELETE statements successfully executed,,Sum,
+sql_delete_started_count_internal,Number of SQL DELETE statements started (internal queries),,Sum,
+sql_temp_object_cleaner_schemas_deletion_success,number of successful schema deletions by the temp object cleaner on this node,,Sum,
+sql_temp_object_cleaner_active_cleaners,number of cleaner tasks currently running on this node,,Gauge,
+sql_temp_object_cleaner_schemas_to_delete,number of schemas to be deleted by the temp object cleaner on this node,,Sum,
+sql_temp_object_cleaner_schemas_deletion_error,number of errored schema deletions by the temp object cleaner on this node,,Sum,
+kv_replica_read_batch_evaluate_latency,Execution duration for evaluating a BatchRequest on the read-only path after latches have been acquired.,,Histogram,STRING(3)
+kv_replica_circuit_breaker_num_tripped_replicas,Number of Replicas for which the per-Replica circuit breaker is currently tripped.,,Gauge,STRING(3)
+kv_replica_circuit_breaker_num_tripped_events,Number of times the per-Replica circuit breakers tripped since process start.,,Sum,STRING(3)
+kv_replica_write_batch_evaluate_latency,Execution duration for evaluating a BatchRequest on the read-write path after latches have been acquired.,,Histogram,STRING(3)
+sql_misc_started_count,Number of other SQL statements started,,Sum,
+sql_misc_count_internal,Number of other SQL statements successfully executed (internal queries),,Sum,
+sql_misc_count,Number of other SQL statements successfully executed,,Sum,
+sql_misc_started_count_internal,Number of other SQL statements started (internal queries),,Sum,
+sql_schema_changer_successes,Counter of the number of schema changer resumes which succeed,,Sum,
+sql_schema_changer_permanent_errors,Counter of the number of permanent errors experienced by the schema changer,,Sum,
+sql_schema_changer_running,Gauge of currently running schema changes,,Gauge,
+sql_schema_changer_retry_errors,Counter of the number of retriable errors experienced by the schema changer,,Sum,
+sql_query_started_count_internal,Number of SQL queries started (internal queries),,Sum,
+sql_query_count,Number of SQL queries executed,,Sum,
+sql_query_started_count,Number of SQL queries started,,Sum,
+sql_query_count_internal,Number of SQL queries executed (internal queries),,Sum,
+sys_go_allocbytes,Current bytes of memory allocated by go,,Gauge,
+sys_goroutines,Current number of goroutines,,Gauge,
+sys_go_totalbytes,"Total bytes of memory allocated by go, but not released",,Gauge,
+spanconfig_kvsubscriber_protected_record_count,"Number of protected timestamp records, as seen by KV",,Gauge,
+spanconfig_kvsubscriber_oldest_protected_record_nanos,Difference between the current time and the oldest protected timestamp (sudden drops indicate a record being released; an ever increasing number indicates that the oldest record is around and preventing GC if > configured GC TTL),,Gauge,
+spanconfig_kvsubscriber_update_behind_nanos,Difference between the current time and when the KVSubscriber received its last update (an ever increasing number indicates that we're no longer receiving updates),,Gauge,
+sys_gc_pause_percent,Current GC pause percentage,,Gauge,
+sys_gc_pause_ns,Total GC pause,,Gauge,
+sys_gc_count,Total number of GC runs,,Gauge,
+timeseries_write_bytes,Total size in bytes of metric samples written to disk,,Sum,
+timeseries_write_errors,Total errors encountered while attempting to write metrics to disk,,Sum,
+timeseries_write_samples,Total number of metric samples written to disk,,Sum,
+sys_cgo_totalbytes,"Total bytes of memory allocated by cgo, but not released",,Gauge,
+sys_cgo_allocbytes,Current bytes of memory allocated by cgo,,Gauge,
+sys_cgocalls,Total number of cgo calls,,Gauge,
+sql_pgwire_cancel_successful,Counter of the number of pgwire query cancel requests that were successful,,Sum,
+sql_pgwire_cancel_total,Counter of the number of pgwire query cancel requests,,Sum,
+sql_pgwire_cancel_ignored,Counter of the number of pgwire query cancel requests that were ignored due to rate limiting,,Sum,
+sql_exec_latency,Latency of SQL statement execution,,Histogram,
+sql_exec_latency_internal,Latency of SQL statement execution (internal queries),,Histogram,
+rangevalbytes,Number of bytes taken up by range key values (e.g. MVCC range tombstones),,Gauge,STRING(3)
+rangevalcount,Count of all range key values (e.g. MVCC range tombstones),,Gauge,STRING(3)
+txn_rollbacks_failed,Number of KV transaction that failed to send final abort,,Sum,
+txn_rollbacks_async_failed,Number of KV transaction that failed to send abort asynchronously which is not always retried,,Sum,
+cloud_write_bytes,Bytes written by all cloud operations,,Sum,
+cloud_read_bytes,Bytes read from all cloud operations,,Sum,
+sql_full_scan_count_internal,Number of full table or index scans (internal queries),,Sum,
+sql_full_scan_count,Number of full table or index scans,,Sum,
+tscache_skl_pages,Number of pages in the timestamp cache,,Gauge,STRING(3)
+tscache_skl_rotations,Number of page rotations in the timestamp cache,,Sum,STRING(3)
+sql_bytesout,Number of sql bytes sent,,Sum,
+sql_bytesin,Number of sql bytes received,,Sum,
+raftlog_truncated,Number of Raft log entries truncated,,Sum,STRING(3)
+raftlog_behind,Number of Raft log entries followers on other stores are behind.,,Gauge,STRING(3)
+sys_fd_softlimit,Process open FD soft limit,,Gauge,
+sys_fd_open,Process open file descriptors,,Gauge,
+sql_failure_count_internal,Number of statements resulting in a planning or runtime error (internal queries),,Sum,
+sql_failure_count,Number of statements resulting in a planning or runtime error,,Sum,
+clock_offset_stddevnanos,Stddev clock offset with other nodes,,Gauge,
+clock_offset_meannanos,Mean clock offset with other nodes,,Gauge,
+rangekeycount,Count of all range keys (e.g. MVCC range tombstones),,Gauge,STRING(3)
+rangekeybytes,Number of bytes taken up by range keys (e.g. MVCC range tombstones),,Gauge,STRING(3)
+seconds_until_enterprise_license_expiry,Seconds until enterprise license expiry (0 if no license present or running without enterprise features),,Gauge,
+sql_feature_flag_denial,Counter of the number of statements denied by a feature flag,,Sum,
+keycount,Count of all keys,,Gauge,STRING(3)
+sql_new_conns,Counter of the number of sql connections created,,Sum,
+raft_quota_pool_percent_used,Histogram of proposal quota pool utilization (0-100) per leaseholder per metrics interval,,Histogram,STRING(3)
+cluster_preserve_downgrade_option_last_updated,Unix timestamp of last updated time for cluster.preserve_downgrade_option,,Gauge,
+sys_uptime,Process uptime,,Gauge,
+valbytes,Number of bytes taken up by values,,Gauge,STRING(3)
+kv_closed_timestamp_max_behind_nanos,Largest latency between realtime and replica max closed timestamp,,Gauge,STRING(3)
+keybytes,Number of bytes taken up by keys,,Gauge,STRING(3)
+go_scheduler_latency,Go scheduling latency,,Histogram,
+txn_durations,KV transaction durations,,Histogram,
+raft_commandsapplied,Count of Raft commands applied.,,Sum,STRING(3)
+round_trip_latency,Distribution of round-trip latencies with other nodes,,Histogram,
+raft_heartbeats_pending,Number of pending heartbeats and responses waiting to be coalesced,,Gauge,STRING(3)
+sys_runnable_goroutines_per_cpu,"Average number of goroutines that are waiting to run, normalized by number of cores",,Gauge,
+exec_success,Number of batch KV requests executed successfully on this node.,,Sum,
+exec_error,Number of batch KV requests that failed to execute on this node.,,Sum,
+livebytes,Number of bytes of live data (keys plus values),,Gauge,STRING(3)
+raft_scheduler_latency,Queueing durations for ranges waiting to be processed by the Raft scheduler.,,Histogram,STRING(3)
+totalbytes,Total number of bytes taken up by keys and values including non-live data,,Gauge,STRING(3)
+abortspanbytes,Number of bytes in the abort span,,Gauge,STRING(3)
+build_timestamp,Build information,,Gauge,STRING(go1.19.6);STRING(v22.2.9)
+engine_stalls,Number of disk stalls detected on this node,,Sum,
+syscount,Count of system KV pairs,,Gauge,STRING(3)
+sys_rss,Current process RSS,,Gauge,
+node_id,node ID with labels for advertised RPC and HTTP addresses,,Gauge,advertise_addr: STRING(roach2:26257);http_addr: STRING(roach2:8080);sql_addr: STRING(roach2:26257)
+gcbytesage,Cumulative age of non-live data,,Gauge,STRING(3)
+txn_parallelcommits,Number of KV transaction parallel commit attempts,,Sum,
+exportrequest_delay_total,Amount by which evaluation of Export requests was delayed,,Sum,STRING(3)
+rpc_batches_recv,Number of batches processed,,Sum,
+follower_reads_success_count,Number of reads successfully processed by any replica,,Sum,STRING(3)
+up,The scraping was successful,,Gauge,
+valcount,Count of all values,,Gauge,STRING(3)
+sql_leases_active,The number of outstanding SQL schema leases.,,Gauge,
+livecount,Count of live keys,,Gauge,STRING(3)
+sysbytes,Number of bytes in system KV pairs,,Gauge,STRING(3)
+txn_aborts,Number of aborted KV transactions,,Sum,
+exec_latency,Latency of batch KV requests (including errors) executed on this node.,,Histogram,

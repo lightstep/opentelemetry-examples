@@ -1,0 +1,89 @@
+Name,Description,Unit,DataType,Attributes
+go_memstats_heap_inuse_bytes,Number of heap bytes that are in use.,,Gauge,
+go_memstats_lookups_total,Total number of pointer lookups.,,Sum,
+go_memstats_next_gc_bytes,Number of heap bytes when next garbage collection will take place.,,Gauge,
+go_memstats_last_gc_time_seconds,Number of seconds since 1970 of last garbage collection.,,Gauge,
+go_memstats_gc_cpu_fraction,The fraction of this program's available CPU time used by the GC since the program started.,,Gauge,
+go_memstats_mspan_inuse_bytes,Number of bytes in use by mspan structures.,,Gauge,
+go_memory_classes_heap_objects_bytes,Memory occupied by live objects and dead objects that have not yet been marked free by the garbage collector.,,Gauge,
+go_memory_classes_os_stacks_bytes,Stack memory allocated by the underlying operating system.,,Gauge,
+go_memory_classes_metadata_mspan_free_bytes,"Memory that is reserved for runtime mspan structures, but not in-use.",,Gauge,
+go_memory_classes_profiling_buckets_bytes,Memory that is used by the stack trace hash map used for profiling.,,Gauge,
+go_memstats_mcache_inuse_bytes,Number of bytes in use by mcache structures.,,Gauge,
+go_memory_classes_heap_stacks_bytes,"Memory allocated from the heap that is reserved for stack space, whether or not it is currently in-use.",,Gauge,
+go_memory_classes_other_bytes,"Memory used by execution trace buffers, structures for debugging the runtime, finalizer and profiler specials, and more.",,Gauge,
+go_memstats_mallocs_total,Total number of mallocs.,,Sum,
+go_memory_classes_metadata_other_bytes,Memory that is reserved for or used to hold runtime metadata.,,Gauge,
+go_memstats_alloc_bytes,Number of bytes allocated and still in use.,,Gauge,
+go_memstats_heap_alloc_bytes,Number of heap bytes allocated and still in use.,,Gauge,
+go_memstats_heap_released_bytes,Number of heap bytes released to OS.,,Gauge,
+go_memory_classes_metadata_mcache_inuse_bytes,Memory that is occupied by runtime mcache structures that are currently being used.,,Gauge,
+go_memstats_heap_idle_bytes,Number of heap bytes waiting to be used.,,Gauge,
+go_memstats_sys_bytes,Number of bytes obtained from system.,,Gauge,
+go_memory_classes_total_bytes,All memory mapped by the Go runtime into the current process as read-write. Note that this does not include memory mapped by code called via cgo or via the syscall package. Sum of all metrics in /memory/classes.,,Gauge,
+go_memstats_frees_total,Total number of frees.,,Sum,
+go_memory_classes_heap_unused_bytes,Memory that is reserved for heap objects but is not currently used to hold heap objects.,,Gauge,
+go_memory_classes_metadata_mcache_free_bytes,"Memory that is reserved for runtime mcache structures, but not in-use.",,Gauge,
+go_memstats_stack_sys_bytes,Number of bytes obtained from system for stack allocator.,,Gauge,
+go_memory_classes_metadata_mspan_inuse_bytes,Memory that is occupied by runtime mspan structures that are currently being used.,,Gauge,
+go_memstats_heap_sys_bytes,Number of heap bytes obtained from system.,,Gauge,
+go_memstats_other_sys_bytes,Number of bytes used for other system allocations.,,Gauge,
+go_memstats_stack_inuse_bytes,Number of bytes in use by the stack allocator.,,Gauge,
+go_memory_classes_heap_free_bytes,"Memory that is completely free and eligible to be returned to the underlying system, but has not been. This metric is the runtime's estimate of free address space that is backed by physical memory.",,Gauge,
+go_memstats_mspan_sys_bytes,Number of bytes used for mspan structures obtained from system.,,Gauge,
+go_memstats_buck_hash_sys_bytes,Number of bytes used by the profiling bucket hash table.,,Gauge,
+go_memory_classes_heap_released_bytes,"Memory that is completely free and has been returned to the underlying system. This metric is the runtime's estimate of free address space that is still mapped into the process, but is not backed by physical memory.",,Gauge,
+go_memstats_gc_sys_bytes,Number of bytes used for garbage collection system metadata.,,Gauge,
+go_memstats_heap_objects,Number of allocated objects.,,Gauge,
+go_memstats_alloc_bytes_total,"Total number of bytes allocated, even if freed.",,Sum,
+go_memstats_mcache_sys_bytes,Number of bytes used for mcache structures obtained from system.,,Gauge,
+phpfpm_idle_processes,The number of idle processes.,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_max_listen_queue,The maximum number of requests in the queue of pending connections since FPM has started.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_listen_queue,The number of requests in the queue of pending connections.,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_process_last_request_cpu,The %cpu the last request consumed.,,Gauge,STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_process_request_duration,The duration in microseconds of the requests.,,Gauge,STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_slow_requests,The number of requests that exceeded your 'request_slowlog_timeout' value.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_max_children_reached,"The number of times, the process limit has been reached, when pm tries to start more children (works only for pm 'dynamic' and 'ondemand').",,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_up,Could PHP-FPM be reached?,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_scrape_failures,The number of failures scraping from PHP-FPM.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_active_processes,The number of active processes.,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_max_active_processes,The maximum number of active processes since FPM has started.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_process_last_request_memory,The max amount of memory the last request consumed.,,Gauge,STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_listen_queue_length,The size of the socket queue of pending connections.,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_process_state,"The state of the process (Idle, Running, ...).",,Gauge,STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Ending);STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Finishing);STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Getting request informations);STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Idle);STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Reading headers);STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Running);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Ending);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Finishing);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Getting request informations);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Idle);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Reading headers);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(Running)
+phpfpm_start_since,The number of seconds since FPM has started.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_accepted_connections,The number of requests accepted by the pool.,,Sum,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_total_processes,The number of idle + active processes.,,Gauge,STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+phpfpm_process_requests,The number of requests the process has served.,,Sum,STRING(0);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status);STRING(1);STRING(www);scrape_uri: STRING(tcp://php-fpm:9000/status)
+go_gc_cycles_forced_gc_cycles_total,Count of completed GC cycles forced by the application.,,Sum,
+go_gc_heap_objects_objects,"Number of objects, live or unswept, occupying heap memory.",,Gauge,
+go_gc_heap_allocs_bytes_total,Cumulative sum of memory allocated to the heap by the application.,,Sum,
+go_gc_pauses_seconds_total,Distribution individual GC-related stop-the-world pause latencies.,,Histogram,
+go_gc_duration_seconds,A summary of the pause duration of garbage collection cycles.,,Summary,
+go_gc_heap_frees_by_size_bytes_total,"Description: Distribution of freed heap allocations by approximate size. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.",,Histogram,
+go_gc_heap_frees_bytes_total,Cumulative sum of heap memory freed by the garbage collector.,,Sum,
+go_gc_heap_goal_bytes,Heap size target for the end of the GC cycle.,,Gauge,
+go_gc_heap_frees_objects_total,"Description: Cumulative count of heap allocations whose storage was freed by the garbage collector. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.",,Sum,
+go_gc_cycles_automatic_gc_cycles_total,Count of completed GC cycles generated by the Go runtime.,,Sum,
+go_gc_cycles_total_gc_cycles_total,Count of all completed GC cycles.,,Sum,
+go_gc_heap_allocs_by_size_bytes_total,"Description: Distribution of heap allocations by approximate size. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.",,Histogram,
+go_gc_heap_allocs_objects_total,"Description: Cumulative count of heap allocations triggered by the application. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.",,Sum,
+go_gc_heap_tiny_allocs_objects_total,"Count of small allocations that are packed together into blocks. These allocations are counted separately from other allocations because each individual allocation is not tracked by the runtime, only their block. Each block is already accounted for in allocs-by-size and frees-by-size.",,Sum,
+process_start_time_seconds,Start time of the process since unix epoch in seconds.,,Gauge,
+process_virtual_memory_bytes,Virtual memory size in bytes.,,Gauge,
+process_open_fds,Number of open file descriptors.,,Gauge,
+process_resident_memory_bytes,Resident memory size in bytes.,,Gauge,
+process_max_fds,Maximum number of open file descriptors.,,Gauge,
+process_virtual_memory_max_bytes,Maximum amount of virtual memory available in bytes.,,Gauge,
+process_cpu_seconds_total,Total user and system CPU time spent in seconds.,,Sum,
+scrape_samples_post_metric_relabeling,The number of samples remaining after metric relabeling was applied,,Gauge,
+scrape_duration_seconds,Duration of the scrape,seconds,Gauge,
+scrape_series_added,The approximate number of new series in this scrape,,Gauge,
+scrape_samples_scraped,The number of samples the target exposed,,Gauge,
+promhttp_metric_handler_requests_total,Total number of scrapes by HTTP status code.,,Sum,STRING(200);STRING(500);STRING(503)
+promhttp_metric_handler_requests_in_flight,Current number of scrapes being served.,,Gauge,
+go_sched_latencies_seconds,Distribution of the time goroutines have spent in the scheduler in a runnable state before actually running.,,Histogram,
+go_sched_goroutines_goroutines,Count of live goroutines.,,Gauge,
+go_goroutines,Number of goroutines that currently exist.,,Gauge,
+go_info,Information about the Go environment.,,Gauge,STRING(go1.17.10)
+up,The scraping was successful,,Gauge,

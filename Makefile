@@ -83,3 +83,13 @@ run-component-project-api-key: replace-api-key run-collector-from-bin docker-com
 
 .PHONY: run-component-project
 run-component-project: run-collector-from-bin docker-component-run
+
+.PHONY: run-logs-for-collector-examples
+run-logs-for-collector-examples:
+	# needs to run for all `collector` examples
+	# python tools/run-logs.py
+
+.PHONY: parse-logs-for-metrics
+parse-logs-for-metrics:
+	go run tools/logs2metricstables.go
+

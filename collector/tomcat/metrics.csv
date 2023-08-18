@@ -1,0 +1,24 @@
+Name,Description,Unit,DataType,Attributes
+jvm.memory.heap.committed,current heap usage,by,Gauge,
+jvm.memory.nonheap.used,current non-heap usage,by,Gauge,
+jvm.memory.heap.init,current heap usage,by,Gauge,
+jvm.memory.nonheap.init,current non-heap usage,by,Gauge,
+jvm.memory.nonheap.committed,current non-heap usage,by,Gauge,
+jvm.memory.heap.used,current heap usage,by,Gauge,
+jvm.memory.pool.used,current memory pool usage,by,Gauge,STRING(Metaspace);STRING(G1 Eden Space);STRING(CodeHeap 'profiled nmethods');STRING(CodeHeap 'non-profiled nmethods');STRING(G1 Survivor Space);STRING(CodeHeap 'non-nmethods');STRING(G1 Old Gen);STRING(Compressed Class Space)
+jvm.memory.pool.max,current memory pool usage,by,Gauge,STRING(Metaspace);STRING(G1 Eden Space);STRING(CodeHeap 'profiled nmethods');STRING(CodeHeap 'non-profiled nmethods');STRING(G1 Survivor Space);STRING(CodeHeap 'non-nmethods');STRING(G1 Old Gen);STRING(Compressed Class Space)
+jvm.memory.heap.max,current heap usage,by,Gauge,
+jvm.memory.pool.init,current memory pool usage,by,Gauge,STRING(Metaspace);STRING(G1 Eden Space);STRING(CodeHeap 'profiled nmethods');STRING(CodeHeap 'non-profiled nmethods');STRING(G1 Survivor Space);STRING(CodeHeap 'non-nmethods');STRING(G1 Old Gen);STRING(Compressed Class Space)
+jvm.memory.pool.committed,current memory pool usage,by,Gauge,STRING(Metaspace);STRING(G1 Eden Space);STRING(CodeHeap 'profiled nmethods');STRING(CodeHeap 'non-profiled nmethods');STRING(G1 Survivor Space);STRING(CodeHeap 'non-nmethods');STRING(G1 Old Gen);STRING(Compressed Class Space)
+jvm.memory.nonheap.max,current non-heap usage,by,Gauge,
+tomcat.errors,The number of errors encountered.,errors,Sum,"STRING(""http-nio-8080"")"
+tomcat.max_time,Maximum time to process a request.,ms,Gauge,"STRING(""http-nio-8080"")"
+tomcat.threads,The number of threads,threads,Gauge,"STRING(""http-nio-8080"");STRING(busy);STRING(""http-nio-8080"");STRING(idle)"
+tomcat.sessions,The number of active sessions.,sessions,Gauge,
+tomcat.traffic,The number of bytes transmitted and received.,by,Sum,"STRING(received);STRING(""http-nio-8080"");STRING(sent);STRING(""http-nio-8080"")"
+tomcat.processing_time,The total processing time.,ms,Sum,"STRING(""http-nio-8080"")"
+tomcat.request_count,The total requests.,requests,Sum,"STRING(""http-nio-8080"")"
+jvm.gc.collections.elapsed,the approximate accumulated collection elapsed time in milliseconds,ms,Sum,STRING(G1 Old Generation);STRING(G1 Young Generation)
+jvm.gc.collections.count,total number of collections that have occurred,1,Sum,STRING(G1 Old Generation);STRING(G1 Young Generation)
+jvm.threads.count,number of threads,1,Gauge,
+jvm.classes.loaded,number of loaded classes,1,Gauge,
