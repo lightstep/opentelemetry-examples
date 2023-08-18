@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: collector
+  namespace: collector
+spec:
+  containers:
+  - name: collector
+    imagePullPolicy: "IfNotPresent"
+    image: otel/opentelemetry-collector-contrib:0.77.0
+    env:
+    - name: LS_ACCESS_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: ls
+          key: access_token
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    args: ["--config=/conf/collector.yml"]
+    volumeMounts:
+    - name: collector-config
+      mountPath: /conf/
+  volumes:
+  - name: collector-config
+    configMap:
+      name: collector-config

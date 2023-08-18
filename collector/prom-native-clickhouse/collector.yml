@@ -9,15 +9,15 @@ receivers:
           tls_config:
             insecure_skip_verify: true
           static_configs:
-            - targets: ['clickhouse:8001']
+            - targets: [ 'clickhouse:8001' ]
 
 exporters:
   logging:
     loglevel: debug
   otlp:
-    endpoint: ingest.staging.lightstep.com:443
+    endpoint: ingest.lightstep.com:443
     headers:
-             "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
 
 
 processors:
@@ -25,10 +25,10 @@ processors:
 
 service:
   telemetry:
-      logs:
-        level: DEBUG
+    logs:
+      level: DEBUG
   pipelines:
     metrics:
-      receivers: [prometheus]
-      processors: [batch]
-      exporters: [logging, otlp]
+      receivers: [ prometheus ]
+      processors: [ batch ]
+      exporters: [ logging, otlp ]
