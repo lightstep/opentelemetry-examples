@@ -2,13 +2,13 @@
 
 ## Overview
 
- Micrometer natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Micrometer and the Collector to send metrics to Lightstep Observability.
+ Micrometer natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Micrometer and the Collector to send metrics to Cloud Observability.
 
 ## Prerequisites
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability [access token][ls-docs-access-token]
 
 ### Java application with Spring framework and a Postgres database
 
@@ -28,7 +28,7 @@ Example structure:
 
 ## How to run the example
 
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -41,7 +41,7 @@ Example structure:
   docker-compose down`
   ```
 
-### Explore Metrics in Lightstep
+### Explore Metrics in Cloud Observability
 
 See the [Micrometer Telemetry Docs][micrometer-prometheus-docs] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
 

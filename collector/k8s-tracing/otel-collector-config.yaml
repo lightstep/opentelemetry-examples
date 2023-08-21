@@ -11,7 +11,7 @@ processors:
 exporters:
   logging:
     loglevel: debug
-  # Export to Lightstep Public Satellites
+  # Export to Cloud Observability Public Satellites
   otlp/lightstep:
     endpoint: ingest.lightstep.com:443
     headers:

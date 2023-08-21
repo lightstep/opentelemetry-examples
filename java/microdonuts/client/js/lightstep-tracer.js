@@ -84,7 +84,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        this._singleton = null;
 	
-	        // Make the constants accessible off the LightStep object
+	        // Make the constants accessible off the Cloud Observability object
 	        for (var key in Constants) {
 	            this[key] = this[key] || Constants[key];
 	        }
@@ -833,7 +833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Spans
 	        //-----------------------------------------------------------------------//
 	
-	        // This is a LightStep-specific feature that should be sparingly. It sets
+	        // This is a CloudObservability-specific feature that should be sparingly. It sets
 	        // a "global" root span such that spans that would *otherwise* be root span
 	        // instead inherit the trace GUID of the active root span. This is best
 	        // clarified by example:
@@ -2639,7 +2639,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: '_addTimingSpans',
 	        value: function _addTimingSpans(parent, timing) {
-	            // NOTE: this currently relies on LightStep-specific APIs
+	            // NOTE: this currently relies on CloudObservability-specific APIs
 	            var parentImp = parent.imp();
 	            if (!parentImp) {
 	                return;
@@ -4546,7 +4546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            //
-	            // LightStep-specific attributes
+	            // CloudObservability-specific attributes
 	            //
 	            if (fields.message !== undefined) {
 	                rec.message(fields.message);
@@ -4588,7 +4588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    // ---------------------------------------------------------------------- //
-	    // LightStep Extensions
+	    // Cloud Observability Extensions
 	    // ---------------------------------------------------------------------- //
 	
 	    _createClass(SpanImp, [{

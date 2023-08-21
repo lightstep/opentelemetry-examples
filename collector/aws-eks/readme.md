@@ -50,4 +50,4 @@ helm upgrade collector-k8s-noprom lightstep/collector-k8s-noprom --install
 
 ### Forward Cloudwatch Metrics to your account
 
-Follow instructions in the Lightstep UI to forward Amazon Cloudwatch metrics to your account: https://docs.lightstep.com/docs/setup-aws-for-metrics
+Follow instructions in the Cloud Observability UI to forward Amazon Cloudwatch metrics to your account: https://docs.lightstep.com/docs/setup-aws-for-metrics

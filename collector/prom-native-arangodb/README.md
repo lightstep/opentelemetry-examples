@@ -1,6 +1,6 @@
-# Monitor ArangoDB with OpenTelemetry Collector and Lightstep
+# Monitor ArangoDB with OpenTelemetry Collector and Cloud Observability
 
-This example shows how to monitor ArangoDB using OpenTelemetry Collector with receivers for Prometheus metrics. The collected metrics are sent to Lightstep and can also be logged for debugging purposes.
+This example shows how to monitor ArangoDB using OpenTelemetry Collector with receivers for Prometheus metrics. The collected metrics are sent to Cloud Observability and can also be logged for debugging purposes.
 
 ## Collector Configuration
 
@@ -22,9 +22,9 @@ This example uses the Prometheus receiver to ingest the OpenMetrics format publi
 Two exporters are defined in this configuration:
 
 1. `logging`: This exporter logs the collected metrics with a log level of `debug`. This can be useful for debugging purposes.
-2. `otlp`: This exporter sends the metrics to Lightstep with the following settings:
-   - `endpoint`: The Lightstep endpoint, set to `ingest.lightstep.com:443`.
-   - `headers`: A header with the Lightstep access token, set to `${LS_ACCESS_TOKEN}`. This requires an environment variable to be set with the actual access token.
+2. `otlp`: This exporter sends the metrics to Cloud Observability with the following settings:
+   - `endpoint`: The Cloud Observability endpoint, set to `ingest.lightstep.com:443`.
+   - `headers`: A header with the Cloud Observability access token, set to `${LS_ACCESS_TOKEN}`. This requires an environment variable to be set with the actual access token.
 
 ### Processors
 
@@ -36,12 +36,12 @@ The service is configured to use the defined receivers, processors, and exporter
 
 ## Running the Demo
 
-To run the demo, you will need Docker Compose installed on your machine. You will also need to set the environment variable `LS_ACCESS_TOKEN` to your Lightstep access token.
+To run the demo, you will need Docker Compose installed on your machine. You will also need to set the environment variable `LS_ACCESS_TOKEN` to your Cloud Observability access token.
 
 1. Clone the `lightstep/collector` repository and navigate to the `arangodb` folder.
 2. Run `docker-compose up -d` to start the ArangoDB service and the OpenTelemetry Collector.
 3. To view the metrics collected by the OpenTelemetry Collector, check the logs using `docker-compose logs collector`.
-4. To view the metrics in Lightstep, navigate to the Metrics dashboard in your Lightstep account.
+4. To view the metrics in Cloud Observability, navigate to the Metrics dashboard in your Cloud Observability account.
 
 You can choose a particular version of ArangoDB by setting APP_VERSION. For example:
 

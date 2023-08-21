@@ -5,7 +5,7 @@ This installs a sample Java spring boot application and instruments it automatic
 ### Requirements
 
 - A locally running k8s test cluster (minikube, kind)
-- A Lightstep project and access token
+- A Cloud Observability project and access token
 
 ### Add Helm Repos
 
@@ -46,7 +46,7 @@ NAMESPACE="your-namespace"
 LS_TOKEN="<your-access-token>"
 kubectl create secret generic otel-collector-secret -n ${NAMESPACE} --from-literal=LS_TOKEN=${LS_TOKEN}
 
-# Also sends k8s metrics to Lightstep
+# Also sends k8s metrics to Cloud Observability
 helm install kube-otel-stack lightstep/kube-otel-stack -n ${NAMESPACE} --set autoinstrumentation.enabled=true --set tracesCollector.enabled=true
 
 ### Run Java Demo App with Annotation

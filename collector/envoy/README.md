@@ -9,11 +9,11 @@ This example illustrates how you can ingest Envoy metrics and traces. Envoy expo
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
+You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Cloud Observability with a dashboard. 
 
 ```
   $ export LS_ACCESS_TOKEN=<your-lightstep-access-token>

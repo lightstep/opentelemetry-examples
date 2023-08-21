@@ -3,12 +3,12 @@
 
 The OTel Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
+Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Cloud Observability, and there may be bugs or unexpected issues in using these contributed receivers with Cloud Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## Prerequisites for local installation
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 #### kind
 
@@ -42,7 +42,7 @@ As we have Fluentd instances at every node in the cluster, we need to collect me
 kubectl apply -f collector-configmap.yaml
 ```
 
-Assuming we have LightStep Access Token in the environment variable at the host machine, we need to create secret in the cluster.
+Assuming we have Cloud Observability Access Token in the environment variable at the host machine, we need to create secret in the cluster.
 
 ```bash
 kubectl create secret generic ls --from-literal=access_token=$LS_ACCESS_TOKEN -n collector
@@ -62,7 +62,7 @@ Detailed description of available [Fluentd metrics](https://docs.fluentd.org/mon
 
 Collector Prometheus receiver has to be pointed to the Fluentd metrics endpoint.
 
-The following example configuration collects metrics from Kong and send them to Lightstep Observability:
+The following example configuration collects metrics from Kong and send them to Cloud Observability:
 
 ```yaml
 receivers:
