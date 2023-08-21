@@ -1,0 +1,5 @@
+Name,Description,Unit,DataType,Attributes
+snmp_cpu_system,,By,Gauge,
+snmp_cpu_user,,By,Gauge,
+snmp_cpu_idle,,By,Gauge,
+snmp_memory_total_swap,,By,Gauge,
