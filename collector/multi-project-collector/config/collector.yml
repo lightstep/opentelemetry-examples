@@ -25,7 +25,7 @@ processors:
 exporters:
   logging:
     loglevel: debug
-  # configuring otlp to Lightstep
+  # configuring otlp to Cloud Observability
   otlp/lightstep:
     endpoint: ingest.lightstep.com:443
     # yes, confusing but sets the headers

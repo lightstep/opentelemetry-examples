@@ -1,8 +1,8 @@
-# Monitoring Elasticsearch with Lightstep
+# Monitoring Elasticsearch with Cloud Observability
 
 ## About this Configuration
 
-This is intended to be the simplest practical example for collecting Elasticsearch metrics with the OTEL Collector, sending data to Lightstep. While Elasticsearch is usually run in multinode clusters and often as part of the "ELK stack" with Logstash and Kibana, this example focuses on illustrating Collector configuration for one node for clarity.
+This is intended to be the simplest practical example for collecting Elasticsearch metrics with the OTEL Collector, sending data to Cloud Observability. While Elasticsearch is usually run in multinode clusters and often as part of the "ELK stack" with Logstash and Kibana, this example focuses on illustrating Collector configuration for one node for clarity.
 
 ## Running the Example
 

@@ -3,11 +3,9 @@
 
 The OTel Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-{: .callout}
-
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
@@ -19,7 +17,7 @@ Installation of the OpenTelemetry Collector varies, please refer to the [collect
 
 SNMP allows to access diffirent metrics by using unique OIDs (Object Identifiers) and sysObjectIDs(System Object Identifiers).
 
-The example collector's configuration, used for this project shows using processors to add metrics with Lightstep Observability:
+The example collector's configuration, used for this project shows using processors to add metrics with Cloud Observability:
 
 ``` yaml
 receivers:

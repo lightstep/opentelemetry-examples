@@ -2,13 +2,13 @@
 
 ## Overview
 
-SingleStore is a distributed SQL database that provides a Prometheus endpoint for collecting metrics data. The OpenTelemetry Collector's Prometheus receiver can scrape this data to monitor and analyze SingleStore's performance and usage, such as query latency, throughput, and resource utilization. Sending these metrics to Lightstep Observability enables you to correlate them with traces and logs for deeper insights into your application behavior and performance. This comprehensive view allows you to quickly identify and resolve issues before they become major problems, making it an essential part of a modern DevOps toolkit.
+SingleStore is a distributed SQL database that provides a Prometheus endpoint for collecting metrics data. The OpenTelemetry Collector's Prometheus receiver can scrape this data to monitor and analyze SingleStore's performance and usage, such as query latency, throughput, and resource utilization. Sending these metrics to Cloud Observability enables you to correlate them with traces and logs for deeper insights into your application behavior and performance. This comprehensive view allows you to quickly identify and resolve issues before they become major problems, making it an essential part of a modern DevOps toolkit.
 
 ## Prerequisites
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability [access token][ls-docs-access-token]
 
 ## How to run the example
 
@@ -16,7 +16,7 @@ SingleStore is a distributed SQL database that provides a Prometheus endpoint fo
   ```
   export LICENSE_KEY=<YOUR_LICENSE>
   ```
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -30,7 +30,7 @@ SingleStore is a distributed SQL database that provides a Prometheus endpoint fo
   ```
 
 
-### Explore Metrics in Lightstep
+### Explore Metrics in Cloud Observability
 
 See the [SingleStore Telemetry Docs][single-store-docs-telemetry] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
 

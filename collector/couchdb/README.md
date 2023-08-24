@@ -1,6 +1,6 @@
-# Monitoring CouchDB with the OpenTelemetry Collector and Lightstep
+# Monitoring CouchDB with the OpenTelemetry Collector and Cloud Observability
 
-This demo shows an example of how to use OpenTelemetry Collector to collect metrics from CouchDB and send them to Lightstep for monitoring.
+This demo shows an example of how to use OpenTelemetry Collector to collect metrics from CouchDB and send them to Cloud Observability for monitoring.
 
 ## Prerequisites
 - Docker
@@ -29,9 +29,9 @@ This demo shows an example of how to use OpenTelemetry Collector to collect metr
    docker-compose up -d
    ```
 
-4. Wait for a few minutes for the metrics to be collected and sent to Lightstep.
+4. Wait for a few minutes for the metrics to be collected and sent to Cloud Observability.
 
-5. Open the Lightstep web app and navigate to the Service Dashboard for the CouchDB service. 
+5. Open the Cloud Observability web app and navigate to the Service Dashboard for the CouchDB service. 
 You should see metrics such as request rate, response time, and throughput.
 
 7. To stop the demo, run:
@@ -40,11 +40,11 @@ You should see metrics such as request rate, response time, and throughput.
    ```
 
 ## Configuration
-The `collector.yml` file configures the OpenTelemetry Collector to collect metrics from CouchDB and export them to Lightstep. The relevant parts of the configuration file are:
+The `collector.yml` file configures the OpenTelemetry Collector to collect metrics from CouchDB and export them to Cloud Observability. The relevant parts of the configuration file are:
 
 - `receivers`: The `couchdb` receiver is configured to scrape metrics from the CouchDB instance running at `http://couchdb:5984`. The `username` and `password` fields are used to authenticate to the CouchDB instance. The `collection_interval` field specifies how often the metrics are collected.
 
-- `exporters`: The `otlp` exporter is used to send the collected metrics to Lightstep. The `endpoint` field specifies the Lightstep endpoint to send the metrics to, and the `headers` field is used to authenticate to Lightstep using your access token.
+- `exporters`: The `otlp` exporter is used to send the collected metrics to Cloud Observability. The `endpoint` field specifies the Cloud Observability endpoint to send the metrics to, and the `headers` field is used to authenticate to Cloud Observability using your access token.
 
 - `processors`: The `batch` processor is used to batch the collected metrics before exporting them.
 
@@ -54,6 +54,6 @@ The `collector.yml` file configures the OpenTelemetry Collector to collect metri
 There are no environment variables required for this demo.
 
 ## Troubleshooting
-- If you are not seeing any metrics in Lightstep, check that the CouchDB instance is running and accessible at `http://couchdb:5984`. Also, check that the OpenTelemetry Collector is running and configured correctly.
+- If you are not seeing any metrics in Cloud Observability, check that the CouchDB instance is running and accessible at `http://couchdb:5984`. Also, check that the OpenTelemetry Collector is running and configured correctly.
 
-- If you are still having issues, refer to the OpenTelemetry and Lightstep documentation for more information.
+- If you are still having issues, refer to the OpenTelemetry and Cloud Observability documentation for more information.

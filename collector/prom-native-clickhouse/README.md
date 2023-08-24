@@ -2,17 +2,17 @@
 
 ## Overview
 
- Clickhouse natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Clickhouse and the Collector to send metrics to Lightstep Observability.
+ Clickhouse natively exposes a Prometheus endpoint and the OpenTelemetry Collector has a [Prometheus receiver][otel-prom-receiver] that can be used to scrape its Prometheus endpoint. This directory contains an example showing how to configure Clickhouse and the Collector to send metrics to Cloud Observability.
 
 ## Prerequisites
 
 * Docker
 * Docker Compose
-* A Lightstep Observability [access token][ls-docs-access-token]
+* A Cloud Observability [access token][ls-docs-access-token]
 
 ## How to run the example
 
-* Export your Lightstep access token
+* Export your Cloud Observability access token
   ```
   export LS_ACCESS_TOKEN=<YOUR_TOKEN>
   ```
@@ -45,7 +45,7 @@
   docker-compose down`
   ```
 
-### Explore Metrics in Lightstep
+### Explore Metrics in Cloud Observability
 
 See the [Clickhouse Telemetry Docs][clickhouse-docs-telemetry] for comprehensive documentation on metrics emitted and the [dashboard documentation][ls-docs-dashboards] for more details.
 
