@@ -1,0 +1,27 @@
+opentelemetry-collector:
+  config:
+    processors:
+      resourcedetection/eks:
+        detectors: [env, ec2, eks]
+        timeout: 2s
+        override: false
+    exporters:
+      logging:
+        verbosity: normal
+        sampling_initial: 5
+        sampling_thereafter: 200
+      otlp/ls:
+        endpoint: ingest.lightstep.com:443
+        headers: 
+          "lightstep-access-token": "<your-token>"
+      
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [resourcedetection/eks, batch]
+          exporters: [logging, otlp/ls]
+        metrics:
+          receivers: [otlp]
+          processors: [resourcedetection/eks, batch]
+          exporters: [logging, otlp/ls]
