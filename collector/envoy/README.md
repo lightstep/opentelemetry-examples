@@ -13,15 +13,20 @@ You must have a Lightstep Observability [access token](/docs/create-and-manage-a
 
 ## Running the Example
 
-You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Lightstep with a dashboard. 
+To run this example in this directory, use the `docker-compose up` command. However, before doing so, you will need to build the Flask service image. To build it, run `docker compose build flask_service`.
 
-```
-  $ export LS_ACCESS_TOKEN=<your-lightstep-access-token>
-  $ docker-compose up
+Additionally, if you use the `docker-compose --profile loadgen up` command, an instance will be created to send requests to the service. To view this in Lightstep with a dashboard, please ensure that you have access to the appropriate resources.
 
-  # make some requests
-  $ curl http://localhost:8080/service/1
-  $ curl http://localhost:8080/service/2
+```bash
+docker compose build flask_service
+
+export LS_ACCESS_TOKEN=<your-lightstep-access-token>
+
+docker-compose up
+
+# make some requests
+curl http://localhost:8080/service/1
+curl http://localhost:8080/service/2
 ```
 
 ## Configuration: Metrics
