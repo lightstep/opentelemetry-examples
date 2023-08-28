@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --out k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: haproxy
+  name: haproxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: haproxy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --out k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/haproxy-integrations: "true"
+        io.kompose.service: haproxy
+    spec:
+      containers:
+        - image: haproxy:latest
+          name: haproxy
+          ports:
+            - containerPort: 80
+            - containerPort: 8404
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/local/etc/haproxy/haproxy.cfg
+              name: haproxy-claim0
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: haproxy-claim0
+          persistentVolumeClaim:
+            claimName: haproxy-claim0
+            readOnly: true
+status: {}

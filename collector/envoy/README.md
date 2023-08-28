@@ -9,11 +9,11 @@ This example illustrates how you can ingest Envoy metrics and traces. Envoy expo
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
-To run this example in this directory, use the `docker-compose up` command. However, before doing so, you will need to build the Flask service image. To build it, run `docker compose build flask_service`.
+You can run this example with `docker-compose up` in this directory. Using `docker-compose --profile loadgen up` also creates an instance to send requests to the NGINX service. You'll want to view this in Cloud Observability with a dashboard. 
 
 Additionally, if you use the `docker-compose --profile loadgen up` command, an instance will be created to send requests to the service. To view this in Lightstep with a dashboard, please ensure that you have access to the appropriate resources.
 

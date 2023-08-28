@@ -3,12 +3,12 @@
 
 The OTel Collector has a variety of [third party receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver) that provide integration with a wide variety of metric sources.
 
-Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Lightstep Observability, and there may be bugs or unexpected issues in using these contributed receivers with Lightstep Observability metrics. File any issues with the appropriate OpenTelemetry community.
+Please note that not all metrics receivers available for the OpenTelemetry Collector have been tested by Cloud Observability, and there may be bugs or unexpected issues in using these contributed receivers with Cloud Observability metrics. File any issues with the appropriate OpenTelemetry community.
 {: .callout}
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
@@ -28,7 +28,7 @@ Example of the Corefile:
 
 CoreDNS metrics described [here](https://coredns.io/plugins/metrics/#description).
 
-The example collector's configuration, used for this project shows using processors to add metrics with Lightstep Observability:
+The example collector's configuration, used for this project shows using processors to add metrics with Cloud Observability:
 
 ``` yaml
 receivers:
