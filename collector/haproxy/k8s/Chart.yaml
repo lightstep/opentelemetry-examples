@@ -1,0 +1,8 @@
+name: k8s
+description: A generated Helm Chart for k8s from Skippbox Kompose
+version: 0.0.1
+apiVersion: v1
+keywords:
+  - k8s
+sources:
+home:

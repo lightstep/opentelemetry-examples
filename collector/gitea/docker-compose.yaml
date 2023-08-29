@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.81.0
+    hostname: otel-collector
+    restart: always
+    command: [ "--config=/conf/collector.yaml" ]
+    volumes:
+      - ./collector.yaml:/conf/collector.yaml:rw
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+
+  gitea:
+    image: gitea/gitea:1.20.2
+    hostname: gitea
+    restart: always
+    volumes:
+      - gitea:/data
+      - ./app.ini:/data/gitea/conf/app.ini
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    environment:
+      - GITEA__metrics__ENABLED=true
+
+volumes:
+  gitea:
+    driver: local
