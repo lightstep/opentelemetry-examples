@@ -4,8 +4,6 @@ services:
     container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:0.77.0
     command: [ "--config=/conf/collector.yml" ]
-    ports:
-      - "8888:8888"
     environment:
       LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
     volumes:
@@ -16,7 +14,7 @@ services:
 
   vault-server:
     container_name: vault-server
-    image: vault:latest
+    image: hashicorp/vault:latest
     restart: on-failure
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: testtoken
@@ -43,7 +41,7 @@ services:
   consul-server:
     container_name: consul-server
     restart: always
-    image: consul
+    image: hashicorp/consul
     healthcheck:
       test: [ "CMD", "curl", "-X", "GET", "localhost:8500/v1/status/leader" ]
       interval: 10s
@@ -63,7 +61,7 @@ services:
   consul-worker:
     container_name: consul-worker
     restart: always
-    image: consul
+    image: hashicorp/consul
     healthcheck:
       test: [ "CMD", "curl", "-X", "GET", "localhost:8500/v1/status/leader" ]
       interval: 10s
