@@ -1,7 +1,9 @@
 receivers:
   docker_stats:
-    endpoint: "http://${DEFAULT_IPV4}:2375"
-    provide_per_core_cpu_metrics: true
+    endpoint: "unix:///var/run/docker.sock"
+    metrics:
+      container.cpu.usage.percpu:
+        enabled: true
 
 exporters:
   logging:
