@@ -8,7 +8,7 @@ Please note that not all metrics receivers available for the OpenTelemetry Colle
 
 ## Requirements
 
-* OpenTelemetry Collector Contrib v0.53.0+
+* OpenTelemetry Collector Contrib v0.81.0+
 
 ## Prerequisites
 
