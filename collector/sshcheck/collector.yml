@@ -5,11 +5,6 @@ receivers:
     password: otelp
     collection_interval: 10s
     ignore_host_key: true
-    metrics:
-      sshcheck.sftp_success:
-        enabled: true
-      sshcheck.sftp_duration:
-        enabled: true
 
 processors:
   batch:

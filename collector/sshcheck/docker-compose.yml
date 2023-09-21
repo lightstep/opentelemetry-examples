@@ -12,9 +12,14 @@ services:
     networks:
         - integrations
     stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "nc", "-z", "-v", "localhost", "2222"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:${OTEL_COLLECTOR_VERSION}
+    image: otel/opentelemetry-collector-contrib:${OTEL_COLLECTOR_VERSION:-latest}
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
