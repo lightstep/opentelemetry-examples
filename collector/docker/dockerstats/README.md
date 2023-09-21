@@ -23,6 +23,8 @@ Detailed description of available [Docker metrics](https://github.com/open-telem
 
 Collector Prometheus receiver has to be pointed to the Kubernetes Prometheus metrics endpoints.
 
+> :warning: **This configuration is for illustration purposes only**: Mounting Docker socket in containers isn't recommended. It's used here for simplicity in illustration.
+
 The following example configuration collects metrics from Kong and send them to Lightstep Observability:
 
 ```yaml
@@ -54,3 +56,5 @@ service:
     logs:
       level: debug
 ```
+
+
