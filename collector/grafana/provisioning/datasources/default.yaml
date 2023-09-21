@@ -1,0 +1,9 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: P4169E866C3094E38
+    type: prometheus
+    url: http://prometheus:9090
+    editable: true
+    isDefault: true
