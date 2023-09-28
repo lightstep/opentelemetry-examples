@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --out k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: otel-collector
+  name: otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: otel-collector
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --out k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/haproxy-integrations: "true"
+        io.kompose.service: otel-collector
+    spec:
+      containers:
+        - args:
+            - --config=/conf/collector.yml
+          env:
+            - name: LS_ACCESS_TOKEN
+              value: ${LS_ACCESS_TOKEN}
+          image: otel/opentelemetry-collector-contrib:0.51.0
+          name: otel-collector
+          ports:
+            - containerPort: 8888
+          resources: {}
+          volumeMounts:
+            - mountPath: /conf/collector.yml
+              name: otel-collector-claim0
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: otel-collector-claim0
+          persistentVolumeClaim:
+            claimName: otel-collector-claim0
+            readOnly: true
+status: {}

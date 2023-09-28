@@ -5,7 +5,7 @@ This example demonstrates monitoring Cilium and Hubble with the OTEL Collector's
 
 ### Prerequisites
 
-To run the example you'll need to put your Lightstep Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Lightstep access token where indicated. There's a `kustomization.yaml` file that references the secret properly and is applied with a rule to deploy the OTEL Collector in the Makefile.
+To run the example you'll need to put your Cloud Observability Access Token in a file at `collector/.patch.token.yaml`. That file should look exactly like `collector/secret.yaml` execept that it will include your actual Cloud Observability access token where indicated. There's a `kustomization.yaml` file that references the secret properly and is applied with a rule to deploy the OTEL Collector in the Makefile.
 
 #### kind
 
@@ -115,11 +115,11 @@ This example provides a method for injecting the access token secret by `kustomi
 kubectl apply -k collector/
 ```
 
-This command uses the kustomize flag (`-k`) to override the access token with the real value. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Lightstep access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But the example would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above, assuming you you have another mechanism to get the access token variable into the environment.
+This command uses the kustomize flag (`-k`) to override the access token with the real value. To make it work you'll need to make a file at `collector/.patch.token.yaml`, which is just a copy of `collector/secret.yaml` with the place indicated replaced by your actual Cloud Observability access token. This arrangement is mostly to simplify keeping secrets out of version control during development. But the example would also work if you delete the file at `collector/kustomization.yaml` and use the `-f` flag in place of `-k` in the command above, assuming you you have another mechanism to get the access token variable into the environment.
 
 6. Make sure everything installed in a good state 
 
-At this point we expect to see the metrics sent to our account in Lightstep.
+At this point we expect to see the metrics sent to our account in Cloud Observability.
 
 We should also be able to see that our deployments are in good health with a command like `kubectl get all --all-namespaces`.
 

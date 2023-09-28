@@ -1,0 +1,13 @@
+Name,Description,Unit,DataType,Attributes
+container.cpu.percent,Percent of CPU used by the container.,1,Gauge,
+container.cpu.usage.kernelmode,Time spent by tasks of the cgroup in kernel mode (Linux).  Time spent by all container processes in kernel mode (Windows).,ns,Sum,
+container.cpu.usage.total,Total CPU time consumed.,ns,Sum,
+container.cpu.usage.usermode,Time spent by tasks of the cgroup in user mode (Linux).  Time spent by all container processes in user mode (Windows).,ns,Sum,
+container.memory.percent,Percentage of memory used.,1,Gauge,
+container.memory.usage.limit,Memory limit of the container.,By,Sum,
+container.memory.usage.total,Memory usage of the container. This excludes the total cache.,By,Sum,
+container.network.io.usage.rx_bytes,Bytes received by the container.,By,Sum,Str(eth0)
+container.network.io.usage.rx_dropped,Incoming packets dropped.,{packets},Sum,Str(eth0)
+container.network.io.usage.tx_bytes,Bytes sent.,By,Sum,Str(eth0)
+container.network.io.usage.tx_dropped,Outgoing packets dropped.,{packets},Sum,Str(eth0);Str(docker);Str(51527445a969);Str(51527445a969eb75ae949938e69ec2ba8699a3c34ad5edd08defdfa362774717);container.image.name: Str(debian:latest);Str(dockerstats-debian-1)
+container.blockio.io_service_bytes_recursive,Number of bytes transferred to/from the disk by the group and descendant groups.,By,Sum,Str(254);Str(0);Str(read);Str(254);Str(0);Str(write);Str(7);Str(0);Str(read);Str(7);Str(0);Str(write)

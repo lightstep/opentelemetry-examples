@@ -7,7 +7,7 @@ The OTel Collector has a variety of [third party receivers](https://github.com/o
 
 ## Prerequisites
 
-You must have a Lightstep Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
+You must have a Cloud Observability [access token](/docs/create-and-manage-access-tokens) for the project to report metrics to.
 
 ## Running the Example
 
@@ -35,7 +35,7 @@ AIRFLOW__METRICS__STATSD_PREFIX=airflow
 
 Airflow metrics described [here](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/metrics.html).
 
-The example collector's configuration, used for this project shows using processors to add metrics with Lightstep Observability:
+The example collector's configuration, used for this project shows using processors to add metrics with Cloud Observability:
 
 ```yaml
 receivers:
