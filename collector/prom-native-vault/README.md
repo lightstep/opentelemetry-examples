@@ -20,18 +20,10 @@
   ```
   docker-compose up -d
   ```
-* Stop the cluster
+* Stop the cluster and remove vault & consul data volumes
   ```
-  docker-compose down`
+  docker-compose down -v`
   ```
-* Remove Vault data
-  ```
-  rm -rf config/data/* 
-  ```
-* Remove Consul data
-  ```
-  rm -rf consul/config/data/*
-  ``` 
 
 ### Explore Metrics in Cloud Observability
 
