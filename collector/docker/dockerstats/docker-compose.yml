@@ -14,9 +14,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: ["--config=/conf/collector.yml"]
-  debian:
-    image: debian:latest
-    tty: True
 
 configs:
   collector_conf:

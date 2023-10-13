@@ -25,7 +25,7 @@ Collector Prometheus receiver has to be pointed to the Kubernetes Prometheus met
 
 > :warning: **This configuration is for illustration purposes only**: Mounting Docker socket in containers isn't recommended. It's used here for simplicity in illustration.
 
-The following example configuration collects metrics from Kong and send them to Lightstep Observability:
+The following example configuration collects metrics from Docker and send them to Lightstep Observability:
 
 ```yaml
 receivers:
