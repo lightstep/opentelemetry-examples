@@ -1,0 +1,27 @@
+jvm.classes.loaded,"number of loaded classes",1,Gauge
+jvm.gc.collections.count,"total number of collections that have occurred",1,Sum
+jvm.gc.collections.elapsed,"the approximate accumulated collection elapsed time in milliseconds",ms,Sum
+jvm.memory.heap.committed,"current heap usage",by,Gauge
+jvm.memory.heap.init,"current heap usage",by,Gauge
+jvm.memory.heap.max,"current heap usage",by,Gauge
+jvm.memory.heap.used,"current heap usage",by,Gauge
+jvm.memory.nonheap.committed,"current non-heap usage",by,Gauge
+jvm.memory.nonheap.init,"current non-heap usage",by,Gauge
+jvm.memory.nonheap.max,"current non-heap usage",by,Gauge
+jvm.memory.nonheap.used,"current non-heap usage",by,Gauge
+jvm.memory.pool.committed,"current memory pool usage",by,Gauge
+jvm.memory.pool.init,"current memory pool usage",by,Gauge
+jvm.memory.pool.max,"current memory pool usage",by,Gauge
+jvm.memory.pool.used,"current memory pool usage",by,Gauge
+jvm.threads.count,"number of threads",1,Gauge
+solr.cache.eviction.count,"The number of evictions from a cache.",{evictions},Sum
+solr.cache.hit.count,"The number of hits for a cache.",{hits},Sum
+solr.cache.insert.count,"The number of inserts to a cache.",{inserts},Sum
+solr.cache.lookup.count,"The number of lookups to a cache.",{lookups},Sum
+solr.cache.size,"The size of the cache occupied in memory.",by,Sum
+solr.document.count,"The total number of indexed documents.",{documents},Sum
+solr.index.size,"The total index size.",by,Sum
+solr.request.count,"The number of queries made.",{queries},Sum
+solr.request.error.count,"The number of queries resulting in an error.",{queries},Sum
+solr.request.time.average,"The average time of a query, based on Solr's histogram configuration.",ms,Gauge
+solr.request.timeout.count,"The number of queries resulting in a timeout.",{queries},Sum
