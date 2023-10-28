@@ -3,19 +3,23 @@ version: '3.9'
 services:
   otel-collector:
     container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib:0.51.0
+    image: otel/opentelemetry-collector-contrib:0.73.0
     environment:
       LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
     configs:
       - source: collector_conf
         target: /conf/collector.yml
-    command: ["--config=/conf/collector.yml"]
+    command: "--config=/conf/collector.yml --feature-gates service.connectors"
+    volumes:
+      - nginx-logs:/var/log/nginx:ro
+    depends_on:
+      - nginx_proxy
     networks:
       - integrations
 
 # deploys a standalone for the proxy and adds instances
   nginx_proxy:
-    image: nginx:1.19
+    image: nginx:1.23.3
     configs:
       - source: proxy_conf
         target: /etc/nginx/conf.d/nginx.conf
@@ -32,6 +36,8 @@ services:
         reservations:
           cpus: "0.125"
           memory: 64M
+    volumes:
+      - nginx-logs:/var/log/nginx
     networks:
       - integrations
 
@@ -65,6 +71,9 @@ configs:
     file: ./nginx-proxy.conf
   appsrv_conf:
     file: ./nginx-appsrv.conf
+
+volumes:
+  nginx-logs:     
 
 networks:
   integrations:

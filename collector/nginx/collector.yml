@@ -1,39 +1,86 @@
 receivers:
+  filelog:
+    include:
+      - /var/log/nginx/proxy-access.log
+    start_at: beginning
+    operators:
+      - type: regex_parser
+        on_error: drop
+        #127.0.0.1 - - [04/Jul/2021:21:03:19 +0800] "GET /favicon-32x32.png HTTP/1.1" 200 628 "http://api.local/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
+        regex: '^(?P<ip>[^\s]+) - (?P<remote_user>[^\s]+) \[(?P<time_local>[^\]]+)\] \"(?P<request>[^\"]+)\" (?P<status>\d+) (?P<body_bytes_sent>\d+) \"(?P<http_referer>[^\"]+)\" \"(?P<http_user_agent>[^\"]+)\"$'
+        timestamp:
+          parse_from: attributes.time_local
+          layout_type: gotime
+          layout: "02/Jan/2006:15:04:05 -0700"
+        severity:
+          parse_from: "attributes.status"
+          mapping:
+            info: 2xx
+            info2: 3xx
+            warn: 4xx
+            error: 5xx
   nginx/proxy:
-    endpoint: 'http://nginx_proxy:8080/status'
+    endpoint: http://nginx_proxy:8080/status
     collection_interval: 10s
   nginx/appsrv:
-    endpoint: 'http://nginx_appsrv:1080/status'
+    endpoint: http://nginx_appsrv:1080/status
     collection_interval: 10s
-
 exporters:
   logging:
     loglevel: debug
   otlp/public:
     endpoint: ingest.lightstep.com:443
     headers:
-        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
-
+      lightstep-access-token: ${LS_ACCESS_TOKEN}
 processors:
   resource/proxy:
     attributes:
-    - key: instance.type
-      value: "proxy"
-      action: insert
+      - key: instance.type
+        value: proxy
+        action: insert
   resource/appsrv:
     attributes:
-    - key: instance.type
-      value: "appsrv"
-      action: insert
+      - key: instance.type
+        value: appsrv
+        action: insert
   batch:
+connectors:
+  count:
+    logs:
+      nginx.requests.ok:
+        description: Successful requests
+        conditions:
+          - severity_number == 9
 
 service:
   pipelines:
+    # Log to metrics pipeline using connector
+    logs/proxy:
+      receivers:
+        - filelog
+      exporters:
+        - count
+        - logging
+    # Count incoming telemetry types, then log and send to public
+    metrics/count:
+       receivers:
+         - count
+       exporters:
+         - logging
+         - otlp/public
     metrics/proxy:
-      receivers: [nginx/proxy]
-      processors: [resource/proxy]
-      exporters: [logging, otlp/public]
+      receivers:
+        - nginx/proxy
+      processors:
+        - resource/proxy
+      exporters:
+        - logging
+        - otlp/public
     metrics/appsrv:
-      receivers: [nginx/appsrv]
-      processors: [resource/appsrv]
-      exporters: [logging, otlp/public]
+      receivers:
+        - nginx/appsrv
+      processors:
+        - resource/appsrv
+      exporters:
+        - logging
+        - otlp/public
