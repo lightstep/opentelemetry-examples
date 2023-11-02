@@ -28,6 +28,6 @@ In your web browser, navigate to http://127.0.0.1:10001 and order yourself some
 µ-donuts.
 
 
-#### Lightstep Configuration
+#### Cloud Observability Configuration
 
-If you have access to [LightStep](https://app.lightstep.com]), you will need your access token. 
+If you have access to [Cloud Observability](https://app.lightstep.com]), you will need your access token.

@@ -1,4 +1,4 @@
-# Python OTel Launcher README
+# Python Auto-instrumentation
 
 ## Setup
 
@@ -11,7 +11,7 @@ pip install -r requirements.txt
 opentelemetry-bootstrap -a install
 ```
 
-## Send data to Lightstep via OTel Collector
+## Send data to Cloud Observability via OTel Collector
 
 > Note: This setup assumes that you have an OTel Collector running at `localhost:4317`. To run an OTel Collector instance locally, check out docs [here](../../../collector/vanilla/readme.md)
 
@@ -33,7 +33,7 @@ opentelemetry-instrument \
 
 To send over HTTP, replace `otlp` with `otlp_proto_http` in the `--traces_exporter` line.
 
-# Send data to Lightstep direct from app (OTLP)
+# Send data to Cloud Observability direct from app (OTLP)
 
 ```bash
 # Enable Flask debugging
@@ -54,7 +54,7 @@ opentelemetry-instrument \
     python server.py
 ```
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Token](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Cloud Observability Access Token](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
 
 To use HTTP instead of gRPC:
 
@@ -86,7 +86,7 @@ opentelemetry-instrument \
 
 Where `test` is the parameter being passed to `client.py`.
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Cloud Observability Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
 
 ## References
 

@@ -1,5 +1,5 @@
 //
-// example code to illustrate sending OTel traces to Lightstep directly via OTLP HTTP
+// example code to illustrate sending OTel traces to Cloud Observability directly via OTLP HTTP
 //
 // usage:
 //   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>

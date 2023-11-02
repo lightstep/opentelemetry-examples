@@ -1,9 +1,0 @@
-# OTel-specific
-opentelemetry-launcher
-protobuf==3.20.1
-
-flask
-pymongo
-redis
-requests
-sqlalchemy

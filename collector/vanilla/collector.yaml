@@ -4,16 +4,15 @@ receivers:
       grpc:
       http:
 
+processors:
+  batch:
+  
 exporters:
   logging:
-    logLevel: debug
   otlp/ls:
     endpoint: ingest.lightstep.com:443
     headers: 
       "lightstep-access-token": "${LIGHTSTEP_ACCESS_TOKEN}"
-
-processors:
-  batch:
 
 service:
   pipelines:
@@ -21,4 +20,7 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [logging, otlp/ls]
-
+    metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [logging,otlp/ls]

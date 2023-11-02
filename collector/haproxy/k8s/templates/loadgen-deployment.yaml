@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --out k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: loadgen
+  name: loadgen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: loadgen
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --out k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/haproxy-integrations: "true"
+        io.kompose.service: loadgen
+    spec:
+      containers:
+        - args:
+            - -t12
+            - -c400
+            - -d10m
+            - http://haproxy/foo
+          image: williamyeh/wrk
+          name: wrk
+          resources: {}
+      restartPolicy: Always
+status: {}

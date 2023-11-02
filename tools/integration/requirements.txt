@@ -4,5 +4,5 @@ pyyaml
 pytest
 requests
 retry
-opentelemetry-instrumentation==0.30b1
+opentelemetry-instrumentation==0.41b0
 opentelemetry-instrumentation-requests

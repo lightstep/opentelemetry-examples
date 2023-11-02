@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.74.0
+    command: [ "--config=/conf/collector.yml" ]
+    ports:
+      - "8888:8888"
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    volumes:
+      - ./collector.yml:/conf/collector.yml:ro
+
+  singlestore:
+    image: memsql/cluster-in-a-box:alma-8.1.2-32927bff38-4.0.11-1.16.0
+    ports:
+      - "3306:3306"
+      - "8080:8080"
+      - "9104:9104"
+    volumes:
+      - singlestore-data:/var/lib/memsql
+      - ./init.sql:/init.sql
+    environment:
+      LICENSE_KEY: "${LICENSE_KEY}"
+      START_AFTER_INIT: Y
+      ROOT_PASSWORD: password_here
+
+volumes:
+  singlestore-data:

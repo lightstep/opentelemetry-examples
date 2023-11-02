@@ -1,0 +1,22 @@
+receivers:
+  couchdb:
+    endpoint: http://couchdb:5984
+    username: otelu
+    password: otelp
+    collection_interval: 10s
+ 
+exporters:
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers: 
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+  
+service:
+    pipelines:
+      metrics:
+        receivers: [couchdb]
+        processors: [batch]
+        exporters: [logging, otlp]

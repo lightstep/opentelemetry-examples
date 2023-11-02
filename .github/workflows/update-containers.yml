@@ -14,18 +14,13 @@ jobs:
           'go-opentracing-server', 'go-opentracing-client',
           'go-opentelemetry-collector-server', 'go-opentelemetry-collector-client',
           'go-opentelemetry-otlp-server', 'go-opentelemetry-otlp-client',
-          'go-launcher-server', 'go-launcher-client',
           'py-opentelemetry-auto-collector-client', 'py-opentelemetry-auto-collector-server',
           'py-opentelemetry-auto-otlp-client', 'py-opentelemetry-auto-otlp-server',
           'py-opentelemetry-manual-otlp-client', 'py-opentelemetry-manual-otlp-server',
-          'py-launcher-client', 'py-launcher-server',
           'demo-client-otlp',
           'py-opentracing-client', 'py-opentracing-server',
-          'js-launcher-server', 'js-launcher-client',
-          'js-ot-shim-server', 'js-ot-shim-client',
           'java-specialagent-server', 'java-specialagent-client',
           'java-otlp-client', 'java-otlp-server',
-          'java-launcher-client', 'java-launcher-server',
           'java-opentracing-server', 'integration-test'
         ]
     steps:

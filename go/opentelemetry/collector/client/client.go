@@ -1,5 +1,5 @@
 //
-// example code to illustrate sending OTel traces to Lightstep via the OTel Collector
+// example code to illustrate sending OTel traces to Cloud Observability via the OTel Collector
 //
 // NOTE: Requires that you run a Collector instance
 // (see collector/vanilla/readme.md for details on how to run the

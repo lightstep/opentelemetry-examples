@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.74.0
+    command: [ "--config=/conf/collector.yml" ]
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - arangodb 
+  arangodb:
+    container_name: arangodb
+    image: arangodb:${APP_VERSION}
+    volumes:
+      - ./arangodb.conf:/etc/arangodb3/arangodb.conf:rw
+    environment:
+      - ARANGO_ROOT_PASSWORD=password
+    ports:
+      - "8529:8529"
+

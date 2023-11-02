@@ -10,7 +10,7 @@ source ./bin/activate
 pip install -r requirements.txt
 ```
 
-## Send data to Lightstep direct from app
+## Send data to Cloud Observability direct from app
 
 ```bash
 export FLASK_DEBUG=1
@@ -23,7 +23,7 @@ export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 python server.py
 ```
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Cloud Observability Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
 
 ## Run the Client
 
@@ -38,4 +38,4 @@ export LS_ACCESS_TOKEN="<LS_ACCESS_TOKEN>"
 python client.py test
 ```
 
-Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Lightstep Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).
+Be sure to replace `<LS_ACCESS_TOKEN>` with your own [Cloud Observability Access Toekn](https://docs.lightstep.com/docs/create-and-manage-access-tokens).

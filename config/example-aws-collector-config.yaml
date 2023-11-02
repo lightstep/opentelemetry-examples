@@ -1,5 +1,5 @@
 # Example config for the AWS OpenTelemetry Distro
-# This sends data to Lightstep, AWS EMF, and X-Ray
+# This sends data to Cloud Observability, AWS EMF, and X-Ray
 # https://github.com/aws-observability/aws-otel-collector
 
 receivers:

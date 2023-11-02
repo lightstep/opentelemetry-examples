@@ -2,7 +2,7 @@
 
 1. Edit the [Collector config YAML](collector.yml)
 
-    Replace `${LIGHTSTEP_ACCESS_TOKEN}` with your own [Lightstep Access Token](https://docs.lightstep.com/docs/create-and-manage-access-tokens)
+    Replace `${LIGHTSTEP_ACCESS_TOKEN}` with your own [Cloud Observability Access Token](https://docs.lightstep.com/docs/create-and-manage-access-tokens)
 
 2. Run the Collector's Docker container instance
 

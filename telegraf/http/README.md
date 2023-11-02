@@ -1,5 +1,5 @@
 ---
-# Monitoring HTTP Services in Lightstep with Telegraf
+# Monitoring HTTP Services in Cloud Observability with Telegraf
 
 ## Setup an HTTP Server to Test
 
@@ -29,7 +29,7 @@ Telegraf will get the metrics from the endpoint on a configurable scrape interva
 
 ### Configure Telegraf: Output OTLP
 
-You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lightstep with configuration similar to this.
+You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Cloud Observability with configuration similar to this.
 
 ```
 [[outputs.opentelemetry]]
@@ -40,7 +40,7 @@ You can use Telegraf's OpenTelemetry output plugin to send OTLP over gRPC to Lig
     lightstep-access-token = "$LS_ACCESS_TOKEN"
 ```
 
-## View the Results in Lightstep
+## View the Results in Cloud Observability
 
-For the example that we configured metrics should appear in your Lightstep project with the name `http_value`.
+For the example that we configured metrics should appear in your Cloud Observability project with the name `http_value`.
 

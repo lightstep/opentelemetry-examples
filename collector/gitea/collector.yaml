@@ -1,0 +1,21 @@
+receivers:
+  prometheus/gitea:
+    config:
+      scrape_configs:
+        - job_name: 'gitea'
+          scrape_interval: 20s
+          metrics_path: "/metrics"
+          static_configs:
+            - targets: ["gitea:3000"]
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      - lightstep-access-token: ${LS_ACCESS_TOKEN}
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus/gitea]
+      exporters: [logging, otlp]

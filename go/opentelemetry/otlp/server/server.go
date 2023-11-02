@@ -1,5 +1,5 @@
 //
-// example code to illustrate sending OTel traces to Lightstep directly via OTLP gRPC
+// example code to illustrate sending OTel traces to Cloud Observability directly via OTLP gRPC
 //
 // usage:
 //   export LS_ACCESS_TOKEN=<YOUR_LS_ACCESS_TOKEN>
@@ -56,7 +56,7 @@ func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	}
 
 	if len(lsToken) == 0 {
-		log.Fatalf("Lightstep token missing. Please set environment variable LS_ACCESS_TOKEN")
+		log.Fatalf("Cloud Observability token missing. Please set environment variable LS_ACCESS_TOKEN")
 	}
 
 	var headers = map[string]string{

@@ -28,12 +28,12 @@ clean :
 
 _wait-for-nginx-operator :
 	@echo ** Waiting for NGINX Operator. **
-	@kubectl wait deployment -n $(NGINX_OPERATOR_NAMESPACE) nginx-ingress-operator-controller-manager --for condition=Available=True --timeout=120s
+	@kubectl wait deployment -n $(NGINX_OPERATOR_NAMESPACE) nginx-ingress-operator-controller-manager --for condition=Available=True --timeout=180s
 	@echo ** NGINX Operator running. **
 
 _wait-for-collector-operator :
 	@echo ** Waiting for OTEL Operator. **
-	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) opentelemetry-operator-controller-manager --for condition=Available=True --timeout=120s
+	@kubectl wait deployment -n $(OTEL_OPERATOR_NAMESPACE) $(OTEL_RELEASE)-opentelemetry-operator --for condition=Available=True --timeout=180s
 	@echo ** Otel Operator running is. **
 
 deploy-nginx :
@@ -60,7 +60,7 @@ install-cert-manager :  	## install cert manager. otel-operator requires this - 
 
 _wait-for-cert-manager :
 	@echo ** Waiting for cert-manager deployments to become available. **
-	@kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE) --for condition=Available=True --timeout=90s 
+	@kubectl wait deployment -n $(CERT_MANAGER_NAMESPACE) $(CERT_MANAGER_RELEASE) --for condition=Available=True --timeout=5m
 	@echo ** cert-manager deployments are now avaliable. **
 
 undeploy-instances : 	## delete instances

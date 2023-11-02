@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "test-topic:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - integrations
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - integrations
+
+  producer:
+    build: ./src/producer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKERS: kafka:9092
+    networks:
+      - integrations
+
+  consumer:
+    build: ./src/consumer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKERS: kafka:9092
+    networks:
+      - integrations
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector-contrib:0.73.0
+    command: [ "--config=/conf/collector.yml" ]
+    restart: always
+    ports:
+      - 8888:8888
+    environment:
+      LS_ACCESS_TOKEN: "${LS_ACCESS_TOKEN}"
+    volumes:
+      - ./collector.yml:/conf/collector.yml:rw
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - integrations
+
+networks:
+  integrations:
+    driver: bridge
