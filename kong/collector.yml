@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        cors:
+          allowed_origins:
+            - "*"
+      grpc:
+        tls:
+
+exporters:
+    logging:
+        loglevel: debug
+    # configuring otlp to Lightstep
+    otlp:
+      endpoint: ingest.lightstep.com:443
+      headers:
+        "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+processors:
+    batch:
+
+service:
+    telemetry:
+      logs:
+        level: debug
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [logging, otlp]
