@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  ssh-server:
+    image: lscr.io/linuxserver/openssh-server
+    environment:
+      - USER_NAME=otelu
+      - PASSWORD_ACCESS=true
+      - USER_PASSWORD=otelp
+    ports:
+        - '2222:2222'
+    networks:
+        - integrations
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "nc", "-z", "-v", "localhost", "2222"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:${OTEL_COLLECTOR_VERSION:-latest}
+    environment:
+      LS_ACCESS_TOKEN: ${LS_ACCESS_TOKEN}
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    depends_on:
+      ssh-server:
+        condition: service_healthy
+    command: ["--config=/conf/collector.yml"]
+    networks:
+      - integrations
+
+configs:
+  collector_conf:
+    file: ./collector.yml
+
+networks:
+  integrations:

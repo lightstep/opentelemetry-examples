@@ -1,0 +1,25 @@
+receivers:
+  sshcheck:
+    endpoint: sshserver:2222 
+    username: otelu
+    password: otelp
+    collection_interval: 10s
+    ignore_host_key: true
+
+processors:
+  batch:
+
+exporters:
+  logging:
+      loglevel: debug
+  otlp:
+    endpoint: ingest.lightstep.com:443
+    headers:
+      "lightstep-access-token": "${LS_ACCESS_TOKEN}"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [sshcheck]
+      processors: [batch]
+      exporters: [logging, otlp]
