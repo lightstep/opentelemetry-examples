@@ -1,0 +1,22 @@
+receivers:
+  kafka:
+    brokers: kafka:29092
+    topic: example-topic
+    encoding: json
+
+exporters:
+  logging:
+  otlp/ls:
+    endpoint: ingest.lightstep.com:443
+    headers:
+        "lightstep-access-token": "${LIGHTSTEP_ACCESS_TOKEN}"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    logs:
+      receivers: [kafka]
+      processors: [batch]
+      exporters: [logging, otlp/ls]
