@@ -1,0 +1,17 @@
+{
+    "name": "elasticsearch-sink",
+    "config": {
+      "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+      "tasks.max": "1",
+      "topics": "example-topic",
+      "key.ignore": "true",
+      "schema.ignore": "true",
+      "connection.url": "https://logingest.lightstep.com:443",
+      "connection.username": "lightstep",
+      "connection.password": "your-access-token",
+      "type.name": "_doc",
+      "name": "elasticsearch-sink",
+      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "value.converter.schemas.enable": "false"
+    }
+}  
