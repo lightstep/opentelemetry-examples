@@ -55,6 +55,7 @@ services:
       - kafka
     networks:
       - kafka-platform
+  
   akhq:
     image: tchiotludo/akhq
     hostname: akhq
@@ -75,6 +76,26 @@ services:
               connect:
                 - name: "connect"
                   url: "http://connect:8083"
+    networks:
+      - kafka-platform
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    depends_on:
+      - kafka
+    environment:
+      - LIGHTSTEP_ACCESS_TOKEN=${LIGHTSTEP_ACCESS_TOKEN}
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "55679:55679" # zpages extension
     networks:
       - kafka-platform
 

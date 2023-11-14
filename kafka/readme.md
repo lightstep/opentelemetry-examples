@@ -9,6 +9,7 @@ Streams Kafka topics to ServiceNow Cloud Observability logs
 2) Run Kafka
 
 ```
+    export LIGHTSTEP_ACCESS_TOKEN=your-token 
     docker-compose up
 
     # wait a few minutes...
@@ -17,12 +18,11 @@ Streams Kafka topics to ServiceNow Cloud Observability logs
 3) Configure connector
 
 ```
-    curl -X POST http://localhost:8083/connectors -H 'Content-Type: application/json' -d @plugin-config.json
+    curl -X POST http://localhost:8083/connectors -H 'Content-Type: application/json' -d @plugin-config-elastic.json
 ```
 
 4) Send some data
 
 ```
 docker exec -i kafka bash -c "echo '{\"userId\": \"1\", \"action\": \"login\"}' | /usr/bin/kafka-console-producer --broker-list kafka:9092 --topic example-topic"
-
 ```
