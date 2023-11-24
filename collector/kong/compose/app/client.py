@@ -33,14 +33,14 @@ def config_kong(host, collector):
         print(res.text)
         # Create the service
         res = requests.post(f"http://{host}:8001/services", json={
-            'name': 'servicenow_service',
-            'url': 'http://www.servicenow.com',
+            'name': 'httpbin_service',
+            'url': 'http://httpbin.org',
         })
         print(res.text)
         # Create the route
-        res = requests.post(f"http://{host}:8001/services/servicenow_service/routes", json={
-            'paths': ['/servicenow'],
-            'name': 'servicenow_route',
+        res = requests.post(f"http://{host}:8001/services/httpbin_service/routes", json={
+            'paths': ['/httpbin'],
+            'name': 'httpbin_route',
         })
         print(res.text)
     except Exception as e:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     collector = os.getenv("COLLECTOR_HOST", "localhost")
     config_kong(host, collector)
 
-    target = f"http://{host}:8000/servicenow/company.html"
+    target = f"http://{host}:8000/httpbin/get"
     while True:
         send_requests(target)
         time.sleep(.5)
