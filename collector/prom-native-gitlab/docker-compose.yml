@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9090:9090"
+    volumes:
+      - ./srv/gitlab/all_volumes:/gitlab-host
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost'
+        gitlab_rails['gitlab_shell_ssh_port'] = 9090
+        gitlab_rails['time_zone'] = 'UTC'
+        nginx['custom_gitlab_server_config'] = "location ^~ /-/health { return 200; }"
+        gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0']
+        gitlab_rails['gitlab_shell_ssh_port'] = 9090
+        prometheus['enable'] = true
+        prometheus['listen_address'] = 'localhost:9090'
+        prometheus['ssl_enabled'] = false
+        gitlab_workhorse['prometheus_listen_addr'] = "localhost:9229"
+        gitlab_rails['env'] = {
+          'GITLAB_SHELL_DIR' => '/gitlab-host/config/gitlab-shell',
+          'GITLAB_LOG_DIR' => '/gitlab-host/logs',
+          'GITLAB_DATA_DIR' => '/gitlab-host/data',
+        }
+    networks:
+          - integrations
+  otel-collector:
+      container_name: otel-collector
+      image: otel/opentelemetry-collector-contrib:0.74.0
+      command: ["--config=/conf/collector.yml"]
+      environment:
+        LS_ACCESS_TOKEN:  ${LS_ACCESS_TOKEN}
+      networks:
+          - integrations
+      volumes:
+          - ./collector.yml:/conf/collector.yml:rw
+networks:
+    integrations:
